@@ -7,6 +7,7 @@
 [labels]: https://docs.gitlab.com/ee/user/project/labels.html
 [releases]: https://docs.gitlab.com/ee/user/project/releases/
 [pages]: https://docs.gitlab.com/ee/user/project/pages/
+[assignee]: https://docs.gitlab.com/ee/user/project/issues/multiple_assignees_for_issues.html
 
 # Contributing Guide
 
@@ -28,6 +29,7 @@ Here's one idea of how we can use GitLab to facilitate our software development 
 
   1. For each sprint, create a GitLab [milestone] with proper start and end dates
   1. For user stories in the current sprint's backlog, assign their respective GitLab [issues] to the [milestone]
+  1. When someone decides to tackle a user story, list him as a [assignee] to the GitLab issue
 
 - During a sprint:
 
