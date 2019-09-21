@@ -1,3 +1,18 @@
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# create-react-app environment files
+.env*.local
+
+# NPM lock file - We use yarn.lock instead
+package-lock.json
+
 #### C ####
 # Prerequisites
 *.d

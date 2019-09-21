@@ -9,6 +9,20 @@
 [pages]: https://docs.gitlab.com/ee/user/project/pages/
 [assignee]: https://docs.gitlab.com/ee/user/project/issues/multiple_assignees_for_issues.html
 
+[Git - the simple guide]: https://rogerdudler.github.io/git-guide/
+[Git reference guide]: https://www.digitalocean.com/community/tutorials/how-to-use-git-a-reference-guide
+[Git command-line]: https://git-scm.com/downloads
+[GitHub Desktop]: https://desktop.github.com/
+[Node.js]: https://nodejs.org/en/download/package-manager/
+[Yarn]: https://yarnpkg.com/en/docs/install
+[Jetbrains WebStorm]: https://www.jetbrains.com/webstorm/
+[Visual Studio Code]: https://code.visualstudio.com/
+[Atom]: https://atom.io/
+[EditorConfig]: https://editorconfig.org/#download
+[React Development Tools - Chrome]: https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi
+[React Development Tools - Firefox]: https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
+[Debugger for Chrome]: https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
+
 # Contributing Guide
 
 ## Software Development Workflow
@@ -54,3 +68,59 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
 - Testing code
 - Making production builds of code
 - Deploying production build to client using GitLab [releases] or [pages]
+
+## Setting up development environment
+
+> [Git quick-start guide][Git - the simple guide]
+>
+> [Git command-line reference][Git reference guide]
+
+1. Install a Git client: [command-line][Git command-line], [GitHub Desktop], etc.
+1. Install [Node.js]
+1. If not already included in your Node.js installation, install [Yarn]
+1. Clone this repo using Git
+1. Install dev dependencies:
+
+  ```bash
+  cd miami-university-senior-capstone-project/
+  yarn install
+  ```
+
+1. Install text editor/IDE with TypeScript support.
+   Examples: [Jetbrains WebStorm], [Visual Studio Code], [Atom] (with plugin)
+
+    1. Install the [EditorConfig] plugin for your IDE
+
+    1. If using [Visual Studio Code], install the [Debugger for Chrome] extension
+
+1. Install the React Developer Tools extension for your web browser.
+   ([Chrome plugin][React Development Tools - Chrome];
+   [Firefox plugin][React Development Tools - Firefox])
+
+## Using development environment
+
+```bash
+cd miami-university-senior-capstone-project/
+
+# Running app in development mode
+yarn start
+
+# Testing codebase
+yarn test
+
+# Linting codebase
+yarn lint
+
+# Automatically fix lint errors
+yarn lint --fix
+
+# Create production build
+yarn build
+
+# Analyze size of the production build
+yarn analyze-build
+```
+
+## Configuring development environment
+
+See https://create-react-app.dev

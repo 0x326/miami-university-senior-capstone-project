@@ -1,0 +1,149 @@
+extends:
+  - plugin:unicorn/recommended
+  - airbnb
+  - plugin:@typescript-eslint/recommended
+
+parser: '@typescript-eslint/parser'
+plugins:
+  - '@typescript-eslint'
+
+env:
+  browser: true
+  node: true
+  jest: true
+
+rules:
+  semi:
+    - error
+    - never
+
+  no-mixed-operators:
+    - error
+    - allowSamePrecedence: true
+
+  no-unused-vars:
+    - error
+    - args: after-used
+
+  react/prefer-stateless-function: off
+
+  no-console: off
+
+  import/order:
+    - error
+    - newlines-between: always-and-inside-groups
+
+  import/no-cycle: error
+
+  object-curly-newline:
+    - error
+    - consistent: true
+      # ImportDeclaration: always
+      # ExportDeclaration: always
+
+  react/prefer-read-only-props: error
+  react/jsx-key: error
+  react/jsx-handler-names: error
+  react/no-direct-mutation-state: error
+  react/no-multi-comp: error
+
+  # As of v10.0.0, incompatible with `immutable`
+  unicorn/new-for-builtins: off
+
+  unicorn/custom-error-definition: error
+
+  unicorn/no-fn-reference-in-iterator: error
+
+  unicorn/no-unsafe-regex: error
+
+  unicorn/no-unused-properties: error
+
+  # Copied from eslint-config-airbnb-base:
+  #
+  # MIT License
+  #
+  # Copyright (c) 2012 Airbnb
+  #
+  # Permission is hereby granted, free of charge, to any person obtaining a copy
+  # of this software and associated documentation files (the "Software"), to deal
+  # in the Software without restriction, including without limitation the rights
+  # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  # copies of the Software, and to permit persons to whom the Software is
+  # furnished to do so, subject to the following conditions:
+  #
+  # The above copyright notice and this permission notice shall be included in all
+  # copies or substantial portions of the Software.
+  #
+  # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  # SOFTWARE.
+  no-restricted-syntax:
+    - error
+    - selector: ForInStatement
+      message: >
+        for..in loops iterate over the entire prototype chain, which is virtually never what you want.
+        Use Object.{keys,values,entries}, and iterate over the resulting array.
+
+    # - selector: ForOfStatement
+    #   message:
+    #     iterators/generators require regenerator-runtime, which is too heavyweight for this guide to allow them.
+    #     Separately, loops should be avoided in favor of array iterations.
+
+    - selector: LabeledStatement
+      message:
+        Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.
+
+    - selector: WithStatement
+      message: >-
+        `with` is disallowed in strict mode because it makes code impossible to predict and optimize.
+
+  # Allow variable name conventions suggested in the React docs
+  unicorn/prevent-abbreviations:
+    - off
+    - replacements:
+        args:
+          arguments: false
+
+        props:
+          properties: false
+
+        prev:
+          previous: false
+
+        ref:
+          reference: false
+
+        refs:
+          references: false
+
+  unicorn/filename-case:
+    - error
+    - cases:
+        camelCase: true
+        pascalCase: true
+
+  #### Fixes for TypeScript ####
+  # This rule looks for .js files instead of .ts files
+  import/no-unresolved: off
+
+  react/jsx-filename-extension:
+    - error
+    - extensions:
+      - .tsx
+      - .jsx
+
+overrides:
+  - files:
+    - '**/*.test.tsx'
+    - '**/*.test.ts'
+    - '**/*.spec.tsx'
+    - '**/*.spec.ts'
+
+    rules:
+      # Does not allow 'App.test.tsx'
+      # Jest through CRA cannot be reconfigured to accept 'App.Test.tsx'
+      unicorn/filename-case: off
