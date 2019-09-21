@@ -81,6 +81,7 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
 1. Install dev dependencies:
 
   ```bash
+  cd miami-university-senior-capstone-project/
   yarn install
   ```
 
@@ -96,6 +97,8 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
 ## Using development environment
 
 ```bash
+cd miami-university-senior-capstone-project/
+
 # Running app in development mode
 yarn start
 
