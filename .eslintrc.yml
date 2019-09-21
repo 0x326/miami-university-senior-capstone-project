@@ -135,3 +135,15 @@ rules:
     - extensions:
       - .tsx
       - .jsx
+
+overrides:
+  - files:
+    - '**/*.test.tsx'
+    - '**/*.test.ts'
+    - '**/*.spec.tsx'
+    - '**/*.spec.ts'
+
+    rules:
+      # Does not allow 'App.test.tsx'
+      # Jest through CRA cannot be reconfigured to accept 'App.Test.tsx'
+      unicorn/filename-case: off
