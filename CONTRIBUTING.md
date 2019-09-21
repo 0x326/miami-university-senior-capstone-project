@@ -88,7 +88,7 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
 1. Install text editor/IDE with TypeScript support.
    Examples: [Jetbrains WebStorm], [Visual Studio Code], [Atom] (with plugin)
 
-1. Install the [EditorConfig] plugin for your IDE
+    1. Install the [EditorConfig] plugin for your IDE
 
 1. Install the React Developer Tools extension for your web browser.
    ([Chrome plugin][React Development Tools - Chrome];
