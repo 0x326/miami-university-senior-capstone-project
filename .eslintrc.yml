@@ -125,3 +125,13 @@ rules:
     - cases:
         camelCase: true
         pascalCase: true
+
+  #### Fixes for TypeScript ####
+  # This rule looks for .js files instead of .ts files
+  import/no-unresolved: off
+
+  react/jsx-filename-extension:
+    - error
+    - extensions:
+      - .tsx
+      - .jsx
