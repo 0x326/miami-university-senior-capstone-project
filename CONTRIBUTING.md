@@ -21,6 +21,7 @@
 [EditorConfig]: https://editorconfig.org/#download
 [React Development Tools - Chrome]: https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi
 [React Development Tools - Firefox]: https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
+[Debugger for Chrome]: https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
 
 # Contributing Guide
 
@@ -89,6 +90,8 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
    Examples: [Jetbrains WebStorm], [Visual Studio Code], [Atom] (with plugin)
 
     1. Install the [EditorConfig] plugin for your IDE
+
+    1. If using [Visual Studio Code], install the [Debugger for Chrome] extension
 
 1. Install the React Developer Tools extension for your web browser.
    ([Chrome plugin][React Development Tools - Chrome];
