@@ -1,0 +1,15 @@
+{
+  // See https://create-react-app.dev/docs/setting-up-your-editor#displaying-lint-output-in-the-editor
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "typescript",
+      "autoFix": true
+    },
+    {
+      "language": "typescriptreact",
+      "autoFix": true
+    }
+  ]
+}
