@@ -113,6 +113,9 @@ yarn lint --fix
 
 # Create production build
 yarn build
+
+# Analyze size of the production build
+yarn analyze-build
 ```
 
 ## Configuring development environment
