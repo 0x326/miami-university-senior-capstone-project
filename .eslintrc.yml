@@ -103,7 +103,7 @@ rules:
 
   # Allow variable name conventions suggested in the React docs
   unicorn/prevent-abbreviations:
-    - off
+    - error
     - replacements:
         args:
           arguments: false
