@@ -25,8 +25,6 @@ rules:
     - error
     - args: after-used
 
-  react/prefer-stateless-function: off
-
   no-console: off
 
   import/order:
@@ -103,7 +101,7 @@ rules:
 
   # Allow variable name conventions suggested in the React docs
   unicorn/prevent-abbreviations:
-    - off
+    - error
     - replacements:
         args:
           arguments: false
