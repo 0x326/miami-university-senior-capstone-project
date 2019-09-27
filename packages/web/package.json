@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "lint": "eslint --ext .tsx,.ts,.jsx,.js src/",
+    "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
     "test": "react-scripts test",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "build": "react-scripts build",
