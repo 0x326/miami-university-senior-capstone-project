@@ -11,7 +11,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/src",
+      "webRoot": "${workspaceFolder}/packages/web/src",
       "sourceMapPathOverrides": {
         "webpack:///src/*": "${webRoot}/*"
       }
@@ -28,7 +28,7 @@
         "--no-cache",
         "--watchAll=false"
       ],
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceRoot}/packages/web/",
       "protocol": "inspector",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
