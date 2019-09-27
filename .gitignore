@@ -1,11 +1,11 @@
-/.pnp
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage
 
 # production
-/build
+build
 
 # create-react-app environment files
 .env*.local
