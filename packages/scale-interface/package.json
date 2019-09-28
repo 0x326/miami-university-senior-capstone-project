@@ -2,6 +2,9 @@
   "name": "scale-interface",
   "private": true,
   "version": "0.1.0",
+  "scripts": {
+    "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore"
+  },
   "devDependencies": {
     "@types/serialport": "^7.0.4",
     "typescript": "3.6.3"
