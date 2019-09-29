@@ -1,5 +1,5 @@
 {
   "hooks": {
-    "pre-push": "npm run lint"
+    "pre-push": "yarn run lint"
   }
 }
