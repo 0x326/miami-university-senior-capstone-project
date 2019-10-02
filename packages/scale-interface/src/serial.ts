@@ -9,7 +9,7 @@ let parser: SerialPort.parsers.Readline | null = null
 let portCloseError: Error | null = null
 
 function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void> {
-  if (port === null) {
+  if (port !== null) {
     throw new Error('Port is already open')
   }
 
