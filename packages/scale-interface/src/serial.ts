@@ -34,7 +34,7 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
 
   // Open port
   return new Promise((resolve, reject): void => port.open((error): void => {
-    if (error !== undefined) {
+    if (error !== null) {
       reject(error)
     } else {
       resolve()
@@ -62,7 +62,7 @@ function write(data: string): Promise<number> {
     }
 
     port.write(data, (error, bytesWritten) => {
-      if (error !== undefined) {
+      if (error !== null) {
         reject(error)
       } else {
         resolve(bytesWritten)
@@ -73,7 +73,7 @@ function write(data: string): Promise<number> {
 
 async function close(): Promise<void> {
   await new Promise((resolve, reject): void => port.close((error) => {
-    if (error !== undefined) {
+    if (error !== null) {
       reject(error)
     } else {
       resolve()
