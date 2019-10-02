@@ -9,10 +9,12 @@
   },
   "devDependencies": {
     "@types/serialport": "^7.0.4",
+    "@types/yargs": "^13.0.3",
     "parcel-bundler": "^1.12.3",
     "typescript": "3.6.3"
   },
   "dependencies": {
-    "serialport": "^7.1.5"
+    "serialport": "^7.1.5",
+    "yargs": "^14.0.0"
   }
 }
