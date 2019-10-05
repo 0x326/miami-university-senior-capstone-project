@@ -59,8 +59,10 @@ const {
   'bit-parity': 'none' | 'even' | 'odd';
 }
 
-connectToScale(device, (data) => console.log(data), {
+connectToScale(device, (data) => console.log('Received data', data), {
   baudRate,
   dataBits,
   parity: bitParity,
 })
+  .then(() => console.log('Scale connected'),
+    (error) => console.error('Error while connecting scale', error))
