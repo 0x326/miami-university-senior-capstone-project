@@ -1,8 +1,8 @@
 import yargs from 'yargs'
 
 import {
-  open,
-} from './serial'
+  connectToScale,
+} from './serialScale'
 
 const {
   argv,
@@ -59,7 +59,7 @@ const {
   'bit-parity': 'none' | 'even' | 'odd';
 }
 
-open(device, {
+connectToScale(device, (data) => console.log(data), {
   baudRate,
   dataBits,
   parity: bitParity,
