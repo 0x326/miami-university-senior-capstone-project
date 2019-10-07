@@ -46,9 +46,26 @@ function parse(data: string): Measurement | ActionReply {
     .trim()
     .toLowerCase()
 
-  const measurementType = MeasurementType[header as keyof typeof MeasurementType]
-  if (measurementType === undefined) {
-    throw new Error(`${header} is not a valid header`)
+  let measurementType: MeasurementType
+  switch (header) {
+    case 'ST':
+      measurementType = MeasurementType.STABLE_WEIGHT
+      break
+
+    case 'QT':
+      measurementType = MeasurementType.STABLE_COUNTING
+      break
+
+    case 'US':
+      measurementType = MeasurementType.UNSTABLE_WEIGHT
+      break
+
+    case 'OL':
+      measurementType = MeasurementType.OUT_OF_RANGE
+      break
+
+    default:
+      throw new Error(`${header} is not a valid header`)
   }
 
   switch (measurementUnit) {
