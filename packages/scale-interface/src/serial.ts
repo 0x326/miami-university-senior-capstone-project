@@ -1,3 +1,7 @@
+import {
+  promisify,
+} from 'util'
+
 import SerialPort from 'serialport'
 
 const {
@@ -5,6 +9,8 @@ const {
 } = SerialPort.parsers
 
 let port: SerialPort | null = null
+let portWrite: (arg1: string | number[] | Buffer) => Promise<number> | null = null
+let portClose: () => Promise<void> | null = null
 let parser: SerialPort.parsers.Readline | null = null
 let portCloseError: Error | null = null
 
@@ -18,6 +24,10 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
     ...options,
     autoOpen: false,
   })
+  const portOpen = promisify(port.open)
+  portWrite = promisify(port.write)
+  portClose = promisify(port.close)
+
   portCloseError = null
 
   // Handle port close
@@ -33,13 +43,7 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
   }))
 
   // Open port
-  return new Promise((resolve, reject): void => port.open((error): void => {
-    if (error !== null) {
-      reject(error)
-    } else {
-      resolve()
-    }
-  }))
+  return portOpen()
 }
 
 function subscribe(callback: (data: string) => void): void {
@@ -51,34 +55,19 @@ function subscribe(callback: (data: string) => void): void {
 }
 
 function write(data: string): Promise<number> {
-  return new Promise((resolve, reject): void => {
-    if (port === null) {
-      if (portCloseError) {
-        reject(portCloseError)
-      } else {
-        reject(new Error('Port is not open'))
-      }
-      return
+  if (port === null) {
+    if (portCloseError) {
+      throw portCloseError
+    } else {
+      throw new Error('Port is not open')
     }
+  }
 
-    port.write(data, (error, bytesWritten) => {
-      if (error !== null) {
-        reject(error)
-      } else {
-        resolve(bytesWritten)
-      }
-    })
-  })
+  return portWrite(data)
 }
 
 async function close(): Promise<void> {
-  await new Promise((resolve, reject): void => port.close((error) => {
-    if (error !== null) {
-      reject(error)
-    } else {
-      resolve()
-    }
-  }))
+  await portClose()
 
   port = null
   parser = null
