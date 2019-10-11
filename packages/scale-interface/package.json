@@ -8,6 +8,7 @@
     "build": "tsc --noEmit && parcel build --target node src/index.ts"
   },
   "devDependencies": {
+    "@types/events.once": "^2.0.0",
     "@types/serialport": "^7.0.4",
     "@types/yargs": "^13.0.3",
     "parcel-bundler": "^1.12.3",
