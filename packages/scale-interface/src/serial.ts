@@ -2,6 +2,7 @@ import {
   promisify,
 } from 'util'
 
+import once from 'events.once'
 import SerialPort from 'serialport'
 
 const {
@@ -63,6 +64,18 @@ function subscribe(callback: (data: string) => void): void {
   parser.on('data', callback)
 }
 
+function subscribeOnce(): Promise<string> {
+  if (serialPort === null) {
+    throw new Error('Port is not open')
+  }
+
+  const {
+    parser,
+  } = serialPort
+  // `as unknown` required due to unusual type cast
+  return once(parser, 'data') as unknown as Promise<string>
+}
+
 function write(data: string): Promise<number> {
   if (serialPort === null) {
     if (portCloseError) {
@@ -92,6 +105,7 @@ async function close(): Promise<void> {
 export {
   open,
   subscribe,
+  subscribeOnce,
   write,
   close,
 }
