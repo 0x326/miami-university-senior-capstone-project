@@ -5,7 +5,7 @@
   "scripts": {
     "start": "parcel watch --target node src/index.ts",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
-    "build": "parcel build --target node src/index.ts"
+    "build": "tsc --noEmit && parcel build --target node src/index.ts"
   },
   "devDependencies": {
     "@types/serialport": "^7.0.4",
