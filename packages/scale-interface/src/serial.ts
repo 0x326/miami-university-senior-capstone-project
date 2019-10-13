@@ -8,69 +8,85 @@ const {
   Readline,
 } = SerialPort.parsers
 
-let port: SerialPort | null = null
-let portWrite: (arg1: string | number[] | Buffer) => Promise<number> | null = null
-let portClose: () => Promise<void> | null = null
-let parser: SerialPort.parsers.Readline | null = null
+type PortWrite = (arg1: string | number[] | Buffer) => Promise<number>
+type PortClose = () => Promise<void>
+
+let serialPort: {
+  port: SerialPort;
+  parser: SerialPort.parsers.Readline;
+  portWrite: PortWrite;
+  portClose: PortClose;
+} | null = null
 let portCloseError: Error | null = null
 
 function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void> {
-  if (port !== null) {
+  if (serialPort !== null) {
     throw new Error('Port is already open')
   }
 
   // Create port
-  port = new SerialPort(path, {
+  const port = new SerialPort(path, {
     ...options,
     autoOpen: false,
   })
   const portOpen = promisify(port.open)
-  portWrite = promisify(port.write)
-  portClose = promisify(port.close)
+  const portWrite = promisify(port.write)
+  const portClose = promisify(port.close)
 
   portCloseError = null
 
   // Handle port close
   port.on('close', (error) => {
     portCloseError = error
-    port = null
-    parser = null
+    serialPort = null
   })
 
   // Create parser
-  parser = port.pipe(new Readline({
+  const parser = port.pipe(new Readline({
     delimiter: '\r\n',
   }))
+
+  serialPort = { port, parser, portWrite, portClose }
 
   // Open port
   return portOpen()
 }
 
 function subscribe(callback: (data: string) => void): void {
-  if (port === null) {
+  if (serialPort === null) {
     throw new Error('Port is not open')
   }
 
+  const {
+    parser,
+  } = serialPort
   parser.on('data', callback)
 }
 
 function write(data: string): Promise<number> {
-  if (port === null) {
+  if (serialPort === null) {
     if (portCloseError) {
       throw portCloseError
     } else {
       throw new Error('Port is not open')
     }
   }
+  const {
+    portWrite,
+  } = serialPort
 
   return portWrite(data)
 }
 
 async function close(): Promise<void> {
-  await portClose()
+  if (serialPort !== null) {
+    const {
+      portClose,
+    } = serialPort
 
-  port = null
-  parser = null
+    await portClose()
+    serialPort = null
+  }
 }
 
 export {
