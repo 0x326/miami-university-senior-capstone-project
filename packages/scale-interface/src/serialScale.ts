@@ -9,6 +9,7 @@ import {
   write,
   subscribe,
   subscribeOnce,
+  close,
 } from './serial'
 
 enum ActionReply {
@@ -116,8 +117,8 @@ async function connectToScale(
   })
 }
 
-function disconnectFromScale(): void {
-
+function disconnectFromScale(): Promise<void> {
+  return close()
 }
 
 async function listenForReply(type: ActionReply): Promise<void> {
