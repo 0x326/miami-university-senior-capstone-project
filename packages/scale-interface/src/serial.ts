@@ -53,61 +53,6 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
   return portOpen()
 }
 
-function subscribe(includeActionReplies: true): AsyncIterable<Measurement | ActionReply>
-function subscribe(includeActionReplies?: false): AsyncIterable<Measurement>
-async function* subscribe(includeActionReplies = false): AsyncIterable<Measurement | ActionReply> {
-  if (serialPort === null) {
-    throw new Error('Port is not open')
-  }
-
-  const {
-    parser,
-  } = serialPort
-
-  for await (const data of parser) {
-    const parsedData = parse(data)
-    switch (parsedData) {
-      case ActionReply.ZEROED_BALANCE:
-      case ActionReply.CHANGED_UNITS:
-        if (includeActionReplies === true) {
-          yield parsedData
-        }
-        break
-
-      default:
-        yield parsedData
-        break
-    }
-  }
-}
-
-function subscribeOnce(includeActionReplies: true): Promise<Measurement | ActionReply>
-function subscribeOnce(includeActionReplies?: false): Promise<Measurement>
-async function subscribeOnce(includeActionReplies = false): Promise<Measurement | ActionReply> {
-  if (serialPort === null) {
-    throw new Error('Port is not open')
-  }
-
-  const {
-    parser,
-  } = serialPort
-  // `as unknown` required due to unusual type cast
-  const data: string = await once(parser, 'data') as unknown as string
-
-  const parsedData = parse(data)
-  switch (parsedData) {
-    case ActionReply.ZEROED_BALANCE:
-    case ActionReply.CHANGED_UNITS:
-      if (includeActionReplies === false) {
-        return subscribeOnce(includeActionReplies)
-      }
-      return parsedData
-
-    default:
-      return parsedData
-  }
-}
-
 function write(data: string): Promise<number> {
   if (serialPort === null) {
     if (portCloseError) {
@@ -214,6 +159,61 @@ function parse(data: string): Measurement | ActionReply {
     type: measurementType,
     value: Number(measurementData),
     unit: measurementUnit as Unit,
+  }
+}
+
+function subscribe(includeActionReplies: true): AsyncIterable<Measurement | ActionReply>
+function subscribe(includeActionReplies?: false): AsyncIterable<Measurement>
+async function* subscribe(includeActionReplies = false): AsyncIterable<Measurement | ActionReply> {
+  if (serialPort === null) {
+    throw new Error('Port is not open')
+  }
+
+  const {
+    parser,
+  } = serialPort
+
+  for await (const data of parser) {
+    const parsedData = parse(data)
+    switch (parsedData) {
+      case ActionReply.ZEROED_BALANCE:
+      case ActionReply.CHANGED_UNITS:
+        if (includeActionReplies === true) {
+          yield parsedData
+        }
+        break
+
+      default:
+        yield parsedData
+        break
+    }
+  }
+}
+
+function subscribeOnce(includeActionReplies: true): Promise<Measurement | ActionReply>
+function subscribeOnce(includeActionReplies?: false): Promise<Measurement>
+async function subscribeOnce(includeActionReplies = false): Promise<Measurement | ActionReply> {
+  if (serialPort === null) {
+    throw new Error('Port is not open')
+  }
+
+  const {
+    parser,
+  } = serialPort
+  // `as unknown` required due to unusual type cast
+  const data: string = await once(parser, 'data') as unknown as string
+
+  const parsedData = parse(data)
+  switch (parsedData) {
+    case ActionReply.ZEROED_BALANCE:
+    case ActionReply.CHANGED_UNITS:
+      if (includeActionReplies === false) {
+        return subscribeOnce(includeActionReplies)
+      }
+      return parsedData
+
+    default:
+      return parsedData
   }
 }
 
