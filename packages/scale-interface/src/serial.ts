@@ -243,11 +243,6 @@ async function changeUnits(): Promise<void> {
 }
 
 export {
-  open,
-  subscribe,
-  subscribeOnce,
-  write,
-  close,
   connectToScale,
   disconnectFromScale,
   tareBalance,
