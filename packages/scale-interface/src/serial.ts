@@ -53,7 +53,7 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
   return portOpen()
 }
 
-function subscribe(callback: (data: string) => void): void {
+async function* subscribe(): AsyncIterable<string> {
   if (serialPort === null) {
     throw new Error('Port is not open')
   }
@@ -61,7 +61,10 @@ function subscribe(callback: (data: string) => void): void {
   const {
     parser,
   } = serialPort
-  parser.on('data', callback)
+
+  for await (const data of parser) {
+    yield data
+  }
 }
 
 function subscribeOnce(): Promise<string> {
@@ -185,13 +188,13 @@ function parse(data: string): Measurement | ActionReply {
   }
 }
 
-async function connectToScale(
+async function* connectToScale(
   path: string,
-  dataCallback: (data: Measurement) => void,
   options: SerialPort.OpenOptions = {},
-): Promise<void> {
+): AsyncIterable<Measurement> {
   await open(path, options)
-  subscribe((data) => {
+
+  for await (const data of subscribe()) {
     const parsedData = parse(data)
     switch (parsedData) {
       case ActionReply.ZEROED_BALANCE:
@@ -201,10 +204,10 @@ async function connectToScale(
         break
 
       default:
-        dataCallback(parsedData)
+        yield parsedData
         break
     }
-  })
+  }
 }
 
 function disconnectFromScale(): Promise<void> {
