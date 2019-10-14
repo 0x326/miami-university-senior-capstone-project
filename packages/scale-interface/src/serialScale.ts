@@ -8,6 +8,7 @@ import {
   open,
   write,
   subscribe,
+  subscribeOnce,
 } from './serial'
 
 enum ActionReply {
@@ -93,23 +94,6 @@ function parse(data: string): Measurement | ActionReply {
   }
 }
 
-type Resolve = (value?: void | PromiseLike<void>) => void
-type Reject = (reason?: Error) => void
-let zeroCommandPromises: Set<[Resolve, Reject]> = Set()
-let changeUnitCommandPromises: Set<[Resolve, Reject]> = Set()
-
-function resolvePromises(promises: Set<[Resolve, Reject]>): void {
-  for (const [resolve] of promises) {
-    resolve()
-  }
-}
-
-function rejectPromises(promises: Set<[Resolve, Reject]>, error: Error): void {
-  for (const [, reject] of promises) {
-    reject(error)
-  }
-}
-
 async function connectToScale(
   path: string,
   dataCallback: (data: Measurement) => void,
@@ -120,13 +104,9 @@ async function connectToScale(
     const parsedData = parse(data)
     switch (parsedData) {
       case ActionReply.ZEROED_BALANCE:
-        resolvePromises(zeroCommandPromises)
-        zeroCommandPromises = zeroCommandPromises.clear()
         break
 
       case ActionReply.CHANGED_UNITS:
-        resolvePromises(changeUnitCommandPromises)
-        changeUnitCommandPromises = changeUnitCommandPromises.clear()
         break
 
       default:
@@ -137,27 +117,18 @@ async function connectToScale(
 }
 
 function disconnectFromScale(): void {
-  rejectPromises(zeroCommandPromises, new Error('Disconnected from scale'))
-  rejectPromises(changeUnitCommandPromises, new Error('Disconnected from scale'))
-  zeroCommandPromises = zeroCommandPromises.clear()
-  changeUnitCommandPromises = changeUnitCommandPromises.clear()
+
 }
 
-function listenForReply(type: ActionReply): Promise<void> {
-  return new Promise((resolve, reject): void => {
-    switch (type) {
-      case ActionReply.ZEROED_BALANCE:
-        zeroCommandPromises = zeroCommandPromises.add([resolve, reject])
-        break
+async function listenForReply(type: ActionReply): Promise<void> {
+  const data = await subscribeOnce()
+  const reply = parse(data)
+  if (reply === type) {
+    return Promise.resolve()
+  }
 
-      case ActionReply.CHANGED_UNITS:
-        changeUnitCommandPromises = changeUnitCommandPromises.add([resolve, reject])
-        break
-
-      default:
-        reject(new Error(`${type} is not a supported ActionReply`))
-    }
-  })
+  // Wait for next data
+  return listenForReply(type)
 }
 
 async function tareBalance(): Promise<void> {
