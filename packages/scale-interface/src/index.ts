@@ -2,7 +2,7 @@ import yargs from 'yargs'
 
 import {
   connectToScale,
-} from './serialScale'
+} from './serial'
 
 const {
   argv,
