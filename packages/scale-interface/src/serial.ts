@@ -30,9 +30,9 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
     ...options,
     autoOpen: false,
   })
-  const portOpen = promisify(port.open)
-  const portWrite = promisify(port.write)
-  const portClose = promisify(port.close)
+  const portOpen = promisify(port.open.bind(port))
+  const portWrite = promisify(port.write.bind(port))
+  const portClose = promisify(port.close.bind(port))
 
   portCloseError = null
 
