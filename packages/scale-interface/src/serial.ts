@@ -210,6 +210,8 @@ async function* subscribe(includeActionReplies = false): AsyncIterable<Measureme
     parser,
   } = serialPort
 
+  // Set the stream to 'flowing' if it is not already
+  setImmediate(() => parser.resume())
   for await (const data of parser) {
     const parsedData = parse(data)
     switch (parsedData) {
