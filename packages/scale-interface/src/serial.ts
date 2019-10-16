@@ -236,10 +236,17 @@ async function subscribeOnce(includeActionReplies = false): Promise<Measurement 
 
   const {
     parser,
+    parserOnce,
   } = serialPort
-  // `as unknown` required due to unusual type cast
-  const data: string = await once(parser, 'data') as unknown as string
+  const {
+    attachPromise,
+    dataPromise,
+  } = parserOnce()
 
+  await attachPromise
+  // Set the stream to 'flowing' if it is not already
+  parser.resume()
+  const data = await dataPromise
   const parsedData = parse(data)
   switch (parsedData) {
     case ActionReply.ZEROED_BALANCE:
@@ -265,21 +272,31 @@ async function listenForReply(type: ActionReply): Promise<void> {
 }
 
 async function tareBalance(): Promise<void> {
-  // There is a slight race condition here:
-  // The listenForReply promise is created after the write-success and resume-promise events
-  //   are handled by the event loop
-  // In listenForReply, we start listening for the responding reply
-  // In the case that the device responds and its corresponding data event is handled
-  //   before the listenForReply promise is created,
-  //   it will not resolve until an additional zeroed reply is received
-  // However, there is nothing we can do about this because
-  //   we cannot control what order the event loop processes events
+  if (serialPort === null) {
+    throw new Error('Port is not open')
+  }
+
+  const {
+    parser,
+  } = serialPort
+
+  // Pauses input stream
+  parser.pause()
   await write('Z')
   return listenForReply(ActionReply.ZEROED_BALANCE)
 }
 
 async function changeUnits(): Promise<void> {
-  // Same race condition applies as in tareBalance()
+  if (serialPort === null) {
+    throw new Error('Port is not open')
+  }
+
+  const {
+    parser,
+  } = serialPort
+
+  // Pauses input stream
+  parser.pause()
   await write('U')
   return listenForReply(ActionReply.CHANGED_UNITS)
 }
