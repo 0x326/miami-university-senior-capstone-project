@@ -2,7 +2,6 @@ import {
   promisify,
 } from 'util'
 
-import once from 'events.once'
 import SerialPort from 'serialport'
 
 const {
