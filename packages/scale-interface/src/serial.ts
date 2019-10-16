@@ -283,7 +283,7 @@ async function tareBalance(): Promise<void> {
 
   // Pauses input stream
   parser.pause()
-  await write('Z')
+  await write('Z\r\n')
   return listenForReply(ActionReply.ZEROED_BALANCE)
 }
 
@@ -298,7 +298,7 @@ async function changeUnits(): Promise<void> {
 
   // Pauses input stream
   parser.pause()
-  await write('U')
+  await write('U\r\n')
   return listenForReply(ActionReply.CHANGED_UNITS)
 }
 
