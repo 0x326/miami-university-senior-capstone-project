@@ -11,12 +11,17 @@ const {
 
 type PortWrite = (arg1: string | number[] | Buffer) => Promise<number>
 type PortClose = () => Promise<void>
+type ParserOnce = () => {
+  attachPromise: Promise<void>;
+  dataPromise: Promise<string>;
+}
 
 let serialPort: {
   port: SerialPort;
   parser: SerialPort.parsers.Readline;
   portWrite: PortWrite;
   portClose: PortClose;
+  parserOnce: ParserOnce;
 } | null = null
 let portCloseError: Error | null = null
 
@@ -47,7 +52,39 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
     delimiter: '\r\n',
   }))
 
-  serialPort = { port, parser, portWrite, portClose }
+  const parserOnce: ParserOnce = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let resolveAttach: (() => void) | any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let rejectAttach: ((error: Error) => void) | any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let resolveData: ((data: string) => void) | any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let rejectData: ((error: Error) => void) | any
+
+    const attachPromise: Promise<void> = new Promise((resolve, reject): void => {
+      [resolveAttach, rejectAttach] = [resolve, reject]
+    })
+    const dataPromise: Promise<string> = new Promise((resolve, reject): void => {
+      [resolveData, rejectData] = [resolve, reject]
+    })
+
+    try {
+      parser.once('data', (data: string) => resolveData(data))
+      parser.once('error', (error: Error) => rejectData(error))
+      resolveAttach()
+    } catch (error) {
+      rejectAttach(error)
+      rejectData(error)
+    }
+
+    return {
+      attachPromise,
+      dataPromise,
+    }
+  }
+
+  serialPort = { port, parser, portWrite, portClose, parserOnce }
 
   // Open port
   return portOpen()
