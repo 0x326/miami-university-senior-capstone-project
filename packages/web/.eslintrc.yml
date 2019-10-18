@@ -1,2 +1,11 @@
 parserOptions:
   project: ./tsconfig.json
+
+overrides:
+  - files:
+    - 'src/serviceWorker.ts'
+
+    rules:
+      # create-react-app does not allow us to reference this in a eslint-disable comment
+      # See https://github.com/facebook/create-react-app/issues/7712#issuecomment-543368918
+      unicorn/no-unsafe-regex: off
