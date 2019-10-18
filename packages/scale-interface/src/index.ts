@@ -3,6 +3,7 @@ import yargs from 'yargs'
 import {
   open,
   subscribe,
+  requestBalance,
 } from './serial'
 
 const {
@@ -60,16 +61,26 @@ const {
   'bit-parity': 'none' | 'even' | 'odd';
 }
 
-open(device, {
+const deviceConnected = open(device, {
   baudRate,
   dataBits,
   parity: bitParity,
 })
   .then(() => console.log('Scale connected'))
-  .then(() => subscribe())
-  .then(async (iterator) => {
-    for await (const data of iterator) {
-      console.log('Received data', data)
-    }
-  })
+
+Promise.all([
+  deviceConnected
+    .then(() => subscribe())
+    .then(async (iterator) => {
+      for await (const data of iterator) {
+        console.log('Received data', data)
+      }
+    }),
+
+  deviceConnected
+    .then(() => setInterval(() => {
+      requestBalance()
+        .then((data) => console.log('Received data (by request)', data))
+    }, 1000)),
+])
   .catch((error) => console.error('Error while interacting with scale', error))
