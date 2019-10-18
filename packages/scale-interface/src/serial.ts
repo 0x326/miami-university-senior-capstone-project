@@ -272,6 +272,21 @@ async function listenForReply(type: ActionReply): Promise<void> {
   return listenForReply(type)
 }
 
+async function requestBalance(): Promise<Measurement> {
+  if (serialPort === null) {
+    throw new Error('Port is not open')
+  }
+
+  const {
+    parser,
+  } = serialPort
+
+  // Pauses input stream
+  parser.pause()
+  await write('Q\r\n')
+  return subscribeOnce()
+}
+
 async function tareBalance(): Promise<void> {
   if (serialPort === null) {
     throw new Error('Port is not open')
@@ -307,6 +322,7 @@ export {
   close,
   subscribe,
   subscribeOnce,
+  requestBalance,
   tareBalance,
   changeUnits,
 }
