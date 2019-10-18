@@ -121,6 +121,11 @@ yarn build
 yarn analyze-build
 ```
 
+These commands will run across all packages in the repo.
+To run them in only a specific package,
+first `cd` into `packages/[PACKNAME-NAME]/`
+then run the relevant `yarn SCRIPT` command
+
 ## Configuring development environment
 
 See https://create-react-app.dev
