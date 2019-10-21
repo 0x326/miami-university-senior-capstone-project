@@ -59,7 +59,7 @@ Here's one idea of how we can use GitLab to facilitate our software development 
      These indicate the user stories that we are trying to accomplish during the sprint,
      but may not finish
   1. Move tasks required for user story into the "To Do" column.
-     These indicate specific tasks for the user stories that we can committed to finishing by the end of the sprint
+     These indicate specific tasks for the user stories that we are committed to finishing by the end of the sprint
   1. For all task issues,
      assign it a [due date] for the end of the sprint
      and add a `Sprint::NUMBER` [label] to it
