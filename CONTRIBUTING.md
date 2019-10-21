@@ -14,6 +14,7 @@
 [due date]: https://docs.gitlab.com/ee/user/project/issues/due_dates.html
 [approval]: https://docs.gitlab.com/ee/user/project/merge_requests/merge_request_approvals.html
 [time tracking]: https://docs.gitlab.com/ee/workflow/time_tracking.html
+[template]: https://docs.gitlab.com/ee/user/project/description_templates.html
 
 [Git - the simple guide]: https://rogerdudler.github.io/git-guide/
 [Git reference guide]: https://www.digitalocean.com/community/tutorials/how-to-use-git-a-reference-guide
@@ -43,7 +44,8 @@ Here's one idea of how we can use GitLab to facilitate our software development 
   1. Create individual GitLab [issues] for each user story
   1. Categorize [issues] using [labels]
   1. Discuss each user story using issue comments
-  1. Brainstorm tasks required to complete the user story and create a new issue for each task.
+  1. Brainstorm tasks required to complete the user story and create a new issue for each task
+     using the `Task` [template].
      (From here on out, these issues will be called "task issues" to differentiate from "user story issues")
   1. In the issue description for each user story, [reference] its task issues in a list
 
@@ -70,7 +72,7 @@ Here's one idea of how we can use GitLab to facilitate our software development 
 
   1. Move issues to different columns of the [issue boards] as work is done
   1. Keep track of time spent on each task issue using GitLab [time tracking]
-  1. When work is done, create a [merge request]
+  1. When work is done, create a [merge request] using the `Complete Task` [template]
      and reference the relevant task [issues] in the issue description
      so that they will be [closed automatically on merge][automatically closing issues]
      (Example: write "Closes #ISSUE_NUMBER")
