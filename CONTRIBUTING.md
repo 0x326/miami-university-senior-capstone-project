@@ -47,7 +47,7 @@ Here's one idea of how we can use GitLab to facilitate our software development 
   1. Brainstorm tasks required to complete the user story and create a new issue for each task
      using the `Task` [template].
      (From here on out, these issues will be called "task issues" to differentiate from "user story issues")
-  1. In the issue description for each user story, [reference] its task issues in a list
+  1. In the issue description for each user story, [reference] its task issues in a [task list]
 
 - Long-term planning:
 
