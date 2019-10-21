@@ -4,7 +4,7 @@
 [issue boards]: https://docs.gitlab.com/ee/user/project/issue_board.html
 [burndown chart]: https://docs.gitlab.com/ee/user/project/milestones/burndown_charts.html
 [CI/CD]: https://docs.gitlab.com/ee/ci/README.html
-[labels]: https://docs.gitlab.com/ee/user/project/labels.html
+[label]: https://docs.gitlab.com/ee/user/project/labels.html
 [releases]: https://docs.gitlab.com/ee/user/project/releases/
 [pages]: https://docs.gitlab.com/ee/user/project/pages/
 [assignee]: https://docs.gitlab.com/ee/user/project/issues/multiple_assignees_for_issues.html
