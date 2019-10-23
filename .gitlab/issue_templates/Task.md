@@ -4,5 +4,6 @@
 >
 > - [ ] Add the `Task` label
 > - [ ] Reference the relevant user story issue
+> - [ ] Assign to the relevant milestone
 > - [ ] When planned, set the due date to the end of the relevant sprint
 > - [ ] When planned, add the `Sprint::NUMBER` label

@@ -6,6 +6,7 @@
 >
 > - [ ] Reference the relevant user story issue
 > - [ ] Reference the relevant task issues
+> - [ ] Assign to the relevant milestone
 > - [ ] Provide summary below
 > - [ ] Add the `Sprint::NUMBER` label
 > - [ ] Merge `master` into this branch and make sure everything still works
