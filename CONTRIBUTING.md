@@ -77,7 +77,9 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
 
 1. Install a Git client: [command-line][Git command-line], [GitHub Desktop], etc.
 
-  - If you are not familiar with the [Git command-line], I highly recommend using [GitHub Desktop]
+  - If you are not familiar with the [Git command-line], I highly recommend using [GitHub Desktop].
+    You do not need to sign into a GitHub account to use it (though it will not hurt either),
+    since we are using GitLab instead of GitHub.
 
 1. Install [Node.js]
 1. If not already included in your Node.js installation, install [Yarn]
