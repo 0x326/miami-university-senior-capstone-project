@@ -9,11 +9,6 @@ plugins:
   - '@typescript-eslint'
   - react-hooks
 
-env:
-  browser: true
-  node: true
-  jest: true
-
 rules:
   semi:
     - error
