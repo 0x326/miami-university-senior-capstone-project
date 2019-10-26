@@ -2,10 +2,15 @@ extends:
   - plugin:unicorn/recommended
   - airbnb
   - plugin:@typescript-eslint/recommended
+  - plugin:@typescript-eslint/recommended-requiring-type-checking
 
 parser: '@typescript-eslint/parser'
+parserOptions:
+  project: ./tsconfig.json
+
 plugins:
   - '@typescript-eslint'
+  - react-hooks
 
 rules:
   semi:
@@ -39,6 +44,9 @@ rules:
   react/jsx-handler-names: error
   react/no-direct-mutation-state: error
   react/no-multi-comp: error
+
+  react-hooks/rules-of-hooks: error
+  react-hooks/exhaustive-deps: warn
 
   # As of v10.0.0, incompatible with `immutable`
   unicorn/new-for-builtins: off
