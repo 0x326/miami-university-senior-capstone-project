@@ -30,6 +30,9 @@
 [React Development Tools - Chrome]: https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi
 [React Development Tools - Firefox]: https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
 [Debugger for Chrome]: https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome
+[ESlint]: https://eslint.org/
+[ESlint-built-in-rules]: https://eslint.org/docs/rules/
+[ESlint-plugin-list]: https://www.npmjs.com/search?q=eslint-plugin
 
 # Contributing Guide
 
@@ -106,6 +109,11 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
 > [Git command-line reference][Git reference guide]
 
 1. Install a Git client: [command-line][Git command-line], [GitHub Desktop], etc.
+
+  - If you are not familiar with the [Git command-line], I highly recommend using [GitHub Desktop].
+    You do not need to sign into a GitHub account to use it (though it will not hurt either),
+    since we are using GitLab instead of GitHub.
+
 1. Install [Node.js]
 1. If not already included in your Node.js installation, install [Yarn]
 1. Clone this repo using Git
@@ -159,3 +167,24 @@ then run the relevant `yarn SCRIPT` command
 ## Configuring development environment
 
 See https://create-react-app.dev
+
+## Debugging lint errors
+
+When [ESlint] analyzes source code, it does so on the basis of pre-determined rules.
+It comes with an extensive list of [built-in rules][ESlint-built-in-rules]
+but it is also flexible to accommodate third-party rules
+through various [plugins][ESlint-plugin-list].
+
+If you get a lint error,
+take note of the rule which is producing the error.
+If the rule contains a `/` then it is produced by a plugin where `plugin-name/` is the rule prefix.
+If it does not contain a `/` then it is a built-in rule.
+
+When rules are not automatically fixable with `yarn lint --fix`,
+it can be helpful to look at the rule's documentation.
+If the error is due to a built-in rule, read its documentation [here][ESlint-built-in-rules].
+If the rule is from a plugin,
+first find its appropriate package on [NPM][ESlint-plugin-list],
+then search for the rule name in the `README`,
+(almost all good plugins will have references to each rule's documentation in the `README`,
+which will contain several example snippets of 'valid' and 'invalid' code)
