@@ -26,62 +26,54 @@ interface State {
   someState: number;
 }
 
-class CageSessionTable extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      someState: 0, // Initialization
-    }
-  }
+function CageSessionTable(props: Props): JSX.Element {
+  const {
+    sessionNumber,
+    bottleTypes,
+    data,
+  } = props
 
-  render(): JSX.Element {
-    const {
-      sessionNumber,
-      bottleTypes,
-      data,
-    } = this.props
-
-    const {
-      someState,
-    } = this.state
-
-    return (
-      <>
-        <DataTable>
-          <DataTableContent>
-            <DataTableHead>
-              <DataTableRow>
-                <DataTableHeadCell>
-Session
-                  {sessionNumber}
+  return (
+    <>
+      <DataTable>
+        <DataTableContent>
+          <DataTableHead>
+            <DataTableRow>
+              <DataTableHeadCell>
+                Session
+                {sessionNumber}
+              </DataTableHeadCell>
+              {bottleTypes.map((bottleType) => (
+                <DataTableHeadCell
+                  key={bottleType}
+                  alignEnd
+                >
+                  {bottleType}
                 </DataTableHeadCell>
+              ))}
+            </DataTableRow>
+          </DataTableHead>
+          <DataTableBody>
+            {data.map(([label, labelData]) => (
+              <DataTableRow
+                key={label}
+              >
+                <DataTableCell>{label}</DataTableCell>
                 {bottleTypes.map((bottleType) => (
-                  <DataTableHeadCell
+                  <DataTableCell
                     key={bottleType}
                     alignEnd
                   >
-                    {bottleType}
-                  </DataTableHeadCell>
+                    {labelData.get(bottleType)}
+                  </DataTableCell>
                 ))}
               </DataTableRow>
-            </DataTableHead>
-            <DataTableBody>
-              {data.map(([label, labelData]) => (
-                <DataTableRow>
-                  <DataTableCell>{label}</DataTableCell>
-                  {bottleTypes.map((bottleType) => (
-                    <DataTableCell alignEnd>
-                      {labelData.get(bottleType)}
-                    </DataTableCell>
-                  ))}
-                </DataTableRow>
-              ))}
-            </DataTableBody>
-          </DataTableContent>
-        </DataTable>
-      </>
-    )
-  }
+            ))}
+          </DataTableBody>
+        </DataTableContent>
+      </DataTable>
+    </>
+  )
 }
 
 export default CageSessionTable
