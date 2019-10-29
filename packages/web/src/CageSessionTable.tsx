@@ -16,14 +16,15 @@ import {
 
 import '@rmwc/data-table/data-table.css'
 
+import {
+  BottleState,
+  BottleType,
+} from './types'
+
 interface Props {
   sessionNumber: number;
-  bottleTypes: List<string>;
-  data: List<[string, Map<string, number>]>;
-}
-
-interface State {
-  someState: number;
+  bottleTypes: List<BottleType>;
+  data: List<[BottleState, Map<BottleType, number>]>;
 }
 
 function CageSessionTable(props: Props): JSX.Element {
