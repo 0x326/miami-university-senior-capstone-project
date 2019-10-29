@@ -5,14 +5,12 @@ extends:
   - plugin:@typescript-eslint/recommended-requiring-type-checking
 
 parser: '@typescript-eslint/parser'
+parserOptions:
+  project: ./tsconfig.json
+
 plugins:
   - '@typescript-eslint'
   - react-hooks
-
-env:
-  browser: true
-  node: true
-  jest: true
 
 rules:
   semi:
