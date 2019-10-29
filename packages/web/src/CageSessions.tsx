@@ -1,10 +1,12 @@
 import React from 'react'
-import CageSessionTable from './CageSessionTable'
 
 import {
   List,
   ListItem,
 } from '@rmwc/list'
+
+import CageSessionTable from './CageSessionTable'
+
 import '@material/list/dist/mdc.list.css'
 
 interface Props {
@@ -24,15 +26,12 @@ class CageSessions extends React.Component<Props, State> {
   }
 
   render(): JSX.Element {
-
-    return(
+    return (
       <>
         <List>
           {/* Do I need to send this objects the props/data? */}
           <ListItem>
-            <CageSessionTable
-
-            />
+            <CageSessionTable />
           </ListItem>
         </List>
       </>

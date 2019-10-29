@@ -49,31 +49,34 @@ class CageSessionTable extends React.Component<Props, State> {
       <>
         <DataTable>
           <DataTableContent>
-          <DataTableHead>
-            <DataTableRow>
-              <DataTableHeadCell>Session {sessionNumber}</DataTableHeadCell>
-              {bottleTypes.map((bottleType) => (
-                <DataTableHeadCell
-                  key={bottleType}
-                  alignEnd
-                >
-                  {bottleType}
-                </DataTableHeadCell>
-              ))}
-            </DataTableRow>
-          </DataTableHead>
-          <DataTableBody>
-            {data.map(([label, labelData]) => (
+            <DataTableHead>
               <DataTableRow>
-                <DataTableCell>{label}</DataTableCell>
+                <DataTableHeadCell>
+Session
+                  {sessionNumber}
+                </DataTableHeadCell>
                 {bottleTypes.map((bottleType) => (
-                  <DataTableCell alignEnd>
-                    {labelData.get(bottleType)}
-                  </DataTableCell>
+                  <DataTableHeadCell
+                    key={bottleType}
+                    alignEnd
+                  >
+                    {bottleType}
+                  </DataTableHeadCell>
                 ))}
               </DataTableRow>
-            ))}
-          </DataTableBody>
+            </DataTableHead>
+            <DataTableBody>
+              {data.map(([label, labelData]) => (
+                <DataTableRow>
+                  <DataTableCell>{label}</DataTableCell>
+                  {bottleTypes.map((bottleType) => (
+                    <DataTableCell alignEnd>
+                      {labelData.get(bottleType)}
+                    </DataTableCell>
+                  ))}
+                </DataTableRow>
+              ))}
+            </DataTableBody>
           </DataTableContent>
         </DataTable>
       </>
