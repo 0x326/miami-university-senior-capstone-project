@@ -1,3 +1,6 @@
+// TODO @0x326 [2019-11-06]: Remove this eslint directive
+/* eslint no-unused-vars: "warn" */
+
 import React, {
   useState,
 } from 'react'
