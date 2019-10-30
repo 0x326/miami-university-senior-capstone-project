@@ -48,6 +48,10 @@ rules:
   react-hooks/rules-of-hooks: error
   react-hooks/exhaustive-deps: warn
 
+  '@typescript-eslint/no-empty-interface':
+    - error
+    - allowSingleExtends: true
+
   # As of v10.0.0, incompatible with `immutable`
   unicorn/new-for-builtins: off
 
