@@ -18,10 +18,6 @@ import {
 } from './CageSessions'
 
 import {
-  CageSessionData,
-} from './CageSessionTable'
-
-import {
   BottleType,
 } from './types'
 
@@ -29,16 +25,21 @@ import './App.css'
 
 const App: React.FC = () => {
   const [bottleTypes, setBottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  const [experimentData, setExperimentData] = useState<ExperimentData>(Map((List.of(
-    [1, (List.of(
-      [1, (List.of(
-        ['Before', Map(List.of(
-          ['H₂0', 5],
-          ['EtOH', 10],
-        ))],
-      ) as unknown as CageSessionData)],
-    ) as CageData)],
-  ) as List<[CageId, CageData]>)))
+  const [experimentData, setExperimentData] = useState<ExperimentData>(
+    Map<CageId, CageData>().withMutations((map) => map
+      .set(1, List().withMutations((cageData) => cageData
+        .push({
+          sessionNumber: 1,
+          cageSessionData: List.of(
+            {
+              rowLabel: 'Before',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 5)
+                .set('EtOH', 10)),
+            },
+          ),
+        })))),
+  )
   const [cages, setCages] = useState<Cages>(List.of(1))
 
   return (
