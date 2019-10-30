@@ -24,14 +24,14 @@ export interface CageData extends List<[SessionNumber, CageSessionData]> {}
 
 interface Props {
   cageNumber: number;
-  data: CageData;
+  cageData: CageData;
   bottleTypes: List<BottleType>;
 }
 
 function CageSessions(props: Props): JSX.Element {
   const {
     cageNumber,
-    data,
+    cageData,
     bottleTypes,
   } = props
 
@@ -45,7 +45,7 @@ function CageSessions(props: Props): JSX.Element {
           </ListItem>
         )}
       >
-        {data.map(([sessionNumber, datum]) => (
+        {cageData.map(([sessionNumber, datum]) => (
           <CageSessionTable
             key={sessionNumber}
             sessionNumber={sessionNumber}
