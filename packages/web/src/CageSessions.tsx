@@ -17,10 +17,12 @@ import '@material/list/dist/mdc.list.css'
 
 import {
   BottleType,
-  SessionNumber,
 } from './types'
 
-export interface CageData extends List<[SessionNumber, CageSessionData]> {}
+export interface CageData extends List<Readonly<{
+  sessionNumber: number;
+  cageSessionData: CageSessionData;
+}>> {}
 
 interface Props {
   cageNumber: number;
@@ -45,12 +47,12 @@ function CageSessions(props: Props): JSX.Element {
           </ListItem>
         )}
       >
-        {cageData.map(([sessionNumber, datum]) => (
+        {cageData.map(({ sessionNumber, cageSessionData }) => (
           <CageSessionTable
             key={sessionNumber}
             sessionNumber={sessionNumber}
             bottleTypes={bottleTypes}
-            data={datum}
+            data={cageSessionData}
           />
         ))}
       </CollapsibleList>

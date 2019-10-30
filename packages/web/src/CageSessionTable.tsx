@@ -21,7 +21,10 @@ import {
   BottleType,
 } from './types'
 
-export interface CageSessionData extends List<[BottleState, Map<BottleType, number>]> {}
+export interface CageSessionData extends List<Readonly<{
+  rowLabel: BottleState;
+  rowData: Map<BottleType, number>;
+}>> {}
 
 interface Props {
   sessionNumber: number;
@@ -57,17 +60,17 @@ function CageSessionTable(props: Props): JSX.Element {
             </DataTableRow>
           </DataTableHead>
           <DataTableBody>
-            {data.map(([label, labelData]) => (
+            {data.map(({ rowLabel, rowData }) => (
               <DataTableRow
-                key={label}
+                key={rowLabel}
               >
-                <DataTableCell>{label}</DataTableCell>
+                <DataTableCell>{rowLabel}</DataTableCell>
                 {bottleTypes.map((bottleType) => (
                   <DataTableCell
                     key={bottleType}
                     alignEnd
                   >
-                    {labelData.get(bottleType)}
+                    {rowData.get(bottleType)}
                   </DataTableCell>
                 ))}
               </DataTableRow>
