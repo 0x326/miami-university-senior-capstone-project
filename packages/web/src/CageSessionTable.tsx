@@ -21,10 +21,12 @@ import {
   BottleType,
 } from './types'
 
+export interface CageSessionData extends List<[BottleState, Map<BottleType, number>]> {}
+
 interface Props {
   sessionNumber: number;
   bottleTypes: List<BottleType>;
-  data: List<[BottleState, Map<BottleType, number>]>;
+  data: CageSessionData;
 }
 
 function CageSessionTable(props: Props): JSX.Element {

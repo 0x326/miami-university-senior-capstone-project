@@ -9,19 +9,22 @@ import {
   ListItem,
 } from '@rmwc/list'
 
-import CageSessionTable from './CageSessionTable'
+import CageSessionTable, {
+  CageSessionData,
+} from './CageSessionTable'
 
 import '@material/list/dist/mdc.list.css'
 
 import {
-  BottleState,
   BottleType,
   SessionNumber,
 } from './types'
 
+export interface CageData extends List<[SessionNumber, CageSessionData]> {}
+
 interface Props {
   cageNumber: number;
-  data: List<[SessionNumber, List<[BottleState, Map<BottleType, number>]>]>;
+  data: CageData;
   bottleTypes: List<BottleType>;
 }
 
