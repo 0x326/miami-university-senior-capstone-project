@@ -1,4 +1,5 @@
 import yargs from 'yargs'
+import ws from 'ws'
 
 import {
   open,
@@ -48,17 +49,26 @@ const {
       'odd',
     ],
   })
+  .option('port', {
+    description: 'Websocket port',
+    type: 'number',
+    demandOption: true,
+    default: 8080,
+  })
+
 
 const {
   device,
   'baud-rate': baudRate,
   'data-bits': dataBits,
   'bit-parity': bitParity,
+  'port': websocketPort,
 } = argv as {
   device: string;
   'baud-rate': 1200 | 2400 | 4800 | 9600;
   'data-bits': 7 | 8;
   'bit-parity': 'none' | 'even' | 'odd';
+  'port': number;
 }
 
 const deviceConnected = open(device, {
@@ -68,8 +78,21 @@ const deviceConnected = open(device, {
 })
   .then(() => console.log('Scale connected'))
 
+async function createWebsocketServer(port: number, ): Promise<ws.Server> {
+  const wss = new ws.Server({ port: port })
+  wss.on('connection', (ws: any) => {
+    ws.on('message', (message: any) => {
+      console.log('received: %s', message);
+    });
+
+    ws.send('something');
+  });
+  return wss
+}
+
 Promise.all([
   deviceConnected
+    .then(() => createWebsocketServer(websocketPort))
     .then(() => subscribe())
     .then(async (iterator) => {
       for await (const data of iterator) {

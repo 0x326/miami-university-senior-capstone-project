@@ -1,0 +1,22 @@
+;; This buffer is for text that is not saved, and for Lisp evaluation.
+;; To create a file, visit it with <open> and enter text in its buffer.
+
+web -> not web
+save:
+[] - experiment query name
+[] - {ExperimentJson, filePath}
+
+
+
+
+not web -> web
+[] - {List of experiments}
+[] - {ExperimentJson, filePath}
+[] - saveWasGoodMessage
+[] - Measurement obj 
+    interface Measurement {
+	type: MeasurementType;
+	value: number;
+	unit: Unit;
+    }
+
