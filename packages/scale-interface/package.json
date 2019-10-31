@@ -14,8 +14,10 @@
     "typescript": "3.6.3"
   },
   "dependencies": {
+    "@types/ws": "^6.0.3",
     "immutable": "^4.0.0-rc.12",
     "serialport": "^7.1.5",
+    "ws": "^7.2.0",
     "yargs": "^14.0.0"
   }
 }
