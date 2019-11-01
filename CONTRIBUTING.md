@@ -164,10 +164,6 @@ To run them in only a specific package,
 first `cd` into `packages/[PACKNAME-NAME]/`
 then run the relevant `yarn SCRIPT` command
 
-## Configuring development environment
-
-See https://create-react-app.dev
-
 ## Debugging lint errors
 
 When [ESlint] analyzes source code, it does so on the basis of pre-determined rules.
@@ -188,3 +184,9 @@ first find its appropriate package on [NPM][ESlint-plugin-list],
 then search for the rule name in the `README`,
 (almost all good plugins will have references to each rule's documentation in the `README`,
 which will contain several example snippets of 'valid' and 'invalid' code)
+
+# Reference material
+
+## Configuring development environment
+
+See https://create-react-app.dev
