@@ -9,12 +9,12 @@
   },
   "devDependencies": {
     "@types/serialport": "^7.0.4",
+    "@types/ws": "^6.0.3",
     "@types/yargs": "^13.0.3",
     "parcel-bundler": "^1.12.3",
     "typescript": "3.6.3"
   },
   "dependencies": {
-    "@types/ws": "^6.0.3",
     "immutable": "^4.0.0-rc.12",
     "serialport": "^7.1.5",
     "ws": "^7.2.0",
