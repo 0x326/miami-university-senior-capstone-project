@@ -33,6 +33,9 @@
 [ESlint]: https://eslint.org/
 [ESlint-built-in-rules]: https://eslint.org/docs/rules/
 [ESlint-plugin-list]: https://www.npmjs.com/search?q=eslint-plugin
+[Yarn usage]: https://yarnpkg.com/en/docs/usage
+[NPM]: https://www.npmjs.com/
+[DefinitelyTyped]: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 # Contributing Guide
 
@@ -184,6 +187,57 @@ first find its appropriate package on [NPM][ESlint-plugin-list],
 then search for the rule name in the `README`,
 (almost all good plugins will have references to each rule's documentation in the `README`,
 which will contain several example snippets of 'valid' and 'invalid' code)
+
+## Adding/upgrading/removing dependencies
+
+> See the [Yarn usage] guide
+>
+> See [NPM] for the list of available packages
+
+Node.js differentiates between different kinds of dependencies:
+`dependencies`, `devDependencies`, and some others (see [here](https://stackoverflow.com/a/22004559) for full guide).
+`dependencies` are those that are used at run-time whereas `devDependencies` are those that are only used at compile-time.
+
+```bash
+cd miami-university-senior-capstone-project/
+
+# First, go into the proper package
+cd packages/PACKNAME_NAME/
+
+# Add dependency
+yarn add package-name
+
+# Add dev dependency
+yarn add package-name --dev
+
+# Commit package.json and yarn.lock
+git add package.json ../../yarn.lock
+git commit -m "Add 'package-name'"
+```
+
+Since we're using TypeScript,
+we need type declarations for all our dependencies.
+If the dependency does not maintain a declaration file itself,
+then you will also need to install its community-maintained declaration file from [DefinitelyTyped]:
+
+```bash
+yarn add @types/package-name --dev
+```
+
+If the dependency is a `devDependency`
+and is not specific to any package in particular, but rather to the project as a whole (such as linters, Git hooks, etc.),
+then the package should be added to the whole workspace:
+
+```bash
+cd miami-university-senior-capstone-project/
+
+# Add workspace dev dependency
+yarn add package-name --dev -W
+
+# Commit package.json and yarn.lock
+git add package.json yarn.lock
+git commit -m "Add 'package-name'"
+```
 
 # Reference material
 
