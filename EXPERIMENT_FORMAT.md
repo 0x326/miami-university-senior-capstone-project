@@ -29,8 +29,8 @@
     ],
   cages: [
     {
-      "Cage Weight": 259,
-      "Cage Label": "Cage 1 (Dummy)",
+      cageWeight: 259,
+      cageLabel: "Cage 1 (Dummy)",
       sessions: [
         {
           "H20 Weights Begore": 432,
