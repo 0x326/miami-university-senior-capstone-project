@@ -91,7 +91,7 @@ cache:
 
 lint:
   stage: test
-  image: node:lts-alpine
+  image: node:lts
 
   before_script:
     - yarn install
