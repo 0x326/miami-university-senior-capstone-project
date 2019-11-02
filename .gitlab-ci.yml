@@ -88,3 +88,8 @@ include:
 cache:
   paths:
     - node_modules/
+
+lint:
+  stage: test
+  before_script: yarn install
+  script: yarn lint
