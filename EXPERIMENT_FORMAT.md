@@ -11,18 +11,18 @@
   totalColsBegin: 8,
   totalColsMid: 6,
   totalColsEnd: 4,
-  subSessionLablesBegin: [
+  subSessionLabelsBegin: [
     "Cage Weight",
     "Cage",
     ["H20 Weights", [ "Before", "After 30m", "After 24h" ]],
     ["20% ETOH Weights", [ "Before", "After 30m", "After 24h" ]]
   ],
-  subSessionLablesMid: [
+  subSessionLabelsMid: [
     "Cage",
     ["H20 Weights", [ "Before", "After 24h" ]],
     ["20% ETOH Weights", [ "Before", "After 24h" ]]
   ],
-  subSessionLablesEnd: [
+  subSessionLabelsEnd: [
     "Cage",
     ["H20 Weights", [ "After 24h" ]],
     ["20% ETOH Weights", [ "After 24h" ]]
