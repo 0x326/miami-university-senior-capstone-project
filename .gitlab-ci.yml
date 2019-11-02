@@ -91,5 +91,6 @@ cache:
 
 lint:
   stage: test
-  before_script: yarn install
+  before_script:
+    - yarn install
   script: yarn lint
