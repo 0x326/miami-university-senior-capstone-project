@@ -1,22 +1,67 @@
-;; This buffer is for text that is not saved, and for Lisp evaluation.
-;; To create a file, visit it with <open> and enter text in its buffer.
+All websockets will send either stringified JSON if success or 'FAIL' if some error occurred
 
-web -> not web
-save:
-[] - experiment query name
-[] - {ExperimentJson, filePath}
+You initialize connections like so:
+#+BEGIN_SRC javascript
+  const ws = new WebSocket("ws://localhost:<port>/<path>")
+  // create an onmessage handler e.g.
+  ws.onmessage = event => console.log(JSON.parse(event.data))
+  // call websocket with query
+  ws.send(<query>)
+#+END_SRC
 
+* DONE Initiated by web
+- /get-root-dir returns root directory of experiments where subdirs /archived and /active are found
+  - No argument expected
 
+- /list-experiments get list of all experiments matching query.filter
+  - Query: stringified JSON obj
+#+BEGIN_SRC javascript
+  JSON.stringify(
+      {
+          path: 'somePath',
+          filter?: {
+              name?: "something",
+              primaryExperimenter?: "something",
+              isComplete?: true|false,
+              ...
+          }
+      }
+  )
+#+END_SRC
 
+- /get-experiment get a single experiment at a given path
+  - Query: a string representing a path to an experiment json file
+#+BEGIN_SRC text
+  "/somepath"
+#+END_SRC
 
-not web -> web
-[] - {List of experiments}
-[] - {ExperimentJson, filePath}
-[] - saveWasGoodMessage
-[] - Measurement obj 
-    interface Measurement {
-	type: MeasurementType;
-	value: number;
-	unit: Unit;
-    }
+- /write-experiment: save experiment at a particular path
+  - Query: stringified ExperimentWrapper
+#+BEGIN_SRC javascript
+      JSON.stringify(
+          {
+              path: "path",
+              data: experimentObj
+          }
+      )
+#+END_SRC
 
+- /list-experiment-paths get list of experiment *paths* at given path that match query
+  - You could use this in combination with /get-experiment to fetch a particular experiment
+  - This might be preferable to /list-experiments in some cases
+  - If you want all experiments at the given path, use empty strings and don't provide dates
+  - Query: stringified json object
+#+BEGIN_SRC javascript
+  JSON.stringify(
+      {
+          path: "/somepath",
+          experimentName: "some experiment",
+          primaryExperimenter: "some name"
+          dateStart?: +new Date('2019'),
+          dateEnd?: + new Date('2020'),
+
+      }
+  )
+#+END_SRC
+
+* TODO Initiated by scale
