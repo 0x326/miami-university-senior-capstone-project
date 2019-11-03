@@ -8,6 +8,8 @@
     "build": "tsc --noEmit && parcel build --target node src/index.ts"
   },
   "devDependencies": {
+    "@types/hapi__joi": "^16.0.2",
+    "@types/lodash": "^4.14.144",
     "@types/node": "^12.12.5",
     "@types/serialport": "^7.0.4",
     "@types/ws": "^6.0.3",
@@ -16,8 +18,10 @@
     "typescript": "3.6.3"
   },
   "dependencies": {
+    "@hapi/joi": "^16.1.7",
     "fs": "^0.0.1-security",
     "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.15",
     "serialport": "^7.1.5",
     "ws": "^7.2.0",
     "yargs": "^14.0.0"
