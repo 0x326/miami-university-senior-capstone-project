@@ -26,7 +26,7 @@
     "Cage",
     ["H20 Weights", [ "After 24h" ]],
     ["20% ETOH Weights", [ "After 24h" ]]
-    ],
+  ],
   cages: [
     {
       cageWeight: 259,
