@@ -13,6 +13,7 @@ import CageSessionTable, {
   CageSessionData,
 } from './CageSessionTable'
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/list/dist/mdc.list.css'
 import '@rmwc/list/collapsible-list.css'
 
