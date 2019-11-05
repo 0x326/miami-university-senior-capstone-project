@@ -18,6 +18,11 @@ import {
   DrawerTitle,
 } from '@rmwc/drawer'
 
+import {
+  List as RMWCList,
+  ListItem,
+} from '@rmwc/list'
+
 import ExperimentDashboard, {
   ExperimentData,
   Cages,
@@ -36,8 +41,13 @@ import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@material/drawer/dist/mdc.drawer.css'
 
+enum AppView {
+  EXPERIMENT_DASHBOARD = 'Experiment Dashboard',
+}
+
 const App: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  const [appView, setAppView] = useState<AppView>(AppView.EXPERIMENT_DASHBOARD)
   const [bottleTypes, setBottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experimentData, setExperimentData] = useState<ExperimentData>(
     Map<CageId, CageData>().withMutations((map) => map
@@ -67,6 +77,19 @@ const App: React.FC = () => {
           <DrawerTitle>Scale Interface Tool</DrawerTitle>
           <DrawerSubtitle>A Senior Design Project</DrawerSubtitle>
         </DrawerHeader>
+        <DrawerContent>
+          <RMWCList>
+            {Object.values(AppView).map((displayName) => (
+              <ListItem
+                key={displayName}
+                activated={displayName === appView}
+                onClick={(): void => setAppView(displayName)}
+              >
+                {displayName}
+              </ListItem>
+            ))}
+          </RMWCList>
+        </DrawerContent>
       </Drawer>
       <ExperimentDashboard
         onDrawerOpen={(): void => setIsDrawerOpen(true)}
