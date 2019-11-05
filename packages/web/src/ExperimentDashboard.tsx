@@ -12,6 +12,7 @@ import {
   TopAppBarNavigationIcon,
   TopAppBarTitle,
   TopAppBarFixedAdjust,
+  TopAppBarActionItem,
 } from '@rmwc/top-app-bar'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -51,6 +52,9 @@ function ExperimentDashboard(props: Props): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
             <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
+          </TopAppBarSection>
+          <TopAppBarSection alignEnd>
+            <TopAppBarActionItem icon="cloud_download" />
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>
