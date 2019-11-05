@@ -46,8 +46,7 @@ function CageSessionTable(props: Props): JSX.Element {
           <DataTableHead>
             <DataTableRow>
               <DataTableHeadCell>
-                Session
-                {sessionNumber}
+                {`Session ${sessionNumber}`}
               </DataTableHeadCell>
               {bottleTypes.map((bottleType) => (
                 <DataTableHeadCell
