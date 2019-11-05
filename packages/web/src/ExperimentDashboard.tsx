@@ -6,10 +6,15 @@ import {
 } from 'immutable'
 
 import {
-  Typography,
-} from '@rmwc/typography'
+  TopAppBar,
+  TopAppBarRow,
+  TopAppBarSection,
+  TopAppBarNavigationIcon,
+  TopAppBarTitle,
+  TopAppBarFixedAdjust,
+} from '@rmwc/top-app-bar'
 
-import '@material/typography/dist/mdc.typography.css'
+import '@material/top-app-bar/dist/mdc.top-app-bar.css'
 
 import CageSessions, {
   CageData,
@@ -38,7 +43,15 @@ function ExperimentDashboard(props: Props): JSX.Element {
 
   return (
     <>
-      <Typography use="headline1">Experiment Dashboard</Typography>
+      <TopAppBar>
+        <TopAppBarRow>
+          <TopAppBarSection alignStart>
+            <TopAppBarNavigationIcon icon="menu" />
+            <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
+          </TopAppBarSection>
+        </TopAppBarRow>
+      </TopAppBar>
+      <TopAppBarFixedAdjust />
       {cages
         .filter((cageId) => experimentData.has(cageId))
         .map((cageId) => (
