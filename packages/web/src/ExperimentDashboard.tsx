@@ -6,10 +6,15 @@ import {
 } from 'immutable'
 
 import {
-  Typography,
-} from '@rmwc/typography'
+  TopAppBar,
+  TopAppBarRow,
+  TopAppBarSection,
+  TopAppBarNavigationIcon,
+  TopAppBarTitle,
+  TopAppBarFixedAdjust,
+} from '@rmwc/top-app-bar'
 
-import '@material/typography/dist/mdc.typography.css'
+import '@material/top-app-bar/dist/mdc.top-app-bar.css'
 
 import CageSessions, {
   CageData,
@@ -24,6 +29,7 @@ export interface ExperimentData extends Map<CageId, CageData> {}
 export interface Cages extends List<CageId> {}
 
 interface Props {
+  onDrawerOpen: () => void;
   bottleTypes: List<BottleType>;
   experimentData: ExperimentData;
   cages: Cages;
@@ -31,6 +37,7 @@ interface Props {
 
 function ExperimentDashboard(props: Props): JSX.Element {
   const {
+    onDrawerOpen,
     bottleTypes,
     cages,
     experimentData,
@@ -38,7 +45,15 @@ function ExperimentDashboard(props: Props): JSX.Element {
 
   return (
     <>
-      <Typography use="headline1">Experiment Dashboard</Typography>
+      <TopAppBar>
+        <TopAppBarRow>
+          <TopAppBarSection alignStart>
+            <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
+            <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
+          </TopAppBarSection>
+        </TopAppBarRow>
+      </TopAppBar>
+      <TopAppBarFixedAdjust />
       {cages
         .filter((cageId) => experimentData.has(cageId))
         .map((cageId) => (
