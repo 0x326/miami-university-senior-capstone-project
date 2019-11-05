@@ -39,6 +39,7 @@ import {
 
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/drawer/dist/mdc.drawer.css'
 
 enum AppView {
