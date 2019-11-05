@@ -39,14 +39,16 @@ function ExperimentDashboard(props: Props): JSX.Element {
   return (
     <>
       <Typography use="headline1">Experiment Dashboard</Typography>
-      {cages.map((cageId) => (
-        <CageSessions
-          key={cageId}
-          cageNumber={cageId}
-          bottleTypes={bottleTypes}
-          cageData={experimentData.get(cageId)}
-        />
-      ))}
+      {cages
+        .filter((cageId) => experimentData.has(cageId))
+        .map((cageId) => (
+          <CageSessions
+            key={cageId}
+            cageNumber={cageId}
+            bottleTypes={bottleTypes}
+            cageData={experimentData.get(cageId) as CageData}
+          />
+        ))}
     </>
   )
 }
