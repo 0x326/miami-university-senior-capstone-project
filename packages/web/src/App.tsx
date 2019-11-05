@@ -25,6 +25,7 @@ import {
 } from './types'
 
 import './App.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 const App: React.FC = () => {
   const [bottleTypes, setBottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
