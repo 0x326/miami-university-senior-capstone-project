@@ -6,7 +6,7 @@ import {
 
 import {
   CollapsibleList,
-  ListItem,
+  SimpleListItem,
 } from '@rmwc/list'
 
 import CageSessionTable, {
@@ -42,10 +42,10 @@ function CageSessions(props: Props): JSX.Element {
     <>
       <CollapsibleList
         handle={(
-          <ListItem>
-            Cage
-            {cageNumber}
-          </ListItem>
+          <SimpleListItem
+            text={`Cage ${cageNumber}`}
+            metaIcon="chevron_right"
+          />
         )}
       >
         {cageData.map(({ sessionNumber, cageSessionData }) => (
