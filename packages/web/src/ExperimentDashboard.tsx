@@ -29,6 +29,7 @@ export interface ExperimentData extends Map<CageId, CageData> {}
 export interface Cages extends List<CageId> {}
 
 interface Props {
+  onDrawerOpen: () => void;
   bottleTypes: List<BottleType>;
   experimentData: ExperimentData;
   cages: Cages;
@@ -36,6 +37,7 @@ interface Props {
 
 function ExperimentDashboard(props: Props): JSX.Element {
   const {
+    onDrawerOpen,
     bottleTypes,
     cages,
     experimentData,
@@ -46,7 +48,7 @@ function ExperimentDashboard(props: Props): JSX.Element {
       <TopAppBar>
         <TopAppBarRow>
           <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu" />
+            <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
             <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
           </TopAppBarSection>
         </TopAppBarRow>
