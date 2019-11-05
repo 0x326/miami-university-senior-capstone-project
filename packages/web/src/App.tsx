@@ -61,10 +61,68 @@ const App: React.FC = () => {
                 .set('H₂0', 5)
                 .set('EtOH', 10)),
             },
+            {
+              rowLabel: 'After',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 3)
+                .set('EtOH', 9)),
+            },
+          ),
+        })
+        .push({
+          sessionNumber: 2,
+          cageSessionData: List.of(
+            {
+              rowLabel: 'Before',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 5)
+                .set('EtOH', 10)),
+            },
+            {
+              rowLabel: 'After',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 2)
+                .set('EtOH', 8)),
+            },
+          ),
+        })))
+      .set(2, List().withMutations((cageData) => cageData
+        .push({
+          sessionNumber: 1,
+          cageSessionData: List.of(
+            {
+              rowLabel: 'Before',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 10)
+                .set('EtOH', 10)),
+            },
+            {
+              rowLabel: 'After',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 9)
+                .set('EtOH', 9)),
+            },
+          ),
+        })
+        .push({
+          sessionNumber: 2,
+          cageSessionData: List.of(
+            {
+              rowLabel: 'Before',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 10)
+                .set('EtOH', 10)),
+            },
+            {
+              rowLabel: 'After',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 1)
+                .set('EtOH', 4)),
+            },
           ),
         })))),
   )
-  const [cages, setCages] = useState<Cages>(List.of(1))
+  const [cages, setCages] = useState<Cages>(List.of(1, 2))
 
   return (
     <>
