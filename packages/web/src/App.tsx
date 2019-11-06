@@ -23,6 +23,8 @@ import ExperimentDashboard, {
   CageId,
 } from './routes/experiment-dashboard/ExperimentDashboard'
 
+import ExperimentList from './routes/experiments/ExperimentList'
+
 import {
   CageData,
 } from './routes/experiment-dashboard/CageSessions'
@@ -128,7 +130,14 @@ const App: React.FC = () => {
         />
         <Switch>
           <Route exact path="/">
-            <Link to="/experiment-dashboard">Experiment Dashboard</Link>
+            <ul>
+              <li>
+                <Link to="/experiment-dashboard">Experiment Dashboard</Link>
+              </li>
+              <li>
+                <Link to="/experiments">Experiments</Link>
+              </li>
+            </ul>
           </Route>
           <Route path="/experiment-dashboard">
             <ExperimentDashboard
@@ -136,6 +145,13 @@ const App: React.FC = () => {
               bottleTypes={bottleTypes}
               experimentData={experiments.get('experiment-1') as ExperimentData}
               cages={cages}
+            />
+          </Route>
+          <Route path="/experiments">
+            <ExperimentList
+              onDrawerOpen={(): void => setIsDrawerOpen(true)}
+              experimentIds={List.of('experiment-1')}
+              experiments={Map<string, string>().set('experiment-1', 'Experiment 1')}
             />
           </Route>
         </Switch>
