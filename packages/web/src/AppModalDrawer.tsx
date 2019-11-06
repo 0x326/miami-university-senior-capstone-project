@@ -1,10 +1,6 @@
 import React from 'react'
 
 import {
-  Map,
-} from 'immutable'
-
-import {
   Drawer,
   DrawerContent,
   DrawerHeader,
@@ -20,18 +16,19 @@ import {
   Link,
 } from 'react-router-dom'
 
+import {
+  RouteMap,
+} from './types'
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/drawer/dist/mdc.drawer.css'
-
-type RouteId = string
-type DisplayName = string
 
 interface Props {
   open: boolean;
   onClose: () => void;
   title: string;
   subtitle: string;
-  viewOptions: Map<RouteId, DisplayName>;
+  viewOptions: RouteMap;
 }
 
 function AppModalDrawer(props: Props): JSX.Element {
