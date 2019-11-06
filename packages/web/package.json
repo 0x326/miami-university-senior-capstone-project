@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@rmwc/card": "^5.7.0",
     "@rmwc/data-table": "^5.7.0",
     "@rmwc/drawer": "^5.7.0",
+    "@rmwc/grid": "^5.7.0",
     "@rmwc/list": "^5.7.0",
+    "@rmwc/tooltip": "^5.7.0",
     "@rmwc/top-app-bar": "^5.7.0",
     "@rmwc/typography": "^5.7.1",
     "immutable": "^4.0.0-rc.12",
