@@ -23,7 +23,7 @@ import ExperimentDashboard, {
   CageId,
 } from './routes/experiment-dashboard/ExperimentDashboard'
 
-import ExperimentList from './routes/experiments/ExperimentList'
+import ExperimentsSwitch from './routes/experiments'
 
 import {
   CageData,
@@ -148,7 +148,7 @@ const App: React.FC = () => {
             />
           </Route>
           <Route path="/experiments">
-            <ExperimentList
+            <ExperimentsSwitch
               onDrawerOpen={(): void => setIsDrawerOpen(true)}
               experimentIds={List.of('experiment-1')}
               experiments={Map<string, string>().set('experiment-1', 'Experiment 1')}
