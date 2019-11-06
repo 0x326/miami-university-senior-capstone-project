@@ -19,7 +19,7 @@ import '@rmwc/data-table/data-table.css'
 import {
   BottleState,
   BottleType,
-} from './types'
+} from '../../types'
 
 export interface CageSessionData extends List<Readonly<{
   rowLabel: BottleState;

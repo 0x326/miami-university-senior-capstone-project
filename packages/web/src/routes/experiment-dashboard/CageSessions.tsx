@@ -19,7 +19,7 @@ import '@rmwc/list/collapsible-list.css'
 
 import {
   BottleType,
-} from './types'
+} from '../../types'
 
 export interface CageData extends List<Readonly<{
   sessionNumber: number;

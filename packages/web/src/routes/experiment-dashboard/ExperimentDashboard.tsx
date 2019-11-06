@@ -24,7 +24,7 @@ import CageSessions, {
 
 import {
   BottleType,
-} from './types'
+} from '../../types'
 
 export type CageId = number
 export interface ExperimentData extends Map<CageId, CageData> {}

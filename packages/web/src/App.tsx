@@ -21,11 +21,11 @@ import ExperimentDashboard, {
   ExperimentData,
   Cages,
   CageId,
-} from './ExperimentDashboard'
+} from './routes/experiment-dashboard/ExperimentDashboard'
 
 import {
   CageData,
-} from './CageSessions'
+} from './routes/experiment-dashboard/CageSessions'
 
 import {
   BottleType,
