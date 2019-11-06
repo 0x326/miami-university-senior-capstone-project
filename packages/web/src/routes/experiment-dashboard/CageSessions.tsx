@@ -9,6 +9,10 @@ import {
   SimpleListItem,
 } from '@rmwc/list'
 
+import {
+  BottleType,
+} from '../../types'
+
 import CageSessionTable, {
   CageSessionData,
 } from './CageSessionTable'
@@ -16,10 +20,6 @@ import CageSessionTable, {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/list/dist/mdc.list.css'
 import '@rmwc/list/collapsible-list.css'
-
-import {
-  BottleType,
-} from './types'
 
 export interface CageData extends List<Readonly<{
   sessionNumber: number;

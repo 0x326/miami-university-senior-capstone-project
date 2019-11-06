@@ -11,27 +11,21 @@ import {
 } from 'immutable'
 
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerSubtitle,
-  DrawerTitle,
-} from '@rmwc/drawer'
-
-import {
-  List as RMWCList,
-  ListItem,
-} from '@rmwc/list'
+  BrowserRouter,
+  Link,
+  Route,
+  Switch,
+} from 'react-router-dom'
 
 import ExperimentDashboard, {
   ExperimentData,
   Cages,
   CageId,
-} from './ExperimentDashboard'
+} from './routes/experiment-dashboard/ExperimentDashboard'
 
 import {
   CageData,
-} from './CageSessions'
+} from './routes/experiment-dashboard/CageSessions'
 
 import {
   BottleType,
@@ -39,16 +33,13 @@ import {
 
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import '@material/drawer/dist/mdc.drawer.css'
+import AppModalDrawer from './AppModalDrawer'
 
-enum AppView {
-  EXPERIMENT_DASHBOARD = 'Experiment Dashboard',
-}
+const viewOptions = Map<string, string>().withMutations((map) => map
+  .set('experiment-dashboard', 'Experiment Dashboard'))
 
 const App: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const [appView, setAppView] = useState<AppView>(AppView.EXPERIMENT_DASHBOARD)
   const [bottleTypes, setBottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experimentData, setExperimentData] = useState<ExperimentData>(
     Map<CageId, CageData>().withMutations((map) => map
@@ -127,35 +118,28 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Drawer
-        modal
-        open={isDrawerOpen}
-        onClose={(): void => setIsDrawerOpen(false)}
-      >
-        <DrawerHeader>
-          <DrawerTitle>Scale Interface Tool</DrawerTitle>
-          <DrawerSubtitle>A Senior Design Project</DrawerSubtitle>
-        </DrawerHeader>
-        <DrawerContent>
-          <RMWCList>
-            {Object.values(AppView).map((displayName) => (
-              <ListItem
-                key={displayName}
-                activated={displayName === appView}
-                onClick={(): void => setAppView(displayName)}
-              >
-                {displayName}
-              </ListItem>
-            ))}
-          </RMWCList>
-        </DrawerContent>
-      </Drawer>
-      <ExperimentDashboard
-        onDrawerOpen={(): void => setIsDrawerOpen(true)}
-        bottleTypes={bottleTypes}
-        experimentData={experimentData}
-        cages={cages}
-      />
+      <BrowserRouter>
+        <AppModalDrawer
+          title="Scale Interface Tool"
+          subtitle="A Senior Design Project"
+          open={isDrawerOpen}
+          onClose={(): void => setIsDrawerOpen(false)}
+          viewOptions={viewOptions}
+        />
+        <Switch>
+          <Route exact path="/">
+            <Link to="/experiment-dashboard">Experiment Dashboard</Link>
+          </Route>
+          <Route path="/experiment-dashboard">
+            <ExperimentDashboard
+              onDrawerOpen={(): void => setIsDrawerOpen(true)}
+              bottleTypes={bottleTypes}
+              experimentData={experimentData}
+              cages={cages}
+            />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     </>
   )
 }

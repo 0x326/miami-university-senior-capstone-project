@@ -18,13 +18,13 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/top-app-bar/dist/mdc.top-app-bar.css'
 
+import {
+  BottleType,
+} from '../../types'
+
 import CageSessions, {
   CageData,
 } from './CageSessions'
-
-import {
-  BottleType,
-} from './types'
 
 export type CageId = number
 export interface ExperimentData extends Map<CageId, CageData> {}
