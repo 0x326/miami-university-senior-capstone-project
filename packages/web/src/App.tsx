@@ -35,16 +35,11 @@ import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 
-enum AppView {
-  EXPERIMENT_DASHBOARD = 'Experiment Dashboard',
-}
-
 const viewOptions = Map<string, string>().withMutations((map) => map
   .set('experiment-dashboard', 'Experiment Dashboard'))
 
 const App: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const [appView, setAppView] = useState<AppView>(AppView.EXPERIMENT_DASHBOARD)
   const [bottleTypes, setBottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experimentData, setExperimentData] = useState<ExperimentData>(
     Map<CageId, CageData>().withMutations((map) => map
