@@ -19,7 +19,6 @@ import {
   valid,
 } from './fsOperations'
 
-// import { Http2Server } from 'http2';
 
 const {
   argv,
@@ -102,6 +101,7 @@ async function createServer(
 
     wssGetRootDir.on('connection', ws => {
       ws.on('message', () => {
+        console.log('===here')
         getRootDir()
           .then((path) => ws.send(path))
           .catch(error => {
@@ -262,3 +262,6 @@ async function createServer(
 //   .then(() => console.log('Scale connected'))
 
 createServer(webSocketPort)
+
+
+import './tester'
