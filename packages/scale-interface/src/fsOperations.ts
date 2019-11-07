@@ -45,7 +45,6 @@ type ExperimentWrapper = {
 const ROOT_PATH = `/media/${os.userInfo().username}/test_usb/SCALE_INTERFACE_DAT`
 
 async function getRootDir(): Promise<string> {
-  console.log('here')
   if (ROOT_PATH)
     return ROOT_PATH
   throw new Error('Root path not available')
