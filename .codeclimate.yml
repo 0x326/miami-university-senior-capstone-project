@@ -6,3 +6,6 @@ plugins:
 
   duplication:
     enabled: true
+
+  fixme:
+    enabled: true
