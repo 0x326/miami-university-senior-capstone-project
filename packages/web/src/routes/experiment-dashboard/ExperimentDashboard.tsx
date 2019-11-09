@@ -15,7 +15,6 @@ import {
   TopAppBarActionItem,
 } from '@rmwc/top-app-bar'
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/top-app-bar/dist/mdc.top-app-bar.css'
 
 import {

@@ -20,7 +20,6 @@ import {
   RouteMap,
 } from './types'
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/drawer/dist/mdc.drawer.css'
 
 interface Props {

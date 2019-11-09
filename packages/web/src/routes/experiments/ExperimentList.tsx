@@ -18,7 +18,6 @@ import {
   Grid,
   GridCell,
 } from '@rmwc/grid'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/layout-grid/dist/mdc.layout-grid.css'
 
 import {
@@ -32,11 +31,8 @@ import {
   CardActions,
   CardPrimaryAction,
 } from '@rmwc/card'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/card/dist/mdc.card.css'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/button/dist/mdc.button.css'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@material/icon-button/dist/mdc.icon-button.css'
 
 import {
