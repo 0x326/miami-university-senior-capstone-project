@@ -1,6 +1,7 @@
 plugins:
+  # Does not support ESLint plugins
   eslint:
-    enabled: true
+    enabled: false
     channel: eslint-5
 
   duplication:
