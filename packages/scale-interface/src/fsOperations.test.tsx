@@ -6,7 +6,7 @@ import {
 } from './fsOperations'
 
 // eslint-disable-next-line no-undef
-it('Returns any amount of experiments', async () => {
+describe('Returns any amount of experiments', async () => {
   const exampleExperiment = new Experiment({
     name: 'Addiction Study 1',
     primaryExperimenter: 'Quinn',
