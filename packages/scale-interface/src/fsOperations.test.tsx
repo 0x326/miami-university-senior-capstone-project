@@ -6,7 +6,7 @@ import {
 } from './fsOperations'
 
 // eslint-disable-next-line no-undef
-describe('Returns any amount of experiments', async () => {
+describe('Returns any amount of experiments', () => {
   const exampleExperiment = new Experiment({
     name: 'Addiction Study 1',
     primaryExperimenter: 'Quinn',
@@ -53,8 +53,7 @@ describe('Returns any amount of experiments', async () => {
 
   // No saved experiments
   test('Empty return array', () => {
-    const experiments = await listExperiments({ path })
-    expect(experiments.length).toBe(0)
+    expect(listExperiments({ path })).resolves.toHaveLength(0)
   })
 
   // One saved experiment
