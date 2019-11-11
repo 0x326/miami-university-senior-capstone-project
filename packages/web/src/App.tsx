@@ -2,6 +2,7 @@
 /* eslint no-unused-vars: "warn" */
 
 // TODO (0x326) [2020-04-01] Remove extraneous @material dependencies
+// TODO (0x326) [2020-04-01] Remove extraneous @rmwc dependencies
 
 import React, {
   useState,
