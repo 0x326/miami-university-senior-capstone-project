@@ -1,4 +1,4 @@
-// TODO @0x326 [2019-11-06]: Remove this eslint directive
+// TODO @0x326 [2019-11-20]: Remove this eslint directive
 /* eslint no-unused-vars: "warn" */
 
 // TODO (0x326) [2020-04-01] Remove extraneous @material dependencies
