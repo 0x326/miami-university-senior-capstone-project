@@ -47,7 +47,7 @@ describe('Returns any amount of experiments', () => {
     ],
   })
 
-  const path = '/media/${os.userInfo().username}/test_usb'
+  const path = `/media/${os.userInfo().username}/test_usb`
 
   // No saved experiments
   test('Empty return array', () => {
