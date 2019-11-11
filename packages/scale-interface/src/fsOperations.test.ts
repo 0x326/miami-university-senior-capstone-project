@@ -62,7 +62,7 @@ describe('Returns any amount of experiments', () => {
 
     // Genrate comparison array
     const compareListExperiments = [new ExperimentWrapper(path, exampleExperiment)]
-    expect(Promise.resolve(listExperiments({ path }))).resolves.toBe(compareListExperiments)
+    expect(listExperiments({ path })).resolves.toBe(compareListExperiments)
   })
 
   // Multiple saved experiments
@@ -76,6 +76,6 @@ describe('Returns any amount of experiments', () => {
       new ExperimentWrapper(path, exampleExperiment),
       new ExperimentWrapper(path, exampleExperiment),
     ]
-    expect(Promise.resolve(listExperiments({ path }))).resolves.toBe(compareListExperiments)
+    expect(listExperiments({ path })).resolves.toBe(compareListExperiments)
   })
 })
