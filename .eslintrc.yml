@@ -1,4 +1,5 @@
 extends:
+  - plugin:security/recommended
   - plugin:unicorn/recommended
   - airbnb
   - plugin:@typescript-eslint/recommended
