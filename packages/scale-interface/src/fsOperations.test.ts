@@ -5,7 +5,6 @@ import {
   ExperimentWrapper,
 } from './fsOperations'
 
-// eslint-disable-next-line no-undef
 describe('Returns any amount of experiments', () => {
   const exampleExperiment = new Experiment({
     name: 'Addiction Study 1',
@@ -48,7 +47,6 @@ describe('Returns any amount of experiments', () => {
     ],
   })
 
-  // eslint-disable-next-line no-template-curly-in-string
   const path = '/media/${os.userInfo().username}/test_usb'
 
   // No saved experiments
