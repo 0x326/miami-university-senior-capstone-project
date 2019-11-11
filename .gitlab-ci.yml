@@ -98,3 +98,16 @@ lint:
     - yarn install
 
   script: yarn lint
+
+pages:
+  only:
+    - master
+
+  script:
+    - yarn install
+    - cd packages/web/
+    - yarn build
+
+  artifacts:
+    paths:
+      - packages/web/build
