@@ -16,6 +16,8 @@
 [time tracking]: https://docs.gitlab.com/ee/workflow/time_tracking.html
 [template]: https://docs.gitlab.com/ee/user/project/description_templates.html
 [related issues]: https://docs.gitlab.com/ee/user/project/issues/related_issues.html
+[Auto DevOps]: https://docs.gitlab.com/ee/topics/autodevops/
+[Docker special characters]: https://docs.gitlab.com/ee/user/packages/container_registry/#docker-connection-error
 
 [Git - the simple guide]: https://rogerdudler.github.io/git-guide/
 [Git reference guide]: https://www.digitalocean.com/community/tutorials/how-to-use-git-a-reference-guide
@@ -104,6 +106,16 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
 - Testing code
 - Making production builds of code
 - Deploying production build to client using GitLab [releases] or [pages]
+
+All of this can be done automatically with little configuration using GitLab [Auto DevOps]
+
+- **Note:**
+  Since [Auto DevOps] is Docker-based, the repo owner, repo name, and branch names
+  should not contain any of the following special characters ([more info][Docker special characters]) or the pipeline will fail:
+
+  - Leading underscore (Regex: `^_`)
+  - Trailing dash (Regex: `-$`)
+  - Double dash (Regex: `.*--.*`)
 
 ## Setting up development environment
 
