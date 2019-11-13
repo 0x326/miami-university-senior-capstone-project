@@ -1,6 +1,3 @@
-// TODO @0x326 [2019-11-20]: Remove this eslint directive
-/* eslint no-unused-vars: "warn" */
-
 import React, {
   useState,
 } from 'react'
@@ -40,8 +37,8 @@ const viewOptions = Map<string, string>().withMutations((map) => map
 
 const App: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const [bottleTypes, setBottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  const [experimentData, setExperimentData] = useState<ExperimentData>(
+  const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
+  const [experimentData] = useState<ExperimentData>(
     Map<CageId, CageData>().withMutations((map) => map
       .set(1, List().withMutations((cageData) => cageData
         .push({
@@ -114,7 +111,7 @@ const App: React.FC = () => {
           ),
         })))),
   )
-  const [cages, setCages] = useState<Cages>(List.of(1, 2))
+  const [cages] = useState<Cages>(List.of(1, 2))
 
   return (
     <>
