@@ -1,6 +1,6 @@
 > User story: #USER_STORY_ISSUE_NUMBER
 >
-> Task issue: #TASK_ISSUE_NUMBER
+> Task issue: Closes #TASK_ISSUE_NUMBER
 
 > Creating a merge request for a completed task:
 >

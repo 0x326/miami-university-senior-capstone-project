@@ -16,6 +16,8 @@
 [time tracking]: https://docs.gitlab.com/ee/workflow/time_tracking.html
 [template]: https://docs.gitlab.com/ee/user/project/description_templates.html
 [related issues]: https://docs.gitlab.com/ee/user/project/issues/related_issues.html
+[Auto DevOps]: https://docs.gitlab.com/ee/topics/autodevops/
+[Docker special characters]: https://docs.gitlab.com/ee/user/packages/container_registry/#docker-connection-error
 
 [Git - the simple guide]: https://rogerdudler.github.io/git-guide/
 [Git reference guide]: https://www.digitalocean.com/community/tutorials/how-to-use-git-a-reference-guide
@@ -33,6 +35,9 @@
 [ESlint]: https://eslint.org/
 [ESlint-built-in-rules]: https://eslint.org/docs/rules/
 [ESlint-plugin-list]: https://www.npmjs.com/search?q=eslint-plugin
+[Yarn usage]: https://yarnpkg.com/en/docs/usage
+[NPM]: https://www.npmjs.com/
+[DefinitelyTyped]: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 # Contributing Guide
 
@@ -102,6 +107,16 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
 - Making production builds of code
 - Deploying production build to client using GitLab [releases] or [pages]
 
+All of this can be done automatically with little configuration using GitLab [Auto DevOps]
+
+- **Note:**
+  Since [Auto DevOps] is Docker-based, the repo owner, repo name, and branch names
+  should not contain any of the following special characters ([more info][Docker special characters]) or the pipeline will fail:
+
+  - Leading underscore (Regex: `^_`)
+  - Trailing dash (Regex: `-$`)
+  - Double dash (Regex: `.*--.*`)
+
 ## Setting up development environment
 
 > [Git quick-start guide][Git - the simple guide]
@@ -164,10 +179,6 @@ To run them in only a specific package,
 first `cd` into `packages/[PACKNAME-NAME]/`
 then run the relevant `yarn SCRIPT` command
 
-## Configuring development environment
-
-See https://create-react-app.dev
-
 ## Debugging lint errors
 
 When [ESlint] analyzes source code, it does so on the basis of pre-determined rules.
@@ -188,3 +199,60 @@ first find its appropriate package on [NPM][ESlint-plugin-list],
 then search for the rule name in the `README`,
 (almost all good plugins will have references to each rule's documentation in the `README`,
 which will contain several example snippets of 'valid' and 'invalid' code)
+
+## Adding/upgrading/removing dependencies
+
+> See the [Yarn usage] guide
+>
+> See [NPM] for the list of available packages
+
+Node.js differentiates between different kinds of dependencies:
+`dependencies`, `devDependencies`, and some others (see [here](https://stackoverflow.com/a/22004559) for full guide).
+`dependencies` are those that are used at run-time whereas `devDependencies` are those that are only used at compile-time.
+
+```bash
+cd miami-university-senior-capstone-project/
+
+# First, go into the proper package
+cd packages/PACKNAME_NAME/
+
+# Add dependency
+yarn add package-name
+
+# Add dev dependency
+yarn add package-name --dev
+
+# Commit package.json and yarn.lock
+git add package.json ../../yarn.lock
+git commit -m "Add 'package-name'"
+```
+
+Since we're using TypeScript,
+we need type declarations for all our dependencies.
+If the dependency does not maintain a declaration file itself,
+then you will also need to install its community-maintained declaration file from [DefinitelyTyped]:
+
+```bash
+yarn add @types/package-name --dev
+```
+
+If the dependency is a `devDependency`
+and is not specific to any package in particular, but rather to the project as a whole (such as linters, Git hooks, etc.),
+then the package should be added to the whole workspace:
+
+```bash
+cd miami-university-senior-capstone-project/
+
+# Add workspace dev dependency
+yarn add package-name --dev -W
+
+# Commit package.json and yarn.lock
+git add package.json yarn.lock
+git commit -m "Add 'package-name'"
+```
+
+# Reference material
+
+## Configuring development environment
+
+See https://create-react-app.dev
