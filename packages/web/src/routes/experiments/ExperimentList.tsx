@@ -5,6 +5,11 @@ import {
 } from 'immutable'
 
 import {
+  useRouteMatch,
+  useHistory,
+} from 'react-router-dom'
+
+import {
   TopAppBar,
   TopAppBarActionItem,
   TopAppBarFixedAdjust,
@@ -57,6 +62,9 @@ function ExperimentList(props: Props): JSX.Element {
     experimentIds,
   } = props
 
+  const { url } = useRouteMatch() || { url: '' }
+  const history = useHistory()
+
   return (
     <>
       <TopAppBar>
@@ -67,7 +75,10 @@ function ExperimentList(props: Props): JSX.Element {
           </TopAppBarSection>
           <TopAppBarSection alignEnd>
             <Tooltip content="New Experiment">
-              <TopAppBarActionItem icon="add" />
+              <TopAppBarActionItem
+                icon="add"
+                onClick={(): void => history.push(`${url}/new`)}
+              />
             </Tooltip>
           </TopAppBarSection>
         </TopAppBarRow>
