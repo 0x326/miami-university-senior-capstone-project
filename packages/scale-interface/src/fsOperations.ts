@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import * as os from 'os'
+
 import _ from 'lodash'
 import Joi from '@hapi/joi'
 
@@ -10,51 +11,49 @@ type SubLabel = [string, Array<string | SubLabelArray>]
 interface SubLabelArray extends Array<SubLabel> { }
 
 type Session = {
-  [key: string]: number
+  [key: string]: number;
 }
 
 type Cage = {
-  cageWeight: number
-  cageLabel: string
-  sessions: Array<Session>
+  cageWeight: number;
+  cageLabel: string;
+  sessions: Array<Session>;
 }
 
 type Experiment = {
-  name: string
-  primaryExperimenter: string
-  dateInitialized: number
-  lastUpdate: number
-  isComplete: boolean
-  totalSessions: number
-  totalColsBegin: number
-  totalColsMid: number
-  totalColsEnd: number
-  subSessionLabelsBegin: Array<string | SubLabel>
-  subSessionLabelsMid: Array<string | SubLabel>
-  subSessionLabelsEnd: Array<string | SubLabel>
-  cages: Array<Cage>
+  name: string;
+  primaryExperimenter: string;
+  dateInitialized: number;
+  lastUpdate: number;
+  isComplete: boolean;
+  totalSessions: number;
+  totalColsBegin: number;
+  totalColsMid: number;
+  totalColsEnd: number;
+  subSessionLabelsBegin: Array<string | SubLabel>;
+  subSessionLabelsMid: Array<string | SubLabel>;
+  subSessionLabelsEnd: Array<string | SubLabel>;
+  cages: Array<Cage>;
 }
 
 // wraps an experiment to provide the path of the file it was read from
 type ExperimentWrapper = {
-  path: string
-  data: Experiment
+  path: string;
+  data: Experiment;
 }
 
 // TODO: figure out how to ensure the usb drive is mounted to same path
 const ROOT_PATH = `/media/${os.userInfo().username}/test_usb/SCALE_INTERFACE_DAT`
 
 async function getRootDir(): Promise<string> {
-  if (ROOT_PATH)
-    return ROOT_PATH
+  if (ROOT_PATH) return ROOT_PATH
   throw new Error('Root path not available')
 }
 
 
 // valid: uses Joi to validate form of data.
 async function valid(data: any): Promise<void> {
-  if (!data)
-    throw new Error("==Data sent to valid() is null")
+  if (!data) throw new Error('==Data sent to valid() is null')
 
   const schema = Joi.object({
     name: Joi.string()
@@ -91,24 +90,27 @@ async function valid(data: any): Promise<void> {
     subSessionLabelsBegin: Joi.array()
       .items(
         Joi.string(),
-        Joi.link('/subSessionLabelsBegin')),
+        Joi.link('/subSessionLabelsBegin'),
+      ),
     subSessionLabelsMid: Joi.array()
       .items(
         Joi.string(),
-        Joi.link('/subSessionLabelsMid')),
+        Joi.link('/subSessionLabelsMid'),
+      ),
     subSessionLabelsEnd: Joi.array()
       .items(
         Joi.string(),
-        Joi.link('/subSessionLabelsEnd')),
+        Joi.link('/subSessionLabelsEnd'),
+      ),
     cages: Joi.array().items(
       Joi.object({
         cageWeight: Joi.number().required(),
         cageLabel: Joi.string().required(),
         sessions: Joi.array()
           .items(Joi.object({}).pattern(/./, Joi.number()))
-          .max(Joi.ref('/totalSessions'))
+          .max(Joi.ref('/totalSessions')),
       }),
-    )
+    ),
   })
 
   return schema.validateAsync(data)
@@ -117,26 +119,25 @@ async function valid(data: any): Promise<void> {
 // listExperiments:
 // TOOD: use path library
 async function listExperiments(query: any): Promise<Array<ExperimentWrapper>> {
-  if (!query.path)
-    throw new Error("No query path provided")
+  if (!query.path) throw new Error('No query path provided')
 
-  const allFiles = await fs.readdir(
+  const allFiles: Array<string | Buffer> = await fs.readdir(
     query.path,
-    { encoding: 'UTF-8' })
+    { encoding: 'UTF-8' },
+  )
 
-  let ret: Array<ExperimentWrapper> = []
-  for (let experimentPath of allFiles) {
+  const experiments: Array<ExperimentWrapper> = []
+  allFiles.map(async experimentPath => {
     const wrappedExperiment = await getExperiment(path.join(query.path, experimentPath as string))
-    if (!query.filter)
-      ret.push(wrappedExperiment)
-    if (query.filter && _.isMatch(wrappedExperiment.data, query.filter))
-      ret.push(wrappedExperiment)
-  }
-  return ret
+    if (!query.filter) experiments.push(wrappedExperiment)
+    if (query.filter && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
+  })
+
+  return experiments
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////
 //  experiment file names:                                                                //
 //  to make certain operations quicker, we can encode certain information in file names   //
 //  so that we don't have to open an experiment file to test whether it matches a query.  //
@@ -146,47 +147,46 @@ async function listExperiments(query: any): Promise<Array<ExperimentWrapper>> {
 //                                                                                        //
 // We should also store active experiments in an /active dir and archived experiments in  //
 // a /archive dir                                                                         //
-////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////
 
 // listExperimentPaths: returns a list of file paths matching query
 async function listExperimentPaths(query: any): Promise<Array<string | Buffer>> {
   try {
-    if (!query.path)
-      throw new Error("No path provided")
+    if (!query.path) throw new Error('No path provided')
 
-    let ret: Array<string | Buffer> = await fs.readdir(query.path, { encoding: 'UTF-8' })
+    let paths: Array<string | Buffer> = await fs.readdir(query.path, { encoding: 'UTF-8' })
 
-    if (query.dateStart && query.dateEnd)
-      ret = ret.filter(path => {
+    if (query.dateStart && query.dateEnd) {
+      paths = paths.filter((path) => {
         path = path as string
         const dateMatch = path.match(/_(\d*?)_/)
-        if (!dateMatch)
-          throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
+        if (!dateMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
         else {
           const date = new Date(Number(dateMatch[1]))
           // filter date if not within range
           return date >= query.dateStart && date <= query.dateEnd
         }
       })
+    }
 
-    ret = ret.filter(path => {
-      let experimentName: string = query.experimentName ? query.experimentName : ""
-      let primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ""
+    paths = paths.filter((path) => {
+      const experimentName: string = query.experimentName ? query.experimentName : ''
+      const primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ''
       path = path as string
       const lMatch = path.match(/^(.*?)_/)
       const rMatch = path.match(/_([^_]*?)$/)
-      if (!lMatch || !rMatch)
-        throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
-      else
-        return lMatch[1].includes(experimentName) &&
-          rMatch[1].includes(primaryExperimenter)
+      if (!lMatch || !rMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
+      else {
+        return lMatch[1].includes(experimentName)
+          && rMatch[1].includes(primaryExperimenter)
+      }
     })
-    return ret
-
+    return paths
   } catch (error) {
     throw error
   }
 }
+
 
 
 // getExperiment: returns experiment object parsed from file at absolute path
@@ -195,18 +195,17 @@ async function getExperiment(path: string): Promise<ExperimentWrapper> {
   const parsed: any = JSON.parse(data)
   await valid(parsed)
   return {
-    path: path,
-    data: parsed as Experiment
+    path,
+    data: parsed as Experiment,
   } as ExperimentWrapper
 }
 
 // writeExperiment: simply writes stringified experiment json to file at path.
-async function writeExperiment(wrapped: { path: string, data: string }): Promise<void> {
+async function writeExperiment(wrapped: { path: string; data: string }): Promise<void> {
   // validate file path
   const lMatch = wrapped.data.match(/^(.*?)_/)
   const rMatch = wrapped.data.match(/_([^_]*?)$/)
-  if (!lMatch || !rMatch)
-    throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.data}`)
+  if (!lMatch || !rMatch) throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.data}`)
   // validate file content
   await valid(wrapped.data)
   return await fs.writeFile(wrapped.path, JSON.stringify(wrapped.data))
