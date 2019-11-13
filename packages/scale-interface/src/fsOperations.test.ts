@@ -18,11 +18,11 @@ const wsGetRoot = new ws(`ws://localhost:${PORT}/get-root-dir`)
 // const wsScaleData = new ws(`ws://localhost:${PORT}/scale-data`)
 
 it('is testing the tester', () => {
-  wsGetRoot.onmessage = (event) => {
-    console.log('==/get-root-dir')
-    console.log(event.data)
-    console.log('===')
-  }
+  // wsGetRoot.onmessage = (event) => {
+  //   console.log('==/get-root-dir')
+  //   console.log(event.data)
+  //   console.log('===')
+  // }
   console.log(getRootDir())
 })
 
