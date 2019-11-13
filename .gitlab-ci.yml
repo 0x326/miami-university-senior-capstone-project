@@ -102,6 +102,9 @@ lint:
 pages:
   stage: production
   image: node:lts
+  environment:
+    name: production
+    url: $CI_PAGES_URL
   only:
     - master
 
