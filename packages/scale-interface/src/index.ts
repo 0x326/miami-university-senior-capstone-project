@@ -17,7 +17,15 @@ import {
   writeExperiment,
   listExperimentPaths,
   valid,
+  ExperimentWrapper,
+  Experiment,
 } from './fsOperations'
+
+type Resp = {
+  status: 'OK' | 'FAIL',
+  data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string,
+  message?: string,
+}
 
 
 const {
@@ -101,9 +109,16 @@ async function createServer(
   wssGetRootDir.on('connection', ws => {
     ws.on('message', () => {
       getRootDir()
-        .then((path) => ws.send(path))
+        .then((path) => {
+          ws.send(JSON.stringify({
+            status: 'OK',
+            data: path,
+          } as Resp))
+        })
         .catch(error => {
-          ws.send('FAIL')
+          ws.send(JSON.stringify({
+            status: 'FAIL'
+          } as Resp))
           console.log(`getting root dir resulted in error ${error}`)
         })
     })
@@ -113,16 +128,23 @@ async function createServer(
       try {
         const parsed = JSON.parse(data as string)
         listExperiments(parsed)
-          .then(experiments => {
-            ws.send(JSON.stringify(experiments))
+          .then(wrappedExperiments => {
+            ws.send(JSON.stringify({
+              status: 'OK',
+              data: wrappedExperiments,
+            } as Resp))
           })
           .catch(error => {
-            ws.send('FAIL')
+            ws.send(JSON.stringify({
+              status: 'FAIL'
+            } as Resp))
             console.log(`listExperiments resulted in error: ${error} when given query:`)
             console.log(parsed)
           })
       } catch (error) {
-        ws.send('FAIL')
+        ws.send(JSON.stringify({
+          status: 'FAIL'
+        } as Resp))
         console.log(error)
       }
     })
@@ -130,17 +152,24 @@ async function createServer(
   wssGetExperiment.on('connection', ws => {
     ws.on('message', data => {
       try {
-        const arg1: string = data as string
-        getExperiment(arg1)
+        const path: string = data as string
+        getExperiment(path)
           .then(wrappedExperiment => {
-            ws.send(JSON.stringify(wrappedExperiment))
+            ws.send(JSON.stringify({
+              status: 'OK',
+              data: wrappedExperiment,
+            } as Resp))
           })
           .catch(error => {
-            ws.send('FAIL')
-            console.log(`getExperiment on path ${arg1} resulted in error ${error}`)
+            ws.send(JSON.stringify({
+              status: 'FAIL'
+            } as Resp))
+            console.log(`getExperiment on path ${path} resulted in error ${error}`)
           })
       } catch (error) {
-        ws.send('FAIL')
+        ws.send(JSON.stringify({
+          status: 'FAIL'
+        } as Resp))
         console.log(error)
       }
     })
@@ -148,18 +177,25 @@ async function createServer(
   wssListPaths.on('connection', ws => {
     ws.on('message', data => {
       try {
-        const parsed = JSON.parse(data as string)
+        const parsed: any = JSON.parse(data as string)
         listExperimentPaths(parsed)
           .then(paths => {
-            ws.send(JSON.stringify(paths))
+            ws.send(JSON.stringify({
+              status: 'OK',
+              data: paths,
+            }))
           })
           .catch(error => {
-            ws.send('FAIL')
+            ws.send(JSON.stringify({
+              status: 'FAIL'
+            } as Resp))
             console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
             console.log(parsed)
           })
       } catch (error) {
-        ws.send('FAIL')
+        ws.send(JSON.stringify({
+          status: 'FAIL'
+        } as Resp))
         console.log(error)
       }
     })
@@ -169,48 +205,69 @@ async function createServer(
       try {
         const parsed = JSON.parse(data as string)
         if (parsed.path && parsed.data) {
-          await valid(parsed.data)
+          // await valid(JSON.parse(parsed.data as string))
           writeExperiment(parsed)
             .then(() => {
-              ws.send('OK')
+              ws.send(JSON.stringify({
+                status: 'OK',
+                message: 'Saved experiment at ${parsed.path}'
+              } as Resp))
               console.log(`==Saved the following object at ${parsed.path}`)
               console.log(parsed.data)
             })
             .catch(error => {
-              ws.send('FAIL')
-              console.log(`Got error when writing valid experiment to disk: ${error}`)
+              ws.send(JSON.stringify({
+                status: 'FAIL'
+              } as Resp))
+              console.log(error)
             })
         }
         else {
-          ws.send('FAIL')
+          ws.send(JSON.stringify({
+            status: 'FAIL'
+          } as Resp))
           console.log('==Passed object is missing either a path or data field')
           console.log(parsed)
         }
       } catch (error) {
-        ws.send('FAIL')
+        ws.send(JSON.stringify({
+          status: 'FAIL'
+        } as Resp))
         console.log('==Do not write badly formatted object to disk')
         console.log(error)
       }
     })
   })
-  // TODO: send data to web whenever it comes in
   wssScaleData.on('connection', ws => {
-    // Promise.all([
-    //   deviceConnected
-    //     .then(() => subscribe())
-    //     .then(async (iterator) => {
-    //       for await (const data of iterator) {
-    //         console.log('Received data', data)
-    //       }
-    //     }),
 
-    //   deviceConnected
-    //     .then(() => setInterval(() => {
-    //       requestBalance()
-    //         .then((data) => console.log('Received data (by request)', data))
-    //     }, 1000)),
-    // ])
-    //   .catch((error) => console.error('Error while interacting with scale', error))
+    const deviceConnected = open(device, {
+      baudRate,
+      dataBits,
+      parity: bitParity,
+    })
+      .then(() => {
+        console.log('Scale connected')
+        ws.send(JSON.stringify({
+          status: 'OK',
+        } as Resp))
+      })
+
+    Promise.all([
+      deviceConnected
+        .then(() => subscribe())
+        .then(async (iterator) => {
+          for await (const data of iterator) {
+            console.log('Received data', data)
+          }
+        }),
+
+      deviceConnected
+        .then(() => setInterval(() => {
+          requestBalance()
+            .then((data) => console.log('Received data (by request)', data))
+        }, 1000)),
+    ])
+      .catch((error) => console.error('Error while interacting with scale', error))
   })
 
   server.on('upgrade', (request, socket, head) => {
@@ -257,14 +314,6 @@ async function createServer(
   return server
 }
 
-// const deviceConnected = open(device, {
-//   baudRate,
-//   dataBits,
-//   parity: bitParity,
-// })
-//   .then(() => console.log('Scale connected'))
-
 createServer(webSocketPort)
-
 
 import './tester'

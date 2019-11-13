@@ -11,7 +11,7 @@ You initialize connections like so:
 
 * DONE Initiated by web
 - /get-root-dir returns root directory of experiments where subdirs /archived and /active are found
-  - No argument expected
+  - Send it an empty string. This just says "Give me the root directory"
 
 - /list-experiments get list of all experiments matching query.filter
   - Query: stringified JSON obj
@@ -55,13 +55,13 @@ You initialize connections like so:
   JSON.stringify(
       {
           path: "/somepath",
-          experimentName: "some experiment",
-          primaryExperimenter: "some name"
+          experimentName?: "some experiment",
+          primaryExperimenter?: "some name"
           dateStart?: +new Date('2019'),
           dateEnd?: + new Date('2020'),
-
       }
   )
 #+END_SRC
 
-* TODO Initiated by scale
+* DONE Initiated by scale
+- /scale-data. Initiates connection with scale. Just create a websocket client to it. You don't need to send it a message.

@@ -1,4 +1,5 @@
 import { promises as fs } from 'fs'
+import path from 'path'
 import * as os from 'os'
 import _ from 'lodash'
 import Joi from '@hapi/joi'
@@ -41,7 +42,6 @@ type ExperimentWrapper = {
 }
 
 // TODO: figure out how to ensure the usb drive is mounted to same path
-// we can't just save it in fstab because we don't know the uuid of the drive
 const ROOT_PATH = `/media/${os.userInfo().username}/test_usb/SCALE_INTERFACE_DAT`
 
 async function getRootDir(): Promise<string> {
@@ -51,8 +51,7 @@ async function getRootDir(): Promise<string> {
 }
 
 
-// valid: used joi to validate data. Returns promise that resolves if data is valid
-// TODO: ensure strings are lower case
+// valid: uses Joi to validate form of data.
 async function valid(data: any): Promise<void> {
   if (!data)
     throw new Error("==Data sent to valid() is null")
@@ -127,7 +126,7 @@ async function listExperiments(query: any): Promise<Array<ExperimentWrapper>> {
 
   let ret: Array<ExperimentWrapper> = []
   for (let experimentPath of allFiles) {
-    const wrappedExperiment = await getExperiment(`${query.path}/${experimentPath}`)
+    const wrappedExperiment = await getExperiment(path.join(query.path, experimentPath as string))
     if (!query.filter)
       ret.push(wrappedExperiment)
     if (query.filter && _.isMatch(wrappedExperiment.data, query.filter))
@@ -171,14 +170,16 @@ async function listExperimentPaths(query: any): Promise<Array<string | Buffer>> 
       })
 
     ret = ret.filter(path => {
+      let experimentName: string = query.experimentName ? query.experimentName : ""
+      let primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ""
       path = path as string
       const lMatch = path.match(/^(.*?)_/)
       const rMatch = path.match(/_([^_]*?)$/)
       if (!lMatch || !rMatch)
         throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
       else
-        return lMatch[1].includes(query.experimentName) &&
-          rMatch[1].includes(query.primaryExperimenter)
+        return lMatch[1].includes(experimentName) &&
+          rMatch[1].includes(primaryExperimenter)
     })
     return ret
 
@@ -200,8 +201,14 @@ async function getExperiment(path: string): Promise<ExperimentWrapper> {
 }
 
 // writeExperiment: simply writes stringified experiment json to file at path.
-// TODO: maybe do validation here instead of outside
-async function writeExperiment(wrapped: ExperimentWrapper): Promise<void> {
+async function writeExperiment(wrapped: { path: string, data: string }): Promise<void> {
+  // validate file path
+  const lMatch = wrapped.data.match(/^(.*?)_/)
+  const rMatch = wrapped.data.match(/_([^_]*?)$/)
+  if (!lMatch || !rMatch)
+    throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.data}`)
+  // validate file content
+  await valid(wrapped.data)
   return await fs.writeFile(wrapped.path, JSON.stringify(wrapped.data))
 }
 
@@ -212,4 +219,6 @@ export {
   listExperimentPaths,
   getExperiment,
   writeExperiment,
+  ExperimentWrapper,
+  Experiment,
 }
