@@ -16,6 +16,7 @@ import {
 } from '../../types'
 
 import ExperimentList from './ExperimentList'
+import NewExperiment from './new/NewExperimentView'
 
 interface Props {
   onDrawerOpen: () => void;
@@ -41,6 +42,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             experimentIds={experimentIds}
             experiments={experiments}
           />
+        </Route>
+        <Route exact path={`${url}/new`}>
+          <NewExperiment />
         </Route>
       </Switch>
     </>
