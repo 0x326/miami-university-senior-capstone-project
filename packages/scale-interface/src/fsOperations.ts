@@ -116,9 +116,22 @@ async function valid(data: any): Promise<void> {
   return schema.validateAsync(data)
 }
 
+
+// getExperiment: returns experiment object parsed from file at absolute path
+async function getExperiment(path: string): Promise<ExperimentWrapper> {
+  const data = await fs.readFile(path, { encoding: 'UTF-8' }) as string
+  const parsed: any = JSON.parse(data)
+  await valid(parsed)
+  return {
+    path,
+    data: parsed as Experiment,
+  } as ExperimentWrapper
+}
+
+
 // listExperiments:
 // TOOD: use path library
-async function listExperiments(query: any): Promise<Array<ExperimentWrapper>> {
+async function listExperiments(query: { path: string; filter: Experiment }): Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
 
   const allFiles: Array<string | Buffer> = await fs.readdir(
@@ -127,7 +140,7 @@ async function listExperiments(query: any): Promise<Array<ExperimentWrapper>> {
   )
 
   const experiments: Array<ExperimentWrapper> = []
-  allFiles.map(async experimentPath => {
+  allFiles.map(async (experimentPath) => {
     const wrappedExperiment = await getExperiment(path.join(query.path, experimentPath as string))
     if (!query.filter) experiments.push(wrappedExperiment)
     if (query.filter && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
@@ -150,55 +163,45 @@ async function listExperiments(query: any): Promise<Array<ExperimentWrapper>> {
 // //////////////////////////////////////////////////////////////////////////////////////////
 
 // listExperimentPaths: returns a list of file paths matching query
-async function listExperimentPaths(query: any): Promise<Array<string | Buffer>> {
-  try {
-    if (!query.path) throw new Error('No path provided')
+async function listExperimentPaths(query: {
+  path: string;
+  experimentName: string;
+  primaryExperimenter: string;
+  dateStart: Date;
+  dateEnd: Date;
+}): Promise<Array<string | Buffer>> {
+  if (!query.path) throw new Error('No path provided')
 
-    let paths: Array<string | Buffer> = await fs.readdir(query.path, { encoding: 'UTF-8' })
+  let paths: Array<string | Buffer> = await fs.readdir(query.path, { encoding: 'UTF-8' })
 
-    if (query.dateStart && query.dateEnd) {
-      paths = paths.filter((path) => {
-        path = path as string
-        const dateMatch = path.match(/_(\d*?)_/)
-        if (!dateMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
-        else {
-          const date = new Date(Number(dateMatch[1]))
-          // filter date if not within range
-          return date >= query.dateStart && date <= query.dateEnd
-        }
-      })
-    }
-
+  if (query.dateStart && query.dateEnd) {
     paths = paths.filter((path) => {
-      const experimentName: string = query.experimentName ? query.experimentName : ''
-      const primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ''
       path = path as string
-      const lMatch = path.match(/^(.*?)_/)
-      const rMatch = path.match(/_([^_]*?)$/)
-      if (!lMatch || !rMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
+      const dateMatch = path.match(/_(\d*?)_/)
+      if (!dateMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
       else {
-        return lMatch[1].includes(experimentName)
-          && rMatch[1].includes(primaryExperimenter)
+        const date = new Date(Number(dateMatch[1]))
+        // filter date if not within range
+        return date >= query.dateStart && date <= query.dateEnd
       }
     })
-    return paths
-  } catch (error) {
-    throw error
   }
+
+  paths = paths.filter((path) => {
+    const experimentName: string = query.experimentName ? query.experimentName : ''
+    const primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ''
+    path = path as string
+    const lMatch = path.match(/^(.*?)_/)
+    const rMatch = path.match(/_([^_]*?)$/)
+    if (!lMatch || !rMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
+    else {
+      return lMatch[1].includes(experimentName)
+        && rMatch[1].includes(primaryExperimenter)
+    }
+  })
+  return paths
 }
 
-
-
-// getExperiment: returns experiment object parsed from file at absolute path
-async function getExperiment(path: string): Promise<ExperimentWrapper> {
-  const data = await fs.readFile(path, { encoding: 'UTF-8' }) as string
-  const parsed: any = JSON.parse(data)
-  await valid(parsed)
-  return {
-    path,
-    data: parsed as Experiment,
-  } as ExperimentWrapper
-}
 
 // writeExperiment: simply writes stringified experiment json to file at path.
 async function writeExperiment(wrapped: { path: string; data: string }): Promise<void> {

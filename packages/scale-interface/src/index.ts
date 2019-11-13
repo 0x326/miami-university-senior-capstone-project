@@ -1,6 +1,7 @@
 import https from 'https'
 import http from 'http'
 import url from 'url'
+
 import yargs from 'yargs'
 import ws from 'ws'
 
@@ -20,6 +21,9 @@ import {
   ExperimentWrapper,
   Experiment,
 } from './fsOperations'
+
+// temporary to simply demo functionality of api
+import './tester'
 
 
 type Resp = {
@@ -314,6 +318,3 @@ async function createServer(
 }
 
 createServer(webSocketPort)
-
-// temporary to simply demo functionality of api
-import './tester'
