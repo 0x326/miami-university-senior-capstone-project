@@ -101,6 +101,7 @@ lint:
 
 pages:
   stage: production
+  image: node:lts
   only:
     - master
 

@@ -1,4 +1,8 @@
 extends:
+  - plugin:you-dont-need-lodash-underscore/compatible
+  - plugin:jest/recommended
+  - plugin:jest-formatting/recommended
+  - plugin:security/recommended
   - plugin:unicorn/recommended
   - airbnb
   - plugin:@typescript-eslint/recommended

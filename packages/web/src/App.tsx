@@ -1,6 +1,3 @@
-// TODO @0x326 [2019-11-20]: Remove this eslint directive
-/* eslint no-unused-vars: "warn" */
-
 // TODO (0x326) [2020-04-01] Remove extraneous @material dependencies
 // TODO (0x326) [2020-04-01] Remove extraneous @rmwc dependencies
 
@@ -45,8 +42,8 @@ const viewOptions = Map<string, string>().withMutations((map) => map
 
 const App: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const [bottleTypes, setBottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  const [experiments, setExperiments] = useState(Map<string, ExperimentData>()
+  const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
+  const [experiments] = useState(Map<string, ExperimentData>()
     .withMutations((experimentMap) => experimentMap
       .set('experiment-1', Map<CageId, CageData>().withMutations((map) => map
         .set(1, List().withMutations((cageData) => cageData
@@ -119,7 +116,7 @@ const App: React.FC = () => {
               },
             ),
           })))))))
-  const [cages, setCages] = useState<Cages>(List.of(1, 2))
+  const [cages] = useState<Cages>(List.of(1, 2))
 
   return (
     <>
