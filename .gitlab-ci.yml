@@ -109,7 +109,9 @@ pages:
     - yarn install
     - cd packages/web/
     - yarn build
+    - cd ../..
+    - mv packages/web/build/ public/
 
   artifacts:
     paths:
-      - packages/web/build
+      - public
