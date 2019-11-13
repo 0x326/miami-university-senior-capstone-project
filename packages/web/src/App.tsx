@@ -1,29 +1,144 @@
-import React from 'react'
+import React, {
+  useState,
+} from 'react'
 
-import logo from './logo.svg'
+import {
+  List,
+  Map,
+} from 'immutable'
+
+import {
+  BrowserRouter,
+  Link,
+  Route,
+  Switch,
+} from 'react-router-dom'
+
+import ExperimentDashboard, {
+  ExperimentData,
+  Cages,
+  CageId,
+} from './routes/experiment-dashboard/ExperimentDashboard'
+
+import {
+  CageData,
+} from './routes/experiment-dashboard/CageSessions'
+
+import {
+  BottleType,
+} from './types'
+
 import './App.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import AppModalDrawer from './AppModalDrawer'
 
-const App: React.FC = () => (
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-        Edit
-        {' '}
-        <code>src/App.tsx</code>
-        {' '}
-        and save to reload.
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-    </header>
-  </div>
-)
+const viewOptions = Map<string, string>().withMutations((map) => map
+  .set('experiment-dashboard', 'Experiment Dashboard'))
+
+const App: React.FC = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
+  const [experimentData] = useState<ExperimentData>(
+    Map<CageId, CageData>().withMutations((map) => map
+      .set(1, List().withMutations((cageData) => cageData
+        .push({
+          sessionNumber: 1,
+          cageSessionData: List.of(
+            {
+              rowLabel: 'Before',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 5)
+                .set('EtOH', 10)),
+            },
+            {
+              rowLabel: 'After',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 3)
+                .set('EtOH', 9)),
+            },
+          ),
+        })
+        .push({
+          sessionNumber: 2,
+          cageSessionData: List.of(
+            {
+              rowLabel: 'Before',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 5)
+                .set('EtOH', 10)),
+            },
+            {
+              rowLabel: 'After',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 2)
+                .set('EtOH', 8)),
+            },
+          ),
+        })))
+      .set(2, List().withMutations((cageData) => cageData
+        .push({
+          sessionNumber: 1,
+          cageSessionData: List.of(
+            {
+              rowLabel: 'Before',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 10)
+                .set('EtOH', 10)),
+            },
+            {
+              rowLabel: 'After',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 9)
+                .set('EtOH', 9)),
+            },
+          ),
+        })
+        .push({
+          sessionNumber: 2,
+          cageSessionData: List.of(
+            {
+              rowLabel: 'Before',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 10)
+                .set('EtOH', 10)),
+            },
+            {
+              rowLabel: 'After',
+              rowData: Map().withMutations((rowData) => rowData
+                .set('H₂0', 1)
+                .set('EtOH', 4)),
+            },
+          ),
+        })))),
+  )
+  const [cages] = useState<Cages>(List.of(1, 2))
+
+  return (
+    <>
+      <BrowserRouter>
+        <AppModalDrawer
+          title="Scale Interface Tool"
+          subtitle="A Senior Design Project"
+          open={isDrawerOpen}
+          onClose={(): void => setIsDrawerOpen(false)}
+          viewOptions={viewOptions}
+        />
+        <Switch>
+          <Route exact path="/">
+            <Link to="/experiment-dashboard">Experiment Dashboard</Link>
+          </Route>
+          <Route path="/experiment-dashboard">
+            <ExperimentDashboard
+              onDrawerOpen={(): void => setIsDrawerOpen(true)}
+              bottleTypes={bottleTypes}
+              experimentData={experimentData}
+              cages={cages}
+            />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </>
+  )
+}
 
 export default App

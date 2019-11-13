@@ -15,3 +15,14 @@ overrides:
       # See https://github.com/facebook/create-react-app/issues/7712#issuecomment-543368918
       unicorn/no-unsafe-regex: off
       security/detect-unsafe-regex: off
+
+  - files:
+    - 'src/AppModalDrawer.tsx'
+
+    rules:
+      unicorn/prevent-abbreviations:
+        - error
+        - replacements:
+            props: false
+            params:
+              parameters: false
