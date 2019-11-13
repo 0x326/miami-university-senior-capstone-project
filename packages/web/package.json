@@ -2,6 +2,7 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "homepage" : "https://0x326.gitlab.io/miami-university-senior-capstone-project/",
   "dependencies": {
     "@rmwc/data-table": "^5.7.0",
     "@rmwc/drawer": "^5.7.0",
