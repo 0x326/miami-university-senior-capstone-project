@@ -43,7 +43,7 @@ type ExperimentWrapper = {
 }
 
 // TODO: figure out how to ensure the usb drive is mounted to same path
-const ROOT_PATH = `/media/${os.userInfo().username}/test_usb/SCALE_INTERFACE_DAT`
+const ROOT_PATH = `C:/Users/${os.userInfo().username}/Documents/School Work/Capstone/SCALE_INTERFACE_DAT`
 
 async function getRootDir(): Promise<string> {
   if (ROOT_PATH) return ROOT_PATH
