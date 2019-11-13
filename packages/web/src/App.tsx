@@ -140,6 +140,9 @@ const App: React.FC = () => {
               <li>
                 <Link to="/experiments">Experiments</Link>
               </li>
+              <li>
+                <Link to="/experiments/new">New Experiment</Link>
+              </li>
             </ul>
           </Route>
           <Route path="/experiment-dashboard">
