@@ -5398,6 +5398,13 @@ eslint-plugin-unicorn@^11.0.1:
     safe-regex "^2.0.2"
     semver "^6.3.0"
 
+eslint-plugin-you-dont-need-lodash-underscore@^6.8.0:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-you-dont-need-lodash-underscore/-/eslint-plugin-you-dont-need-lodash-underscore-6.8.0.tgz#1ea0320299c08d8c611c321a6fd21ea87eaf9e70"
+  integrity sha512-JZ+v76MqNzP/ohRhtRnuCSIPEaY4dj58YAiJwSvEm3fVEwfjVVeNRHBea0oIcwAUcUGU08fEq75KeOKuE4AvCA==
+  dependencies:
+    kebab-case "^1.0.0"
+
 eslint-scope@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-4.0.3.tgz#ca03833310f6889a3264781aa82e63eb9cfe7848"
@@ -7875,6 +7882,11 @@ jsx-ast-utils@^2.1.0, jsx-ast-utils@^2.2.1:
   dependencies:
     array-includes "^3.0.3"
     object.assign "^4.1.0"
+
+kebab-case@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/kebab-case/-/kebab-case-1.0.0.tgz#3f9e4990adcad0c686c0e701f7645868f75f91eb"
+  integrity sha1-P55JkK3K0MaGwOcB92RYaPdfkes=
 
 killable@^1.0.0:
   version "1.0.1"
