@@ -7,7 +7,7 @@
     // Requires "Debugger for Chrome" extension (https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome)
     // See https://create-react-app.dev/docs/setting-up-your-editor#visual-studio-code
     {
-      "name": "Chrome",
+      "name": "web: Debug in Chrome",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
@@ -18,7 +18,7 @@
     },
     // See https://create-react-app.dev/docs/debugging-tests#debugging-tests-in-visual-studio-code
     {
-      "name": "Debug CRA Tests",
+      "name": "web: Debug Jest tests",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",
