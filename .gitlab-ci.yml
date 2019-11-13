@@ -102,6 +102,9 @@ lint:
 pages:
   stage: production
   image: node:lts
+  environment:
+    name: production
+    url: $CI_PAGES_URL
   only:
     - master
 
@@ -109,7 +112,9 @@ pages:
     - yarn install
     - cd packages/web/
     - yarn build
+    - cd ../..
+    - mv packages/web/build/ public/
 
   artifacts:
     paths:
-      - packages/web/build
+      - public
