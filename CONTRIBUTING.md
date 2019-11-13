@@ -138,6 +138,18 @@ In addition to workflow, we can use GitLab [CI/CD] to automate common tasks such
    ([Chrome plugin][React Development Tools - Chrome];
    [Firefox plugin][React Development Tools - Firefox])
 
+Note:
+Your development environment will automatically run `yarn install` after a Git pull or checkout
+if new dependencies are added in order to keep your local installation up-to-date.
+If you would like to opt out of this behavior,
+set the `YARNHOOK_DRYRUN` environment variable to `true` in your shell.
+E.g.:
+
+```bash
+# In ~/.bashrc
+export YARNHOOK_DRYRUN=true
+```
+
 ## Using development environment
 
 ```bash
