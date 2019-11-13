@@ -1,0 +1,11 @@
+plugins:
+  # Does not support ESLint plugins
+  eslint:
+    enabled: false
+    channel: eslint-5
+
+  duplication:
+    enabled: true
+
+  fixme:
+    enabled: true
