@@ -1,5 +1,8 @@
 {
   "hooks": {
-    "pre-push": "yarn run lint"
+    "pre-push": "yarn run lint",
+    "post-checkout": "yarnhook",
+    "post-merge": "yarnhook",
+    "post-rewrite": "yarnhook"
   }
 }

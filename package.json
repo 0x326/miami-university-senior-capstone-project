@@ -17,10 +17,15 @@
     "@typescript-eslint/parser": "^2.3.0",
     "eslint": "^6.4.0",
     "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-jest": "^23.0.3",
+    "eslint-plugin-jest-formatting": "^1.2.0",
     "eslint-plugin-react-hooks": "^2.0.1",
+    "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-unicorn": "^11.0.1",
+    "eslint-plugin-you-dont-need-lodash-underscore": "^6.8.0",
     "husky": "^3.0.5",
     "lerna": "^3.16.4",
-    "source-map-explorer": "^2.0.1"
+    "source-map-explorer": "^2.0.1",
+    "yarnhook": "^0.4.3"
   }
 }

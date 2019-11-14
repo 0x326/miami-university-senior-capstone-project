@@ -1,4 +1,8 @@
 extends:
+  - plugin:you-dont-need-lodash-underscore/compatible
+  - plugin:jest/recommended
+  - plugin:jest-formatting/recommended
+  - plugin:security/recommended
   - plugin:unicorn/recommended
   - airbnb
   - plugin:@typescript-eslint/recommended
@@ -47,6 +51,10 @@ rules:
 
   react-hooks/rules-of-hooks: error
   react-hooks/exhaustive-deps: warn
+
+  '@typescript-eslint/no-empty-interface':
+    - error
+    - allowSingleExtends: true
 
   # As of v10.0.0, incompatible with `immutable`
   unicorn/new-for-builtins: off
