@@ -204,11 +204,11 @@ async function listExperimentPaths(query: {
 
 
 // writeExperiment: simply writes stringified experiment json to file at path.
-async function writeExperiment(wrapped: { path: string; data: string }): Promise<void> {
+async function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
   // validate file path
-  const lMatch = wrapped.data.match(/^(.*?)_/)
-  const rMatch = wrapped.data.match(/_([^_]*?)$/)
-  if (!lMatch || !rMatch) throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.data}`)
+  const lMatch = wrapped.path.match(/^(.*?)_/)
+  const rMatch = wrapped.path.match(/_([^_]*?)$/)
+  if (!lMatch || !rMatch) throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`)
   // validate file content
   await valid(wrapped.data)
   return await fs.writeFile(wrapped.path, JSON.stringify(wrapped.data))
