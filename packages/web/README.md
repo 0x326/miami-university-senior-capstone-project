@@ -9,6 +9,31 @@
 
 # Web UI
 
+## Usage
+
+```bash
+cd miami-university-senior-capstone-project/
+cd packages/web/
+
+# Running app in development mode
+yarn start
+
+# Testing codebase
+yarn test
+
+# Linting codebase
+yarn lint
+
+# Automatically fix lint errors
+yarn lint --fix
+
+# Create production build
+yarn build
+
+# Analyze size of the production build
+yarn analyze-build
+```
+
 ## Technologies
 
 - Runtime environment: Web browser

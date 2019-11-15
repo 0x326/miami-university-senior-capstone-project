@@ -4,13 +4,26 @@
 
 # scale-interface
 
-## Running
+## Usage
 
 ```bash
+cd miami-university-senior-capstone-project/
+cd packages/scale-interface/
+
+# Building code
+yarn build
+
+# Running code
 yarn start
 
-# In a separate shell
-node dist/index.js
+# Testing code
+yarn test
+
+# Linting code
+yarn lint
+
+# Fixing lint errors
+yarn lint --fix
 ```
 
 ## Technologies
