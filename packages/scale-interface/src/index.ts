@@ -22,9 +22,6 @@ import {
   Experiment,
 } from './fsOperations'
 
-// temporary to simply demo functionality of api
-import './tester'
-
 
 type Resp = {
   status: 'OK' | 'FAIL';
