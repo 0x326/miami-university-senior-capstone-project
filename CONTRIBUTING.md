@@ -265,6 +265,12 @@ git commit -m "Add 'package-name'"
 
 # Reference material
 
-## Configuring development environment
-
-See https://create-react-app.dev
+- Pair programming in modern IDEs:
+  [vscode](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare),
+  [Atom](https://teletype.atom.io/)
+- Promises:
+  [MDN article](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises),
+  [API details](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- Debugging JavaScript running in Chrome:
+  [Using vscode](https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code),
+  [Using WebStorm](https://www.jetbrains.com/help/webstorm/debugging-javascript-in-chrome.html)
