@@ -23,7 +23,7 @@ import {
 } from './fsOperations'
 
 // temporary to simply demo functionality of api
-import './tester'
+// import './tester'
 
 
 type Resp = {
@@ -318,3 +318,5 @@ async function createServer(
 }
 
 createServer(webSocketPort)
+
+export { createServer }

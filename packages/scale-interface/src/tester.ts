@@ -7,7 +7,7 @@ console.log(`
 `)
 
 
-const PORT = 8081
+const PORT = 8080
 
 const wsGetRoot = new ws(`ws://localhost:${PORT}/get-root-dir`)
 const wsListExperiments = new ws(`ws://localhost:${PORT}/list-experiments`)
