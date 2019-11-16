@@ -45,11 +45,12 @@ type ExperimentWrapper = {
 // TODO: figure out how to ensure the usb drive is mounted to same path
 const ROOT_PATH = `/media/${os.userInfo().username}/test_usb/SCALE_INTERFACE_DAT`
 
-async function getRootDir(): Promise<string> {
-  if (ROOT_PATH) return ROOT_PATH
-  throw new Error('Root path not available')
+function getRootDir(): Promise<string | Error> {
+  return new Promise((resolve, reject) => {
+    if (ROOT_PATH) resolve(ROOT_PATH)
+    reject(new Error('Root path not available'))
+  })
 }
-
 
 // valid: uses Joi to validate form of data.
 async function valid(data: any): Promise<void> {
@@ -131,7 +132,8 @@ async function getExperiment(path: string): Promise<ExperimentWrapper> {
 
 // listExperiments:
 // TOOD: use path library
-async function listExperiments(query: { path: string; filter: Experiment }): Promise<Array<ExperimentWrapper>> {
+async function listExperiments(query: { path: string; filter: Experiment }):
+  Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
 
   const allFiles: Array<string | Buffer> = await fs.readdir(
@@ -143,7 +145,8 @@ async function listExperiments(query: { path: string; filter: Experiment }): Pro
   allFiles.map(async (experimentPath) => {
     const wrappedExperiment = await getExperiment(path.join(query.path, experimentPath as string))
     if (!query.filter) experiments.push(wrappedExperiment)
-    if (query.filter && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
+    if (query.filter
+      && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
   })
 
   return experiments
@@ -177,7 +180,7 @@ async function listExperimentPaths(query: {
   if (query.dateStart && query.dateEnd) {
     paths = paths.filter((path) => {
       path = path as string
-      const dateMatch = path.match(/_(\d*?)_/)
+      const dateMatch = /_\d{13}_/.exec(path)
       if (!dateMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
       else {
         const date = new Date(Number(dateMatch[1]))
@@ -191,8 +194,8 @@ async function listExperimentPaths(query: {
     const experimentName: string = query.experimentName ? query.experimentName : ''
     const primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ''
     path = path as string
-    const lMatch = path.match(/^(.*?)_/)
-    const rMatch = path.match(/_([^_]*?)$/)
+    const lMatch = /^(.*?)_/.exec(path)
+    const rMatch = /_([^_]*?)$/.exec(path)
     if (!lMatch || !rMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
     else {
       return lMatch[1].includes(experimentName)
@@ -204,14 +207,19 @@ async function listExperimentPaths(query: {
 
 
 // writeExperiment: simply writes stringified experiment json to file at path.
-async function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
-  // validate file path
-  const lMatch = wrapped.path.match(/^(.*?)_/)
-  const rMatch = wrapped.path.match(/_([^_]*?)$/)
-  if (!lMatch || !rMatch) throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`)
-  // validate file content
-  await valid(wrapped.data)
-  return await fs.writeFile(wrapped.path, JSON.stringify(wrapped.data))
+function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // validate file path
+    const lMatch = /^.*?_/.exec(wrapped.path)
+    const rMatch = /_[^_]*?$/.exec(wrapped.path)
+    const dateMatch = /_\d{13}_/.exec(wrapped.path)
+    /* eslint-disable curly, nonblock-statement-body-position */
+    if (!lMatch || !rMatch || !dateMatch)
+      reject(new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`))
+    /* eslint-enable curly, nonblock-statement-body-position */
+    valid(wrapped.data)
+      .then(() => resolve(fs.writeFile(wrapped.path, JSON.stringify(wrapped.data))))
+  })
 }
 
 export {
