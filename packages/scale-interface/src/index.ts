@@ -318,5 +318,3 @@ async function createServer(
 }
 
 createServer(webSocketPort)
-
-export { createServer }
