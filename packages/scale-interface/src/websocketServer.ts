@@ -1,7 +1,6 @@
 import https from 'https'
 import http from 'http'
 import url from 'url'
-
 import * as WebSocket from 'ws'
 
 import {
@@ -21,9 +20,13 @@ import {
 
 import { ScaleConfig } from '.'
 
+enum Status {
+  OK = 'OK',
+  FAIL = 'FAIL'
+}
 
 type Resp = {
-  status: 'OK' | 'FAIL';
+  status: Status;
   data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
   message?: string;
 }
@@ -50,13 +53,14 @@ function createServer(
         getRootDir()
           .then((path) => {
             ws.send(JSON.stringify({
-              status: 'OK',
+              status: Status.OK,
               data: path,
             } as Resp))
           })
           .catch((error) => {
             ws.send(JSON.stringify({
-              status: 'FAIL',
+              status: Status.FAIL,
+              message: error.toString(),
             } as Resp))
             console.log(`getting root dir resulted in error ${error}`)
           })
@@ -69,20 +73,22 @@ function createServer(
           listExperiments(parsed)
             .then((wrappedExperiments) => {
               ws.send(JSON.stringify({
-                status: 'OK',
+                status: Status.OK,
                 data: wrappedExperiments,
               } as Resp))
             })
             .catch((error) => {
               ws.send(JSON.stringify({
-                status: 'FAIL',
+                status: Status.FAIL,
+                message: error.toString(),
               } as Resp))
               console.log(`listExperiments resulted in error: ${error} when given query:`)
               console.log(parsed)
             })
         } catch (error) {
           ws.send(JSON.stringify({
-            status: 'FAIL',
+            status: Status.FAIL,
+            message: error.toString(),
           } as Resp))
           console.log(error)
         }
@@ -95,19 +101,21 @@ function createServer(
           getExperiment(path)
             .then((wrappedExperiment) => {
               ws.send(JSON.stringify({
-                status: 'OK',
+                status: Status.OK,
                 data: wrappedExperiment,
               } as Resp))
             })
             .catch((error) => {
               ws.send(JSON.stringify({
-                status: 'FAIL',
+                status: Status.FAIL,
+                message: error.toString(),
               } as Resp))
               console.log(`getExperiment on path ${path} resulted in error ${error}`)
             })
         } catch (error) {
           ws.send(JSON.stringify({
-            status: 'FAIL',
+            status: Status.FAIL,
+            message: error.toString(),
           } as Resp))
           console.log(error)
         }
@@ -120,20 +128,22 @@ function createServer(
           listExperimentPaths(parsed)
             .then((paths) => {
               ws.send(JSON.stringify({
-                status: 'OK',
+                status: Status.OK,
                 data: paths,
-              }))
+              } as Resp))
             })
             .catch((error) => {
               ws.send(JSON.stringify({
-                status: 'FAIL',
+                status: Status.FAIL,
+                message: error.toString()
               } as Resp))
               console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
               console.log(parsed)
             })
         } catch (error) {
           ws.send(JSON.stringify({
-            status: 'FAIL',
+            status: Status.FAIL,
+            message: error.toString(),
           } as Resp))
           console.log(error)
         }
@@ -148,7 +158,7 @@ function createServer(
             writeExperiment(parsed)
               .then(() => {
                 ws.send(JSON.stringify({
-                  status: 'OK',
+                  status: Status.OK,
                   message: `Saved experiment at ${parsed.path}`,
                 } as Resp))
                 console.log(`==Saved the following object at ${parsed.path}`)
@@ -156,20 +166,23 @@ function createServer(
               })
               .catch((error) => {
                 ws.send(JSON.stringify({
-                  status: 'FAIL',
+                  status: Status.FAIL,
+                  message: error.toString(),
                 } as Resp))
                 console.log(error)
               })
           } else {
             ws.send(JSON.stringify({
-              status: 'FAIL',
+              status: Status.FAIL,
+              message: 'Need both a path and data'
             } as Resp))
             console.log('==Passed object is missing either a path or data field')
             console.log(parsed)
           }
         } catch (error) {
           ws.send(JSON.stringify({
-            status: 'FAIL',
+            status: Status.FAIL,
+            message: error.toString(),
           } as Resp))
           console.log('==Do not write badly formatted object to disk')
           console.log(error)
@@ -185,7 +198,7 @@ function createServer(
         .then(() => {
           console.log('Scale connected')
           ws.send(JSON.stringify({
-            status: 'OK',
+            status: Status.OK,
           } as Resp))
         })
 
@@ -253,4 +266,6 @@ function createServer(
 
 export {
   createServer,
+  Resp,
+  Status,
 }

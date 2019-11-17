@@ -119,20 +119,20 @@ async function valid(data: any): Promise<void> {
 
 
 // getExperiment: returns experiment object parsed from file at absolute path
-async function getExperiment(path: string): Promise<ExperimentWrapper> {
-  const data = await fs.readFile(path, { encoding: 'UTF-8' }) as string
+async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
+  const normalized = path.normalize(searchPath)
+  const data = await fs.readFile(normalized, { encoding: 'UTF-8' }) as string
   const parsed: any = JSON.parse(data)
   await valid(parsed)
   return {
-    path,
+    path: normalized,
     data: parsed as Experiment,
   } as ExperimentWrapper
 }
 
 
 // listExperiments:
-// TOOD: use path library
-async function listExperiments(query: { path: string; filter: Experiment }):
+async function listExperiments(query: { path: string; filter: null | Experiment }):
   Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
 
@@ -141,13 +141,13 @@ async function listExperiments(query: { path: string; filter: Experiment }):
     { encoding: 'UTF-8' },
   )
 
-  const experiments: Array<ExperimentWrapper> = []
-  allFiles.map(async (experimentPath) => {
+  const experiments = []
+  for (let experimentPath of allFiles) {
     const wrappedExperiment = await getExperiment(path.join(query.path, experimentPath as string))
     if (!query.filter) experiments.push(wrappedExperiment)
     if (query.filter
       && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
-  })
+  }
 
   return experiments
 }
