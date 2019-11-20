@@ -4,3 +4,8 @@ parserOptions:
 env:
   browser: false
   node: true
+
+rules:
+  no-new-require: error
+  no-mixed-requires: error
+  no-sync: error
