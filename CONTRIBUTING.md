@@ -79,6 +79,8 @@ Here's one idea of how we can use GitLab to facilitate our software development 
 
 - During a sprint:
 
+  1. Create a branch for each task in the following format to [reference its respective task issue](https://stackoverflow.com/a/43297769):
+     `XX-brief-description`, where `XX` is the issue number
   1. Move issues to different columns of the [issue boards] as work is done
   1. Keep track of time spent on each task issue using GitLab [time tracking]
   1. When work is done, create a [merge request] using the `Complete Task` [template]
