@@ -88,6 +88,7 @@
     "@material/top-app-bar": "^3.1.0",
     "@material/touch-target": "^4.0.0",
     "@material/typography": "^3.1.0",
+    "dayjs": "^1.8.17",
     "immutable": "^4.0.0-rc.12",
     "material-design-icons-iconfont": "^5.0.1",
     "react": "^16.9.0",
