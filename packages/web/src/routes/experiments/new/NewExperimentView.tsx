@@ -35,6 +35,11 @@ import '@material/floating-label/dist/mdc.floating-label.css'
 import '@material/notched-outline/dist/mdc.notched-outline.css'
 import '@material/line-ripple/dist/mdc.line-ripple.css'
 
+import {
+  Tooltip,
+} from '@rmwc/tooltip'
+import '@rmwc/tooltip/tooltip.css'
+
 import dayjs from 'dayjs'
 
 function NewExperiment(): JSX.Element {
@@ -66,17 +71,19 @@ function NewExperiment(): JSX.Element {
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>
           <TopAppBarSection alignEnd>
-            <TopAppBarActionItem
-              icon="done"
-              disabled={[
-                isExperimentNameValid,
-                isExperimentLeadNameValid,
-                isStartDateValid,
-                isSessionCountValid,
-                isBottlesPerCageValid,
-                isWeighsPerBottleValid,
-              ].some((valid) => !valid)}
-            />
+            <Tooltip content="Save experiment">
+              <TopAppBarActionItem
+                icon="done"
+                disabled={[
+                  isExperimentNameValid,
+                  isExperimentLeadNameValid,
+                  isStartDateValid,
+                  isSessionCountValid,
+                  isBottlesPerCageValid,
+                  isWeighsPerBottleValid,
+                ].some((valid) => !valid)}
+              />
+            </Tooltip>
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>
