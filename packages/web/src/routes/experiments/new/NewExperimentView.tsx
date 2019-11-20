@@ -66,7 +66,17 @@ function NewExperiment(): JSX.Element {
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>
           <TopAppBarSection alignEnd>
-            <TopAppBarActionItem icon="done" />
+            <TopAppBarActionItem
+              icon="done"
+              disabled={[
+                isExperimentNameValid,
+                isExperimentLeadNameValid,
+                isStartDateValid,
+                isSessionCountValid,
+                isBottlesPerCageValid,
+                isWeighsPerBottleValid,
+              ].some((valid) => !valid)}
+            />
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>
