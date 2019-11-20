@@ -70,7 +70,7 @@ function NewExperiment(): JSX.Element {
             <TextField label="Bottles per cage" type="number" />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Weights per bottle" type="number" />
+            <TextField label="Weighs per bottle" type="number" />
           </GridCell>
         </Grid>
       </FormField>
