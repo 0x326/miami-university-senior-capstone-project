@@ -47,6 +47,13 @@ function NewExperiment(): JSX.Element {
   const [bottlesPerCage, setBottlesPerCage] = useState('1')
   const [weighsPerBottle, setWeighsPerBottle] = useState('1')
 
+  const isExperimentNameValid = experimentName.length > 0
+  const isExperimentLeadNameValid = experimentLeadName.length > 0
+  const isStartDateValid = dayjs(startDate).isValid()
+  const isSessionCountValid = Number(sessionCount) > 0
+  const isBottlesPerCageValid = Number(bottlesPerCage) > 0
+  const isWeighsPerBottleValid = Number(weighsPerBottle) > 0
+
   return (
     <>
       <TopAppBar>
@@ -71,6 +78,7 @@ function NewExperiment(): JSX.Element {
               label="Experiment Name"
               type="text"
               value={experimentName}
+              invalid={!isExperimentNameValid}
               onChange={(event: FormEvent<HTMLInputElement>): void => {
                 setExperimentName(event.currentTarget.value)
               }}
@@ -81,6 +89,7 @@ function NewExperiment(): JSX.Element {
               label="Experiment Lead Name"
               type="text"
               value={experimentLeadName}
+              invalid={!isExperimentLeadNameValid}
               onChange={(event: FormEvent<HTMLInputElement>): void => {
                 setExperimentLeadName(event.currentTarget.value)
               }}
@@ -91,6 +100,7 @@ function NewExperiment(): JSX.Element {
               label="Start date"
               type="date"
               value={startDate}
+              invalid={!isStartDateValid}
               onChange={(event: FormEvent<HTMLInputElement>): void => {
                 setStartDate(event.currentTarget.value)
               }}
@@ -101,6 +111,7 @@ function NewExperiment(): JSX.Element {
               label="Number of sessions"
               type="number"
               value={sessionCount}
+              invalid={!isSessionCountValid}
               onChange={(event: FormEvent<HTMLInputElement>): void => {
                 setSessionCount(event.currentTarget.value)
               }}
@@ -111,6 +122,7 @@ function NewExperiment(): JSX.Element {
               label="Bottles per cage"
               type="number"
               value={bottlesPerCage}
+              invalid={!isBottlesPerCageValid}
               onChange={(event: FormEvent<HTMLInputElement>): void => {
                 setBottlesPerCage(event.currentTarget.value)
               }}
@@ -121,6 +133,7 @@ function NewExperiment(): JSX.Element {
               label="Weighs per bottle"
               type="number"
               value={weighsPerBottle}
+              invalid={!isWeighsPerBottleValid}
               onChange={(event: FormEvent<HTMLInputElement>): void => {
                 setWeighsPerBottle(event.currentTarget.value)
               }}
