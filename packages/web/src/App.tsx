@@ -33,13 +33,14 @@ import {
 
 import {
   BottleType,
+  RouteMap,
 } from './types'
 
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 
-const viewOptions = Map<string, string>().withMutations((map) => map
+const viewOptions: RouteMap = Map<string, string>().withMutations((map) => map
   .set('experiment-dashboard', 'Experiment Dashboard')
   .set('experiments', 'Experiments'))
 
