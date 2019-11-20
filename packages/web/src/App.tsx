@@ -33,6 +33,8 @@ import {
 
 import {
   BottleType,
+  RouteId,
+  DisplayName,
   RouteMap,
 } from './types'
 
@@ -40,14 +42,16 @@ import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 
-const viewOptions: RouteMap = Map<string, string>().withMutations((map) => map
+export type ExperimentId = RouteId
+
+const viewOptions: RouteMap = Map<ExperimentId, DisplayName>().withMutations((map) => map
   .set('experiment-dashboard', 'Experiment Dashboard')
   .set('experiments', 'Experiments'))
 
 const App: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  const [experiments] = useState(Map<string, ExperimentData>()
+  const [experiments] = useState(Map<ExperimentId, ExperimentData>()
     .withMutations((experimentMap) => experimentMap
       .set('experiment-1', Map<RackId, Map<CageId, CageData>>().withMutations((map) => map
         .set(1, Map<CageId, CageData>().withMutations((rackData) => rackData
@@ -235,7 +239,7 @@ const App: React.FC = () => {
             <ExperimentsSwitch
               onDrawerOpen={(): void => setIsDrawerOpen(true)}
               experimentIds={List.of('experiment-1')}
-              experiments={Map<string, string>().set('experiment-1', 'Experiment 1')}
+              experiments={Map<ExperimentId, DisplayName>().set('experiment-1', 'Experiment 1')}
             />
           </Route>
         </Switch>
