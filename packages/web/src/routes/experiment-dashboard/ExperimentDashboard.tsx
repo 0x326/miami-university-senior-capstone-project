@@ -1,4 +1,6 @@
-import React from 'react'
+import React, {
+  useState,
+} from 'react'
 
 import {
   List,
@@ -44,18 +46,33 @@ function ExperimentDashboard(props: Props): JSX.Element {
     experimentData,
   } = props
 
+  const [isEditMode, setIsEditMode] = useState<boolean>(false)
+  const [editedExperimentData, setEditedExperimentData] = useState(experimentData)
+
   return (
     <>
       <TopAppBar>
-        <TopAppBarRow>
-          <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
-            <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
-          </TopAppBarSection>
-          <TopAppBarSection alignEnd>
-            <TopAppBarActionItem icon="cloud_download" />
-          </TopAppBarSection>
-        </TopAppBarRow>
+        {isEditMode === false && (
+          <TopAppBarRow>
+            <TopAppBarSection alignStart>
+              <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
+              <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
+            </TopAppBarSection>
+            <TopAppBarSection alignEnd>
+              <TopAppBarActionItem icon="edit" title="Edit" onClick={() => setIsEditMode(true)} />
+              <TopAppBarActionItem icon="cloud_download" />
+            </TopAppBarSection>
+          </TopAppBarRow>
+        )}
+        {isEditMode === true && (
+          <TopAppBarRow>
+            <TopAppBarSection alignStart>
+              <TopAppBarNavigationIcon icon="chevron_left" onClick={() => setIsEditMode(false)} />
+              <TopAppBarTitle>Edit mode</TopAppBarTitle>
+            </TopAppBarSection>
+            <TopAppBarSection alignEnd />
+          </TopAppBarRow>
+        )}
       </TopAppBar>
       <TopAppBarFixedAdjust />
       {cages
@@ -65,11 +82,16 @@ function ExperimentDashboard(props: Props): JSX.Element {
             key={cageId}
             cageNumber={cageId}
             bottleTypes={bottleTypes}
-            cageData={experimentData.get(cageId) as CageData}
+            cageData={editedExperimentData.get(cageId) as CageData}
+            isEditable={isEditMode}
+            onCageDataChange={(newCageData): void => {
+              setEditedExperimentData(editedExperimentData.set(cageId, newCageData))
+            }}
           />
         ))}
     </>
   )
 }
+
 
 export default ExperimentDashboard
