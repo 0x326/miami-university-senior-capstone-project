@@ -1,4 +1,7 @@
-import React from 'react'
+import React, {
+  useState,
+  FormEvent,
+} from 'react'
 
 import {
   useHistory,
@@ -32,8 +35,17 @@ import '@material/floating-label/dist/mdc.floating-label.css'
 import '@material/notched-outline/dist/mdc.notched-outline.css'
 import '@material/line-ripple/dist/mdc.line-ripple.css'
 
+import dayjs from 'dayjs'
+
 function NewExperiment(): JSX.Element {
   const history = useHistory()
+
+  const [experimentName, setExperimentName] = useState('')
+  const [experimentLeadName, setExperimentLeadName] = useState('')
+  const [startDate, setStartDate] = useState(dayjs().format('YYYY-MM-DD'))
+  const [sessionCount, setSessionCount] = useState('1')
+  const [bottlesPerCage, setBottlesPerCage] = useState('1')
+  const [weighsPerBottle, setWeighsPerBottle] = useState('1')
 
   return (
     <>
@@ -55,22 +67,64 @@ function NewExperiment(): JSX.Element {
       <FormField>
         <Grid>
           <GridCell span={4}>
-            <TextField label="Experiment Name" type="text" />
+            <TextField
+              label="Experiment Name"
+              type="text"
+              value={experimentName}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setExperimentName(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Experiment Lead Name" type="text" />
+            <TextField
+              label="Experiment Lead Name"
+              type="text"
+              value={experimentLeadName}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setExperimentLeadName(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Start date" type="date" />
+            <TextField
+              label="Start date"
+              type="date"
+              value={startDate}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setStartDate(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Number of sessions" type="number" />
+            <TextField
+              label="Number of sessions"
+              type="number"
+              value={sessionCount}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setSessionCount(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Bottles per cage" type="number" />
+            <TextField
+              label="Bottles per cage"
+              type="number"
+              value={bottlesPerCage}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setBottlesPerCage(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Weighs per bottle" type="number" />
+            <TextField
+              label="Weighs per bottle"
+              type="number"
+              value={weighsPerBottle}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setWeighsPerBottle(event.currentTarget.value)
+              }}
+            />
           </GridCell>
         </Grid>
       </FormField>
