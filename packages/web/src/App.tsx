@@ -11,7 +11,7 @@ import {
 } from 'immutable'
 
 import {
-  BrowserRouter,
+  HashRouter,
   Link,
   Route,
   Switch,
@@ -121,7 +121,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         <AppModalDrawer
           title="Scale Interface Tool"
           subtitle="A Senior Design Project"
@@ -159,7 +159,7 @@ const App: React.FC = () => {
             />
           </Route>
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     </>
   )
 }
