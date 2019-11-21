@@ -20,7 +20,14 @@ import '@rmwc/data-table/data-table.css'
 
 import { TextField } from '@rmwc/textfield'
 
+import '@material/textfield/dist/mdc.textfield.css'
+import '@material/floating-label/dist/mdc.floating-label.css'
+import '@material/notched-outline/dist/mdc.notched-outline.css'
+import '@material/line-ripple/dist/mdc.line-ripple.css'
+
 import { FormField } from '@rmwc/formfield'
+
+import '@material/form-field/dist/mdc.form-field.css'
 
 import {
   BottleState,
