@@ -43,7 +43,6 @@ const viewOptions = Map<string, string>().withMutations((map) => map
 
 const App: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experiments] = useState(Map<string, ExperimentData>()
     .withMutations((experimentMap) => experimentMap
@@ -130,7 +129,6 @@ const App: React.FC = () => {
           onClose={(): void => setIsDrawerOpen(false)}
           viewOptions={viewOptions}
         />
-
         <Switch>
           <Route exact path="/">
             <ul>
@@ -161,7 +159,6 @@ const App: React.FC = () => {
             />
           </Route>
         </Switch>
-
       </HashRouter>
     </>
   )

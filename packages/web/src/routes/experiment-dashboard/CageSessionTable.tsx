@@ -27,12 +27,10 @@ import {
   BottleType,
 } from '../../types'
 
-
 export interface CageSessionData extends List<Readonly<{
   rowLabel: BottleState;
   rowData: Map<BottleType, number>;
 }>> {}
-
 
 interface Props {
   isEditable: boolean;
@@ -42,7 +40,6 @@ interface Props {
   onDataChange: (newData: CageSessionData) => void;
 }
 
-
 function CageSessionTable(props: Props): JSX.Element {
   const {
     isEditable,
@@ -51,7 +48,6 @@ function CageSessionTable(props: Props): JSX.Element {
     data,
     onDataChange,
   } = props
-
 
   return (
     <>
