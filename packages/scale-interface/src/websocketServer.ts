@@ -1,6 +1,7 @@
 import https from 'https'
 import http from 'http'
 import url from 'url'
+
 import * as WebSocket from 'ws'
 
 import {
@@ -25,7 +26,7 @@ enum Status {
   FAIL = 'FAIL'
 }
 
-type Resp = {
+export type Resp = {
   status: Status;
   data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
   message?: string;
@@ -135,7 +136,7 @@ function createServer(
             .catch((error) => {
               ws.send(JSON.stringify({
                 status: Status.FAIL,
-                message: error.toString()
+                message: error.toString(),
               } as Resp))
               console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
               console.log(parsed)
@@ -174,7 +175,7 @@ function createServer(
           } else {
             ws.send(JSON.stringify({
               status: Status.FAIL,
-              message: 'Need both a path and data'
+              message: 'Need both a path and data',
             } as Resp))
             console.log('==Passed object is missing either a path or data field')
             console.log(parsed)
@@ -266,6 +267,5 @@ function createServer(
 
 export {
   createServer,
-  Resp,
   Status,
 }

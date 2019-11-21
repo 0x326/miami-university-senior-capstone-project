@@ -142,7 +142,7 @@ async function listExperiments(query: { path: string; filter: null | Experiment 
   )
 
   const experiments = []
-  for (let experimentPath of allFiles) {
+  for (const experimentPath of allFiles) {
     const wrappedExperiment = await getExperiment(path.join(query.path, experimentPath as string))
     if (!query.filter) experiments.push(wrappedExperiment)
     if (query.filter

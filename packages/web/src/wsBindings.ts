@@ -45,7 +45,7 @@ function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
 // resolves to a websocket guaranteed to be open
 // has side effect of opening globally defined websockets if they are not open
 function ensureOpen(route: string): Promise<WebSocket> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     switch (route) {
       case 'get-root-dir':
         if (wsGetRoot && wsGetRoot.readyState === WebSocket.OPEN) {
@@ -108,7 +108,7 @@ function ensureOpen(route: string): Promise<WebSocket> {
         break
 
       default:
-        throw new Error('No websocket matching path provided.')
+        reject(new Error('No websocket matching path provided.'))
     }
   })
 }
