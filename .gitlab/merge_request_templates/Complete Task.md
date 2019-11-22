@@ -1,6 +1,6 @@
-> User story: #USER_STORY_ISSUE_NUMBER
->
-> Task issue: Closes #TASK_ISSUE_NUMBER
+User story: #USER_STORY_ISSUE_NUMBER
+
+Task issue: Closes #TASK_ISSUE_NUMBER
 
 <details>
 <summary>
