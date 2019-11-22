@@ -21,6 +21,10 @@
 
 [Git - the simple guide]: https://rogerdudler.github.io/git-guide/
 [Git reference guide]: https://www.digitalocean.com/community/tutorials/how-to-use-git-a-reference-guide
+[Git cheat sheet]: https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet
+[Git Tower book]: https://www.git-tower.com/learn/git/ebook/en/command-line/introduction
+[Pro Git book]: https://git-scm.com/book/en/v2
+[Git best practices]: https://www.git-tower.com/learn/git/ebook/en/command-line/appendix/best-practices
 [Git command-line]: https://git-scm.com/downloads
 [GitHub Desktop]: https://desktop.github.com/
 [Node.js]: https://nodejs.org/en/download/package-manager/
@@ -81,6 +85,7 @@ Here's one idea of how we can use GitLab to facilitate our software development 
 
   1. Create a branch for each task in the following format to [reference its respective task issue](https://stackoverflow.com/a/43297769):
      `XX-brief-description`, where `XX` is the issue number
+  1. Make changes and commit along the way, following [Git best practices]
   1. Move issues to different columns of the [issue boards] as work is done
   1. Keep track of time spent on each task issue using GitLab [time tracking]
   1. When work is done, create a [merge request] using the `Complete Task` [template]
@@ -121,9 +126,7 @@ All of this can be done automatically with little configuration using GitLab [Au
 
 ## Setting up development environment
 
-> [Git quick-start guide][Git - the simple guide]
->
-> [Git command-line reference][Git reference guide]
+> See the 'Reference material' section for information on how to use Git
 
 1. Install a Git client: [command-line][Git command-line], [GitHub Desktop], etc.
 
@@ -266,6 +269,15 @@ git commit -m "Add 'package-name'"
 ```
 
 # Reference material
+
+- Git
+
+  - [Quick-start guide][Git - the simple guide]
+  - [Command-line reference][Git reference guide]
+  - [Cheat sheet][Git cheat sheet]
+  - [Book for beginners][Git Tower book]
+  - [Book for intermediates][Pro Git book]
+  - [Best practices][Git best practices]
 
 - Pair programming in modern IDEs:
   [vscode](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare),
