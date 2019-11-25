@@ -1,5 +1,6 @@
 [React]: https://reactjs.org/
 [MDN]: https://developer.mozilla.org/en-US/
+[Google Developers: Web]: https://developers.google.com/web
 [web.dev]: https://web.dev/
 [TypeScript]: https://www.typescriptlang.org/
 [Material]: https://material.io/
@@ -50,4 +51,4 @@ yarn analyze-build
 - Learning Web technology: [MDN]
 - Using the web browser developer tools:
   [MDN article](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools)
-- Learning how to make Web apps performant: [web.dev]
+- Learning how to make Web apps performant: [Google Developers: Web], [web.dev]
