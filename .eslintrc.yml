@@ -117,6 +117,7 @@ rules:
         args:
           arguments: false
 
+        # React terminology
         props:
           properties: false
 
