@@ -51,4 +51,4 @@ yarn analyze-build
 - Learning Web technology: [MDN]
 - Using the web browser developer tools:
   [MDN article](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools)
-- Learning how to make Web apps performant: [Google Developers: Web], [web.dev]
+- Web app best practices: [Google Developers: Web], [web.dev]
