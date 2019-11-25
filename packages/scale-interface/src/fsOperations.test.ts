@@ -94,7 +94,7 @@ describe('Reading and writing an experiment', () => {
     })
 
     it('writes an empty name experiment Filename', async () => {
-      const { fileContent, parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid3.json')
+      const { fileContent, parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid.json')
       const exampleInvalidExperimentName = `_1571826295869_quinn`
       await writeExperiment({ path: ACTIVE + exampleInvalidExperimentName, data: exampleExperiment })
 
@@ -111,7 +111,7 @@ describe('Reading and writing an experiment', () => {
     })
 
     it('writes an empty primaryExperimenter experiment Filename', async () => {
-      const { fileContent, parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid4.json')
+      const { fileContent, parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid.json')
       const exampleExperimentName = `Addiction Study 12_1571826295869_`
       await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleExperiment })
 
@@ -121,7 +121,7 @@ describe('Reading and writing an experiment', () => {
   })
 
   it('reads a written experiment', async () => {
-    const { fileContent, parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid5.json')
+    const { fileContent, parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid.json')
     const exampleExperimentName = `Addiction Study 12_1571826295869_quinn`
     await fs.writeFile(ACTIVE + exampleExperimentName, fileContent)
     let rtnExpr = await getExperiment(ACTIVE + exampleExperimentName)
