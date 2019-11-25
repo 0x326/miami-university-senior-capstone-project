@@ -117,6 +117,9 @@ rules:
         args:
           arguments: false
 
+        dir:
+          directory: false
+
         # React terminology
         props:
           properties: false
