@@ -95,9 +95,11 @@ async function ensureOpen(route: string): Promise<WebSocket> {
  * @param resolve
  * @param reject
  */
-function messageHandler(event: any,
+function messageHandler(
+  event: any,
   resolve: (data?: any) => any,
-  reject: (reason?: any) => any): void {
+  reject: (reason?: any) => any,
+): void {
   const parsed: Resp = JSON.parse(event.data)
   if (parsed.status === Status.FAIL) reject(new Error(parsed.message))
   resolve(parsed.data)
