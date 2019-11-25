@@ -47,73 +47,56 @@ function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
  * has side effect of opening globally defined websockets if they are not open
  * @param route
  */
-function ensureOpen(route: string): Promise<WebSocket> {
-  return new Promise((resolve, reject) => {
-    switch (route) {
-      case 'get-root-dir':
-        if (wsGetRoot && wsGetRoot.readyState === WebSocket.OPEN) {
-          resolve(wsGetRoot)
-        } else {
-          openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-            .then((socket) => {
-              wsGetRoot = socket
-              resolve(wsGetRoot)
-            })
-        }
-        break
+async function ensureOpen(route: string): Promise<WebSocket> {
+  switch (route) {
+    case 'get-root-dir':
+      if (wsGetRoot && wsGetRoot.readyState === WebSocket.OPEN) {
+        return wsGetRoot
+      } else {
+        wsGetRoot = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
+        return wsGetRoot
+      }
+      break
 
-      case 'list-experiments':
-        if (wsListExperiments && wsListExperiments.readyState === WebSocket.OPEN) {
-          resolve(wsListExperiments)
-        } else {
-          openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-            .then((socket) => {
-              wsListExperiments = socket
-              resolve(wsListExperiments)
-            })
-        }
-        break
+    case 'list-experiments':
+      if (wsListExperiments && wsListExperiments.readyState === WebSocket.OPEN) {
+        return wsListExperiments
+      } else {
+        wsListExperiments = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
+        return wsListExperiments
+      }
+      break
 
-      case 'get-experiment':
-        if (wsGetExperiment && wsGetExperiment.readyState === WebSocket.OPEN) {
-          resolve(wsGetExperiment)
-        } else {
-          openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-            .then((socket) => {
-              wsGetExperiment = socket
-              resolve(wsGetExperiment)
-            })
-        }
-        break
+    case 'get-experiment':
+      if (wsGetExperiment && wsGetExperiment.readyState === WebSocket.OPEN) {
+        return wsGetExperiment
+      } else {
+        wsGetExperiment = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
+        return wsGetExperiment
+      }
+      break
 
-      case 'list-experiment-paths':
-        if (wsListPaths && wsListPaths.readyState === WebSocket.OPEN) {
-          resolve(wsListPaths)
-        } else {
-          openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-            .then((socket) => {
-              wsListPaths = socket
-              resolve(wsListPaths)
-            })
-        }
-        break
+    case 'list-experiment-paths':
+      if (wsListPaths && wsListPaths.readyState === WebSocket.OPEN) {
+        return wsListPaths
+      } else {
+        wsListPaths = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
+        return wsListPaths
+      }
+      break
 
-      case 'write-experiment':
-        if (wsWriteExperiment && wsWriteExperiment.readyState === WebSocket.OPEN) {
-          resolve(wsWriteExperiment)
-        } else {
-          openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-            .then((socket) => {
-              wsWriteExperiment = socket
-              resolve(wsWriteExperiment)
-            })
-        }
-        break
+    case 'write-experiment':
+      if (wsWriteExperiment && wsWriteExperiment.readyState === WebSocket.OPEN) {
+        return wsWriteExperiment
+      } else {
+        wsWriteExperiment = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
+        return wsWriteExperiment
+      }
+      break
 
-      default:
-        reject(new Error('No websocket matching path provided.'))
-    }
-  })
+    default:
+      throw new Error('No websocket matching path provided.')
+  }
 }
 
 /**
