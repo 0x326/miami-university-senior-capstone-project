@@ -26,7 +26,7 @@ enum Status {
   FAIL = 'FAIL'
 }
 
-export type Resp = {
+export interface Resp {
   status: Status;
   data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
   message?: string;

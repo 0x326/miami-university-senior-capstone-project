@@ -10,17 +10,17 @@ import Joi from '@hapi/joi'
 type SubLabel = [string, Array<string | SubLabelArray>]
 interface SubLabelArray extends Array<SubLabel> { }
 
-type Session = {
+interface Session {
   [key: string]: number;
 }
 
-type Cage = {
+interface Cage {
   cageWeight: number;
   cageLabel: string;
   sessions: Array<Session>;
 }
 
-type Experiment = {
+interface Experiment {
   name: string;
   primaryExperimenter: string;
   dateInitialized: number;
@@ -37,7 +37,7 @@ type Experiment = {
 }
 
 // wraps an experiment to provide the path of the file it was read from
-type ExperimentWrapper = {
+interface ExperimentWrapper {
   path: string;
   data: Experiment;
 }

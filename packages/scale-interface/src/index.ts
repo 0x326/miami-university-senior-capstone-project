@@ -51,7 +51,7 @@ const {
     default: 8080,
   })
 
-export type ScaleConfig = {
+export interface ScaleConfig {
   device: string;
   baudRate: 1200 | 2400 | 4800 | 9600;
   dataBits: 7 | 8;
