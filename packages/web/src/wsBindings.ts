@@ -50,49 +50,39 @@ function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
 async function ensureOpen(route: string): Promise<WebSocket> {
   switch (route) {
     case 'get-root-dir':
-      if (wsGetRoot && wsGetRoot.readyState === WebSocket.OPEN) {
-        return wsGetRoot
-      } else {
+      if (wsGetRoot === null || wsGetRoot.readyState !== WebSocket.OPEN) {
         wsGetRoot = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-        return wsGetRoot
       }
-      break
+      return wsGetRoot
+
 
     case 'list-experiments':
-      if (wsListExperiments && wsListExperiments.readyState === WebSocket.OPEN) {
-        return wsListExperiments
-      } else {
+      if (wsListExperiments === null || wsListExperiments.readyState === WebSocket.OPEN) {
         wsListExperiments = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-        return wsListExperiments
       }
-      break
+      return wsListExperiments
+
 
     case 'get-experiment':
-      if (wsGetExperiment && wsGetExperiment.readyState === WebSocket.OPEN) {
-        return wsGetExperiment
-      } else {
+      if (wsGetExperiment === null || wsGetExperiment.readyState === WebSocket.OPEN) {
         wsGetExperiment = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-        return wsGetExperiment
       }
-      break
+      return wsGetExperiment
+
 
     case 'list-experiment-paths':
-      if (wsListPaths && wsListPaths.readyState === WebSocket.OPEN) {
-        return wsListPaths
-      } else {
+      if (wsListPaths === null || wsListPaths.readyState === WebSocket.OPEN) {
         wsListPaths = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-        return wsListPaths
       }
-      break
+      return wsListPaths
+
 
     case 'write-experiment':
-      if (wsWriteExperiment && wsWriteExperiment.readyState === WebSocket.OPEN) {
-        return wsWriteExperiment
-      } else {
+      if (wsWriteExperiment === null || wsWriteExperiment.readyState === WebSocket.OPEN) {
         wsWriteExperiment = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-        return wsWriteExperiment
       }
-      break
+      return wsWriteExperiment
+
 
     default:
       throw new Error('No websocket matching path provided.')
