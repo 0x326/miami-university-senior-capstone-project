@@ -42,7 +42,7 @@ type ExperimentWrapper = {
   data: Experiment;
 }
 
-// TODO: figure out how to ensure the usb drive is mounted to same path
+// TODO [2020-02-01] (wimmeldj): figure out how to ensure the usb drive is mounted to same path
 const ROOT_PATH = `/media/${os.userInfo().username}/test_usb/SCALE_INTERFACE_DAT`
 
 function getRootDir(): Promise<string | Error> {
