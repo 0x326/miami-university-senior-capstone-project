@@ -110,15 +110,20 @@ const schema = Joi.object({
   ),
 })
 
-// valid: uses Joi to validate form of data.
+/**
+ * uses Joi to validate form of data.
+ * @param data
+ */
 async function valid(data: any): Promise<void> {
   if (!data) throw new Error('==Data sent to valid() is null')
 
   return schema.validateAsync(data)
 }
 
-
-// getExperiment: returns experiment object parsed from file at absolute path
+/**
+ * @param searchPath
+ * @return experiment object parsed from file at absolute path
+ */
 async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
   const normalized = path.normalize(searchPath)
   const data = await fs.readFile(normalized, { encoding: 'UTF-8' }) as string
@@ -131,7 +136,6 @@ async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
 }
 
 
-// listExperiments:
 async function listExperiments(query: { path: string; filter: null | Experiment }):
   Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
@@ -165,7 +169,11 @@ async function listExperiments(query: { path: string; filter: null | Experiment 
 // a /archive dir                                                                         //
 // //////////////////////////////////////////////////////////////////////////////////////////
 
-// listExperimentPaths: returns a list of file paths matching query
+/**
+ *
+ * @param query
+ * @return a list of file paths matching query
+ */
 async function listExperimentPaths(query: {
   path: string;
   experimentName: string;
@@ -206,7 +214,10 @@ async function listExperimentPaths(query: {
 }
 
 
-// writeExperiment: simply writes stringified experiment json to file at path.
+/**
+ * simply writes stringified experiment json to file at path.
+ * @param wrapped
+ */
 function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
   return new Promise((resolve, reject) => {
     // validate file path

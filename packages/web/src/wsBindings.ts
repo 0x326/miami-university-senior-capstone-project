@@ -42,8 +42,11 @@ function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
   })
 }
 
-// resolves to a websocket guaranteed to be open
-// has side effect of opening globally defined websockets if they are not open
+/**
+ * resolves to a websocket guaranteed to be open
+ * has side effect of opening globally defined websockets if they are not open
+ * @param route
+ */
 function ensureOpen(route: string): Promise<WebSocket> {
   return new Promise((resolve, reject) => {
     switch (route) {
@@ -113,7 +116,12 @@ function ensureOpen(route: string): Promise<WebSocket> {
   })
 }
 
-// generic socket message handler for most sockets
+/**
+ * generic socket message handler for most sockets
+ * @param event
+ * @param resolve
+ * @param reject
+ */
 function messageHandler(event: any,
   resolve: (data?: any) => any,
   reject: (reason?: any) => any): void {
