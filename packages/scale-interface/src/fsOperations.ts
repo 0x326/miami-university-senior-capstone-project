@@ -52,67 +52,67 @@ function getRootDir(): Promise<string | Error> {
   })
 }
 
+const schema = Joi.object({
+  name: Joi.string()
+    .min(1)
+    .pattern(/^[^_]*$/) // anything but an underscore
+    .required(),
+  primaryExperimenter: Joi.string()
+    .min(1)
+    .pattern(/^[^_]*$/)
+    .required(),
+  dateInitialized: Joi.number()
+    .integer()
+    .greater(+new Date('2019'))
+    .required(),
+  lastUpdated: Joi.number()
+    .integer()
+    .greater(+new Date('2019'))
+    .required(),
+  isComplete: Joi.boolean()
+    .required(),
+  totalSessions: Joi.number()
+    .integer()
+    .greater(0)
+    .required(),
+  totalColsBegin: Joi.number()
+    .integer()
+    .required(),
+  totalColsMid: Joi.number()
+    .integer()
+    .required(),
+  totalColsEnd: Joi.number()
+    .integer()
+    .required(),
+  subSessionLabelsBegin: Joi.array()
+    .items(
+      Joi.string(),
+      Joi.link('/subSessionLabelsBegin'),
+    ),
+  subSessionLabelsMid: Joi.array()
+    .items(
+      Joi.string(),
+      Joi.link('/subSessionLabelsMid'),
+    ),
+  subSessionLabelsEnd: Joi.array()
+    .items(
+      Joi.string(),
+      Joi.link('/subSessionLabelsEnd'),
+    ),
+  cages: Joi.array().items(
+    Joi.object({
+      cageWeight: Joi.number().required(),
+      cageLabel: Joi.string().required(),
+      sessions: Joi.array()
+        .items(Joi.object({}).pattern(/./, Joi.number()))
+        .max(Joi.ref('/totalSessions')),
+    }),
+  ),
+})
+
 // valid: uses Joi to validate form of data.
 async function valid(data: any): Promise<void> {
   if (!data) throw new Error('==Data sent to valid() is null')
-
-  const schema = Joi.object({
-    name: Joi.string()
-      .min(1)
-      .pattern(/^[^_]*$/) // anything but an underscore
-      .required(),
-    primaryExperimenter: Joi.string()
-      .min(1)
-      .pattern(/^[^_]*$/)
-      .required(),
-    dateInitialized: Joi.number()
-      .integer()
-      .greater(+new Date('2019'))
-      .required(),
-    lastUpdated: Joi.number()
-      .integer()
-      .greater(+new Date('2019'))
-      .required(),
-    isComplete: Joi.boolean()
-      .required(),
-    totalSessions: Joi.number()
-      .integer()
-      .greater(0)
-      .required(),
-    totalColsBegin: Joi.number()
-      .integer()
-      .required(),
-    totalColsMid: Joi.number()
-      .integer()
-      .required(),
-    totalColsEnd: Joi.number()
-      .integer()
-      .required(),
-    subSessionLabelsBegin: Joi.array()
-      .items(
-        Joi.string(),
-        Joi.link('/subSessionLabelsBegin'),
-      ),
-    subSessionLabelsMid: Joi.array()
-      .items(
-        Joi.string(),
-        Joi.link('/subSessionLabelsMid'),
-      ),
-    subSessionLabelsEnd: Joi.array()
-      .items(
-        Joi.string(),
-        Joi.link('/subSessionLabelsEnd'),
-      ),
-    cages: Joi.array().items(
-      Joi.object({
-        cageWeight: Joi.number().required(),
-        cageLabel: Joi.string().required(),
-        sessions: Joi.array()
-          .items(Joi.object({}).pattern(/./, Joi.number()))
-          .max(Joi.ref('/totalSessions')),
-      }),
-    ),
-  })
 
   return schema.validateAsync(data)
 }
