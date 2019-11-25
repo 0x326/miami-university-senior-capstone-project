@@ -20,7 +20,7 @@ interface Cage {
   sessions: Array<Session>;
 }
 
-interface Experiment {
+export interface Experiment {
   name: string;
   primaryExperimenter: string;
   dateInitialized: number;
@@ -37,7 +37,7 @@ interface Experiment {
 }
 
 // wraps an experiment to provide the path of the file it was read from
-interface ExperimentWrapper {
+export interface ExperimentWrapper {
   path: string;
   data: Experiment;
 }
@@ -240,6 +240,4 @@ export {
   listExperimentPaths,
   getExperiment,
   writeExperiment,
-  ExperimentWrapper,
-  Experiment,
 }
