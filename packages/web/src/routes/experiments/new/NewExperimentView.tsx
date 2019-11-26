@@ -75,7 +75,7 @@ function NewExperiment(): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={(): void => history.goBack()}
+              onClick={(): void => history.push('../')}
             />
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>
