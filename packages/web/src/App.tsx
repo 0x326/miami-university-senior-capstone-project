@@ -15,7 +15,10 @@ import {
   Link,
   Route,
   Switch,
+  useHistory,
 } from 'react-router-dom'
+
+import uuid from 'uuid/v4'
 
 import ExperimentDashboard, {
   ExperimentData,
@@ -49,9 +52,11 @@ const viewOptions: RouteMap = Map<ExperimentId, DisplayName>().withMutations((ma
   .set('experiments', 'Experiments'))
 
 const App: React.FC = () => {
+  const history = useHistory()
+
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  const [experiments] = useState(Map<ExperimentId, ExperimentData>()
+  const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>()
     .withMutations((experimentMap) => experimentMap
       .set('experiment-1', Map<RackId, Map<CageId, CageData>>().withMutations((map) => map
         .set(1, Map<CageId, CageData>().withMutations((rackData) => rackData
@@ -246,6 +251,20 @@ const App: React.FC = () => {
               onDrawerOpen={(): void => setIsDrawerOpen(true)}
               experimentIds={experimentDisplayOrder}
               experiments={experimentDisplayNames}
+              onCreateExperiment={((experimentMetaData): void => {
+                const {
+                  experimentName,
+                } = experimentMetaData
+
+                const experimentId = uuid()
+                setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
+                setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
+                  .set(experimentId, experimentName))
+                setExperimentDisplayOrder((prevExperimentDisplayOrder) => prevExperimentDisplayOrder
+                  .push(experimentId))
+
+                history.push('/experiments')
+              })}
             />
           </Route>
         </Switch>

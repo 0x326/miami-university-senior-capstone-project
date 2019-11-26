@@ -40,10 +40,29 @@ import {
 } from '@rmwc/tooltip'
 import '@rmwc/tooltip/tooltip.css'
 
-import dayjs from 'dayjs'
+import dayjs, {
+  Dayjs,
+} from 'dayjs'
 
-function NewExperiment(): JSX.Element {
+export interface ExperimentMetaData extends Readonly<{
+  experimentName: string;
+  experimentLeadName: string;
+  startDate: Dayjs;
+  sessionCount: number;
+  bottlesPerCage: number;
+  weighsPerBottle: number;
+}> {}
+
+interface Props {
+  onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
+}
+
+function NewExperiment(props: Props): JSX.Element {
   const history = useHistory()
+
+  const {
+    onCreateExperiment,
+  } = props
 
   const [experimentName, setExperimentName] = useState('')
   const [experimentLeadName, setExperimentLeadName] = useState('')
@@ -84,6 +103,18 @@ function NewExperiment(): JSX.Element {
               <TopAppBarActionItem
                 icon="done"
                 disabled={!areAllFieldsValid}
+                onClick={(): boolean | void => {
+                  if (areAllFieldsValid) {
+                    onCreateExperiment({
+                      experimentName,
+                      experimentLeadName,
+                      startDate: dayjs(startDate),
+                      sessionCount: Number(sessionCount),
+                      bottlesPerCage: Number(bottlesPerCage),
+                      weighsPerBottle: Number(weighsPerBottle),
+                    })
+                  }
+                }}
               />
             </Tooltip>
           </TopAppBarSection>

@@ -16,12 +16,15 @@ import {
 } from '../../types'
 
 import ExperimentList from './ExperimentList'
-import NewExperiment from './new/NewExperimentView'
+import NewExperiment, {
+  ExperimentMetaData,
+} from './new/NewExperimentView'
 
 interface Props {
   onDrawerOpen: () => void;
   experimentIds: List<RouteId>;
   experiments: RouteMap;
+  onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
 }
 
 function ExperimentsSwitch(props: Props): JSX.Element {
@@ -29,6 +32,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     onDrawerOpen,
     experimentIds,
     experiments,
+    onCreateExperiment,
   } = props
 
   const { url } = useRouteMatch() || { url: '' }
@@ -44,7 +48,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
           />
         </Route>
         <Route exact path={`${url}/new`}>
-          <NewExperiment />
+          <NewExperiment
+            onCreateExperiment={onCreateExperiment}
+          />
         </Route>
       </Switch>
     </>
