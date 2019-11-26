@@ -57,6 +57,7 @@ function ExperimentList(props: Props): JSX.Element {
     onDrawerOpen,
     onNewExperimentAction,
     experimentIds,
+    experiments,
   } = props
 
   return (
@@ -88,7 +89,7 @@ function ExperimentList(props: Props): JSX.Element {
               <CardPrimaryAction>
                 <div style={{ padding: '0 1rem 1rem 1rem' }}>
                   <Typography use="headline6" tag="h2">
-                    Experiment One
+                    {experiments.get(experimentId) || 'Untitled'}
                   </Typography>
                 </div>
               </CardPrimaryAction>
