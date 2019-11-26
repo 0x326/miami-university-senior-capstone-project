@@ -196,6 +196,12 @@ const App: React.FC = () => {
                 },
               ),
             })))))))))
+  const [experimentDisplayNames, setExperimentDisplayNames] = useState(
+    Map<ExperimentId, DisplayName>()
+      .set('experiment-1', 'Experiment 1')
+      .set('experiment-2', 'Experiment 2'),
+  )
+  const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List.of('experiment-1', 'experiment-2'))
   const [cageDisplayOrders] = useState<CageDisplayOrder>(Map<RackId, List<CageId>>()
     .withMutations((map) => map
       .set(1, List.of(1, 2))
@@ -238,8 +244,8 @@ const App: React.FC = () => {
           <Route path="/experiments">
             <ExperimentsSwitch
               onDrawerOpen={(): void => setIsDrawerOpen(true)}
-              experimentIds={List.of('experiment-1')}
-              experiments={Map<ExperimentId, DisplayName>().set('experiment-1', 'Experiment 1')}
+              experimentIds={experimentDisplayOrder}
+              experiments={experimentDisplayNames}
             />
           </Route>
         </Switch>
