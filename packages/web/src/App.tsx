@@ -11,7 +11,6 @@ import {
 } from 'immutable'
 
 import {
-  HashRouter,
   Link,
   Route,
   Switch,
@@ -215,60 +214,58 @@ const App: React.FC = () => {
 
   return (
     <>
-      <HashRouter>
-        <AppModalDrawer
-          title="Scale Interface Tool"
-          subtitle="A Senior Design Project"
-          open={isDrawerOpen}
-          onClose={(): void => setIsDrawerOpen(false)}
-          viewOptions={viewOptions}
-        />
-        <Switch>
-          <Route exact path="/">
-            <ul>
-              <li>
-                <Link to="/experiment-dashboard">Experiment Dashboard</Link>
-              </li>
-              <li>
-                <Link to="/experiments">Experiments</Link>
-              </li>
-              <li>
-                <Link to="/experiments/new">New Experiment</Link>
-              </li>
-            </ul>
-          </Route>
-          <Route path="/experiment-dashboard">
-            <ExperimentDashboard
-              onDrawerOpen={(): void => setIsDrawerOpen(true)}
-              bottleTypes={bottleTypes}
-              experimentData={experiments.get('experiment-1') as ExperimentData}
-              rackDisplayOrder={rackDisplayOrder}
-              cageDisplayOrders={cageDisplayOrders}
-            />
-          </Route>
-          <Route path="/experiments">
-            <ExperimentsSwitch
-              onDrawerOpen={(): void => setIsDrawerOpen(true)}
-              experimentIds={experimentDisplayOrder}
-              experiments={experimentDisplayNames}
-              onCreateExperiment={((experimentMetaData): void => {
-                const {
-                  experimentName,
-                } = experimentMetaData
+      <AppModalDrawer
+        title="Scale Interface Tool"
+        subtitle="A Senior Design Project"
+        open={isDrawerOpen}
+        onClose={(): void => setIsDrawerOpen(false)}
+        viewOptions={viewOptions}
+      />
+      <Switch>
+        <Route exact path="/">
+          <ul>
+            <li>
+              <Link to="/experiment-dashboard">Experiment Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/experiments">Experiments</Link>
+            </li>
+            <li>
+              <Link to="/experiments/new">New Experiment</Link>
+            </li>
+          </ul>
+        </Route>
+        <Route path="/experiment-dashboard">
+          <ExperimentDashboard
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            bottleTypes={bottleTypes}
+            experimentData={experiments.get('experiment-1') as ExperimentData}
+            rackDisplayOrder={rackDisplayOrder}
+            cageDisplayOrders={cageDisplayOrders}
+          />
+        </Route>
+        <Route path="/experiments">
+          <ExperimentsSwitch
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            experimentIds={experimentDisplayOrder}
+            experiments={experimentDisplayNames}
+            onCreateExperiment={((experimentMetaData): void => {
+              const {
+                experimentName,
+              } = experimentMetaData
 
-                const experimentId = uuid()
-                setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
-                setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
-                  .set(experimentId, experimentName))
-                setExperimentDisplayOrder((prevExperimentDisplayOrder) => prevExperimentDisplayOrder
-                  .push(experimentId))
+              const experimentId = uuid()
+              setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
+              setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
+                .set(experimentId, experimentName))
+              setExperimentDisplayOrder((prevExperimentDisplayOrder) => prevExperimentDisplayOrder
+                .push(experimentId))
 
-                history.push('/experiments')
-              })}
-            />
-          </Route>
-        </Switch>
-      </HashRouter>
+              history.push('/experiments')
+            })}
+          />
+        </Route>
+      </Switch>
     </>
   )
 }
