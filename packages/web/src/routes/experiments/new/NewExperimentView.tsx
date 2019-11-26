@@ -4,10 +4,6 @@ import React, {
 } from 'react'
 
 import {
-  useHistory,
-} from 'react-router-dom'
-
-import {
   TopAppBar,
   TopAppBarActionItem,
   TopAppBarFixedAdjust,
@@ -54,13 +50,13 @@ export interface ExperimentMetaData extends Readonly<{
 }> {}
 
 interface Props {
+  onCancel: () => void;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
 }
 
 function NewExperiment(props: Props): JSX.Element {
-  const history = useHistory()
-
   const {
+    onCancel,
     onCreateExperiment,
   } = props
 
@@ -94,7 +90,7 @@ function NewExperiment(props: Props): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={(): void => history.push('../')}
+              onClick={onCancel}
             />
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>

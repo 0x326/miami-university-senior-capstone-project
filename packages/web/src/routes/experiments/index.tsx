@@ -4,6 +4,7 @@ import {
   useRouteMatch,
   Switch,
   Route,
+  useHistory,
 } from 'react-router-dom'
 
 import {
@@ -36,6 +37,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   } = props
 
   const { url } = useRouteMatch() || { url: '' }
+  const history = useHistory()
 
   return (
     <>
@@ -43,12 +45,14 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         <Route exact path={`${url}/`}>
           <ExperimentList
             onDrawerOpen={onDrawerOpen}
+            onNewExperimentAction={(): void => history.push(`${url}/new`)}
             experimentIds={experimentIds}
             experiments={experiments}
           />
         </Route>
         <Route exact path={`${url}/new`}>
           <NewExperiment
+            onCancel={(): void => history.push(`${url}/`)}
             onCreateExperiment={onCreateExperiment}
           />
         </Route>
