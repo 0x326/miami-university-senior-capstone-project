@@ -50,14 +50,14 @@ export interface ExperimentMetaData extends Readonly<{
 }> {}
 
 interface Props {
-  onCancel: () => void;
-  onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
+  onCancelAction: () => void;
+  onDoneAction: (experimentMetaData: ExperimentMetaData) => void;
 }
 
 function NewExperiment(props: Props): JSX.Element {
   const {
-    onCancel,
-    onCreateExperiment,
+    onCancelAction,
+    onDoneAction,
   } = props
 
   const [experimentName, setExperimentName] = useState('')
@@ -90,7 +90,7 @@ function NewExperiment(props: Props): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={onCancel}
+              onClick={onCancelAction}
             />
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>
@@ -101,7 +101,7 @@ function NewExperiment(props: Props): JSX.Element {
                 disabled={!areAllFieldsValid}
                 onClick={(): boolean | void => {
                   if (areAllFieldsValid) {
-                    onCreateExperiment({
+                    onDoneAction({
                       experimentName,
                       experimentLeadName,
                       startDate: dayjs(startDate),

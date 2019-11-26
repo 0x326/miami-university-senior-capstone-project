@@ -52,8 +52,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route exact path={`${url}/new`}>
           <NewExperiment
-            onCancel={(): void => history.push(`${url}/`)}
-            onCreateExperiment={onCreateExperiment}
+            onCancelAction={(): void => history.push(`${url}/`)}
+            onDoneAction={onCreateExperiment}
           />
         </Route>
       </Switch>
