@@ -59,6 +59,15 @@ function NewExperiment(): JSX.Element {
   const isBottlesPerCageValid = Number(bottlesPerCage) > 0
   const isWeighsPerBottleValid = Number(weighsPerBottle) > 0
 
+  const areAllFieldsValid = [
+    isExperimentNameValid,
+    isExperimentLeadNameValid,
+    isStartDateValid,
+    isSessionCountValid,
+    isBottlesPerCageValid,
+    isWeighsPerBottleValid,
+  ].every((valid) => valid)
+
   return (
     <>
       <TopAppBar>
@@ -74,14 +83,7 @@ function NewExperiment(): JSX.Element {
             <Tooltip content="Save experiment">
               <TopAppBarActionItem
                 icon="done"
-                disabled={[
-                  isExperimentNameValid,
-                  isExperimentLeadNameValid,
-                  isStartDateValid,
-                  isSessionCountValid,
-                  isBottlesPerCageValid,
-                  isWeighsPerBottleValid,
-                ].some((valid) => !valid)}
+                disabled={!areAllFieldsValid}
               />
             </Tooltip>
           </TopAppBarSection>
