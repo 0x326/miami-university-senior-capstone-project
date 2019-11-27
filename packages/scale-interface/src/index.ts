@@ -1,3 +1,4 @@
+import { init as sentryInit } from '@sentry/node'
 import yargs from 'yargs'
 
 import {
@@ -5,6 +6,16 @@ import {
   subscribe,
   requestBalance,
 } from './serial'
+
+const {
+  SENTRY_DSN,
+} = process.env
+
+if (process.env.NODE_ENV === 'production' && SENTRY_DSN !== undefined) {
+  sentryInit({
+    dsn: `https://${SENTRY_DSN}@sentry.io/1830093`,
+  })
+}
 
 const {
   argv,
