@@ -19,8 +19,10 @@ import {
 
 import ExperimentDashboard, {
   ExperimentData,
-  Cages,
+  CageDisplayOrder,
   CageId,
+  RackId,
+  RackDisplayOrder,
 } from './routes/experiment-dashboard/ExperimentDashboard'
 
 import ExperimentsSwitch from './routes/experiments'
@@ -46,78 +48,154 @@ const App: React.FC = () => {
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experiments] = useState(Map<string, ExperimentData>()
     .withMutations((experimentMap) => experimentMap
-      .set('experiment-1', Map<CageId, CageData>().withMutations((map) => map
-        .set(1, List().withMutations((cageData) => cageData
-          .push({
-            sessionNumber: 1,
-            cageSessionData: List.of(
-              {
-                rowLabel: 'Before',
-                rowData: Map().withMutations((rowData) => rowData
-                  .set('H₂0', 5)
-                  .set('EtOH', 10)),
-              },
-              {
-                rowLabel: 'After',
-                rowData: Map().withMutations((rowData) => rowData
-                  .set('H₂0', 3)
-                  .set('EtOH', 9)),
-              },
-            ),
-          })
-          .push({
-            sessionNumber: 2,
-            cageSessionData: List.of(
-              {
-                rowLabel: 'Before',
-                rowData: Map().withMutations((rowData) => rowData
-                  .set('H₂0', 5)
-                  .set('EtOH', 10)),
-              },
-              {
-                rowLabel: 'After',
-                rowData: Map().withMutations((rowData) => rowData
-                  .set('H₂0', 2)
-                  .set('EtOH', 8)),
-              },
-            ),
-          })))
-        .set(2, List().withMutations((cageData) => cageData
-          .push({
-            sessionNumber: 1,
-            cageSessionData: List.of(
-              {
-                rowLabel: 'Before',
-                rowData: Map().withMutations((rowData) => rowData
-                  .set('H₂0', 10)
-                  .set('EtOH', 10)),
-              },
-              {
-                rowLabel: 'After',
-                rowData: Map().withMutations((rowData) => rowData
-                  .set('H₂0', 9)
-                  .set('EtOH', 9)),
-              },
-            ),
-          })
-          .push({
-            sessionNumber: 2,
-            cageSessionData: List.of(
-              {
-                rowLabel: 'Before',
-                rowData: Map().withMutations((rowData) => rowData
-                  .set('H₂0', 10)
-                  .set('EtOH', 10)),
-              },
-              {
-                rowLabel: 'After',
-                rowData: Map().withMutations((rowData) => rowData
-                  .set('H₂0', 1)
-                  .set('EtOH', 4)),
-              },
-            ),
-          })))))))
-  const [cages] = useState<Cages>(List.of(1, 2))
+      .set('experiment-1', Map<RackId, Map<CageId, CageData>>().withMutations((map) => map
+        .set(1, Map<CageId, CageData>().withMutations((rackData) => rackData
+          .set(1, List().withMutations((cageData) => cageData
+            .push({
+              sessionNumber: 1,
+              cageSessionData: List.of(
+                {
+                  rowLabel: 'Before',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 5)
+                    .set('EtOH', 10)),
+                },
+                {
+                  rowLabel: 'After',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 3)
+                    .set('EtOH', 9)),
+                },
+              ),
+            })
+            .push({
+              sessionNumber: 2,
+              cageSessionData: List.of(
+                {
+                  rowLabel: 'Before',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 5)
+                    .set('EtOH', 10)),
+                },
+                {
+                  rowLabel: 'After',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 2)
+                    .set('EtOH', 8)),
+                },
+              ),
+            })))
+          .set(2, List().withMutations((cageData) => cageData
+            .push({
+              sessionNumber: 1,
+              cageSessionData: List.of(
+                {
+                  rowLabel: 'Before',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 10)
+                    .set('EtOH', 10)),
+                },
+                {
+                  rowLabel: 'After',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 9)
+                    .set('EtOH', 9)),
+                },
+              ),
+            })
+            .push({
+              sessionNumber: 2,
+              cageSessionData: List.of(
+                {
+                  rowLabel: 'Before',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 10)
+                    .set('EtOH', 10)),
+                },
+                {
+                  rowLabel: 'After',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 1)
+                    .set('EtOH', 4)),
+                },
+              ),
+            })))))
+        .set(2, Map<CageId, CageData>().withMutations((rackData) => rackData
+          .set(3, List().withMutations((cageData) => cageData
+            .push({
+              sessionNumber: 1,
+              cageSessionData: List.of(
+                {
+                  rowLabel: 'Before',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 5)
+                    .set('EtOH', 10)),
+                },
+                {
+                  rowLabel: 'After',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 3)
+                    .set('EtOH', 9)),
+                },
+              ),
+            })
+            .push({
+              sessionNumber: 2,
+              cageSessionData: List.of(
+                {
+                  rowLabel: 'Before',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 5)
+                    .set('EtOH', 10)),
+                },
+                {
+                  rowLabel: 'After',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 2)
+                    .set('EtOH', 8)),
+                },
+              ),
+            })))
+          .set(4, List().withMutations((cageData) => cageData
+            .push({
+              sessionNumber: 1,
+              cageSessionData: List.of(
+                {
+                  rowLabel: 'Before',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 10)
+                    .set('EtOH', 10)),
+                },
+                {
+                  rowLabel: 'After',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 9)
+                    .set('EtOH', 9)),
+                },
+              ),
+            })
+            .push({
+              sessionNumber: 2,
+              cageSessionData: List.of(
+                {
+                  rowLabel: 'Before',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 10)
+                    .set('EtOH', 10)),
+                },
+                {
+                  rowLabel: 'After',
+                  rowData: Map().withMutations((rowData) => rowData
+                    .set('H₂0', 1)
+                    .set('EtOH', 4)),
+                },
+              ),
+            })))))))))
+  const [cageDisplayOrders] = useState<CageDisplayOrder>(Map<RackId, List<CageId>>()
+    .withMutations((map) => map
+      .set(1, List.of(1, 2))
+      .set(2, List.of(3, 4))))
+  const [rackDisplayOrder] = useState<RackDisplayOrder>(List.of(1, 2))
 
   return (
     <>
@@ -148,7 +226,8 @@ const App: React.FC = () => {
               onDrawerOpen={(): void => setIsDrawerOpen(true)}
               bottleTypes={bottleTypes}
               experimentData={experiments.get('experiment-1') as ExperimentData}
-              cages={cages}
+              rackDisplayOrder={rackDisplayOrder}
+              cageDisplayOrders={cageDisplayOrders}
             />
           </Route>
           <Route path="/experiments">
