@@ -5,7 +5,8 @@
   "scripts": {
     "start": "echo \"\u001b[33mWARNING: Types will not be checked\u001b[0m\" && parcel watch --target node src/index.ts",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
-    "build": "tsc --noEmit && parcel build --target node src/index.ts"
+    "build": "tsc --noEmit && parcel build --target node src/index.ts",
+    "analyze-build": "source-map-explorer 'dist/*.js'"
   },
   "devDependencies": {
     "@types/hapi__joi": "^16.0.2",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^16.1.7",
+    "@sentry/node": "^5.9.0",
     "fs": "^0.0.1-security",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
