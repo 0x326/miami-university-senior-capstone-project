@@ -113,24 +113,18 @@ rules:
   unicorn/prevent-abbreviations:
     - error
     - replacements:
-        args:
-          arguments: false
+        args: false  # "arguments"
 
-        dir:
-          directory: false
+        dir: false  # "directory"
 
         # React terminology
-        props:
-          properties: false
+        props: false
 
-        prev:
-          previous: false
+        prev: false  # "previous"
 
-        ref:
-          reference: false
+        ref: false
 
-        refs:
-          references: false
+        refs: false
 
   unicorn/filename-case:
     - error
