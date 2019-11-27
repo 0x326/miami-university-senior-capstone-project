@@ -110,7 +110,6 @@ rules:
       message: >-
         `with` is disallowed in strict mode because it makes code impossible to predict and optimize.
 
-  # Allow variable name conventions suggested in the React docs
   unicorn/prevent-abbreviations:
     - error
     - replacements:
