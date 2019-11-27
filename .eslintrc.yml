@@ -110,24 +110,21 @@ rules:
       message: >-
         `with` is disallowed in strict mode because it makes code impossible to predict and optimize.
 
-  # Allow variable name conventions suggested in the React docs
   unicorn/prevent-abbreviations:
     - error
     - replacements:
-        args:
-          arguments: false
+        args: false  # "arguments"
 
-        props:
-          properties: false
+        dir: false  # "directory"
 
-        prev:
-          previous: false
+        # React terminology
+        props: false
 
-        ref:
-          reference: false
+        prev: false  # "previous"
 
-        refs:
-          references: false
+        ref: false
+
+        refs: false
 
   unicorn/filename-case:
     - error
