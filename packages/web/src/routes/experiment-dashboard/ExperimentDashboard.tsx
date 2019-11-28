@@ -84,11 +84,18 @@ function ExperimentDashboard(props: Props): JSX.Element {
         {isEditMode === false && (
           <TopAppBarRow>
             <TopAppBarSection alignStart>
-              <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
+              <TopAppBarNavigationIcon
+                icon="menu"
+                onClick={onDrawerOpen}
+              />
               <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
             </TopAppBarSection>
             <TopAppBarSection alignEnd>
-              <TopAppBarActionItem icon="edit" title="Edit" onClick={(): void => setIsEditMode(true)} />
+              <TopAppBarActionItem
+                icon="edit"
+                title="Edit"
+                onClick={(): void => setIsEditMode(true)}
+              />
               <TopAppBarActionItem icon="cloud_download" />
             </TopAppBarSection>
           </TopAppBarRow>
@@ -96,7 +103,10 @@ function ExperimentDashboard(props: Props): JSX.Element {
         {isEditMode === true && (
           <TopAppBarRow>
             <TopAppBarSection alignStart>
-              <TopAppBarNavigationIcon icon="chevron_left" onClick={(): void => setIsEditMode(false)} />
+              <TopAppBarNavigationIcon
+                icon="chevron_left"
+                onClick={(): void => setIsEditMode(false)}
+              />
               <TopAppBarTitle>Edit mode</TopAppBarTitle>
             </TopAppBarSection>
             <TopAppBarSection alignEnd />
