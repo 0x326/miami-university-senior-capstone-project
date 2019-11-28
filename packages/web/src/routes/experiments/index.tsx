@@ -9,12 +9,16 @@ import {
 
 import {
   List,
+  Map,
 } from 'immutable'
 
 import {
+  DisplayName,
   RouteId,
   RouteMap,
 } from '../../types'
+
+import NoMatch from '../NoMatch'
 
 import ExperimentList from './ExperimentList'
 import NewExperiment, {
@@ -54,6 +58,13 @@ function ExperimentsSwitch(props: Props): JSX.Element {
           <NewExperiment
             onCancelAction={(): void => history.push(`${url}/`)}
             onDoneAction={onCreateExperiment}
+          />
+        </Route>
+        <Route path="*">
+          <NoMatch
+            onDrawerOpen={onDrawerOpen}
+            suggestedNavigationLink={Map<RouteId, DisplayName>()
+              .set(`${url}/`, 'Experiment List')}
           />
         </Route>
       </Switch>
