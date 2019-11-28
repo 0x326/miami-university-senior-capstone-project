@@ -23,6 +23,7 @@ import '@material/layout-grid/dist/mdc.layout-grid.css'
 import {
   Typography,
 } from '@rmwc/typography'
+import '@material/typography/dist/mdc.typography.css'
 import {
   Card,
   CardActionButtons,
