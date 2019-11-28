@@ -123,7 +123,7 @@ function ExperimentDashboard(props: Props): JSX.Element {
                 isEditable={isEditMode}
                 onCageDataChange={(newCageData): void => {
                   setEditedExperimentData(editedExperimentData
-                    .update(rackId, (oldRackData) => oldRackData
+                    .update(rackId, (oldRackData): Map<CageId, CageData> => oldRackData
                       .set(cageId, newCageData)))
                 }}
               />
