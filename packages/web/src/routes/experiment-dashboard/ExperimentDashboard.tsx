@@ -1,4 +1,6 @@
-import React from 'react'
+import React, {
+  useState,
+} from 'react'
 
 import {
   List,
@@ -57,16 +59,19 @@ function ExperimentDashboard(props: Props): JSX.Element {
     experimentData,
   } = props
 
+  const [isEditMode, setIsEditMode] = useState<boolean>(false)
+  const [editedExperimentData, setEditedExperimentData] = useState(experimentData)
+
   const displayableExperimentData:
     List<Readonly<[List<Readonly<[CageData, CageId]>>, RackId]>> = (rackDisplayOrder
       .map((rackId) => cageDisplayOrders.get(rackId))
       .zip(rackDisplayOrder)
       .filter(([cageDisplayOrder, rackId]) => cageDisplayOrder !== undefined
-        && experimentData.has(rackId)) as List<[List<CageId>, RackId]>)
+        && editedExperimentData.has(rackId)) as List<[List<CageId>, RackId]>)
       .map(([cageDisplayOrder, rackId]) => [
         (cageDisplayOrder
           .map((cageId) => [
-            (experimentData.get(rackId) as Map<CageId, CageData>).get(cageId),
+            (editedExperimentData.get(rackId) as Map<CageId, CageData>).get(cageId),
             cageId,
           ])
           .filterNot(([cageData]) => cageData === undefined) as List<[CageData, CageId]>),
@@ -76,15 +81,37 @@ function ExperimentDashboard(props: Props): JSX.Element {
   return (
     <>
       <TopAppBar>
-        <TopAppBarRow>
-          <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
-            <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
-          </TopAppBarSection>
-          <TopAppBarSection alignEnd>
-            <TopAppBarActionItem icon="cloud_download" />
-          </TopAppBarSection>
-        </TopAppBarRow>
+        {isEditMode === false && (
+          <TopAppBarRow>
+            <TopAppBarSection alignStart>
+              <TopAppBarNavigationIcon
+                icon="menu"
+                onClick={onDrawerOpen}
+              />
+              <TopAppBarTitle>Experiment Dashboard</TopAppBarTitle>
+            </TopAppBarSection>
+            <TopAppBarSection alignEnd>
+              <TopAppBarActionItem
+                icon="edit"
+                title="Edit"
+                onClick={(): void => setIsEditMode(true)}
+              />
+              <TopAppBarActionItem icon="cloud_download" />
+            </TopAppBarSection>
+          </TopAppBarRow>
+        )}
+        {isEditMode === true && (
+          <TopAppBarRow>
+            <TopAppBarSection alignStart>
+              <TopAppBarNavigationIcon
+                icon="chevron_left"
+                onClick={(): void => setIsEditMode(false)}
+              />
+              <TopAppBarTitle>Edit mode</TopAppBarTitle>
+            </TopAppBarSection>
+            <TopAppBarSection alignEnd />
+          </TopAppBarRow>
+        )}
       </TopAppBar>
       <TopAppBarFixedAdjust />
       {displayableExperimentData.map(([rackData, rackId]) => (
@@ -103,6 +130,12 @@ function ExperimentDashboard(props: Props): JSX.Element {
                 cageNumber={cageId}
                 bottleTypes={bottleTypes}
                 cageData={cageData}
+                isEditable={isEditMode}
+                onCageDataChange={(newCageData): void => {
+                  setEditedExperimentData(editedExperimentData
+                    .update(rackId, (oldRackData) => oldRackData
+                      .set(cageId, newCageData)))
+                }}
               />
             ))}
           </CollapsibleList>
