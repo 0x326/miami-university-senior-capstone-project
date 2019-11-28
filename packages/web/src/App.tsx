@@ -11,11 +11,13 @@ import {
 } from 'immutable'
 
 import {
-  HashRouter,
   Link,
   Route,
   Switch,
+  useHistory,
 } from 'react-router-dom'
+
+import uuid from 'uuid/v4'
 
 import ExperimentDashboard, {
   ExperimentData,
@@ -33,20 +35,27 @@ import {
 
 import {
   BottleType,
+  RouteId,
+  DisplayName,
+  RouteMap,
 } from './types'
 
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 
-const viewOptions = Map<string, string>().withMutations((map) => map
+export type ExperimentId = RouteId
+
+const viewOptions: RouteMap = Map<ExperimentId, DisplayName>().withMutations((map) => map
   .set('experiment-dashboard', 'Experiment Dashboard')
   .set('experiments', 'Experiments'))
 
 const App: React.FC = () => {
+  const history = useHistory()
+
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  const [experiments] = useState(Map<string, ExperimentData>()
+  const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>()
     .withMutations((experimentMap) => experimentMap
       .set('experiment-1', Map<RackId, Map<CageId, CageData>>().withMutations((map) => map
         .set(1, Map<CageId, CageData>().withMutations((rackData) => rackData
@@ -191,6 +200,12 @@ const App: React.FC = () => {
                 },
               ),
             })))))))))
+  const [experimentDisplayNames, setExperimentDisplayNames] = useState(
+    Map<ExperimentId, DisplayName>()
+      .set('experiment-1', 'Experiment 1')
+      .set('experiment-2', 'Experiment 2'),
+  )
+  const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List.of('experiment-1', 'experiment-2'))
   const [cageDisplayOrders] = useState<CageDisplayOrder>(Map<RackId, List<CageId>>()
     .withMutations((map) => map
       .set(1, List.of(1, 2))
@@ -199,46 +214,58 @@ const App: React.FC = () => {
 
   return (
     <>
-      <HashRouter>
-        <AppModalDrawer
-          title="Scale Interface Tool"
-          subtitle="A Senior Design Project"
-          open={isDrawerOpen}
-          onClose={(): void => setIsDrawerOpen(false)}
-          viewOptions={viewOptions}
-        />
-        <Switch>
-          <Route exact path="/">
-            <ul>
-              <li>
-                <Link to="/experiment-dashboard">Experiment Dashboard</Link>
-              </li>
-              <li>
-                <Link to="/experiments">Experiments</Link>
-              </li>
-              <li>
-                <Link to="/experiments/new">New Experiment</Link>
-              </li>
-            </ul>
-          </Route>
-          <Route path="/experiment-dashboard">
-            <ExperimentDashboard
-              onDrawerOpen={(): void => setIsDrawerOpen(true)}
-              bottleTypes={bottleTypes}
-              experimentData={experiments.get('experiment-1') as ExperimentData}
-              rackDisplayOrder={rackDisplayOrder}
-              cageDisplayOrders={cageDisplayOrders}
-            />
-          </Route>
-          <Route path="/experiments">
-            <ExperimentsSwitch
-              onDrawerOpen={(): void => setIsDrawerOpen(true)}
-              experimentIds={List.of('experiment-1')}
-              experiments={Map<string, string>().set('experiment-1', 'Experiment 1')}
-            />
-          </Route>
-        </Switch>
-      </HashRouter>
+      <AppModalDrawer
+        title="Scale Interface Tool"
+        subtitle="A Senior Design Project"
+        open={isDrawerOpen}
+        onClose={(): void => setIsDrawerOpen(false)}
+        viewOptions={viewOptions}
+      />
+      <Switch>
+        <Route exact path="/">
+          <ul>
+            <li>
+              <Link to="/experiment-dashboard">Experiment Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/experiments">Experiments</Link>
+            </li>
+            <li>
+              <Link to="/experiments/new">New Experiment</Link>
+            </li>
+          </ul>
+        </Route>
+        <Route path="/experiment-dashboard">
+          <ExperimentDashboard
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            bottleTypes={bottleTypes}
+            experimentData={experiments.get('experiment-1') as ExperimentData}
+            rackDisplayOrder={rackDisplayOrder}
+            cageDisplayOrders={cageDisplayOrders}
+          />
+        </Route>
+        <Route path="/experiments">
+          <ExperimentsSwitch
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            experimentIds={experimentDisplayOrder}
+            experiments={experimentDisplayNames}
+            onCreateExperiment={((experimentMetaData): void => {
+              const {
+                experimentName,
+              } = experimentMetaData
+
+              const experimentId = uuid()
+              setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
+              setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
+                .set(experimentId, experimentName))
+              setExperimentDisplayOrder((prevExperimentDisplayOrder) => prevExperimentDisplayOrder
+                .push(experimentId))
+
+              history.push('/experiments')
+            })}
+          />
+        </Route>
+      </Switch>
     </>
   )
 }
