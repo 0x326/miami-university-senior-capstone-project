@@ -43,6 +43,7 @@ import {
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
+import NoMatch from './routes/NoMatch'
 
 export type ExperimentId = RouteId
 
@@ -263,6 +264,12 @@ const App: React.FC = () => {
 
               history.push('/experiments')
             })}
+          />
+        </Route>
+        <Route path="*">
+          <NoMatch
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            suggestedNavigationLink={viewOptions}
           />
         </Route>
       </Switch>
