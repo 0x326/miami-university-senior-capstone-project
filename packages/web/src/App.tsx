@@ -11,8 +11,8 @@ import {
 } from 'immutable'
 
 import {
-  Link,
   Route,
+  Redirect,
   Switch,
   useHistory,
 } from 'react-router-dom'
@@ -224,17 +224,7 @@ const App: React.FC = () => {
       />
       <Switch>
         <Route exact path="/">
-          <ul>
-            <li>
-              <Link to="/experiment-dashboard">Experiment Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/experiments">Experiments</Link>
-            </li>
-            <li>
-              <Link to="/experiments/new">New Experiment</Link>
-            </li>
-          </ul>
+          <Redirect to="/experiments" />
         </Route>
         <Route path="/experiment-dashboard">
           <ExperimentDashboard
