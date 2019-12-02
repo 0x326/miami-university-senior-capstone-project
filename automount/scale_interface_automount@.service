@@ -1,0 +1,23 @@
+# /etc/systemd/system/scale_interface_automount@.service 
+[Unit]
+Description=Attach scale-interface USB device at /dev/%i to /dev/scale_interface_mountpoint/
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+RootDirectory=/
+ExecStart=/bin/sh -c '\
+    mkdir -p /dev/scale_interface_mountpoint;\
+    mount /dev/%i /dev/scale_interface_mountpoint;'
+ExecStartPost=/bin/sh -c '\
+if [ -e /dev/scale_interface_mountpoint/SCALE_INTERFACE_DAT ]; then\
+    exit 0;\
+else\
+    umount /dev/scale_interface_mountpoint; rmdir /dev/scale_interface_mountpoint;\
+    exit 1;\
+fi'
+ExecStop=/bin/sh -c '\
+if [ -e /dev/scale_interface_mountpoint ]; then\
+    umount /dev/scale_interface_mountpoint;\
+    rmdir /dev/scale_interface_mountpoint;\
+fi'
