@@ -7,8 +7,10 @@ Type=oneshot
 RemainAfterExit=true
 RootDirectory=/
 ExecStart=/bin/sh -c '\
+if [ ! -e /dev/scale_interface_mountpoint/ ]; then\
     mkdir -p /dev/scale_interface_mountpoint;\
-    mount /dev/%i /dev/scale_interface_mountpoint;'
+    mount /dev/%i /dev/scale_interface_mountpoint;\
+fi'
 ExecStartPost=/bin/sh -c '\
 if [ -e /dev/scale_interface_mountpoint/SCALE_INTERFACE_DAT ]; then\
     exit 0;\
@@ -17,7 +19,7 @@ else\
     exit 1;\
 fi'
 ExecStop=/bin/sh -c '\
-if [ -e /dev/scale_interface_mountpoint ]; then\
+if /usr/bin/mount | grep -q "%i on /dev/scale_interface_mountpoint"; then\
     umount /dev/scale_interface_mountpoint;\
     rmdir /dev/scale_interface_mountpoint;\
 fi'
