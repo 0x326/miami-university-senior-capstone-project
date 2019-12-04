@@ -2,6 +2,7 @@
 // TODO (0x326) [2020-04-01] Remove extraneous @rmwc dependencies
 
 import React, {
+  useEffect,
   useState,
 } from 'react'
 
@@ -34,14 +35,6 @@ import {
   RouteMap,
 } from './types'
 
-import {
-  sampleExperiments,
-  sampleExperimentDisplayNames,
-  sampleExperimentDisplayOrder,
-  sampleCageDisplayOrders,
-  sampleRackDisplayOrder,
-} from './sampleData'
-
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
@@ -57,11 +50,28 @@ const App: React.FC = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  const [experiments, setExperiments] = useState(sampleExperiments)
-  const [experimentDisplayNames, setExperimentDisplayNames] = useState(sampleExperimentDisplayNames)
-  const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(sampleExperimentDisplayOrder)
-  const [cageDisplayOrders] = useState<CageDisplayOrder>(sampleCageDisplayOrders)
-  const [rackDisplayOrder] = useState<RackDisplayOrder>(sampleRackDisplayOrder)
+  const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>())
+  const [experimentDisplayNames, setExperimentDisplayNames] = useState(Map<ExperimentId, DisplayName>())
+  const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List<ExperimentId>())
+  const [cageDisplayOrders, setCageDisplayOrders] = useState<CageDisplayOrder>(Map())
+  const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
+
+  useEffect(() => {
+    import('./sampleData')
+      .then(({
+        sampleExperiments,
+        sampleExperimentDisplayNames,
+        sampleExperimentDisplayOrder,
+        sampleCageDisplayOrders,
+        sampleRackDisplayOrder,
+      }) => {
+        setExperiments(sampleExperiments)
+        setExperimentDisplayNames(sampleExperimentDisplayNames)
+        setExperimentDisplayOrder(sampleExperimentDisplayOrder)
+        setCageDisplayOrders(sampleCageDisplayOrders)
+        setRackDisplayOrder(sampleRackDisplayOrder)
+      })
+  }, [])
 
   return (
     <>
