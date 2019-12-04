@@ -5,11 +5,6 @@ import {
 } from 'immutable'
 
 import {
-  useRouteMatch,
-  useHistory,
-} from 'react-router-dom'
-
-import {
   TopAppBar,
   TopAppBarActionItem,
   TopAppBarFixedAdjust,
@@ -28,6 +23,7 @@ import '@material/layout-grid/dist/mdc.layout-grid.css'
 import {
   Typography,
 } from '@rmwc/typography'
+import '@material/typography/dist/mdc.typography.css'
 import {
   Card,
   CardActionButtons,
@@ -52,6 +48,7 @@ import {
 
 interface Props {
   onDrawerOpen: () => void;
+  onNewExperimentAction: () => void;
   experimentIds: List<RouteId>;
   experiments: RouteMap;
 }
@@ -59,11 +56,10 @@ interface Props {
 function ExperimentList(props: Props): JSX.Element {
   const {
     onDrawerOpen,
+    onNewExperimentAction,
     experimentIds,
+    experiments,
   } = props
-
-  const { url } = useRouteMatch() || { url: '' }
-  const history = useHistory()
 
   return (
     <>
@@ -77,7 +73,7 @@ function ExperimentList(props: Props): JSX.Element {
             <Tooltip content="New Experiment">
               <TopAppBarActionItem
                 icon="add"
-                onClick={(): void => history.push(`${url}/new`)}
+                onClick={onNewExperimentAction}
               />
             </Tooltip>
           </TopAppBarSection>
@@ -94,7 +90,7 @@ function ExperimentList(props: Props): JSX.Element {
               <CardPrimaryAction>
                 <div style={{ padding: '0 1rem 1rem 1rem' }}>
                   <Typography use="headline6" tag="h2">
-                    Experiment One
+                    {experiments.get(experimentId) || 'Untitled'}
                   </Typography>
                 </div>
               </CardPrimaryAction>
