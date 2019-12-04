@@ -38,6 +38,7 @@ function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
       console.log(`Socket to ${path} closed.`)
       socket = null
     })
+    // TODO (wimmeldj) [2020-03-01]: Add event listener for 'error' event
     setTimeout(() => reject(new Error('Could not open socket because connection exceeded timeout')), timeout)
   })
 }
