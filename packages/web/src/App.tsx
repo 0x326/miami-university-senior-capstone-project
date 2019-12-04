@@ -35,6 +35,8 @@ import {
   RouteMap,
 } from './types'
 
+import useSnackbar from './useSnackbar'
+
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
@@ -49,6 +51,8 @@ const App: React.FC = () => {
   const history = useHistory()
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  const [snackbar, snackbarQueuePush] = useSnackbar()
+
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>())
   const [experimentDisplayNames, setExperimentDisplayNames] = useState(Map<ExperimentId, DisplayName>())
@@ -70,8 +74,13 @@ const App: React.FC = () => {
         setExperimentDisplayOrder(sampleExperimentDisplayOrder)
         setCageDisplayOrders(sampleCageDisplayOrders)
         setRackDisplayOrder(sampleRackDisplayOrder)
+
+        snackbarQueuePush({
+          message: 'Sample data loaded',
+          actions: List(),
+        })
       })
-  }, [])
+  }, [snackbarQueuePush])
 
   return (
     <>
@@ -127,6 +136,7 @@ const App: React.FC = () => {
           />
         </Route>
       </Switch>
+      {snackbar}
     </>
   )
 }
