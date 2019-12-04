@@ -70,7 +70,7 @@ function createServer(
     wssListExperiments.on('connection', (ws) => {
       ws.on('message', (data) => {
         try {
-          const parsed = JSON.parse(data as string)
+          const parsed = JSON.parse(String(data))
           listExperiments(parsed)
             .then((wrappedExperiments) => {
               ws.send(JSON.stringify({
@@ -98,7 +98,7 @@ function createServer(
     wssGetExperiment.on('connection', (ws) => {
       ws.on('message', (data) => {
         try {
-          const path: string = data as string
+          const path = String(data)
           getExperiment(path)
             .then((wrappedExperiment) => {
               ws.send(JSON.stringify({
@@ -125,7 +125,7 @@ function createServer(
     wssListPaths.on('connection', (ws) => {
       ws.on('message', (data) => {
         try {
-          const parsed: any = JSON.parse(data as string)
+          const parsed: any = JSON.parse(String(data))
           listExperimentPaths(parsed)
             .then((paths) => {
               ws.send(JSON.stringify({
@@ -153,9 +153,9 @@ function createServer(
     wssWriteExperiment.on('connection', (ws) => {
       ws.on('message', (data) => {
         try {
-          const parsed = JSON.parse(data as string)
+          const parsed = JSON.parse(String(data))
           if (parsed.path && parsed.data) {
-            // await valid(JSON.parse(parsed.data as string))
+            // await valid(JSON.parse(String(parsed.data)))
             writeExperiment(parsed)
               .then(() => {
                 ws.send(JSON.stringify({

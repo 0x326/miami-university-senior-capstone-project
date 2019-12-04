@@ -126,8 +126,8 @@ async function valid(data: any): Promise<void> {
  */
 async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
   const normalized = path.normalize(searchPath)
-  const data = await fs.readFile(normalized, { encoding: 'UTF-8' }) as string
-  const parsed: any = JSON.parse(data)
+  const data = await fs.readFile(normalized, { encoding: 'UTF-8' })
+  const parsed: any = JSON.parse(String(data))
   await valid(parsed)
   return {
     path: normalized,
@@ -187,7 +187,7 @@ async function listExperimentPaths(query: {
 
   if (query.dateStart && query.dateEnd) {
     paths = paths.filter((path) => {
-      path = path as string
+      path = String(path)
       const dateMatch = /_\d{13}_/.exec(path)
       if (!dateMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
       else {
@@ -201,7 +201,7 @@ async function listExperimentPaths(query: {
   paths = paths.filter((path) => {
     const experimentName: string = query.experimentName ? query.experimentName : ''
     const primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ''
-    path = path as string
+    path = String(path)
     const lMatch = /^(.*?)_/.exec(path)
     const rMatch = /_([^_]*?)$/.exec(path)
     if (!lMatch || !rMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
