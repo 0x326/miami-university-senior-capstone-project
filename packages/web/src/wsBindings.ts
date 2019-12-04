@@ -71,6 +71,18 @@ async function connect(): Promise<void> {
   ])
 }
 
+function disconnect(): void {
+  const sockets = [
+    wsGetRoot,
+    wsListExperiments,
+    wsGetExperiment,
+    wsListPaths,
+    wsWriteExperiment,
+  ]
+
+  sockets.map((socket) => socket.close())
+}
+
 function socketSend(socket: WebSocket, message: string): Promise<Resp> {
   return new Promise((resolve, reject): void => {
     socket.addEventListener('message', (event) => {
@@ -133,6 +145,7 @@ function writeExperiment(data: Experiment, path: string): Promise<string> {
 
 export {
   connect,
+  disconnect,
   getRoot,
   listExperiments,
   getExperiment,
