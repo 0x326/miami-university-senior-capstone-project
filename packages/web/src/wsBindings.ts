@@ -91,65 +91,48 @@ async function ensureOpen(route: string): Promise<WebSocket> {
   }
 }
 
-/**
- * generic socket message handler for most sockets
- * @param event
- * @param resolve
- * @param reject
- */
-function messageHandler(
-  event: any,
-  resolve: (data?: any) => any,
-  reject: (reason?: any) => any,
-): void {
-  const parsed: Resp = JSON.parse(event.data)
-  if (parsed.status === Status.FAIL) reject(new Error(parsed.message))
-  resolve(parsed.data)
+function socketSend(socket: WebSocket, message: string): Promise<Resp> {
+  return new Promise((resolve, reject): void => {
+    socket.addEventListener('message', (event) => {
+      const { data } = event
+      const parsed: Resp = JSON.parse(data)
+      if (parsed.status === Status.FAIL) reject(new Error(parsed.message))
+      resolve(parsed)
+    })
+
+    socket.send(message)
+  })
 }
 
 function getRoot(): Promise<any> {
   return ensureOpen('get-root-dir')
-    .then((socket) => new Promise((resolve, reject): void => {
-      socket.addEventListener('message', (event) => messageHandler(event, resolve, reject))
-      socket.send('')
-    }))
+    .then((socket) => socketSend(socket, ''))
+    .then((response) => response.data)
 }
 
 function listExperiments(path: string, filter?: Experiment): Promise<Array<ExperimentWrapper>> {
   return ensureOpen('list-experiments')
-    .then((socket) => new Promise((resolve, reject): void => {
-      socket.addEventListener('message', (event) => messageHandler(event, resolve, reject))
-      socket.send(JSON.stringify({ path, filter }))
-    }))
+    .then((socket) => socketSend(socket, JSON.stringify({ path, filter })))
+    .then((response) => response.data)
 }
 
 function getExperiment(path: string): Promise<ExperimentWrapper> {
   return ensureOpen('get-experiment')
-    .then((socket) => new Promise((resolve, reject): void => {
-      socket.addEventListener('message', (event) => messageHandler(event, resolve, reject))
-      socket.send(path)
-    }))
+    .then((socket) => socketSend(socket, path))
+    .then((response) => response.data)
 }
 
 function listPaths(query: ListPathsQuery):
   Promise<ExperimentWrapper> {
   return ensureOpen('list-experiment-paths')
-    .then((socket) => new Promise((resolve, reject): void => {
-      socket.addEventListener('message', (event) => messageHandler(event, resolve, reject))
-      socket.send(JSON.stringify(query))
-    }))
+    .then((socket) => socketSend(socket, JSON.stringify(query)))
+    .then((response) => response.data)
 }
 
 function writeExperiment(data: Experiment, path: string): Promise<string> {
   return ensureOpen('write-experiment')
-    .then((socket) => new Promise((resolve, reject): void => {
-      socket.addEventListener('message', (event) => {
-        const parsed: Resp = JSON.parse(event.data)
-        if (parsed.status === Status.OK) resolve(parsed.message)
-        reject(new Error(parsed.message))
-      })
-      socket.send(JSON.stringify({ path, data }))
-    }))
+    .then((socket) => socketSend(socket, JSON.stringify({ path, data })))
+    .then((response) => response.message)
 }
 
 
