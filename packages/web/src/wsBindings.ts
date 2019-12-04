@@ -34,10 +34,10 @@ function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
   return new Promise((resolve, reject) => {
     let socket: WebSocket | null = new WebSocket(path)
     socket.addEventListener('open', () => resolve(socket as WebSocket))
-    socket.onclose = () => {
+    socket.addEventListener('close', () => {
       console.log(`Socket to ${path} closed.`)
       socket = null
-    }
+    })
     setTimeout(() => reject(new Error('Could not open socket because connection exceeded timeout')), timeout)
   })
 }
