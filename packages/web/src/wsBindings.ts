@@ -44,51 +44,31 @@ function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
   })
 }
 
-/**
- * resolves to a websocket guaranteed to be open
- * has side effect of opening globally defined websockets if they are not open
- * @param route
- */
-async function ensureOpen(route: string): Promise<WebSocket> {
-  switch (route) {
-    case 'get-root-dir':
-      if (wsGetRoot === null || wsGetRoot.readyState !== WebSocket.OPEN) {
-        wsGetRoot = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-      }
-      return wsGetRoot
-
-
-    case 'list-experiments':
-      if (wsListExperiments === null || wsListExperiments.readyState === WebSocket.OPEN) {
-        wsListExperiments = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-      }
-      return wsListExperiments
-
-
-    case 'get-experiment':
-      if (wsGetExperiment === null || wsGetExperiment.readyState === WebSocket.OPEN) {
-        wsGetExperiment = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-      }
-      return wsGetExperiment
-
-
-    case 'list-experiment-paths':
-      if (wsListPaths === null || wsListPaths.readyState === WebSocket.OPEN) {
-        wsListPaths = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-      }
-      return wsListPaths
-
-
-    case 'write-experiment':
-      if (wsWriteExperiment === null || wsWriteExperiment.readyState === WebSocket.OPEN) {
-        wsWriteExperiment = await openWebSocket(`ws://localhost:${PORT}/${route}`, TIMEOUT)
-      }
-      return wsWriteExperiment
-
-
-    default:
-      throw new Error('No websocket matching path provided.')
+async function connect(): Promise<void> {
+  const sockets = [
+    wsGetRoot,
+    wsListExperiments,
+    wsGetExperiment,
+    wsListPaths,
+    wsWriteExperiment,
+  ]
+  if (sockets.every((socket) => socket !== null)) {
+    throw new Error('Sockets are already open')
   }
+
+  [
+    wsGetRoot,
+    wsListExperiments,
+    wsGetExperiment,
+    wsListPaths,
+    wsWriteExperiment,
+  ] = await Promise.all([
+    openWebSocket(`ws://localhost:${PORT}/get-root-dir`, TIMEOUT),
+    openWebSocket(`ws://localhost:${PORT}/list-experiments`, TIMEOUT),
+    openWebSocket(`ws://localhost:${PORT}/get-experiment`, TIMEOUT),
+    openWebSocket(`ws://localhost:${PORT}/list-experiment-paths`, TIMEOUT),
+    openWebSocket(`ws://localhost:${PORT}/write-experiment`, TIMEOUT),
+  ])
 }
 
 function socketSend(socket: WebSocket, message: string): Promise<Resp> {
@@ -105,38 +85,54 @@ function socketSend(socket: WebSocket, message: string): Promise<Resp> {
 }
 
 function getRoot(): Promise<any> {
-  return ensureOpen('get-root-dir')
-    .then((socket) => socketSend(socket, ''))
+  if (wsGetRoot === null) {
+    throw new Error('Socket is not open')
+  }
+
+  return socketSend(wsGetRoot, '')
     .then((response) => response.data)
 }
 
 function listExperiments(path: string, filter?: Experiment): Promise<Array<ExperimentWrapper>> {
-  return ensureOpen('list-experiments')
-    .then((socket) => socketSend(socket, JSON.stringify({ path, filter })))
+  if (wsListExperiments === null) {
+    throw new Error('Socket is not open')
+  }
+
+  return socketSend(wsListExperiments, JSON.stringify({ path, filter }))
     .then((response) => response.data)
 }
 
 function getExperiment(path: string): Promise<ExperimentWrapper> {
-  return ensureOpen('get-experiment')
-    .then((socket) => socketSend(socket, path))
+  if (wsGetExperiment === null) {
+    throw new Error('Socket is not open')
+  }
+
+  return socketSend(wsGetExperiment, path)
     .then((response) => response.data)
 }
 
 function listPaths(query: ListPathsQuery):
   Promise<ExperimentWrapper> {
-  return ensureOpen('list-experiment-paths')
-    .then((socket) => socketSend(socket, JSON.stringify(query)))
+  if (wsListPaths === null) {
+    throw new Error('Socket is not open')
+  }
+
+  return socketSend(wsListPaths, JSON.stringify(query))
     .then((response) => response.data)
 }
 
 function writeExperiment(data: Experiment, path: string): Promise<string> {
-  return ensureOpen('write-experiment')
-    .then((socket) => socketSend(socket, JSON.stringify({ path, data })))
+  if (wsWriteExperiment === null) {
+    throw new Error('Socket is not open')
+  }
+
+  return socketSend(wsWriteExperiment, JSON.stringify({ path, data }))
     .then((response) => response.message)
 }
 
 
 export {
+  connect,
   getRoot,
   listExperiments,
   getExperiment,
