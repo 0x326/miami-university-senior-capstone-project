@@ -80,7 +80,7 @@ function disconnect(): void {
     wsWriteExperiment,
   ]
 
-  sockets.map((socket) => socket.close())
+  sockets.map((socket) => socket !== null && socket.close())
 }
 
 function socketSend(socket: WebSocket, message: string): Promise<Resp> {
