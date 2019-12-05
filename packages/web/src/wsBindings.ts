@@ -111,7 +111,7 @@ function listExperiments(path: string, filter?: Experiment): Promise<Array<Exper
   }
 
   return socketSend(wsListExperiments, JSON.stringify({ path, filter }))
-    .then((response) => response.data)
+    .then((response) => response.data as Array<ExperimentWrapper>)
 }
 
 function getExperiment(path: string): Promise<ExperimentWrapper> {
@@ -120,17 +120,17 @@ function getExperiment(path: string): Promise<ExperimentWrapper> {
   }
 
   return socketSend(wsGetExperiment, path)
-    .then((response) => response.data)
+    .then((response) => response.data as ExperimentWrapper)
 }
 
 function listPaths(query: ListPathsQuery):
-  Promise<ExperimentWrapper> {
+  Promise<Array<string>> {
   if (wsListPaths === null) {
     throw new Error('Socket is not open')
   }
 
   return socketSend(wsListPaths, JSON.stringify(query))
-    .then((response) => response.data)
+    .then((response) => response.data as Array<string>)
 }
 
 function writeExperiment(data: Experiment, path: string): Promise<string> {
@@ -139,7 +139,7 @@ function writeExperiment(data: Experiment, path: string): Promise<string> {
   }
 
   return socketSend(wsWriteExperiment, JSON.stringify({ path, data }))
-    .then((response) => response.message)
+    .then((response) => response.message as string)
 }
 
 
