@@ -11,7 +11,7 @@ ws.onmessage = event => console.log(JSON.parse(event.data))
 ws.send(<query>)
 ```
 
-[DONE]{.done .DONE} Initiated by web {#initiated-by-web}
+Initiated by web {#initiated-by-web}
 ====================================
 
 -   /get-root-dir returns root directory of experiments where subdirs
@@ -75,7 +75,7 @@ JSON.stringify(
 )
 ```
 
-[DONE]{.done .DONE} Initiated by scale {#initiated-by-scale}
+Initiated by scale {#initiated-by-scale}
 ======================================
 
 -   /scale-data. Initiates connection with scale. Just create a
