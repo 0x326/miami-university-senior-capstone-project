@@ -1,4 +1,3 @@
-import https from 'https'
 import http from 'http'
 import url from 'url'
 
@@ -36,8 +35,6 @@ export interface Resp {
 function createServer(
   port: number,
   scaleConfig: ScaleConfig,
-  keyPath?: string,
-  certPath?: string,
 ): http.Server {
   const server = http.createServer()
   // different webSocket servers for different actions
@@ -124,7 +121,7 @@ function createServer(
   wssListPaths.on('connection', (ws) => {
     ws.on('message', (data) => {
       try {
-        const parsed: any = JSON.parse(data as string)
+        const parsed = JSON.parse(data as string)
         listExperimentPaths(parsed)
           .then((paths) => {
             ws.send(JSON.stringify({
