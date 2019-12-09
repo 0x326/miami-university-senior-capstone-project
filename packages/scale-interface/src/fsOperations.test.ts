@@ -57,26 +57,14 @@ describe('Test valid', () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"","primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = '_1572730420004_quinn'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
 
     it('writes an experiment with an underscore in name value', async () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"Addiction_Study 12","primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -85,26 +73,14 @@ describe('Test valid', () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
 
     it('writes an experiment with an underscore in the primaryExperimenter value', async () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"dr_quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_dr_quinn'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -113,13 +89,7 @@ describe('Test valid', () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":0,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -128,13 +98,7 @@ describe('Test valid', () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":0,"lastUpdated":0,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -145,13 +109,7 @@ describe('Test valid', () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":0,"lastUpdated":0,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -160,13 +118,7 @@ describe('Test valid', () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":0,"lastUpdated":0,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
   })
 })
@@ -246,26 +198,14 @@ describe('Test writeExperiment', () => {
       const exampleInvalidExperiment = JSON.parse('{"primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
 
     it('it does not write an experiment adding a new variable, totalBottlesPerSession', async () => {
       const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12", "primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4, "totalBottlesPerSession":3, "subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      let error = false
-      try {
-        await writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })
-      } catch (err) {
-        error = true
-      }
-      expect(error).toBe(true)
+      await expect(writeExperiment({ path: ACTIVE + exampleExperimentName, data: exampleInvalidExperiment })).rejects.toBeInstanceOf(Error)
     })
   })
 })
