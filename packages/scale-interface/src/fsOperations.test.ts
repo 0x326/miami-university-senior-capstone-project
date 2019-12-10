@@ -162,7 +162,7 @@ describe('Test listExperiments', () => {
 
   // No saved experiments
   test('Empty return array', async () => {
-    expect(await listExperiments({ path: ACTIVE, filter: exampleExperiment }))
+    await expect(listExperiments({ path: ACTIVE, filter: exampleExperiment }))
       .resolves.toHaveLength(0)
   })
 
@@ -172,8 +172,10 @@ describe('Test listExperiments', () => {
 
     // Genrate comparison array
     const compareListExperiments = [exampleExperiment]
-    const rtnArray = await listExperiments({ path: ACTIVE, filter: exampleExperiment })
-    expect(rtnArray).resolves.toBe(compareListExperiments)
+    await expect(listExperiments({
+      path: ACTIVE,
+      filter: exampleExperiment,
+    })).resolves.toBe(compareListExperiments)
   })
 })
 
