@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
 import { promises as fs } from 'fs'
 
 import {
@@ -8,8 +9,6 @@ import {
 } from './fsOperations'
 
 
-const PORT = 8081
-const ROOT = './SCALE_INTERFACE_DAT/'
 const ACTIVE = './SCALE_INTERFACE_DAT/active/'
 const ARCHIVE = './SCALE_INTERFACE_DAT/archive/'
 
@@ -27,14 +26,16 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-  const activeDir = await fs.readdir('./SCALE_INTERFACE_DAT/active')
-  const archiveDir = await fs.readdir('./SCALE_INTERFACE_DAT/archive')
+  const activeDirectory = await fs.readdir('./SCALE_INTERFACE_DAT/active')
+  const archiveDirectory = await fs.readdir('./SCALE_INTERFACE_DAT/archive')
 
   try {
-    activeDir.forEach(async (fileName) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    activeDirectory.forEach(async (fileName) => {
       await fs.unlink(ACTIVE + fileName)
     })
-    archiveDir.forEach(async (fileName) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    archiveDirectory.forEach(async (fileName) => {
       await fs.unlink(ARCHIVE + fileName)
     })
   } catch (error) { console.error(error) }
@@ -165,7 +166,8 @@ describe('Test listExperiments', () => {
 
   // No saved experiments
   test('Empty return array', async () => {
-    expect(listExperiments({ path: ACTIVE, filter: exampleExperiment })).resolves.toHaveLength(0)
+    expect(await listExperiments({ path: ACTIVE, filter: exampleExperiment }))
+      .resolves.toHaveLength(0)
   })
 
   // One saved experiment
@@ -180,7 +182,7 @@ describe('Test listExperiments', () => {
 })
 
 // Need to fix listExperimentPaths function. It is returning the experiment names and not the paths.
-describe('Test listExperimentPaths', async () => {
+describe('Test listExperimentPaths', () => {
   it('returns no experiment path', async () => {
     expect(await listExperimentPaths({ path: ACTIVE, experimentName: '', primaryExperimenter: '', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) }))
       .toEqual([])
