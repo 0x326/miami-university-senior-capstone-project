@@ -204,18 +204,20 @@ describe('Test getExperiment', () => {
 })
 
 
-describe('Test listExperiments', async () => {
-  const { parsedContent: exampleExperiment, fileContent } = await readJSON('sampleExperiments/valid.json')
-  const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
-
+describe('Test listExperiments', () => {
   // No saved experiments
   test('Empty return array', async () => {
+    const { parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid.json')
+
     await expect(listExperiments({ path: ACTIVE, filter: exampleExperiment as Experiment }))
       .resolves.toHaveLength(0)
   })
 
   // One saved experiment
   test('One element returned', async () => {
+    const { parsedContent: exampleExperiment, fileContent } = await readJSON('sampleExperiments/valid.json')
+    const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
+
     await writeFile(ACTIVE + exampleExperimentName, fileContent, {
       boundary: TEST_DIRECTORY,
     })
