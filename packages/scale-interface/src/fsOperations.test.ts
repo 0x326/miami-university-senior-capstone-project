@@ -12,12 +12,29 @@ import {
   writeExperiment,
   getExperiment,
   listExperiments,
+  Experiment,
 } from './fsOperations'
 
 const TEST_DIRECTORY = './SCALE_INTERFACE_DAT/'
 const ACTIVE = './SCALE_INTERFACE_DAT/active/'
 const ARCHIVE = './SCALE_INTERFACE_DAT/archive/'
 
+async function readJSON(
+  path: string,
+): Promise<{
+  fileContent: string;
+  parsedContent: object;
+}> {
+  const fileBuffer = await readFile(path, {
+    boundary: 'sampleExperiments/',
+  })
+  const fileContent = String(fileBuffer)
+  const parsedContent = JSON.parse(fileContent)
+  return {
+    fileContent: JSON.stringify(parsedContent),
+    parsedContent,
+  }
+}
 
 beforeEach(async () => {
   try {
@@ -80,68 +97,68 @@ afterEach(async () => {
 describe('Test valid', () => {
   describe('testing name', () => {
     it('writes an experiment with an empty name value', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"","primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/emptyName.json')
       const exampleExperimentName = '_1572730420004_quinn'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
 
     it('writes an experiment with an underscore in name value', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"Addiction_Study 12","primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/underscoreInName.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
   })
 
   describe('testing primaryExperimenter', () => {
     it('writes an experiment with an empty primaryExperimenter value', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/emptyPrimaryExperimenter.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
 
     it('writes an experiment with an underscore in the primaryExperimenter value', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"dr_quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/underscoreInPrimaryExperimenter.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_dr_quinn'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
   })
 
   describe('testing dateInitialized', () => {
     it('writes an experiment with a zero dateInitialized value', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":0,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/zeroDateInitialized.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
   })
 
   describe('testing lastUpdated', () => {
     it('writes an experiment with a zero lastUpdated value', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":0,"lastUpdated":0,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/zeroLastUpdated.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
   })
@@ -150,24 +167,24 @@ describe('Test valid', () => {
 
   describe('testing totalSessions', () => {
     it('writes an experiment with a zero totalSessions value', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":0,"lastUpdated":0,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/zeroTotalSessions.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
   })
 
   describe('testing totColsBegin vs subSessionLabelsBegin', () => {
     it('writes an experiment with a zero totalSessions value', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":0,"lastUpdated":0,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/zeroTotalSessions.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
   })
@@ -175,31 +192,33 @@ describe('Test valid', () => {
 
 describe('Test getExperiment', () => {
   it('returns an experiment', async () => {
-    const exampleExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"Quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+    const { fileContent } = await readJSON('sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
 
-    await writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment), {
+    await writeFile(ACTIVE + exampleExperimentName, fileContent, {
       boundary: TEST_DIRECTORY,
     })
     const rtnExpr = await getExperiment(ACTIVE + exampleExperimentName)
-    expect(JSON.stringify(rtnExpr.data)).toBe(JSON.stringify(exampleExperiment))
+    expect(JSON.stringify(rtnExpr.data)).toBe(fileContent)
   })
 })
 
 
 describe('Test listExperiments', () => {
-  const exampleExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"Quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
-  const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
-
   // No saved experiments
   test('Empty return array', async () => {
-    await expect(listExperiments({ path: ACTIVE, filter: exampleExperiment }))
+    const { parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid.json')
+
+    await expect(listExperiments({ path: ACTIVE, filter: exampleExperiment as Experiment }))
       .resolves.toHaveLength(0)
   })
 
   // One saved experiment
   test('One element returned', async () => {
-    await writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment), {
+    const { parsedContent: exampleExperiment, fileContent } = await readJSON('sampleExperiments/valid.json')
+    const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
+
+    await writeFile(ACTIVE + exampleExperimentName, fileContent, {
       boundary: TEST_DIRECTORY,
     })
 
@@ -207,7 +226,7 @@ describe('Test listExperiments', () => {
     const compareListExperiments = [exampleExperiment]
     await expect(listExperiments({
       path: ACTIVE,
-      filter: exampleExperiment,
+      filter: exampleExperiment as Experiment,
     })).resolves.toBe(compareListExperiments)
   })
 })
@@ -220,26 +239,26 @@ describe('Test listExperimentPaths', () => {
   })
 
   it('returns one experiment path', async () => {
-    const exampleExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+    const { fileContent } = await readJSON('sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-    await writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment), {
+    await writeFile(ACTIVE + exampleExperimentName, fileContent, {
       boundary: TEST_DIRECTORY,
     })
     expect(await listExperimentPaths({ path: ACTIVE, experimentName: 'Addiction Study 12', primaryExperimenter: 'quinn', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) })).toBe([ACTIVE + exampleExperimentName])
   })
 
   it('returns multiple experiment paths', async () => {
-    const exampleExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"Quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+    const { fileContent } = await readJSON('sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-    const exampleExperiment2 = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"Quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+    const { fileContent: fileContent2 } = await readJSON('sampleExperiments/valid.json')
     const exampleExperimentName2 = 'Addiction Study 12_1572730420004_quinn2'
 
-    await writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment), {
+    await writeFile(ACTIVE + exampleExperimentName, fileContent, {
       boundary: TEST_DIRECTORY,
     })
-    await writeFile(ACTIVE + exampleExperimentName2, JSON.stringify(exampleExperiment2), {
+    await writeFile(ACTIVE + exampleExperimentName2, fileContent2, {
       boundary: TEST_DIRECTORY,
     })
     expect(await listExperimentPaths({ path: ACTIVE, experimentName: 'Addiction Study 12', primaryExperimenter: 'quinn', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) })).toBe([ACTIVE + exampleExperimentName, ACTIVE + exampleExperimentName2])
@@ -248,37 +267,37 @@ describe('Test listExperimentPaths', () => {
 
 describe('Test writeExperiment', () => {
   it('writes a valid experiment', async () => {
-    const exampleExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+    const { parsedContent: exampleExperiment, fileContent } = await readJSON('sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
     await writeExperiment({
       path: ACTIVE + exampleExperimentName,
-      data: exampleExperiment,
+      data: exampleExperiment as Experiment,
     })
 
     const experimentFile = await readFile(ACTIVE + exampleExperimentName, {
       boundary: TEST_DIRECTORY,
     })
-    expect((experimentFile.toString())).toBe(JSON.stringify(exampleExperiment))
+    expect((experimentFile.toString())).toBe(fileContent)
   })
 
   describe('Test incorrect experiment format', () => {
     it('does not write an experiment without the name variable', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/noName.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
 
     it('it does not write an experiment adding a new variable, totalBottlesPerSession', async () => {
-      const exampleInvalidExperiment = JSON.parse('{"name":"Addiction Study 12", "primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":6,"totalColsMid":6,"totalColsEnd":4, "totalBottlesPerSession":3, "subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/noExtraKeys.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment,
+        data: exampleInvalidExperiment as Experiment,
       })).rejects.toBeInstanceOf(Error)
     })
   })
