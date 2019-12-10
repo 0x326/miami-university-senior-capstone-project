@@ -11,8 +11,8 @@ import {
 } from 'immutable'
 
 import {
-  Link,
   Route,
+  Redirect,
   Switch,
   useHistory,
 } from 'react-router-dom'
@@ -43,6 +43,7 @@ import {
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
+import NoMatch from './routes/NoMatch'
 
 export type ExperimentId = RouteId
 
@@ -223,17 +224,7 @@ const App: React.FC = () => {
       />
       <Switch>
         <Route exact path="/">
-          <ul>
-            <li>
-              <Link to="/experiment-dashboard">Experiment Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/experiments">Experiments</Link>
-            </li>
-            <li>
-              <Link to="/experiments/new">New Experiment</Link>
-            </li>
-          </ul>
+          <Redirect to="/experiments" />
         </Route>
         <Route path="/experiment-dashboard">
           <ExperimentDashboard
@@ -263,6 +254,12 @@ const App: React.FC = () => {
 
               history.push('/experiments')
             })}
+          />
+        </Route>
+        <Route path="*">
+          <NoMatch
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            suggestedNavigationLink={viewOptions}
           />
         </Route>
       </Switch>
