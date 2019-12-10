@@ -10,17 +10,17 @@ import Joi from '@hapi/joi'
 type SubLabel = [string, Array<string | SubLabelArray>]
 interface SubLabelArray extends Array<SubLabel> { }
 
-type Session = {
+interface Session {
   [key: string]: number;
 }
 
-type Cage = {
+interface Cage {
   cageWeight: number;
   cageLabel: string;
   sessions: Array<Session>;
 }
 
-type Experiment = {
+export interface Experiment {
   name: string;
   primaryExperimenter: string;
   dateInitialized: number;
@@ -37,101 +37,107 @@ type Experiment = {
 }
 
 // wraps an experiment to provide the path of the file it was read from
-type ExperimentWrapper = {
+export interface ExperimentWrapper {
   path: string;
   data: Experiment;
 }
 
-// TODO: figure out how to ensure the usb drive is mounted to same path
+// TODO [2020-02-01] (wimmeldj): figure out how to ensure the usb drive is mounted to same path
 const ROOT_PATH = `C:/Users/${os.userInfo().username}/Documents/School Work/Capstone/SCALE_INTERFACE_DAT`
 
-async function getRootDir(): Promise<string> {
-  if (ROOT_PATH) return ROOT_PATH
-  throw new Error('Root path not available')
+function getRootDir(): Promise<string | Error> {
+  return new Promise((resolve, reject): void => {
+    if (ROOT_PATH) resolve(ROOT_PATH)
+    reject(new Error('Root path not available'))
+  })
 }
 
+const schema = Joi.object({
+  name: Joi.string()
+    .min(1)
+    .pattern(/^[^_]*$/) // anything but an underscore
+    .required(),
+  primaryExperimenter: Joi.string()
+    .min(1)
+    .pattern(/^[^_]*$/)
+    .required(),
+  dateInitialized: Joi.number()
+    .integer()
+    .greater(+new Date('2019'))
+    .required(),
+  lastUpdated: Joi.number()
+    .integer()
+    .greater(+new Date('2019'))
+    .required(),
+  isComplete: Joi.boolean()
+    .required(),
+  totalSessions: Joi.number()
+    .integer()
+    .greater(0)
+    .required(),
+  totalColsBegin: Joi.number()
+    .integer()
+    .required(),
+  totalColsMid: Joi.number()
+    .integer()
+    .required(),
+  totalColsEnd: Joi.number()
+    .integer()
+    .required(),
+  subSessionLabelsBegin: Joi.array()
+    .items(
+      Joi.string(),
+      Joi.link('/subSessionLabelsBegin'),
+    ),
+  subSessionLabelsMid: Joi.array()
+    .items(
+      Joi.string(),
+      Joi.link('/subSessionLabelsMid'),
+    ),
+  subSessionLabelsEnd: Joi.array()
+    .items(
+      Joi.string(),
+      Joi.link('/subSessionLabelsEnd'),
+    ),
+  cages: Joi.array().items(
+    Joi.object({
+      cageWeight: Joi.number().required(),
+      cageLabel: Joi.string().required(),
+      sessions: Joi.array()
+        .items(Joi.object({}).pattern(/./, Joi.number()))
+        .max(Joi.ref('/totalSessions')),
+    }),
+  ),
+})
 
-// valid: uses Joi to validate form of data.
+/**
+ * uses Joi to validate form of data.
+ * @param data
+ */
 async function valid(data: any): Promise<void> {
   if (!data) throw new Error('==Data sent to valid() is null')
-
-  const schema = Joi.object({
-    name: Joi.string()
-      .min(1)
-      .pattern(/^[^_]*$/) // anything but an underscore
-      .required(),
-    primaryExperimenter: Joi.string()
-      .min(1)
-      .pattern(/^[^_]*$/)
-      .required(),
-    dateInitialized: Joi.number()
-      .integer()
-      .greater(+new Date('2019'))
-      .required(),
-    lastUpdated: Joi.number()
-      .integer()
-      .greater(+new Date('2019'))
-      .required(),
-    isComplete: Joi.boolean()
-      .required(),
-    totalSessions: Joi.number()
-      .integer()
-      .greater(0)
-      .required(),
-    totalColsBegin: Joi.number()
-      .integer()
-      .required(),
-    totalColsMid: Joi.number()
-      .integer()
-      .required(),
-    totalColsEnd: Joi.number()
-      .integer()
-      .required(),
-    subSessionLabelsBegin: Joi.array()
-      .items(
-        Joi.string(),
-        Joi.link('/subSessionLabelsBegin'),
-      ),
-    subSessionLabelsMid: Joi.array()
-      .items(
-        Joi.string(),
-        Joi.link('/subSessionLabelsMid'),
-      ),
-    subSessionLabelsEnd: Joi.array()
-      .items(
-        Joi.string(),
-        Joi.link('/subSessionLabelsEnd'),
-      ),
-    cages: Joi.array().items(
-      Joi.object({
-        cageWeight: Joi.number().required(),
-        cageLabel: Joi.string().required(),
-        sessions: Joi.array()
-          .items(Joi.object({}).pattern(/./, Joi.number()))
-          .max(Joi.ref('/totalSessions')),
-      }),
-    ),
-  })
 
   return schema.validateAsync(data)
 }
 
-
-// getExperiment: returns experiment object parsed from file at absolute path
-async function getExperiment(path: string): Promise<ExperimentWrapper> {
-  const data = await fs.readFile(path, { encoding: 'UTF-8' }) as string
-  const parsed: any = JSON.parse(data)
+/**
+ * @param searchPath
+ * @return experiment object parsed from file at absolute path
+ */
+async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
+  const normalized = path.normalize(searchPath)
+  const data = await fs.readFile(normalized, { encoding: 'UTF-8' }) as string
+  const parsed = JSON.parse(data)
   await valid(parsed)
   return {
-    path,
+    path: normalized,
     data: parsed as Experiment,
   } as ExperimentWrapper
 }
 
 
-// listExperiments:
-// TOOD: use path library
-async function listExperiments(query: { path: string; filter: Experiment }): Promise<Array<ExperimentWrapper>> {
+async function listExperiments(query: { path: string; filter: null | Experiment }):
+  Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
 
   const allFiles: Array<string | Buffer> = await fs.readdir(
@@ -139,12 +145,13 @@ async function listExperiments(query: { path: string; filter: Experiment }): Pro
     { encoding: 'UTF-8' },
   )
 
-  const experiments: Array<ExperimentWrapper> = []
-  allFiles.map(async (experimentPath) => {
+  const experiments = []
+  for (const experimentPath of allFiles) {
     const wrappedExperiment = await getExperiment(path.join(query.path, experimentPath as string))
     if (!query.filter) experiments.push(wrappedExperiment)
-    if (query.filter && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
-  })
+    if (query.filter
+      && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
+  }
 
   return experiments
 }
@@ -162,7 +169,11 @@ async function listExperiments(query: { path: string; filter: Experiment }): Pro
 // a /archive dir                                                                         //
 // //////////////////////////////////////////////////////////////////////////////////////////
 
-// listExperimentPaths: returns a list of file paths matching query
+/**
+ *
+ * @param query
+ * @return a list of file paths matching query
+ */
 async function listExperimentPaths(query: {
   path: string;
   experimentName: string;
@@ -172,13 +183,12 @@ async function listExperimentPaths(query: {
 }): Promise<Array<string | Buffer>> {
   if (!query.path) throw new Error('No path provided')
 
-  let paths: Array<string | Buffer> = await fs.readdir(query.path, { encoding: 'UTF-8' })
+  let paths: Array<string> = await fs.readdir(query.path, { encoding: 'UTF-8' }) as Array<string>
 
   if (query.dateStart && query.dateEnd) {
-    paths = paths.filter((path) => {
-      path = path as string
-      const dateMatch = path.match(/_(\d*?)_/)
-      if (!dateMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
+    paths = paths.filter((experimentPath) => {
+      const dateMatch = /_\d{13}_/.exec(experimentPath)
+      if (!dateMatch) throw new Error(`File at experimentPath: ${query.path}/${experimentPath} has improperly formmatted name`)
       else {
         const date = new Date(Number(dateMatch[1]))
         // filter date if not within range
@@ -187,13 +197,12 @@ async function listExperimentPaths(query: {
     })
   }
 
-  paths = paths.filter((path) => {
+  paths = paths.filter((experimentPath) => {
     const experimentName: string = query.experimentName ? query.experimentName : ''
     const primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ''
-    path = path as string
-    const lMatch = path.match(/^(.*?)_/)
-    const rMatch = path.match(/_([^_]*?)$/)
-    if (!lMatch || !rMatch) throw new Error(`File at path: ${query.path}/${path} has improperly formmatted name`)
+    const lMatch = /^(.*?)_/.exec(experimentPath)
+    const rMatch = /_([^_]*?)$/.exec(experimentPath)
+    if (!lMatch || !rMatch) throw new Error(`File at experimentPath: ${query.path}/${experimentPath} has improperly formmatted name`)
     else {
       return lMatch[1].includes(experimentName)
         && rMatch[1].includes(primaryExperimenter)
@@ -203,15 +212,22 @@ async function listExperimentPaths(query: {
 }
 
 
-// writeExperiment: simply writes stringified experiment json to file at path.
-async function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
-  // validate file path
-  const lMatch = wrapped.path.match(/^(.*?)_/)
-  const rMatch = wrapped.path.match(/_([^_]*?)$/)
-  if (!lMatch || !rMatch) throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`)
-  // validate file content
-  await valid(wrapped.data)
-  return await fs.writeFile(wrapped.path, JSON.stringify(wrapped.data))
+/**
+ * simply writes stringified experiment json to file at path.
+ * @param wrapped
+ */
+function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
+  return new Promise((resolve, reject): void => {
+    // validate file path
+    const lMatch = /^.*?_/.exec(wrapped.path)
+    const rMatch = /_[^_]*?$/.exec(wrapped.path)
+    const dateMatch = /_\d{13}_/.exec(wrapped.path)
+    /* eslint-disable curly, nonblock-statement-body-position */
+    if (!lMatch || !rMatch || !dateMatch)
+      reject(new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`))
+    valid(wrapped.data)
+      .then(() => resolve(fs.writeFile(wrapped.path, JSON.stringify(wrapped.data))))
+  })
 }
 
 export {
@@ -221,6 +237,4 @@ export {
   listExperimentPaths,
   getExperiment,
   writeExperiment,
-  ExperimentWrapper,
-  Experiment,
 }

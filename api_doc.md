@@ -3,25 +3,34 @@ if some error occurred
 
 You initialize connections like so:
 
-``` {.javascript}
+``` javascript
 const ws = new WebSocket("ws://localhost:<port>/<path>")
 // create an onmessage handler e.g.
 ws.onmessage = event => console.log(JSON.parse(event.data))
 // call websocket with query
 ws.send(<query>)
 ```
+When I say a route "returns" X, I mean it returns a Resp object as defined in
+webSocketServer where the X is the value of data.
 
-[DONE]{.done .DONE} Initiated by web {#initiated-by-web}
+```javascript
+Resp {
+  status: 'OK' | 'FAIL';
+  data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
+  message?: string;
+}
+```
+Initiated by web
 ====================================
 
--   /get-root-dir returns root directory of experiments where subdirs
-    /archived and /active are found
+-   /get-root-dir returns root directory of experiments /archived and /active
+    are found
     -   Send it an empty string. This just says \"Give me the root
         directory\"
--   /list-experiments get list of all experiments matching query.filter
-    -   Query: stringified JSON obj
 
-``` {.javascript}
+-   /list-experiments returns a list of wrappedExperiments matching query.filter
+    -   Query: stringified JSON obj
+``` javascript
 JSON.stringify(
     {
         path: 'somePath',
@@ -34,18 +43,25 @@ JSON.stringify(
     }
 )
 ```
+    - ExperimentWrapper as defined in fsOperations
+```javascript
+export interface ExperimentWrapper {
+  path: string;
+  data: Experiment;
+}
+```
 
--   /get-experiment get a single experiment at a given path
+-   /get-experiment returns a single wrapped experiment at a given path
     -   Query: a string representing a path to an experiment json file
-
-``` {.text}
+``` text
 "/somepath"
 ```
 
--   /write-experiment: save experiment at a particular path
+-   /write-experiment: save experiment at a particular pat. Doesn't return
+    anything, but _does_ give you a message that contains either the error
+    message for a failure or "Saved experiment at <some path>"
     -   Query: stringified ExperimentWrapper
-
-``` {.javascript}
+``` javascript
 JSON.stringify(
     {
         path: "path",
@@ -54,16 +70,15 @@ JSON.stringify(
 )
 ```
 
--   /list-experiment-paths get list of experiment **paths** at given
-    path that match query
+-   /list-experiment-paths returns list of experiment **paths** (strings) at
+    given path that match query
     -   You could use this in combination with /get-experiment to fetch
         a particular experiment
     -   This might be preferable to /list-experiments in some cases
     -   If you want all experiments at the given path, use empty strings
         and don\'t provide dates
     -   Query: stringified json object
-
-``` {.javascript}
+``` javascript
 JSON.stringify(
     {
         path: "/somepath",
@@ -75,7 +90,7 @@ JSON.stringify(
 )
 ```
 
-[DONE]{.done .DONE} Initiated by scale {#initiated-by-scale}
+Initiated by scale
 ======================================
 
 -   /scale-data. Initiates connection with scale. Just create a

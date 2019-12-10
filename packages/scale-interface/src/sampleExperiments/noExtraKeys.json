@@ -1,4 +1,5 @@
 {
+  "name": "Addiction Study 12",
   "primaryExperimenter": "quinn",
   "dateInitialized": 1572730420004,
   "lastUpdated": 1572730420004,
@@ -7,6 +8,7 @@
   "totalColsBegin": 6,
   "totalColsMid": 6,
   "totalColsEnd": 4,
+  "totalBottlesPerSession": 3,
   "subSessionLabelsBegin": [
     "Cage Weight",
     "Cage",
