@@ -222,7 +222,6 @@ function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<v
     const lMatch = /^.*?_/.exec(wrapped.path)
     const rMatch = /_[^_]*?$/.exec(wrapped.path)
     const dateMatch = /_\d{13}_/.exec(wrapped.path)
-    /* eslint-disable curly, nonblock-statement-body-position */
     if (!lMatch || !rMatch || !dateMatch)
       reject(new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`))
     valid(wrapped.data)
