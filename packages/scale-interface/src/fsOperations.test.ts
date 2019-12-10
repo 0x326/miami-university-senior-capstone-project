@@ -1,5 +1,11 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
-import { promises as fs } from 'fs'
+import {
+  mkdir,
+  rmdir,
+  readdir,
+  readFile,
+  writeFile,
+  unlink,
+} from './fs'
 
 import {
   listExperimentPaths,
@@ -8,42 +14,65 @@ import {
   listExperiments,
 } from './fsOperations'
 
-
+const TEST_DIRECTORY = './SCALE_INTERFACE_DAT/'
 const ACTIVE = './SCALE_INTERFACE_DAT/active/'
 const ARCHIVE = './SCALE_INTERFACE_DAT/archive/'
 
 
 beforeEach(async () => {
   try {
-    await fs.mkdir('./SCALE_INTERFACE_DAT/', 0o777)
+    await mkdir('./SCALE_INTERFACE_DAT/', {
+      mode: 0o777,
+      boundary: TEST_DIRECTORY,
+    })
   } catch (error) { /* Do Nothing */ }
   try {
-    await fs.mkdir('./SCALE_INTERFACE_DAT/active', 0o777)
+    await mkdir('./SCALE_INTERFACE_DAT/active', {
+      mode: 0o777,
+      boundary: TEST_DIRECTORY,
+    })
   } catch (error) { /* Do Nothing */ }
   try {
-    await fs.mkdir('./SCALE_INTERFACE_DAT/archive', 0o777)
+    await mkdir('./SCALE_INTERFACE_DAT/archive', {
+      mode: 0o777,
+      boundary: TEST_DIRECTORY,
+    })
   } catch (error) { /* Do Nothing */ }
 })
 
 afterEach(async () => {
-  const activeDirectory = await fs.readdir('./SCALE_INTERFACE_DAT/active')
-  const archiveDirectory = await fs.readdir('./SCALE_INTERFACE_DAT/archive')
+  const activeDirectory = await readdir('./SCALE_INTERFACE_DAT/active', {
+    boundary: TEST_DIRECTORY,
+  })
+  const archiveDirectory = await readdir('./SCALE_INTERFACE_DAT/archive', {
+    boundary: TEST_DIRECTORY,
+  })
 
   try {
     await Promise.all([
-      ...activeDirectory.map((fileName) => fs.unlink(ACTIVE + fileName)),
-      ...archiveDirectory.map((fileName) => fs.unlink(ARCHIVE + fileName)),
+      ...activeDirectory.map((fileName) => unlink(ACTIVE + fileName, {
+        boundary: ACTIVE,
+      })),
+      ...archiveDirectory.map((fileName) => unlink(ARCHIVE + fileName, {
+        boundary: ARCHIVE,
+      })),
     ])
   } catch (error) { console.error(error) }
 
   try {
-    await fs.rmdir('./SCALE_INTERFACE_DAT/active')
+    await rmdir('./SCALE_INTERFACE_DAT/active', {
+      boundary: TEST_DIRECTORY,
+    })
   } catch (error) { /* Do Nothing */ }
   try {
-    await fs.rmdir('./SCALE_INTERFACE_DAT/archive')
+    await rmdir('./SCALE_INTERFACE_DAT/archive', {
+      boundary: TEST_DIRECTORY,
+    })
   } catch (error) { console.error(error) }
   try {
-    await fs.rmdir('./SCALE_INTERFACE_DAT/')
+    await rmdir('./SCALE_INTERFACE_DAT/', {
+      boundary: TEST_DIRECTORY,
+    })
   } catch (error) { /* Do Nothing */ }
 })
 
@@ -149,7 +178,9 @@ describe('Test getExperiment', () => {
     const exampleExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"Quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
     const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
 
-    await fs.writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment))
+    await writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment), {
+      boundary: TEST_DIRECTORY,
+    })
     const rtnExpr = await getExperiment(ACTIVE + exampleExperimentName)
     expect(JSON.stringify(rtnExpr.data)).toBe(JSON.stringify(exampleExperiment))
   })
@@ -168,7 +199,9 @@ describe('Test listExperiments', () => {
 
   // One saved experiment
   test('One element returned', async () => {
-    await fs.writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment))
+    await writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment), {
+      boundary: TEST_DIRECTORY,
+    })
 
     // Genrate comparison array
     const compareListExperiments = [exampleExperiment]
@@ -190,7 +223,9 @@ describe('Test listExperimentPaths', () => {
     const exampleExperiment = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-    await fs.writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment))
+    await writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment), {
+      boundary: TEST_DIRECTORY,
+    })
     expect(await listExperimentPaths({ path: ACTIVE, experimentName: 'Addiction Study 12', primaryExperimenter: 'quinn', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) })).toBe([ACTIVE + exampleExperimentName])
   })
 
@@ -201,8 +236,12 @@ describe('Test listExperimentPaths', () => {
     const exampleExperiment2 = JSON.parse('{"name":"Addiction Study 12","primaryExperimenter":"Quinn","dateInitialized":1572730420004,"lastUpdated":1572730420004,"isComplete":false,"totalSessions":30,"totalColsBegin":8,"totalColsMid":6,"totalColsEnd":4,"subSessionLabelsBegin":["Cage Weight","Cage",["H20 Weights",["Before","After 30m","After 24h"]],["20% ETOH Weights",["Before","After 30m","After 24h"]]],"subSessionLabelsMid":["Cage",["H20 Weights",["Before","After 24h"]],["20% ETOH Weights",["Before","After 24h"]]],"subSessionLabelsEnd":["Cage",["H20 Weights",["After 24h"]],["20% ETOH Weights",["After 24h"]]],"cages":[{"cageWeight":259,"cageLabel":"Cage 1 (Dummy)","sessions":[{"H20 Weights Before":1,"H20 Weights After 30m":2,"H20 Weights After 24h":3,"20% ETOH Weights Before":1,"20% ETOH Weights After 20m":2,"20% ETOH Weights After 24h":3}]}]}')
     const exampleExperimentName2 = 'Addiction Study 12_1572730420004_quinn2'
 
-    await fs.writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment))
-    await fs.writeFile(ACTIVE + exampleExperimentName2, JSON.stringify(exampleExperiment2))
+    await writeFile(ACTIVE + exampleExperimentName, JSON.stringify(exampleExperiment), {
+      boundary: TEST_DIRECTORY,
+    })
+    await writeFile(ACTIVE + exampleExperimentName2, JSON.stringify(exampleExperiment2), {
+      boundary: TEST_DIRECTORY,
+    })
     expect(await listExperimentPaths({ path: ACTIVE, experimentName: 'Addiction Study 12', primaryExperimenter: 'quinn', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) })).toBe([ACTIVE + exampleExperimentName, ACTIVE + exampleExperimentName2])
   })
 })
@@ -216,7 +255,9 @@ describe('Test writeExperiment', () => {
       data: exampleExperiment,
     })
 
-    const experimentFile = await fs.readFile(ACTIVE + exampleExperimentName)
+    const experimentFile = await readFile(ACTIVE + exampleExperimentName, {
+      boundary: TEST_DIRECTORY,
+    })
     expect((experimentFile.toString())).toBe(JSON.stringify(exampleExperiment))
   })
 
