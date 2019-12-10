@@ -30,8 +30,10 @@ afterEach(async () => {
   const archiveDirectory = await fs.readdir('./SCALE_INTERFACE_DAT/archive')
 
   try {
-    activeDirectory.forEach((fileName) => fs.unlink(ACTIVE + fileName))
-    archiveDirectory.forEach((fileName) => fs.unlink(ARCHIVE + fileName))
+    await Promise.all([
+      ...activeDirectory.map((fileName) => fs.unlink(ACTIVE + fileName)),
+      ...archiveDirectory.map((fileName) => fs.unlink(ARCHIVE + fileName)),
+    ])
   } catch (error) { console.error(error) }
 
   try {
