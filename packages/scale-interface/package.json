@@ -7,7 +7,8 @@
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
     "test": "jest",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
-    "build": "tsc --noEmit && parcel build --target node src/index.ts"
+    "build": "tsc --noEmit && parcel build --target node src/index.ts",
+    "analyze-build": "source-map-explorer 'dist/*.js'"
   },
   "devDependencies": {
     "@types/hapi__joi": "^16.0.2",
@@ -24,7 +25,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^16.1.7",
-    "fs": "^0.0.1-security",
+    "@sentry/node": "^5.9.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "serialport": "^7.1.5",
