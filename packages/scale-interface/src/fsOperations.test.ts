@@ -30,14 +30,8 @@ afterEach(async () => {
   const archiveDirectory = await fs.readdir('./SCALE_INTERFACE_DAT/archive')
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    activeDirectory.forEach(async (fileName) => {
-      await fs.unlink(ACTIVE + fileName)
-    })
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    archiveDirectory.forEach(async (fileName) => {
-      await fs.unlink(ARCHIVE + fileName)
-    })
+    activeDirectory.forEach((fileName) => fs.unlink(ACTIVE + fileName))
+    archiveDirectory.forEach((fileName) => fs.unlink(ARCHIVE + fileName))
   } catch (error) { console.error(error) }
 
   try {
