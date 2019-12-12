@@ -10,7 +10,7 @@ import {
 } from './serial'
 
 import {
-  getRootDir,
+  ROOT_PATH,
   listExperiments,
   getExperiment,
   writeExperiment,
@@ -47,20 +47,10 @@ function createServer(
 
   wssGetRootDir.on('connection', (ws) => {
     ws.on('message', () => {
-      getRootDir()
-        .then((path) => {
-          ws.send(JSON.stringify({
-            status: Status.OK,
-            data: path,
-          } as Resp))
-        })
-        .catch((error) => {
-          ws.send(JSON.stringify({
-            status: Status.FAIL,
-            message: error.toString(),
-          } as Resp))
-          console.log(`getting root dir resulted in error ${error}`)
-        })
+      ws.send(JSON.stringify({
+        status: Status.OK,
+        data: ROOT_PATH,
+      } as Resp))
     })
   })
   wssListExperiments.on('connection', (ws) => {

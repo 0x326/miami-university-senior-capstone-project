@@ -1,9 +1,9 @@
-import { promises as fs } from 'fs'
 import path from 'path'
-import * as os from 'os'
 
 import _ from 'lodash'
 import Joi from '@hapi/joi'
+
+import * as fs from './fs'
 
 // workaround for a recursive type definition
 // eq to: type SubLabel = [string, Array<string | SubLabel>]
@@ -40,16 +40,6 @@ export interface Experiment {
 export interface ExperimentWrapper {
   path: string;
   data: Experiment;
-}
-
-// TODO [2020-02-01] (wimmeldj): figure out how to ensure the usb drive is mounted to same path
-const ROOT_PATH = `/media/${os.userInfo().username}/test_usb/SCALE_INTERFACE_DAT`
-
-function getRootDir(): Promise<string | Error> {
-  return new Promise((resolve, reject): void => {
-    if (ROOT_PATH) resolve(ROOT_PATH)
-    reject(new Error('Root path not available'))
-  })
 }
 
 const schema = Joi.object({
@@ -110,6 +100,8 @@ const schema = Joi.object({
   ),
 })
 
+const ROOT_PATH = '/media/scale_interface_mountpoint'
+
 /**
  * uses Joi to validate form of data.
  * @param data
@@ -126,7 +118,8 @@ async function valid(data: any): Promise<void> {
  */
 async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
   const normalized = path.normalize(searchPath)
-  const data = await fs.readFile(normalized, { encoding: 'UTF-8' }) as string
+  const data = await fs.readFile(normalized,
+    { encoding: 'utf-8', boundary: ROOT_PATH }) as string
   const parsed = JSON.parse(data)
   await valid(parsed)
   return {
@@ -140,19 +133,19 @@ async function listExperiments(query: { path: string; filter: null | Experiment 
   Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
 
-  const allFiles: Array<string | Buffer> = await fs.readdir(
-    query.path,
-    { encoding: 'UTF-8' },
-  )
+  const allFiles = await fs.readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
 
-  const experiments = []
-  for (const experimentPath of allFiles) {
-    const wrappedExperiment = await getExperiment(path.join(query.path, experimentPath as string))
-    if (!query.filter) experiments.push(wrappedExperiment)
-    if (query.filter
-      && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
-  }
-
+  const experiments: Array<ExperimentWrapper> = []
+  const proms: Array<Promise<ExperimentWrapper>> = []
+  allFiles.map((experimentPath) => proms.push(getExperiment(path.join(query.path, experimentPath))))
+  Promise.all(proms)
+    .then((wrappedExperiments) => {
+      for (const wrappedExperiment of wrappedExperiments) {
+        if (!query.filter) experiments.push(wrappedExperiment)
+        if (query.filter
+          && _.isMatch(wrappedExperiment.data, query.filter)) experiments.push(wrappedExperiment)
+      }
+    })
   return experiments
 }
 
@@ -183,7 +176,7 @@ async function listExperimentPaths(query: {
 }): Promise<Array<string | Buffer>> {
   if (!query.path) throw new Error('No path provided')
 
-  let paths: Array<string> = await fs.readdir(query.path, { encoding: 'UTF-8' }) as Array<string>
+  let paths = await fs.readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
 
   if (query.dateStart && query.dateEnd) {
     paths = paths.filter((experimentPath) => {
@@ -216,22 +209,20 @@ async function listExperimentPaths(query: {
  * simply writes stringified experiment json to file at path.
  * @param wrapped
  */
-function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
-  return new Promise((resolve, reject): void => {
-    // validate file path
-    const lMatch = /^.*?_/.exec(wrapped.path)
-    const rMatch = /_[^_]*?$/.exec(wrapped.path)
-    const dateMatch = /_\d{13}_/.exec(wrapped.path)
-    if (!lMatch || !rMatch || !dateMatch) {
-      reject(new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`))
-    }
-    valid(wrapped.data)
-      .then(() => resolve(fs.writeFile(wrapped.path, JSON.stringify(wrapped.data))))
-  })
+async function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
+  // validate file path
+  const lMatch = /^.*?_/.exec(wrapped.path)
+  const rMatch = /_[^_]*?$/.exec(wrapped.path)
+  const dateMatch = /_\d{13}_/.exec(wrapped.path)
+  if (!lMatch || !rMatch || !dateMatch) {
+    throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`)
+  }
+  await valid(wrapped.data)
+  return fs.writeFile(wrapped.path, JSON.stringify(wrapped.data), { encoding: 'utf-8', boundary: ROOT_PATH })
 }
 
 export {
-  getRootDir,
+  ROOT_PATH,
   valid,
   listExperiments,
   listExperimentPaths,

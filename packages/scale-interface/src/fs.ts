@@ -54,10 +54,10 @@ function rmdir(
 function readFile(
   path: Path,
   options: {
-    encoding?: null;
+    encoding?: BufferEncoding | null;
     flag?: string | number;
   } & FSBoundaryOptions,
-): Promise<Buffer> {
+): Promise<string | Buffer> {
   assert(isPathWithinBoundary(path, options.boundary))
   // eslint-disable-next-line security/detect-non-literal-fs-filename
   return fs.readFile(path, options)
