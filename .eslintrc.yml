@@ -1,5 +1,6 @@
 extends:
   - plugin:you-dont-need-lodash-underscore/compatible
+  - plugin:you-dont-need-momentjs/recommended
   - plugin:jest/recommended
   - plugin:jest-formatting/recommended
   - plugin:security/recommended
