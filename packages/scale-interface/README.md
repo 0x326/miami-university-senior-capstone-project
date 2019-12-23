@@ -1,6 +1,7 @@
 [Node.js]: https://nodejs.org/en/docs/
 [TypeScript]: https://www.typescriptlang.org/
 [Jest]: https://jestjs.io/
+[goldbergyoni/nodebestpractices]: https://github.com/goldbergyoni/nodebestpractices
 
 # scale-interface
 
@@ -35,3 +36,5 @@ yarn lint --fix
 ## Resources
 
 > See also the 'Reference material' section in [`CONTRIBUTING.md`](../../CONTRIBUTING.md)
+
+- Node.js best practices: [goldbergyoni/nodebestpractices]
