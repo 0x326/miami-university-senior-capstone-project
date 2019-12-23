@@ -1,8 +1,7 @@
-import React from 'react'
-
-import {
-  useHistory,
-} from 'react-router-dom'
+import React, {
+  useState,
+  FormEvent,
+} from 'react'
 
 import {
   TopAppBar,
@@ -32,8 +31,57 @@ import '@material/floating-label/dist/mdc.floating-label.css'
 import '@material/notched-outline/dist/mdc.notched-outline.css'
 import '@material/line-ripple/dist/mdc.line-ripple.css'
 
-function NewExperiment(): JSX.Element {
-  const history = useHistory()
+import {
+  Tooltip,
+} from '@rmwc/tooltip'
+import '@rmwc/tooltip/tooltip.css'
+
+import dayjs, {
+  Dayjs,
+} from 'dayjs'
+
+export interface ExperimentMetaData extends Readonly<{
+  experimentName: string;
+  experimentLeadName: string;
+  startDate: Dayjs;
+  sessionCount: number;
+  bottlesPerCage: number;
+  weighsPerBottle: number;
+}> {}
+
+interface Props {
+  onCancelAction: () => void;
+  onDoneAction: (experimentMetaData: ExperimentMetaData) => void;
+}
+
+function NewExperiment(props: Props): JSX.Element {
+  const {
+    onCancelAction,
+    onDoneAction,
+  } = props
+
+  const [experimentName, setExperimentName] = useState('')
+  const [experimentLeadName, setExperimentLeadName] = useState('')
+  const [startDate, setStartDate] = useState(dayjs().format('YYYY-MM-DD'))
+  const [sessionCount, setSessionCount] = useState('1')
+  const [bottlesPerCage, setBottlesPerCage] = useState('1')
+  const [weighsPerBottle, setWeighsPerBottle] = useState('1')
+
+  const isExperimentNameValid = experimentName.length > 0
+  const isExperimentLeadNameValid = experimentLeadName.length > 0
+  const isStartDateValid = dayjs(startDate).isValid()
+  const isSessionCountValid = Number(sessionCount) > 0
+  const isBottlesPerCageValid = Number(bottlesPerCage) > 0
+  const isWeighsPerBottleValid = Number(weighsPerBottle) > 0
+
+  const areAllFieldsValid = [
+    isExperimentNameValid,
+    isExperimentLeadNameValid,
+    isStartDateValid,
+    isSessionCountValid,
+    isBottlesPerCageValid,
+    isWeighsPerBottleValid,
+  ].every((valid) => valid)
 
   return (
     <>
@@ -42,12 +90,29 @@ function NewExperiment(): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={(): void => history.goBack()}
+              onClick={onCancelAction}
             />
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>
           <TopAppBarSection alignEnd>
-            <TopAppBarActionItem icon="done" />
+            <Tooltip content="Save experiment">
+              <TopAppBarActionItem
+                icon="done"
+                disabled={!areAllFieldsValid}
+                onClick={(): boolean | void => {
+                  if (areAllFieldsValid) {
+                    onDoneAction({
+                      experimentName,
+                      experimentLeadName,
+                      startDate: dayjs(startDate),
+                      sessionCount: Number(sessionCount),
+                      bottlesPerCage: Number(bottlesPerCage),
+                      weighsPerBottle: Number(weighsPerBottle),
+                    })
+                  }
+                }}
+              />
+            </Tooltip>
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>
@@ -55,22 +120,70 @@ function NewExperiment(): JSX.Element {
       <FormField>
         <Grid>
           <GridCell span={4}>
-            <TextField label="Experiment Name" type="text" />
+            <TextField
+              label="Experiment Name"
+              type="text"
+              value={experimentName}
+              invalid={!isExperimentNameValid}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setExperimentName(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Experiment Lead Name" type="text" />
+            <TextField
+              label="Experiment Lead Name"
+              type="text"
+              value={experimentLeadName}
+              invalid={!isExperimentLeadNameValid}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setExperimentLeadName(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Start date" type="date" />
+            <TextField
+              label="Start date"
+              type="date"
+              value={startDate}
+              invalid={!isStartDateValid}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setStartDate(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Number of sessions" type="number" />
+            <TextField
+              label="Number of sessions"
+              type="number"
+              value={sessionCount}
+              invalid={!isSessionCountValid}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setSessionCount(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Bottles per cage" type="number" />
+            <TextField
+              label="Bottles per cage"
+              type="number"
+              value={bottlesPerCage}
+              invalid={!isBottlesPerCageValid}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setBottlesPerCage(event.currentTarget.value)
+              }}
+            />
           </GridCell>
           <GridCell span={4}>
-            <TextField label="Weights per bottle" type="number" />
+            <TextField
+              label="Weighs per bottle"
+              type="number"
+              value={weighsPerBottle}
+              invalid={!isWeighsPerBottleValid}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setWeighsPerBottle(event.currentTarget.value)
+              }}
+            />
           </GridCell>
         </Grid>
       </FormField>
