@@ -19,6 +19,7 @@
 [Auto DevOps]: https://docs.gitlab.com/ee/topics/autodevops/
 [Docker special characters]: https://docs.gitlab.com/ee/user/packages/container_registry/#docker-connection-error
 
+[You don't need loops]: https://github.com/you-dont-need/You-Dont-Need-Loops
 [Git - the simple guide]: https://rogerdudler.github.io/git-guide/
 [Git reference guide]: https://www.digitalocean.com/community/tutorials/how-to-use-git-a-reference-guide
 [Git cheat sheet]: https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet
@@ -269,6 +270,10 @@ git commit -m "Add 'package-name'"
 ```
 
 # Reference material
+
+- Programming guidelines:
+
+  - [You don't need loops] article
 
 - Git
 
