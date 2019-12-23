@@ -4,9 +4,7 @@ Task issue: Closes #TASK_ISSUE_NUMBER
 
 <details>
 <summary>
-
 Creating a merge request for a completed task:
-
 </summary>
 
 > - [ ] Reference the relevant user story issue

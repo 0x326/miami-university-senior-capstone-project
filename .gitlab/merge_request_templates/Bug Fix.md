@@ -2,9 +2,7 @@ Bug issue: Fixes #BUG_ISSUE_NUMBER
 
 <details>
 <summary>
-
 Creating a merge request for a fixed bug:
-
 </summary>
 
 > - [ ] Reference the relevant bug issue
