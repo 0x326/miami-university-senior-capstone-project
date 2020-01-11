@@ -138,6 +138,13 @@ All of this can be done automatically with little configuration using GitLab [Au
 1. Install [Node.js]
 1. If not already included in your Node.js installation, install [Yarn]
 1. Clone this repo using Git
+1. Tell Git to use Unix-like line endings:
+
+  ```bash
+  git config core.autoCrlf input
+  git checkout -- .
+  ```
+
 1. Install dev dependencies:
 
   ```bash
