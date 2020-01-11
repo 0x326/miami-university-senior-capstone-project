@@ -283,6 +283,9 @@ git commit -m "Add 'package-name'"
   - [Book for beginners][Git Tower book]
   - [Book for intermediates][Pro Git book]
   - [Best practices][Git best practices]
+  - Tip: Use `git add -p` to make fine-grained commits.
+    It asks you which portions of your changes you want to add.
+    This is useful when you have multiple changes in the same file that ought to be committed separately.
 
 - Pair programming in modern IDEs:
   [vscode](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare),
