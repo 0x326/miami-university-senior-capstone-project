@@ -53,3 +53,4 @@ yarn analyze-build
 - Using the web browser developer tools:
   [MDN article](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools)
 - Web app best practices: [Google Developers: Web], [web.dev], [goldbergyoni/nodebestpractices] (JavaScript recommendations are still relevant)
+  [Adaptive Loading](https://addyosmani.com/blog/adaptive-loading/)
