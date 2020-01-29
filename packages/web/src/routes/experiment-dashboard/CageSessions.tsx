@@ -29,6 +29,8 @@ interface Props {
   cageNumber: number;
   cageData: CageData;
   bottleTypes: List<BottleType>;
+  isEditable: boolean;
+  onCageDataChange: (newCageData: CageData) => void;
 }
 
 function CageSessions(props: Props): JSX.Element {
@@ -36,6 +38,8 @@ function CageSessions(props: Props): JSX.Element {
     cageNumber,
     cageData,
     bottleTypes,
+    isEditable,
+    onCageDataChange,
   } = props
 
   return (
@@ -48,12 +52,19 @@ function CageSessions(props: Props): JSX.Element {
           />
         )}
       >
-        {cageData.map(({ sessionNumber, cageSessionData }) => (
+        {cageData.map(({ sessionNumber, cageSessionData }, cageDataIndex) => (
           <CageSessionTable
             key={sessionNumber}
             sessionNumber={sessionNumber}
             bottleTypes={bottleTypes}
             data={cageSessionData}
+            isEditable={isEditable}
+            onDataChange={(newData): void => {
+              onCageDataChange(cageData.set(cageDataIndex, {
+                sessionNumber,
+                cageSessionData: newData,
+              }))
+            }}
           />
         ))}
       </CollapsibleList>

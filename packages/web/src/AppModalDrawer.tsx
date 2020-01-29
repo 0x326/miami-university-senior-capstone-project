@@ -13,7 +13,7 @@ import {
 } from '@rmwc/list'
 import {
   useRouteMatch,
-  Link,
+  useHistory,
 } from 'react-router-dom'
 
 import {
@@ -46,6 +46,7 @@ function AppModalDrawer(props: Props): JSX.Element {
       viewId: '',
     },
   }
+  const history = useHistory()
 
   return (
     <Drawer
@@ -63,10 +64,9 @@ function AppModalDrawer(props: Props): JSX.Element {
             <ListItem
               key={routeId}
               activated={routeId === viewId}
+              onClick={(): void => history.push(`/${routeId}`)}
             >
-              <Link to={`/${routeId}`}>
-                {displayName}
-              </Link>
+              {displayName}
             </ListItem>
           ))}
         </RMWCList>

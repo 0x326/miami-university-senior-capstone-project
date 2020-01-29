@@ -1,4 +1,6 @@
-import React from 'react'
+import React, {
+  FormEvent,
+} from 'react'
 
 import {
   List,
@@ -17,6 +19,21 @@ import {
 import '@rmwc/data-table/data-table.css'
 
 import {
+  TextField,
+} from '@rmwc/textfield'
+
+import '@material/textfield/dist/mdc.textfield.css'
+import '@material/floating-label/dist/mdc.floating-label.css'
+import '@material/notched-outline/dist/mdc.notched-outline.css'
+import '@material/line-ripple/dist/mdc.line-ripple.css'
+
+import {
+  FormField,
+} from '@rmwc/formfield'
+
+import '@material/form-field/dist/mdc.form-field.css'
+
+import {
   BottleState,
   BottleType,
 } from '../../types'
@@ -27,16 +44,20 @@ export interface CageSessionData extends List<Readonly<{
 }>> {}
 
 interface Props {
+  isEditable: boolean;
   sessionNumber: number;
   bottleTypes: List<BottleType>;
   data: CageSessionData;
+  onDataChange: (newData: CageSessionData) => void;
 }
 
 function CageSessionTable(props: Props): JSX.Element {
   const {
+    isEditable,
     sessionNumber,
     bottleTypes,
     data,
+    onDataChange,
   } = props
 
   return (
@@ -59,7 +80,7 @@ function CageSessionTable(props: Props): JSX.Element {
             </DataTableRow>
           </DataTableHead>
           <DataTableBody>
-            {data.map(({ rowLabel, rowData }) => (
+            {data.map(({ rowLabel, rowData }, rowIndex) => (
               <DataTableRow
                 key={rowLabel}
               >
@@ -69,7 +90,22 @@ function CageSessionTable(props: Props): JSX.Element {
                     key={bottleType}
                     alignEnd
                   >
-                    {rowData.get(bottleType)}
+                    {isEditable === false && rowData.get(bottleType)}
+                    {isEditable === true && (
+                      <FormField>
+                        <TextField
+                          label={bottleType}
+                          value={rowData.get(bottleType)}
+                          onChange={(event: FormEvent<HTMLInputElement>): void => {
+                            onDataChange(data
+                              .set(rowIndex, {
+                                rowLabel,
+                                rowData: rowData.set(bottleType, Number(event.currentTarget.value)),
+                              }))
+                          }}
+                        />
+                      </FormField>
+                    )}
                   </DataTableCell>
                 ))}
               </DataTableRow>
