@@ -26,6 +26,7 @@
 [Git Tower book]: https://www.git-tower.com/learn/git/ebook/en/command-line/introduction
 [Pro Git book]: https://git-scm.com/book/en/v2
 [Git best practices]: https://www.git-tower.com/learn/git/ebook/en/command-line/appendix/best-practices
+[Git atomic commits]: http://adopteungit.fr/en/methodology/2017/04/26/how-to-do-atomic-commits.html
 [Git command-line]: https://git-scm.com/downloads
 [GitHub Desktop]: https://desktop.github.com/
 [Node.js]: https://nodejs.org/en/download/package-manager/
@@ -293,6 +294,7 @@ git commit -m "Add 'package-name'"
   - Tip: Use `git add -p` to make fine-grained commits.
     It asks you which portions of your changes you want to add.
     This is useful when you have multiple changes in the same file that ought to be committed separately.
+    See [here][Git atomic commits] for more info.
   - Advanced Git tutorials:
     [*Advanced Git for Developers* presented by Lorna Jane Mitchell](https://youtu.be/duqBHik7nRo),
     [*Git and GitHub Advanced* presented by Tim Berglund](https://youtu.be/0SJCYPsef54)
