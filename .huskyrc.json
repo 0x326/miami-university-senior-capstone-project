@@ -1,6 +1,6 @@
 {
   "hooks": {
-    "pre-push": "yarn run lint",
+    "pre-push": "yarn run lint || node scripts/git-hook-failure.js",
     "post-checkout": "yarnhook",
     "post-merge": "yarnhook",
     "post-rewrite": "yarnhook"
