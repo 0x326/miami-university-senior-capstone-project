@@ -19,6 +19,10 @@ import {
 
 import uuid from 'uuid/v4'
 
+import dayjs, {
+  Dayjs,
+} from 'dayjs'
+
 import ExperimentDashboard, {
   ExperimentData,
   CageDisplayOrder,
@@ -32,6 +36,10 @@ import ExperimentsSwitch from './routes/experiments'
 import {
   CageData,
 } from './routes/experiment-dashboard/CageSessions'
+
+import {
+  ExperimentMetaData,
+} from './routes/experiments/new/NewExperimentView'
 
 import {
   BottleType,
@@ -56,6 +64,24 @@ const App: React.FC = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
+  const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>()
+    .withMutations((experimentMap) => experimentMap
+      .set('experiment-1', {
+        experimentName: 'Experiment 1',
+        experimentLeadName: 'Dr. Quinn',
+        startDate: dayjs('2020-01-01'),
+        sessionCount: 20,
+        bottlesPerCage: 2,
+        weighsPerBottle: 2,
+      })
+      .set('experiment-2', {
+        experimentName: 'Experiment 2',
+        experimentLeadName: 'Prof. Stahr',
+        startDate: dayjs('2020-01-07'),
+        sessionCount: 20,
+        bottlesPerCage: 2,
+        weighsPerBottle: 2,
+      })))
   const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>()
     .withMutations((experimentMap) => experimentMap
       .set('experiment-1', Map<RackId, Map<CageId, CageData>>().withMutations((map) => map
