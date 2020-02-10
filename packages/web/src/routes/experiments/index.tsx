@@ -19,8 +19,11 @@ import {
 } from '../../types'
 
 import NoMatch from '../NoMatch'
-
+import {
+  ExperimentId
+} from '../../App'
 import ExperimentList from './ExperimentList'
+import ExperimentMetadataView from './record/ExperimentMetadataView'
 import NewExperiment, {
   ExperimentMetaData,
 } from './new/NewExperimentView'
@@ -29,6 +32,7 @@ interface Props {
   onDrawerOpen: () => void;
   experimentIds: List<RouteId>;
   experiments: RouteMap;
+  experimentMetadata: Map<ExperimentId, ExperimentMetaData>;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
 }
 
@@ -38,6 +42,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     experimentIds,
     experiments,
     onCreateExperiment,
+    experimentMetadata,
   } = props
 
   const { url } = useRouteMatch() || { url: '' }
@@ -58,6 +63,11 @@ function ExperimentsSwitch(props: Props): JSX.Element {
           <NewExperiment
             onCancelAction={(): void => history.push(`${url}/`)}
             onDoneAction={onCreateExperiment}
+          />
+        </Route>
+        <Route exact path={`${url}/record`}>
+          <ExperimentMetadataView
+            experimentMetadata={experimentMetadata.get('experiment-1') as ExperimentMetaData}
           />
         </Route>
         <Route path="*">

@@ -266,6 +266,7 @@ const App: React.FC = () => {
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
             experimentIds={experimentDisplayOrder}
             experiments={experimentDisplayNames}
+            experimentMetadata={experimentMetadata}
             onCreateExperiment={((experimentMetaData): void => {
               const {
                 experimentName,
