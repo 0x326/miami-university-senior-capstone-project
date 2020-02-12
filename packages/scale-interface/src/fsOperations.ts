@@ -183,7 +183,6 @@ async function listExperimentPaths(query: {
 
   if (query.dateStart && query.dateEnd) {
     paths = paths.filter((experimentPath) => {
-      experimentPath = String(experimentPath)
       const dateMatch = /_\d{13}_/.exec(experimentPath)
       if (!dateMatch) throw new Error(`File at experimentPath: ${query.path}/${experimentPath} has improperly formmatted name`)
       else {
@@ -195,7 +194,6 @@ async function listExperimentPaths(query: {
   }
 
   paths = paths.filter((experimentPath) => {
-    experimentPath = String(experimentPath)
     const experimentName: string = query.experimentName ? query.experimentName : ''
     const primaryExperimenter: string = query.primaryExperimenter ? query.primaryExperimenter : ''
     const lMatch = /^(.*?)_/.exec(experimentPath)
