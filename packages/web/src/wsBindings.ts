@@ -27,7 +27,6 @@ let wsListExperiments: null | WebSocket = null
 let wsGetExperiment: null | WebSocket = null
 let wsListPaths: null | WebSocket = null
 let wsWriteExperiment: null | WebSocket = null
-const wsScaleData: null | WebSocket = null
 
 
 function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
