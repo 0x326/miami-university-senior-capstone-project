@@ -1,4 +1,4 @@
-import ws from 'ws'
+import WebSocket from 'ws'
 
 console.log(`
 ////////////////////////////
@@ -9,12 +9,12 @@ console.log(`
 
 const PORT = 8080
 
-const wsGetRoot = new ws(`ws://localhost:${PORT}/get-root-dir`)
-const wsListExperiments = new ws(`ws://localhost:${PORT}/list-experiments`)
-const wsGetExperiment = new ws(`ws://localhost:${PORT}/get-experiment`)
-const wsListPaths = new ws(`ws://localhost:${PORT}/list-experiment-paths`)
-const wsWriteExperiment = new ws(`ws://localhost:${PORT}/write-experiment`)
-const wsScaleData = new ws(`ws://localhost:${PORT}/scale-data`)
+const wsGetRoot = new WebSocket(`ws://localhost:${PORT}/get-root-dir`)
+const wsListExperiments = new WebSocket(`ws://localhost:${PORT}/list-experiments`)
+const wsGetExperiment = new WebSocket(`ws://localhost:${PORT}/get-experiment`)
+const wsListPaths = new WebSocket(`ws://localhost:${PORT}/list-experiment-paths`)
+const wsWriteExperiment = new WebSocket(`ws://localhost:${PORT}/write-experiment`)
+const wsScaleData = new WebSocket(`ws://localhost:${PORT}/scale-data`)
 
 let ROOT_DIR: string | null = null
 
