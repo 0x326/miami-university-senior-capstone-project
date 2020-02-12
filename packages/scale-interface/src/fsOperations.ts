@@ -106,7 +106,7 @@ const ROOT_PATH = '/media/scale_interface_mountpoint'
  * uses Joi to validate form of data.
  * @param data
  */
-async function valid(data: any): Promise<void> {
+function valid(data: any): Promise<void> {
   if (!data) throw new Error('==Data sent to valid() is null')
 
   return schema.validateAsync(data)
