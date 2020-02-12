@@ -30,7 +30,7 @@ let wsWriteExperiment: null | WebSocket = null
 
 
 function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject): void => {
     let socket: WebSocket | null = new WebSocket(path)
     socket.addEventListener('open', () => resolve(socket as WebSocket))
     socket.addEventListener('close', () => {
