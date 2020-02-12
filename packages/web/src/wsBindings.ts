@@ -96,13 +96,13 @@ function socketSend(socket: WebSocket, message: string): Promise<Resp> {
   })
 }
 
-function getRoot(): Promise<any> {
+function getRoot(): Promise<string> {
   if (wsGetRoot === null) {
     throw new Error('Socket is not open')
   }
 
   return socketSend(wsGetRoot, '')
-    .then((response) => response.data)
+    .then((response) => response.data as string)
 }
 
 function listExperiments(path: string, filter?: Experiment): Promise<Array<ExperimentWrapper>> {
