@@ -5,6 +5,8 @@
   "scripts": {
     "start": "echo \"\u001b[33mWARNING: Types will not be checked\u001b[0m\" && parcel watch --target node src/index.ts",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
+    "test": "jest",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "build": "tsc --noEmit && parcel build --target node src/index.ts",
     "analyze-build": "source-map-explorer 'dist/*.js'"
   },
