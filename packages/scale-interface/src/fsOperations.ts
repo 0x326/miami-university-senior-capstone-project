@@ -3,7 +3,11 @@ import path from 'path'
 import _ from 'lodash'
 import Joi from '@hapi/joi'
 
-import * as fs from './fs'
+import {
+  readFile,
+  readdir,
+  writeFile,
+} from './fs'
 
 // workaround for a recursive type definition
 // eq to: type SubLabel = [string, Array<string | SubLabel>]
@@ -118,7 +122,7 @@ function valid(data: any): Promise<void> {
  */
 async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
   const normalized = path.normalize(searchPath)
-  const data = await fs.readFile(normalized, { encoding: 'utf-8', boundary: ROOT_PATH }) as string
+  const data = await readFile(normalized, { encoding: 'utf-8', boundary: ROOT_PATH }) as string
   const parsed = JSON.parse(data)
   await valid(parsed)
   return {
@@ -132,7 +136,7 @@ async function listExperiments(query: { path: string; filter: null | Experiment 
   Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
 
-  const allFiles = await fs.readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
+  const allFiles = await readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
 
   const experiments: Array<ExperimentWrapper> = []
   const proms: Array<Promise<ExperimentWrapper>> = []
@@ -175,7 +179,7 @@ async function listExperimentPaths(query: {
 }): Promise<Array<string | Buffer>> {
   if (!query.path) throw new Error('No path provided')
 
-  let paths = await fs.readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
+  let paths = await readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
 
   if (query.dateStart && query.dateEnd) {
     paths = paths.filter((experimentPath) => {
@@ -219,7 +223,7 @@ async function writeExperiment(wrapped: { path: string; data: Experiment }): Pro
     throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`)
   }
   await valid(wrapped.data)
-  return fs.writeFile(wrapped.path, JSON.stringify(wrapped.data), { encoding: 'utf-8', boundary: ROOT_PATH })
+  return writeFile(wrapped.path, JSON.stringify(wrapped.data), { encoding: 'utf-8', boundary: ROOT_PATH })
 }
 
 export {
