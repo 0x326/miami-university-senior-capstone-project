@@ -16,19 +16,15 @@ const wsListPaths = new WebSocket(`ws://localhost:${PORT}/list-experiment-paths`
 const wsWriteExperiment = new WebSocket(`ws://localhost:${PORT}/write-experiment`)
 const wsScaleData = new WebSocket(`ws://localhost:${PORT}/scale-data`)
 
-let ROOT_DIR: string | null = null
-
 wsGetRoot.addEventListener('message', (event) => {
   console.log('==/get-root-dir')
   console.log(JSON.parse(event.data as string))
-  ROOT_DIR = event.data as string
   console.log('===')
 })
 
 wsListExperiments.addEventListener('message', (event) => {
   console.log('==/list-experiments')
   console.log(JSON.parse(event.data as string))
-  ROOT_DIR = event.data as string
   console.log('===')
 })
 
