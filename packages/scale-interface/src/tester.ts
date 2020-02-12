@@ -83,13 +83,13 @@ wsListPaths.addEventListener('open', () => {
   }))
 })
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////
 // valid name:                                                                                //
 // <experimentName>_ < dateInitialized > _ < primaryExperimenter >                            //
 //                                                                                            //
 // You could also test experiment format validation with this method. Just give it different  //
 // types of invalid experiment data.                                                          //
-////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////
 
 wsWriteExperiment.addEventListener('open', () => {
   wsWriteExperiment.send(JSON.stringify({
