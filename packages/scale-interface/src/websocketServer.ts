@@ -84,7 +84,7 @@ function createServer(
   wssGetExperiment.on('connection', (ws) => {
     ws.on('message', (data) => {
       try {
-        const path: string = String(data)
+        const path = String(data)
         getExperiment(path)
           .then((wrappedExperiment) => {
             ws.send(JSON.stringify({
