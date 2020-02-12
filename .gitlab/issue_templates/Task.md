@@ -1,8 +1,6 @@
 <details>
 <summary>
-
 Creating a task issue:
-
 </summary>
 
 > - [ ] Add the `Task` label

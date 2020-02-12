@@ -1,8 +1,6 @@
 <details>
 <summary>
-
 Creating a bug issue:
-
 </summary>
 
 > - [ ] Add the `Bug` label

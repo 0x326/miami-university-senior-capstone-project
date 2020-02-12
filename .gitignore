@@ -1217,3 +1217,6 @@ DerivedData/
 
 ## Gcc Patch
 /*.gcno
+
+#### Custom Overrides ####
+!/scripts

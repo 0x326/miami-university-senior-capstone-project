@@ -19,12 +19,14 @@
 [Auto DevOps]: https://docs.gitlab.com/ee/topics/autodevops/
 [Docker special characters]: https://docs.gitlab.com/ee/user/packages/container_registry/#docker-connection-error
 
+[You don't need loops]: https://github.com/you-dont-need/You-Dont-Need-Loops
 [Git - the simple guide]: https://rogerdudler.github.io/git-guide/
 [Git reference guide]: https://www.digitalocean.com/community/tutorials/how-to-use-git-a-reference-guide
 [Git cheat sheet]: https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet
 [Git Tower book]: https://www.git-tower.com/learn/git/ebook/en/command-line/introduction
 [Pro Git book]: https://git-scm.com/book/en/v2
 [Git best practices]: https://www.git-tower.com/learn/git/ebook/en/command-line/appendix/best-practices
+[Git atomic commits]: http://adopteungit.fr/en/methodology/2017/04/26/how-to-do-atomic-commits.html
 [Git command-line]: https://git-scm.com/downloads
 [GitHub Desktop]: https://desktop.github.com/
 [Node.js]: https://nodejs.org/en/download/package-manager/
@@ -137,6 +139,13 @@ All of this can be done automatically with little configuration using GitLab [Au
 1. Install [Node.js]
 1. If not already included in your Node.js installation, install [Yarn]
 1. Clone this repo using Git
+1. Tell Git to use Unix-like line endings:
+
+  ```bash
+  git config core.autoCrlf input
+  git checkout -- .
+  ```
+
 1. Install dev dependencies:
 
   ```bash
@@ -270,6 +279,10 @@ git commit -m "Add 'package-name'"
 
 # Reference material
 
+- Programming guidelines:
+
+  - [You don't need loops] article
+
 - Git
 
   - [Quick-start guide][Git - the simple guide]
@@ -278,6 +291,13 @@ git commit -m "Add 'package-name'"
   - [Book for beginners][Git Tower book]
   - [Book for intermediates][Pro Git book]
   - [Best practices][Git best practices]
+  - Tip: Use `git add -p` to make fine-grained commits.
+    It asks you which portions of your changes you want to add.
+    This is useful when you have multiple changes in the same file that ought to be committed separately.
+    See [here][Git atomic commits] for more info.
+  - Advanced Git tutorials:
+    [*Advanced Git for Developers* presented by Lorna Jane Mitchell](https://youtu.be/duqBHik7nRo),
+    [*Git and GitHub Advanced* presented by Tim Berglund](https://youtu.be/0SJCYPsef54)
 
 - Pair programming in modern IDEs:
   [vscode](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare),

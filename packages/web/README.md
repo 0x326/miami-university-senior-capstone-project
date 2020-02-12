@@ -7,6 +7,7 @@
 [RMWC]: https://rmwc.io/
 [Create React App]: https://create-react-app.dev/
 [Jest]: https://jestjs.io/
+[goldbergyoni/nodebestpractices]: https://github.com/goldbergyoni/nodebestpractices
 
 # Web UI
 
@@ -51,4 +52,5 @@ yarn analyze-build
 - Learning Web technology: [MDN]
 - Using the web browser developer tools:
   [MDN article](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools)
-- Web app best practices: [Google Developers: Web], [web.dev]
+- Web app best practices: [Google Developers: Web], [web.dev], [goldbergyoni/nodebestpractices] (JavaScript recommendations are still relevant)
+  [Adaptive Loading](https://addyosmani.com/blog/adaptive-loading/)
