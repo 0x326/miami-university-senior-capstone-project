@@ -229,39 +229,53 @@ function createServer(
   server.on('upgrade', (request, socket, head) => {
     const { pathname } = url.parse(request.url)
     console.log(`Request for ${pathname}`)
-    if (pathname === '/get-root-dir') {
-      console.log(`Creating websocket server to handle ${pathname}`)
-      wssGetRootDir.handleUpgrade(request, socket, head, (ws) => {
-        wssGetRootDir.emit('connection', ws, request)
-      })
-    } else if (pathname === '/list-experiments') {
-      console.log(`Creating websocket server to handle ${pathname}`)
-      wssListExperiments.handleUpgrade(request, socket, head, (ws) => {
-        wssListExperiments.emit('connection', ws, request)
-      })
-    } else if (pathname === '/get-experiment') {
-      console.log(`Creating websocket server to handle ${pathname}`)
-      wssGetExperiment.handleUpgrade(request, socket, head, (ws) => {
-        wssGetExperiment.emit('connection', ws, request)
-      })
-    } else if (pathname === '/list-experiment-paths') {
-      console.log(`Creating websocket server to handle ${pathname}`)
-      wssListPaths.handleUpgrade(request, socket, head, (ws) => {
-        wssListPaths.emit('connection', ws, request)
-      })
-    } else if (pathname === '/write-experiment') {
-      console.log(`Creating websocket server to handle ${pathname}`)
-      wssWriteExperiment.handleUpgrade(request, socket, head, (ws) => {
-        wssWriteExperiment.emit('connection', ws, request)
-      })
-    } else if (pathname === '/scale-data') {
-      console.log(`Creating websocket server to handle ${pathname}`)
-      wssScaleData.handleUpgrade(request, socket, head, (ws) => {
-        wssScaleData.emit('connection', ws, request)
-      })
-    } else {
-      console.log('Request is not a valid path, destroying socket')
-      socket.destroy()
+
+    switch (pathname) {
+      case '/get-root-dir':
+        console.log(`Creating websocket server to handle ${pathname}`)
+        wssGetRootDir.handleUpgrade(request, socket, head, (ws) => {
+          wssGetRootDir.emit('connection', ws, request)
+        })
+        break
+
+      case '/list-experiments':
+        console.log(`Creating websocket server to handle ${pathname}`)
+        wssListExperiments.handleUpgrade(request, socket, head, (ws) => {
+          wssListExperiments.emit('connection', ws, request)
+        })
+        break
+
+      case '/get-experiment':
+        console.log(`Creating websocket server to handle ${pathname}`)
+        wssGetExperiment.handleUpgrade(request, socket, head, (ws) => {
+          wssGetExperiment.emit('connection', ws, request)
+        })
+        break
+
+      case '/list-experiment-paths':
+        console.log(`Creating websocket server to handle ${pathname}`)
+        wssListPaths.handleUpgrade(request, socket, head, (ws) => {
+          wssListPaths.emit('connection', ws, request)
+        })
+        break
+
+      case '/write-experiment':
+        console.log(`Creating websocket server to handle ${pathname}`)
+        wssWriteExperiment.handleUpgrade(request, socket, head, (ws) => {
+          wssWriteExperiment.emit('connection', ws, request)
+        })
+        break
+
+      case '/scale-data':
+        console.log(`Creating websocket server to handle ${pathname}`)
+        wssScaleData.handleUpgrade(request, socket, head, (ws) => {
+          wssScaleData.emit('connection', ws, request)
+        })
+        break
+
+      default:
+        console.log('Request is not a valid path, destroying socket')
+        socket.destroy()
     }
   })
   server.listen(port)
