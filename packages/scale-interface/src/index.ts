@@ -1,6 +1,10 @@
 import { init as sentryInit } from '@sentry/node'
 import yargs from 'yargs'
 
+import {
+  open,
+} from './serial'
+
 import { createServer } from './websocketServer'
 
 const {
@@ -70,5 +74,8 @@ const scaleConfig = {
   parity: argv.bitParity,
 }
 
-
-createServer(argv.port, scaleConfig)
+const deviceConnected = open(scaleConfig.device, scaleConfig)
+  .then(() => {
+    console.log('Scale connected')
+  })
+  .then(() => createServer(argv.port))

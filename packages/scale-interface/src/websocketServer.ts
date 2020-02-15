@@ -5,10 +5,7 @@ import {
   Server as WebSocketServer,
 } from 'ws'
 
-import SerialPort from 'serialport'
-
 import {
-  open,
   subscribe,
   requestBalance,
 } from './serial'
@@ -202,9 +199,6 @@ async function handleWriteExperiment(
 
 function createServer(
   port: number,
-  scaleConfig: SerialPort.OpenOptions & {
-    device: string;
-  },
 ): http.Server {
   const server = http.createServer()
   // different webSocket servers for different actions
@@ -216,16 +210,8 @@ function createServer(
   const wssScaleData = new WebSocketServer({ noServer: true })
 
   wssScaleData.on('connection', (ws) => {
-    const deviceConnected = open(scaleConfig.device, scaleConfig)
-      .then(() => {
-        console.log('Scale connected')
-        ws.send(JSON.stringify({
-          status: Status.OK,
-        } as Resp))
-      })
-
     Promise.all([
-      deviceConnected
+      Promise.resolve()
         .then(() => subscribe())
         .then(async (iterator) => {
           for await (const data of iterator) {
@@ -233,7 +219,7 @@ function createServer(
           }
         }),
 
-      deviceConnected
+      Promise.resolve()
         .then(() => setInterval(() => {
           requestBalance()
             .then((data) => console.log('Received data (by request)', data))
