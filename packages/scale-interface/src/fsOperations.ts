@@ -110,10 +110,19 @@ const ROOT_PATH = '/media/scale_interface_mountpoint'
  * uses Joi to validate form of data.
  * @param data
  */
-function valid(data: Experiment): Promise<void> {
+function valid(data: Experiment): Experiment {
   if (!data) throw new Error('==Data sent to valid() is null')
 
-  return schema.validateAsync(data)
+  const {
+    value,
+    error,
+  } = schema.validate(data)
+
+  if (error !== undefined) {
+    throw error
+  }
+
+  return value
 }
 
 /**
@@ -123,8 +132,7 @@ function valid(data: Experiment): Promise<void> {
 async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
   const normalized = path.normalize(searchPath)
   const data = await readFile(normalized, { encoding: 'utf-8', boundary: ROOT_PATH }) as string
-  const parsed: Experiment = JSON.parse(data)
-  await valid(parsed)
+  const parsed = valid(JSON.parse(data))
   return {
     path: normalized,
     data: parsed,
@@ -220,8 +228,7 @@ async function writeExperiment(wrapped: { path: string; data: Experiment }): Pro
   if (!lMatch || !rMatch || !dateMatch) {
     throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`)
   }
-  await valid(wrapped.data)
-  return writeFile(wrapped.path, JSON.stringify(wrapped.data), { encoding: 'utf-8', boundary: ROOT_PATH })
+  return writeFile(wrapped.path, JSON.stringify(valid(wrapped.data)), { encoding: 'utf-8', boundary: ROOT_PATH })
 }
 
 export {
