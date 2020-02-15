@@ -129,7 +129,9 @@ function valid(data: Experiment): Experiment {
  * @param searchPath
  * @return experiment object parsed from file at absolute path
  */
-async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
+async function getExperiment(
+  searchPath: string,
+): Promise<ExperimentWrapper> {
   const normalized = path.normalize(searchPath)
   const data = await readFile(normalized, { encoding: 'utf-8', boundary: ROOT_PATH }) as string
   const parsed = valid(JSON.parse(data))
@@ -140,7 +142,12 @@ async function getExperiment(searchPath: string): Promise<ExperimentWrapper> {
 }
 
 
-async function listExperiments(query: { path: string; filter: null | Experiment }):
+async function listExperiments(
+  query: {
+    path: string;
+    filter: null | Experiment;
+  },
+):
   Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
 
@@ -178,13 +185,15 @@ async function listExperiments(query: { path: string; filter: null | Experiment 
  * @param query
  * @return a list of file paths matching query
  */
-async function listExperimentPaths(query: {
-  path: string;
-  experimentName: string;
-  primaryExperimenter: string;
-  dateStart: Date;
-  dateEnd: Date;
-}): Promise<Array<string>> {
+async function listExperimentPaths(
+  query: {
+    path: string;
+    experimentName: string;
+    primaryExperimenter: string;
+    dateStart: Date;
+    dateEnd: Date;
+  },
+): Promise<Array<string>> {
   if (!query.path) throw new Error('No path provided')
 
   let paths = await readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
@@ -220,7 +229,12 @@ async function listExperimentPaths(query: {
  * simply writes stringified experiment json to file at path.
  * @param wrapped
  */
-async function writeExperiment(wrapped: { path: string; data: Experiment }): Promise<void> {
+async function writeExperiment(
+  wrapped: {
+    path: string;
+    data: Experiment;
+  },
+): Promise<void> {
   // validate file path
   const lMatch = /^.*?_/.exec(wrapped.path)
   const rMatch = /_[^_]*?$/.exec(wrapped.path)

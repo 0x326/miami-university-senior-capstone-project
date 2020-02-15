@@ -15,7 +15,10 @@ interface FSBoundaryOptions {
   boundary: Path;
 }
 
-function isPathWithinBoundary(path: Path, boundary: Path): boolean {
+function isPathWithinBoundary(
+  path: Path,
+  boundary: Path,
+): boolean {
   const [absolutePath, absoluteBoundary] = [resolve(path), resolve(boundary)]
   const pathRelativeToBoundary = relative(absoluteBoundary, absolutePath)
   return pathRelativeToBoundary.startsWith('..') === false
