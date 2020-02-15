@@ -132,7 +132,10 @@ function valid(data: Experiment): Experiment {
 async function getExperiment(
   searchPath: string,
 ): Promise<ExperimentWrapper> {
-  const data = await readFile(searchPath, { encoding: 'utf-8', boundary: ROOT_PATH })
+  const data = await readFile(searchPath, {
+    encoding: 'utf-8',
+    boundary: ROOT_PATH,
+  })
   const parsed = valid(JSON.parse(String(data)))
   return {
     path: searchPath,
@@ -150,7 +153,10 @@ async function listExperiments(
   Promise<Array<ExperimentWrapper>> {
   if (!query.path) throw new Error('No query path provided')
 
-  const allFiles = await readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
+  const allFiles = await readdir(query.path, {
+    encoding: 'utf-8',
+    boundary: ROOT_PATH,
+  })
 
   const experiments: Array<ExperimentWrapper> = []
   const proms: Array<Promise<ExperimentWrapper>> = []
@@ -195,7 +201,10 @@ async function listExperimentPaths(
 ): Promise<Array<string>> {
   if (!query.path) throw new Error('No path provided')
 
-  let paths = await readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
+  let paths = await readdir(query.path, {
+    encoding: 'utf-8',
+    boundary: ROOT_PATH,
+  })
 
   if (query.dateStart && query.dateEnd) {
     paths = paths.filter((experimentPath) => {
@@ -238,7 +247,10 @@ async function writeExperiment(
   if (!lMatch || !rMatch || !dateMatch) {
     throw new Error(`Attempted to write experiment data with invalid path name: ${wrapped.path}`)
   }
-  return writeFile(wrapped.path, JSON.stringify(valid(wrapped.data)), { encoding: 'utf-8', boundary: ROOT_PATH })
+  return writeFile(wrapped.path, JSON.stringify(valid(wrapped.data)), {
+    encoding: 'utf-8',
+    boundary: ROOT_PATH,
+  })
 }
 
 export {
