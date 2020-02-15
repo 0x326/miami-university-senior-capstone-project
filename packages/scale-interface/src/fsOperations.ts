@@ -151,8 +151,7 @@ async function listExperiments(
     path: string;
     filter: null | Experiment;
   },
-):
-  Promise<Array<ExperimentWrapper>> {
+): Promise<Array<ExperimentWrapper>> {
   if (!query.path) {
     throw new Error('No query path provided')
   }
