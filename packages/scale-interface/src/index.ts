@@ -62,19 +62,13 @@ const {
     default: 8080,
   })
 
-export interface ScaleConfig {
-  device: string;
-  baudRate: 1200 | 2400 | 4800 | 9600;
-  dataBits: 7 | 8;
-  bitParity: 'none' | 'even' | 'odd';
-}
 
 const scaleConfig = {
   device: argv.device,
   baudRate: argv.baudRate,
   dataBits: argv.dataBits,
-  bitParity: argv.bitParity,
-} as ScaleConfig
+  parity: argv.bitParity,
+}
 
 
 createServer(argv.port, scaleConfig)

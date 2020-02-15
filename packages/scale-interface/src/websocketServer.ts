@@ -5,6 +5,8 @@ import {
   Server as WebSocketServer,
 } from 'ws'
 
+import SerialPort from 'serialport'
+
 import {
   open,
   subscribe,
@@ -20,8 +22,6 @@ import {
   listExperimentPaths,
   ExperimentWrapper,
 } from './fsOperations'
-
-import { ScaleConfig } from '.'
 
 enum Status {
   OK = 'OK',
@@ -202,7 +202,9 @@ async function handleWriteExperiment(
 
 function createServer(
   port: number,
-  scaleConfig: ScaleConfig,
+  scaleConfig: SerialPort.OpenOptions & {
+    device: string;
+  },
 ): http.Server {
   const server = http.createServer()
   // different webSocket servers for different actions
@@ -214,11 +216,7 @@ function createServer(
   const wssScaleData = new WebSocketServer({ noServer: true })
 
   wssScaleData.on('connection', (ws) => {
-    const deviceConnected = open(scaleConfig.device, {
-      baudRate: scaleConfig.baudRate,
-      dataBits: scaleConfig.dataBits,
-      parity: scaleConfig.bitParity,
-    })
+    const deviceConnected = open(scaleConfig.device, scaleConfig)
       .then(() => {
         console.log('Scale connected')
         ws.send(JSON.stringify({
