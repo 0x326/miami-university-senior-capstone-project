@@ -1,7 +1,9 @@
 import http from 'http'
 import url from 'url'
 
-import * as WebSocket from 'ws'
+import {
+  Server as WebSocketServer,
+} from 'ws'
 
 import {
   open,
@@ -38,12 +40,12 @@ function createServer(
 ): http.Server {
   const server = http.createServer()
   // different webSocket servers for different actions
-  const wssGetRootDir = new WebSocket.Server({ noServer: true })
-  const wssListExperiments = new WebSocket.Server({ noServer: true })
-  const wssGetExperiment = new WebSocket.Server({ noServer: true })
-  const wssListPaths = new WebSocket.Server({ noServer: true })
-  const wssWriteExperiment = new WebSocket.Server({ noServer: true })
-  const wssScaleData = new WebSocket.Server({ noServer: true })
+  const wssGetRootDir = new WebSocketServer({ noServer: true })
+  const wssListExperiments = new WebSocketServer({ noServer: true })
+  const wssGetExperiment = new WebSocketServer({ noServer: true })
+  const wssListPaths = new WebSocketServer({ noServer: true })
+  const wssWriteExperiment = new WebSocketServer({ noServer: true })
+  const wssScaleData = new WebSocketServer({ noServer: true })
 
   wssGetRootDir.on('connection', (ws) => {
     ws.on('message', () => {
