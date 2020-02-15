@@ -13,6 +13,7 @@ import {
 
 import {
   ROOT_PATH,
+  Experiment,
   listExperiments,
   getExperiment,
   writeExperiment,
@@ -56,7 +57,12 @@ function handleGetRootDir(): Promise<Resp> {
   })
 }
 
-async function handleListExperiments(data): Promise<Resp> {
+async function handleListExperiments(
+  data: {
+    path: string;
+    filter: null | Experiment;
+  },
+): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
     try {
@@ -82,7 +88,9 @@ async function handleListExperiments(data): Promise<Resp> {
   }
 }
 
-async function handleGetExperiment(data): Promise<Resp> {
+async function handleGetExperiment(
+  data: string,
+): Promise<Resp> {
   try {
     const path = String(data)
     try {
@@ -107,7 +115,15 @@ async function handleGetExperiment(data): Promise<Resp> {
   }
 }
 
-async function handleListExperimentPaths(data): Promise<Resp> {
+async function handleListExperimentPaths(
+  data: {
+    path: string;
+    experimentName: string;
+    primaryExperimenter: string;
+    dateStart: Date;
+    dateEnd: Date;
+  },
+): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
     try {
@@ -133,7 +149,12 @@ async function handleListExperimentPaths(data): Promise<Resp> {
   }
 }
 
-async function handleWriteExperiment(data): Promise<Resp> {
+async function handleWriteExperiment(
+  data: {
+    path: string;
+    data: Experiment;
+  },
+): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
     if (parsed.path && parsed.data) {
