@@ -162,20 +162,13 @@ async function listExperiments(
     boundary: ROOT_PATH,
   })
 
-  const experiments: Array<ExperimentWrapper> = []
-  const proms: Array<Promise<ExperimentWrapper>> = []
-  allFiles.map((experimentPath) => proms.push(getExperiment(path.join(query.path, experimentPath))))
-  Promise.all(proms)
-    .then((wrappedExperiments) => {
-      for (const wrappedExperiment of wrappedExperiments) {
-        if (!query.filter) {
-          experiments.push(wrappedExperiment)
-        }
-        if (query.filter && _.isMatch(wrappedExperiment.data, query.filter)) {
-            experiments.push(wrappedExperiment)
-        }
-      }
-    })
+  const experiments: Array<ExperimentWrapper> = await Promise.all(allFiles
+    .map((experimentPath) => getExperiment(path.join(query.path, experimentPath))))
+
+  if (query.filter !== null) {
+    return experiments.filter((wrappedExperiment) => _.isMatch(wrappedExperiment.data, query.filter))
+  }
+
   return experiments
 }
 
