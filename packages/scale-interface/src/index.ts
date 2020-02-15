@@ -66,16 +66,26 @@ const {
     default: 8080,
   })
 
-
-const scaleConfig = {
-  device: argv.device,
-  baudRate: argv.baudRate,
-  dataBits: argv.dataBits,
-  parity: argv.bitParity,
+const {
+  device,
+  'baud-rate': baudRate,
+  'data-bits': dataBits,
+  'bit-parity': bitParity,
+  port,
+} = argv as {
+  device: string;
+  'baud-rate': 1200 | 2400 | 4800 | 9600;
+  'data-bits': 7 | 8;
+  'bit-parity': 'none' | 'even' | 'odd';
+  port: number;
 }
 
-const deviceConnected = open(scaleConfig.device, scaleConfig)
+const deviceConnected = open(device, {
+  baudRate,
+  dataBits,
+  parity: bitParity,
+})
   .then(() => {
     console.log('Scale connected')
   })
-  .then(() => createServer(argv.port))
+  .then(() => createServer(port))
