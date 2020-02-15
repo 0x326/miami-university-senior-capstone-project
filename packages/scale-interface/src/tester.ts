@@ -18,37 +18,37 @@ const wsScaleData = new WebSocket(`ws://localhost:${PORT}/scale-data`)
 
 wsGetRoot.addEventListener('message', (event) => {
   console.log('==/get-root-dir')
-  console.log(JSON.parse(event.data as string))
+  console.log(JSON.parse(String(event.data)))
   console.log('===')
 })
 
 wsListExperiments.addEventListener('message', (event) => {
   console.log('==/list-experiments')
-  console.log(JSON.parse(event.data as string))
+  console.log(JSON.parse(String(event.data)))
   console.log('===')
 })
 
 wsGetExperiment.addEventListener('message', (event) => {
   console.log('==/get-experiment')
-  console.log(JSON.parse(event.data as string))
+  console.log(JSON.parse(String(event.data)))
   console.log('===')
 })
 
 wsListPaths.addEventListener('message', (event) => {
   console.log('==/list-paths')
-  console.log(JSON.parse(event.data as string))
+  console.log(JSON.parse(String(event.data)))
   console.log('===')
 })
 
 wsWriteExperiment.addEventListener('message', (event) => {
   console.log('==/write-experiment')
-  console.log(JSON.parse(event.data as string))
+  console.log(JSON.parse(String(event.data)))
   console.log('===')
 })
 
 wsScaleData.addEventListener('message', (event) => {
   console.log('==/scale-data')
-  console.log(JSON.parse(event.data as string))
+  console.log(JSON.parse(String(event.data)))
   console.log('===')
 })
 

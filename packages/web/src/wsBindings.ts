@@ -102,7 +102,7 @@ function getRoot(): Promise<string> {
   }
 
   return socketSend(wsGetRoot, '')
-    .then((response) => response.data as string)
+    .then((response) => String(response.data))
 }
 
 function listExperiments(path: string, filter?: Experiment): Promise<Array<ExperimentWrapper>> {
@@ -139,7 +139,7 @@ function writeExperiment(data: Experiment, path: string): Promise<string> {
   }
 
   return socketSend(wsWriteExperiment, JSON.stringify({ path, data }))
-    .then((response) => response.message as string)
+    .then((response) => String(response.message))
 }
 
 
