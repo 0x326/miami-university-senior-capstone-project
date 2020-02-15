@@ -57,11 +57,13 @@ function handleGetRootDir(): Promise<Resp> {
   })
 }
 
+export interface ListExperimentsOptions {
+  path: string;
+  filter: null | Experiment;
+}
+
 async function handleListExperiments(
-  data: {
-    path: string;
-    filter: null | Experiment;
-  },
+  data: ListExperimentsOptions,
 ): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
@@ -88,8 +90,10 @@ async function handleListExperiments(
   }
 }
 
+export type GetExperimentOptions = string
+
 async function handleGetExperiment(
-  data: string,
+  data: GetExperimentOptions,
 ): Promise<Resp> {
   try {
     const path = String(data)
@@ -115,14 +119,16 @@ async function handleGetExperiment(
   }
 }
 
+export interface ListExperimentPathsOptions {
+  path: string;
+  experimentName: string;
+  primaryExperimenter: string;
+  dateStart: Date;
+  dateEnd: Date;
+}
+
 async function handleListExperimentPaths(
-  data: {
-    path: string;
-    experimentName: string;
-    primaryExperimenter: string;
-    dateStart: Date;
-    dateEnd: Date;
-  },
+  data: ListExperimentPathsOptions,
 ): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
@@ -149,11 +155,13 @@ async function handleListExperimentPaths(
   }
 }
 
+export interface WriteExperimentOptions {
+  path: string;
+  data: Experiment;
+}
+
 async function handleWriteExperiment(
-  data: {
-    path: string;
-    data: Experiment;
-  },
+  data: WriteExperimentOptions,
 ): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
