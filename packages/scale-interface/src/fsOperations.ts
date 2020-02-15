@@ -132,11 +132,10 @@ function valid(data: Experiment): Experiment {
 async function getExperiment(
   searchPath: string,
 ): Promise<ExperimentWrapper> {
-  const normalized = path.normalize(searchPath)
-  const data = await readFile(normalized, { encoding: 'utf-8', boundary: ROOT_PATH })
+  const data = await readFile(searchPath, { encoding: 'utf-8', boundary: ROOT_PATH })
   const parsed = valid(JSON.parse(String(data)))
   return {
-    path: normalized,
+    path: searchPath,
     data: parsed,
   }
 }
