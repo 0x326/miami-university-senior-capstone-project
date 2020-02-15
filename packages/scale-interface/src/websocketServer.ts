@@ -56,112 +56,118 @@ function handleGetRootDir(): Promise<Resp> {
   })
 }
 
-function handleListExperiments(data): Promise<Resp> {
+async function handleListExperiments(data): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
-    return listExperiments(parsed)
-      .then((wrappedExperiments) => ({
+    try {
+      const wrappedExperiments = await listExperiments(parsed)
+      return {
         status: Status.OK,
         data: wrappedExperiments,
-      }), (error) => {
-        console.log(`listExperiments resulted in error: ${error} when given query:`)
-        console.log(parsed)
-        return {
-          status: Status.FAIL,
-          message: error.toString(),
-        }
-      })
+      }
+    } catch (error) {
+      console.log(`listExperiments resulted in error: ${error} when given query:`)
+      console.log(parsed)
+      return {
+        status: Status.FAIL,
+        message: error.toString(),
+      }
+    }
   } catch (error) {
     console.log(error)
-    return Promise.resolve({
+    return {
       status: Status.FAIL,
       message: error.toString(),
-    })
+    }
   }
 }
 
-function handleGetExperiment(data): Promise<Resp> {
+async function handleGetExperiment(data): Promise<Resp> {
   try {
     const path = String(data)
-    return getExperiment(path)
-      .then((wrappedExperiment) => ({
+    try {
+      const wrappedExperiment = await getExperiment(path)
+      return {
         status: Status.OK,
         data: wrappedExperiment,
-      }), (error) => {
-        console.log(`getExperiment on path ${path} resulted in error ${error}`)
-        return {
-          status: Status.FAIL,
-          message: error.toString(),
-        }
-      })
+      }
+    } catch (error) {
+      console.log(`getExperiment on path ${path} resulted in error ${error}`)
+      return {
+        status: Status.FAIL,
+        message: error.toString(),
+      }
+    }
   } catch (error) {
     console.log(error)
-    return Promise.resolve({
+    return {
       status: Status.FAIL,
       message: error.toString(),
-    })
+    }
   }
 }
 
-function handleListExperimentPaths(data): Promise<Resp> {
+async function handleListExperimentPaths(data): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
-    return listExperimentPaths(parsed)
-      .then((paths) => ({
+    try {
+      const paths = await listExperimentPaths(parsed)
+      return {
         status: Status.OK,
         data: paths,
-      }), (error) => {
-        console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
-        console.log(parsed)
-        return {
-          status: Status.FAIL,
-          message: error.toString(),
-        }
-      })
+      }
+    } catch (error) {
+      console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
+      console.log(parsed)
+      return {
+        status: Status.FAIL,
+        message: error.toString(),
+      }
+    }
   } catch (error) {
     console.log(error)
-    return Promise.resolve({
+    return {
       status: Status.FAIL,
       message: error.toString(),
-    })
+    }
   }
 }
 
-function handleWriteExperiment(data): Promise<Resp> {
+async function handleWriteExperiment(data): Promise<Resp> {
   try {
     const parsed = JSON.parse(String(data))
     if (parsed.path && parsed.data) {
       // await valid(JSON.parse(parsed.String(data)))
-      return writeExperiment(parsed)
-        .then(() => {
-          console.log(`==Saved the following object at ${parsed.path}`)
-          console.log(parsed.data)
-          return {
-            status: Status.OK,
-            message: `Saved experiment at ${parsed.path}`,
-          }
-        }, (error) => {
-          console.log(error)
-          return {
-            status: Status.FAIL,
-            message: error.toString(),
-          }
-        })
+      try {
+        await writeExperiment(parsed)
+        console.log(`==Saved the following object at ${parsed.path}`)
+        console.log(parsed.data)
+        return {
+          status: Status.OK,
+          message: `Saved experiment at ${parsed.path}`,
+        }
+      } catch (error) {
+        console.log(error)
+        return {
+          status: Status.FAIL,
+          message: error.toString(),
+        }
+      }
     } else {
       console.log('==Passed object is missing either a path or data field')
       console.log(parsed)
-      return Promise.resolve({
+      return {
         status: Status.FAIL,
         message: 'Need both a path and data',
-      })
+      }
     }
   } catch (error) {
     console.log('==Do not write badly formatted object to disk')
     console.log(error)
-    return Promise.resolve({
+    return {
       status: Status.FAIL,
       message: error.toString(),
-    })
+    }
   }
 }
 
