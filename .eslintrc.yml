@@ -22,6 +22,10 @@ rules:
     - error
     - never
 
+  curly:
+    - error
+    - all
+
   no-mixed-operators:
     - error
     - allowSamePrecedence: true
