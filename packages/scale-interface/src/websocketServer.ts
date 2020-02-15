@@ -25,7 +25,7 @@ enum Status {
   FAIL = 'FAIL'
 }
 
-export interface Resp {
+export interface Response {
   status: Status;
   data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
   message?: string;
@@ -47,7 +47,7 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
   return webSocketServer
 }
 
-function handleGetRootDir(): Promise<Resp> {
+function handleGetRootDir(): Promise<Response> {
   return Promise.resolve({
     status: Status.OK,
     data: ROOT_PATH,
@@ -61,7 +61,7 @@ export interface ListExperimentsOptions {
 
 async function handleListExperiments(
   data: ListExperimentsOptions,
-): Promise<Resp> {
+): Promise<Response> {
   try {
     const parsed = JSON.parse(String(data))
     try {
@@ -91,7 +91,7 @@ export type GetExperimentOptions = string
 
 async function handleGetExperiment(
   data: GetExperimentOptions,
-): Promise<Resp> {
+): Promise<Response> {
   try {
     const path = String(data)
     try {
@@ -126,7 +126,7 @@ export interface ListExperimentPathsOptions {
 
 async function handleListExperimentPaths(
   data: ListExperimentPathsOptions,
-): Promise<Resp> {
+): Promise<Response> {
   try {
     const parsed = JSON.parse(String(data))
     try {
@@ -159,7 +159,7 @@ export interface WriteExperimentOptions {
 
 async function handleWriteExperiment(
   data: WriteExperimentOptions,
-): Promise<Resp> {
+): Promise<Response> {
   try {
     const parsed = JSON.parse(String(data))
     if (parsed.path && parsed.data) {

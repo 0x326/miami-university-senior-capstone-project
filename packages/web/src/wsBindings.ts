@@ -5,7 +5,7 @@ import {
 
 import {
   Status,
-  Resp,
+  Response,
 } from '../../scale-interface/src/websocketServer'
 
 const PORT = 8081
@@ -82,12 +82,12 @@ function disconnect(): void {
   sockets.map((socket) => socket !== null && socket.close())
 }
 
-function socketSend(socket: WebSocket, message: string): Promise<Resp> {
+function socketSend(socket: WebSocket, message: string): Promise<Response> {
   return new Promise((resolve, reject): void => {
     socket.addEventListener('message', (event) => {
       const { data } = event
       // Trust that objects from `scale-interface` implement Resp
-      const parsed: Resp = JSON.parse(data)
+      const parsed: Response = JSON.parse(data)
       if (parsed.status === Status.FAIL) reject(new Error(parsed.message))
       resolve(parsed)
     })
