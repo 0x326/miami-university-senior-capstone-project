@@ -198,9 +198,9 @@ function parse(data: string): Measurement | ActionReply {
   }
 }
 
-function subscribe(includeActionReplies: true): AsyncIterable<Measurement | ActionReply>
-function subscribe(includeActionReplies?: false): AsyncIterable<Measurement>
-async function* subscribe(includeActionReplies = false): AsyncIterable<Measurement | ActionReply> {
+function subscribe(includeActionReplies: true): AsyncGenerator<Measurement | ActionReply>
+function subscribe(includeActionReplies?: false): AsyncGenerator<Measurement>
+async function* subscribe(includeActionReplies = false): AsyncGenerator<Measurement | ActionReply> {
   if (serialPort === null) {
     throw new Error('Port is not open')
   }
