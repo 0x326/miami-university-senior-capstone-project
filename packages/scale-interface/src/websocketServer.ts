@@ -33,6 +33,22 @@ export interface Resp {
   message?: string;
 }
 
+function createWebSocketHandler<HandlerData, HandlerResponse>(
+  handler: (data: HandlerData) => Promise<HandlerResponse>,
+): WebSocketServer {
+  const webSocketServer = new WebSocketServer({ noServer: true })
+
+  webSocketServer
+    .on('connection', (ws) => ws
+      .on('message', (data: HandlerData) => {
+        handler(data)
+          .then((response) => ws
+            .send(JSON.stringify(response)))
+      }))
+
+  return webSocketServer
+}
+
 function handleGetRootDir(): Promise<Resp> {
   return Promise.resolve({
     status: Status.OK,
@@ -159,43 +175,13 @@ function createServer(
 ): http.Server {
   const server = http.createServer()
   // different webSocket servers for different actions
-  const wssGetRootDir = new WebSocketServer({ noServer: true })
-  const wssListExperiments = new WebSocketServer({ noServer: true })
-  const wssGetExperiment = new WebSocketServer({ noServer: true })
-  const wssListPaths = new WebSocketServer({ noServer: true })
-  const wssWriteExperiment = new WebSocketServer({ noServer: true })
+  const wssGetRootDir = createWebSocketHandler(handleGetRootDir)
+  const wssListExperiments = createWebSocketHandler(handleListExperiments)
+  const wssGetExperiment = createWebSocketHandler(handleGetExperiment)
+  const wssListPaths = createWebSocketHandler(handleListExperimentPaths)
+  const wssWriteExperiment = createWebSocketHandler(handleWriteExperiment)
   const wssScaleData = new WebSocketServer({ noServer: true })
 
-  wssGetRootDir.on('connection', (ws) => {
-    ws.on('message', () => {
-      handleGetRootDir()
-        .then((response) => ws.send(JSON.stringify(response)))
-    })
-  })
-  wssListExperiments.on('connection', (ws) => {
-    ws.on('message', (data) => {
-      handleListExperiments(data)
-        .then((response) => ws.send(JSON.stringify(response)))
-    })
-  })
-  wssGetExperiment.on('connection', (ws) => {
-    ws.on('message', (data) => {
-      handleGetExperiment(data)
-        .then((response) => ws.send(JSON.stringify(response)))
-    })
-  })
-  wssListPaths.on('connection', (ws) => {
-    ws.on('message', (data) => {
-      handleListExperimentPaths(data)
-        .then((response) => ws.send(JSON.stringify(response)))
-    })
-  })
-  wssWriteExperiment.on('connection', (ws) => {
-    ws.on('message', (data) => {
-      handleWriteExperiment(data)
-        .then((response) => ws.send(JSON.stringify(response)))
-    })
-  })
   wssScaleData.on('connection', (ws) => {
     const deviceConnected = open(scaleConfig.device, {
       baudRate: scaleConfig.baudRate,
