@@ -63,8 +63,7 @@ function handleListExperiments(data): Promise<Resp> {
       .then((wrappedExperiments) => ({
         status: Status.OK,
         data: wrappedExperiments,
-      }))
-      .catch((error) => {
+      }), (error) => {
         console.log(`listExperiments resulted in error: ${error} when given query:`)
         console.log(parsed)
         return {
@@ -88,8 +87,7 @@ function handleGetExperiment(data): Promise<Resp> {
       .then((wrappedExperiment) => ({
         status: Status.OK,
         data: wrappedExperiment,
-      }))
-      .catch((error) => {
+      }), (error) => {
         console.log(`getExperiment on path ${path} resulted in error ${error}`)
         return {
           status: Status.FAIL,
@@ -112,8 +110,7 @@ function handleListExperimentPaths(data): Promise<Resp> {
       .then((paths) => ({
         status: Status.OK,
         data: paths,
-      }))
-      .catch((error) => {
+      }), (error) => {
         console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
         console.log(parsed)
         return {
@@ -143,8 +140,7 @@ function handleWriteExperiment(data): Promise<Resp> {
             status: Status.OK,
             message: `Saved experiment at ${parsed.path}`,
           }
-        })
-        .catch((error) => {
+        }, (error) => {
           console.log(error)
           return {
             status: Status.FAIL,
