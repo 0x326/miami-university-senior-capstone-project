@@ -33,6 +33,125 @@ export interface Resp {
   message?: string;
 }
 
+function handleGetRootDir(): Resp {
+  return {
+    status: Status.OK,
+    data: ROOT_PATH,
+  }
+}
+
+function handleListExperiments(data): Promise<Resp> {
+  try {
+    const parsed = JSON.parse(String(data))
+    return listExperiments(parsed)
+      .then((wrappedExperiments) => ({
+        status: Status.OK,
+        data: wrappedExperiments,
+      }))
+      .catch((error) => {
+        console.log(`listExperiments resulted in error: ${error} when given query:`)
+        console.log(parsed)
+        return {
+          status: Status.FAIL,
+          message: error.toString(),
+        }
+      })
+  } catch (error) {
+    console.log(error)
+    return Promise.resolve({
+      status: Status.FAIL,
+      message: error.toString(),
+    })
+  }
+}
+
+function handleGetExperiment(data): Promise<Resp> {
+  try {
+    const path = String(data)
+    return getExperiment(path)
+      .then((wrappedExperiment) => ({
+        status: Status.OK,
+        data: wrappedExperiment,
+      }))
+      .catch((error) => {
+        console.log(`getExperiment on path ${path} resulted in error ${error}`)
+        return {
+          status: Status.FAIL,
+          message: error.toString(),
+        }
+      })
+  } catch (error) {
+    console.log(error)
+    return Promise.resolve({
+      status: Status.FAIL,
+      message: error.toString(),
+    })
+  }
+}
+
+function handleListExperimentPaths(data): Promise<Resp> {
+  try {
+    const parsed = JSON.parse(String(data))
+    return listExperimentPaths(parsed)
+      .then((paths) => ({
+        status: Status.OK,
+        data: paths,
+      }))
+      .catch((error) => {
+        console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
+        console.log(parsed)
+        return {
+          status: Status.FAIL,
+          message: error.toString(),
+        }
+      })
+  } catch (error) {
+    console.log(error)
+    return Promise.resolve({
+      status: Status.FAIL,
+      message: error.toString(),
+    })
+  }
+}
+
+function handleWriteExperiment(data): Promise<Resp> {
+  try {
+    const parsed = JSON.parse(String(data))
+    if (parsed.path && parsed.data) {
+      // await valid(JSON.parse(parsed.String(data)))
+      return writeExperiment(parsed)
+        .then(() => {
+          console.log(`==Saved the following object at ${parsed.path}`)
+          console.log(parsed.data)
+          return {
+            status: Status.OK,
+            message: `Saved experiment at ${parsed.path}`,
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          return {
+            status: Status.FAIL,
+            message: error.toString(),
+          }
+        })
+    } else {
+      console.log('==Passed object is missing either a path or data field')
+      console.log(parsed)
+      return Promise.resolve({
+        status: Status.FAIL,
+        message: 'Need both a path and data',
+      })
+    }
+  } catch (error) {
+    console.log('==Do not write badly formatted object to disk')
+    console.log(error)
+    return Promise.resolve({
+      status: Status.FAIL,
+      message: error.toString(),
+    })
+  }
+}
 
 function createServer(
   port: number,
@@ -49,133 +168,31 @@ function createServer(
 
   wssGetRootDir.on('connection', (ws) => {
     ws.on('message', () => {
-      ws.send(JSON.stringify({
-        status: Status.OK,
-        data: ROOT_PATH,
-      } as Resp))
+      ws.send(JSON.stringify(handleGetRootDir()))
     })
   })
   wssListExperiments.on('connection', (ws) => {
     ws.on('message', (data) => {
-      try {
-        const parsed = JSON.parse(String(data))
-        listExperiments(parsed)
-          .then((wrappedExperiments) => {
-            ws.send(JSON.stringify({
-              status: Status.OK,
-              data: wrappedExperiments,
-            } as Resp))
-          })
-          .catch((error) => {
-            ws.send(JSON.stringify({
-              status: Status.FAIL,
-              message: error.toString(),
-            } as Resp))
-            console.log(`listExperiments resulted in error: ${error} when given query:`)
-            console.log(parsed)
-          })
-      } catch (error) {
-        ws.send(JSON.stringify({
-          status: Status.FAIL,
-          message: error.toString(),
-        } as Resp))
-        console.log(error)
-      }
+      handleListExperiments(data)
+        .then((response) => ws.send(JSON.stringify(response)))
     })
   })
   wssGetExperiment.on('connection', (ws) => {
     ws.on('message', (data) => {
-      try {
-        const path = String(data)
-        getExperiment(path)
-          .then((wrappedExperiment) => {
-            ws.send(JSON.stringify({
-              status: Status.OK,
-              data: wrappedExperiment,
-            } as Resp))
-          })
-          .catch((error) => {
-            ws.send(JSON.stringify({
-              status: Status.FAIL,
-              message: error.toString(),
-            } as Resp))
-            console.log(`getExperiment on path ${path} resulted in error ${error}`)
-          })
-      } catch (error) {
-        ws.send(JSON.stringify({
-          status: Status.FAIL,
-          message: error.toString(),
-        } as Resp))
-        console.log(error)
-      }
+      handleGetExperiment(data)
+        .then((response) => ws.send(JSON.stringify(response)))
     })
   })
   wssListPaths.on('connection', (ws) => {
     ws.on('message', (data) => {
-      try {
-        const parsed = JSON.parse(String(data))
-        listExperimentPaths(parsed)
-          .then((paths) => {
-            ws.send(JSON.stringify({
-              status: Status.OK,
-              data: paths,
-            } as Resp))
-          })
-          .catch((error) => {
-            ws.send(JSON.stringify({
-              status: Status.FAIL,
-              message: error.toString(),
-            } as Resp))
-            console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
-            console.log(parsed)
-          })
-      } catch (error) {
-        ws.send(JSON.stringify({
-          status: Status.FAIL,
-          message: error.toString(),
-        } as Resp))
-        console.log(error)
-      }
+      handleListExperimentPaths(data)
+        .then((response) => ws.send(JSON.stringify(response)))
     })
   })
   wssWriteExperiment.on('connection', (ws) => {
     ws.on('message', (data) => {
-      try {
-        const parsed = JSON.parse(String(data))
-        if (parsed.path && parsed.data) {
-          // await valid(JSON.parse(parsed.String(data)))
-          writeExperiment(parsed)
-            .then(() => {
-              ws.send(JSON.stringify({
-                status: Status.OK,
-                message: `Saved experiment at ${parsed.path}`,
-              } as Resp))
-              console.log(`==Saved the following object at ${parsed.path}`)
-              console.log(parsed.data)
-            })
-            .catch((error) => {
-              ws.send(JSON.stringify({
-                status: Status.FAIL,
-                message: error.toString(),
-              } as Resp))
-              console.log(error)
-            })
-        } else {
-          ws.send(JSON.stringify({
-            status: Status.FAIL,
-            message: 'Need both a path and data',
-          } as Resp))
-          console.log('==Passed object is missing either a path or data field')
-          console.log(parsed)
-        }
-      } catch (error) {
-        ws.send(JSON.stringify({
-          status: Status.FAIL,
-          message: error.toString(),
-        } as Resp))
-        console.log('==Do not write badly formatted object to disk')
-        console.log(error)
-      }
+      handleWriteExperiment(data)
+        .then((response) => ws.send(JSON.stringify(response)))
     })
   })
   wssScaleData.on('connection', (ws) => {
