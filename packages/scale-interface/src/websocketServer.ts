@@ -71,15 +71,14 @@ async function handleListExperiments(
         data: wrappedExperiments,
       }
     } catch (error) {
-      console.log(`listExperiments resulted in error: ${error} when given query:`)
-      console.log(parsed)
+      console.error(`listExperiments resulted in error: ${error} when given query:`, parsed)
       return {
         status: Status.FAIL,
         message: error.toString(),
       }
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return {
       status: Status.FAIL,
       message: error.toString(),
@@ -101,14 +100,14 @@ async function handleGetExperiment(
         data: wrappedExperiment,
       }
     } catch (error) {
-      console.log(`getExperiment on path ${path} resulted in error ${error}`)
+      console.error(`getExperiment on path ${path} resulted in error ${error}`)
       return {
         status: Status.FAIL,
         message: error.toString(),
       }
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return {
       status: Status.FAIL,
       message: error.toString(),
@@ -136,15 +135,14 @@ async function handleListExperimentPaths(
         data: paths,
       }
     } catch (error) {
-      console.log(`listExperimentPaths resulted in error: ${error} when given query:`)
-      console.log(parsed)
+      console.error(`listExperimentPaths resulted in error: ${error} when given query:`, parsed)
       return {
         status: Status.FAIL,
         message: error.toString(),
       }
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return {
       status: Status.FAIL,
       message: error.toString(),
@@ -173,23 +171,21 @@ async function handleWriteExperiment(
           message: `Saved experiment at ${parsed.path}`,
         }
       } catch (error) {
-        console.log(error)
+        console.error(error)
         return {
           status: Status.FAIL,
           message: error.toString(),
         }
       }
     } else {
-      console.log('==Passed object is missing either a path or data field')
-      console.log(parsed)
+      console.error('==Passed object is missing either a path or data field', parsed)
       return {
         status: Status.FAIL,
         message: 'Need both a path and data',
       }
     }
   } catch (error) {
-    console.log('==Do not write badly formatted object to disk')
-    console.log(error)
+    console.error('==Do not write badly formatted object to disk', error)
     return {
       status: Status.FAIL,
       message: error.toString(),
