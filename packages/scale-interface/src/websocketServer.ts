@@ -33,11 +33,11 @@ export interface Resp {
   message?: string;
 }
 
-function handleGetRootDir(): Resp {
-  return {
+function handleGetRootDir(): Promise<Resp> {
+  return Promise.resolve({
     status: Status.OK,
     data: ROOT_PATH,
-  }
+  })
 }
 
 function handleListExperiments(data): Promise<Resp> {
@@ -168,7 +168,8 @@ function createServer(
 
   wssGetRootDir.on('connection', (ws) => {
     ws.on('message', () => {
-      ws.send(JSON.stringify(handleGetRootDir()))
+      handleGetRootDir()
+        .then((response) => ws.send(JSON.stringify(response)))
     })
   })
   wssListExperiments.on('connection', (ws) => {
