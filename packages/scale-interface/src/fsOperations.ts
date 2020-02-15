@@ -176,7 +176,7 @@ async function listExperimentPaths(query: {
   primaryExperimenter: string;
   dateStart: Date;
   dateEnd: Date;
-}): Promise<Array<string | Buffer>> {
+}): Promise<Array<string>> {
   if (!query.path) throw new Error('No path provided')
 
   let paths = await readdir(query.path, { encoding: 'utf-8', boundary: ROOT_PATH })
