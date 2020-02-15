@@ -1,4 +1,8 @@
 import {
+  PassThrough,
+} from 'stream'
+
+import {
   promisify,
 } from 'util'
 
@@ -209,9 +213,13 @@ async function* subscribe(includeActionReplies = false): AsyncGenerator<Measurem
     parser,
   } = serialPort
 
+  // Pipe into new stream to allow multiple users
+  const parserCopy = new PassThrough()
+  parser.pipe(parserCopy)
+
   // Set the stream to 'flowing' if it is not already
   setImmediate(() => parser.resume())
-  for await (const data of parser) {
+  for await (const data of parserCopy) {
     const parsedData = parse(data)
     switch (parsedData) {
       case ActionReply.ZEROED_BALANCE:
