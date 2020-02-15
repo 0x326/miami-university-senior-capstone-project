@@ -230,10 +230,7 @@ async function listExperimentPaths(
  * @param wrapped
  */
 async function writeExperiment(
-  wrapped: {
-    path: string;
-    data: Experiment;
-  },
+  wrapped: ExperimentWrapper,
 ): Promise<void> {
   // validate file path
   const lMatch = /^.*?_/.exec(wrapped.path)
