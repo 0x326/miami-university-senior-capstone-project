@@ -14,8 +14,6 @@ import {
 const PORT = 8081
 const TIMEOUT = 1500
 
-// import * as assert from 'assert'
-
 let webSockets: null | {
   getRoot: WebSocket;
   listExperiments: WebSocket;
