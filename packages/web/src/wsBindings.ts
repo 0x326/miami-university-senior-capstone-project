@@ -79,7 +79,9 @@ function socketSend(socket: WebSocket, message: string): Promise<Response> {
       const { data } = event
       // Trust that objects from `scale-interface` implement Resp
       const parsed: Response = JSON.parse(data)
-      if (parsed.status === Status.FAIL) reject(new Error(parsed.message))
+      if (parsed.status === Status.FAIL) {
+        reject(new Error(parsed.message))
+      }
       resolve(parsed)
     })
 
