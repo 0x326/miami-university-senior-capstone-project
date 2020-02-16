@@ -32,15 +32,21 @@ let webSockets: null | {
 
 function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
   return new Promise((resolve, reject): void => {
+    const rejectTimer = setTimeout(() => {
+      reject(new Error('Could not open socket because connection exceeded timeout'))
+    }, timeout)
+
     let socket: WebSocket | null = new WebSocket(path)
-    socket.addEventListener('open', () => resolve(socket as WebSocket))
+    socket.addEventListener('open', () => {
+      clearTimeout(rejectTimer)
+      resolve(socket as WebSocket)
+    })
     socket.addEventListener('close', () => {
       console.log(`Socket to ${path} closed.`)
       // Deallocate socket
       socket = null
     })
     // TODO (wimmeldj) [2020-03-01]: Add event listener for 'error' event
-    setTimeout(() => reject(new Error('Could not open socket because connection exceeded timeout')), timeout)
   })
 }
 
