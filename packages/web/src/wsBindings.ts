@@ -12,9 +12,6 @@ import {
   WriteExperimentResponse,
 } from '../../scale-interface/src/websocketServer'
 
-const PORT = 8081
-const TIMEOUT = 1500
-
 let webSockets: null | {
   getRootDir: WebSocket;
   listExperiments: WebSocket;
@@ -46,12 +43,16 @@ function openWebSocket(
   })
 }
 
-async function connect(): Promise<void> {
+async function connect(
+  host = 'localhost',
+  port = 8081,
+  timeout = 1500,
+): Promise<void> {
   if (webSockets !== null) {
     throw new Error('Sockets are already open')
   }
 
-  const baseURI = `ws://localhost:${PORT}`
+  const baseURI = `ws://${host}:${port}`
 
   webSockets = {
     getRootDir: await openWebSocket(`${baseURI}/get-root-dir`, timeout),
