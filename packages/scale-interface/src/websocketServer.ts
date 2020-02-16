@@ -52,6 +52,8 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
   return webSocketServer
 }
 
+const getRootDirEndpoint = '/get-root-dir'
+
 export interface GetRootDirResponse extends Response {
   status: Status;
   data: string;
@@ -63,6 +65,8 @@ function handleGetRootDir(): Promise<GetRootDirResponse> {
     data: ROOT_PATH,
   })
 }
+
+const listExperimentsEndpoint = '/list-experiments'
 
 export interface ListExperimentsOptions {
   path: string;
@@ -101,6 +105,8 @@ async function handleListExperiments(
   }
 }
 
+const getExperimentEndpoint = '/get-experiment'
+
 export interface GetExperimentOptions {
   path: string;
 }
@@ -137,6 +143,8 @@ async function handleGetExperiment(
     }
   }
 }
+
+const listExperimentPathsEndpoint = '/list-experiment-paths'
 
 export interface ListExperimentPathsOptions {
   path: string;
@@ -177,6 +185,8 @@ async function handleListExperimentPaths(
     }
   }
 }
+
+const writeExperimentEndpoint = '/write-experiment'
 
 export interface WriteExperimentOptions {
   path: string;
@@ -225,6 +235,8 @@ async function handleWriteExperiment(
   }
 }
 
+const scaleDataEndpoint = '/scale-data'
+
 function createServer(
   port: number,
 ): http.Server {
@@ -251,12 +263,12 @@ function createServer(
   })
 
   const routes = Map<WebSocketServer>({
-    '/get-root-dir': createWebSocketHandler(handleGetRootDir),
-    '/list-experiments': createWebSocketHandler(handleListExperiments),
-    '/get-experiment': createWebSocketHandler(handleGetExperiment),
-    '/list-experiment-paths': createWebSocketHandler(handleListExperimentPaths),
-    '/write-experiment': createWebSocketHandler(handleWriteExperiment),
-    '/scale-data': wssScaleData,
+    [getRootDirEndpoint]: createWebSocketHandler(handleGetRootDir),
+    [listExperimentsEndpoint]: createWebSocketHandler(handleListExperiments),
+    [getExperimentEndpoint]: createWebSocketHandler(handleGetExperiment),
+    [listExperimentPathsEndpoint]: createWebSocketHandler(handleListExperimentPaths),
+    [writeExperimentEndpoint]: createWebSocketHandler(handleWriteExperiment),
+    [scaleDataEndpoint]: wssScaleData,
   })
 
   server.on('upgrade', (request, socket, head) => {
