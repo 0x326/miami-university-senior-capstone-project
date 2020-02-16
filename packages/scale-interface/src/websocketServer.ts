@@ -2,6 +2,10 @@ import http from 'http'
 import url from 'url'
 
 import {
+  Map,
+} from 'immutable'
+
+import {
   Server as WebSocketServer,
 } from 'ws'
 
@@ -224,56 +228,28 @@ function createServer(
       .catch((error) => console.error('Error while interacting with scale', error))
   })
 
+  const routes = Map<WebSocketServer>({
+    '/get-root-dir': wssGetRootDir,
+    '/list-experiments': wssListExperiments,
+    '/get-experiment': wssGetExperiment,
+    '/list-experiment-paths': wssListPaths,
+    '/write-experiment': wssWriteExperiment,
+    '/scale-data': wssScaleData,
+  })
+
   server.on('upgrade', (request, socket, head) => {
     const { pathname } = url.parse(request.url)
     console.log(`Request for ${pathname}`)
+    const wss = routes.get(pathname || '')
 
-    switch (pathname) {
-      case '/get-root-dir':
-        console.log(`Creating websocket server to handle ${pathname}`)
-        wssGetRootDir.handleUpgrade(request, socket, head, (ws) => {
-          wssGetRootDir.emit('connection', ws, request)
-        })
-        break
-
-      case '/list-experiments':
-        console.log(`Creating websocket server to handle ${pathname}`)
-        wssListExperiments.handleUpgrade(request, socket, head, (ws) => {
-          wssListExperiments.emit('connection', ws, request)
-        })
-        break
-
-      case '/get-experiment':
-        console.log(`Creating websocket server to handle ${pathname}`)
-        wssGetExperiment.handleUpgrade(request, socket, head, (ws) => {
-          wssGetExperiment.emit('connection', ws, request)
-        })
-        break
-
-      case '/list-experiment-paths':
-        console.log(`Creating websocket server to handle ${pathname}`)
-        wssListPaths.handleUpgrade(request, socket, head, (ws) => {
-          wssListPaths.emit('connection', ws, request)
-        })
-        break
-
-      case '/write-experiment':
-        console.log(`Creating websocket server to handle ${pathname}`)
-        wssWriteExperiment.handleUpgrade(request, socket, head, (ws) => {
-          wssWriteExperiment.emit('connection', ws, request)
-        })
-        break
-
-      case '/scale-data':
-        console.log(`Creating websocket server to handle ${pathname}`)
-        wssScaleData.handleUpgrade(request, socket, head, (ws) => {
-          wssScaleData.emit('connection', ws, request)
-        })
-        break
-
-      default:
-        console.log('Request is not a valid path, destroying socket')
-        socket.destroy()
+    if (wss !== undefined) {
+      console.log(`Creating websocket server to handle ${pathname}`)
+      wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit('connection', ws, request)
+      })
+    } else {
+      console.log('Request is not a valid path, destroying socket')
+      socket.destroy()
     }
   })
   server.listen(port)
