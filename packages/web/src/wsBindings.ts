@@ -51,12 +51,14 @@ async function connect(): Promise<void> {
     throw new Error('Sockets are already open')
   }
 
+  const baseURI = `ws://localhost:${PORT}`
+
   webSockets = {
-    getRootDir: await openWebSocket(`ws://localhost:${PORT}/get-root-dir`, TIMEOUT),
-    listExperiments: await openWebSocket(`ws://localhost:${PORT}/list-experiments`, TIMEOUT),
-    getExperiment: await openWebSocket(`ws://localhost:${PORT}/get-experiment`, TIMEOUT),
-    listExperimentPaths: await openWebSocket(`ws://localhost:${PORT}/list-experiment-paths`, TIMEOUT),
-    writeExperiment: await openWebSocket(`ws://localhost:${PORT}/write-experiment`, TIMEOUT),
+    getRootDir: await openWebSocket(`${baseURI}/get-root-dir`, timeout),
+    listExperiments: await openWebSocket(`${baseURI}/list-experiments`, timeout),
+    getExperiment: await openWebSocket(`${baseURI}/get-experiment`, timeout),
+    listExperimentPaths: await openWebSocket(`${baseURI}/list-experiment-paths`, timeout),
+    writeExperiment: await openWebSocket(`${baseURI}/write-experiment`, timeout),
   }
 }
 
