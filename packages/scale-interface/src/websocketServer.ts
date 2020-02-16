@@ -42,8 +42,9 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
 
   webSocketServer
     .on('connection', (ws) => ws
-      .on('message', (data: HandlerData) => {
-        handler(data)
+      .on('message', (data) => {
+        const parsedData: HandlerData = JSON.parse(String(data))
+        handler(parsedData)
           .then((response) => ws
             .send(JSON.stringify(response)))
       }))
@@ -75,10 +76,9 @@ export interface ListExperimentsResponse extends Response {
 }
 
 async function handleListExperiments(
-  data: ListExperimentsOptions,
+  parsed: ListExperimentsOptions,
 ): Promise<ListExperimentsResponse> {
   try {
-    const parsed = JSON.parse(String(data))
     try {
       const wrappedExperiments = await listExperiments(parsed)
       return {
@@ -115,7 +115,7 @@ async function handleGetExperiment(
   data: GetExperimentOptions,
 ): Promise<GetExperimentResponse> {
   try {
-    const { path } = JSON.parse(String(data))
+    const { path } = data
     try {
       const wrappedExperiment = await getExperiment(path)
       return {
@@ -153,10 +153,9 @@ export interface ListExperimentPathsResponse extends Response {
 }
 
 async function handleListExperimentPaths(
-  data: ListExperimentPathsOptions,
+  parsed: ListExperimentPathsOptions,
 ): Promise<ListExperimentPathsResponse> {
   try {
-    const parsed = JSON.parse(String(data))
     try {
       const paths = await listExperimentPaths(parsed)
       return {
@@ -190,10 +189,9 @@ export interface WriteExperimentResponse extends Response {
 }
 
 async function handleWriteExperiment(
-  data: WriteExperimentOptions,
+  parsed: WriteExperimentOptions,
 ): Promise<WriteExperimentResponse> {
   try {
-    const parsed = JSON.parse(String(data))
     if (parsed.path && parsed.data) {
       // await valid(JSON.parse(parsed.String(data)))
       try {
