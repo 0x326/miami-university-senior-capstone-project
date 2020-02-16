@@ -16,10 +16,10 @@ const PORT = 8081
 const TIMEOUT = 1500
 
 let webSockets: null | {
-  getRoot: WebSocket;
+  getRootDir: WebSocket;
   listExperiments: WebSocket;
   getExperiment: WebSocket;
-  listPaths: WebSocket;
+  listExperimentPaths: WebSocket;
   writeExperiment: WebSocket;
 } = null
 
@@ -49,10 +49,10 @@ async function connect(): Promise<void> {
   }
 
   webSockets = {
-    getRoot: await openWebSocket(`ws://localhost:${PORT}/get-root-dir`, TIMEOUT),
+    getRootDir: await openWebSocket(`ws://localhost:${PORT}/get-root-dir`, TIMEOUT),
     listExperiments: await openWebSocket(`ws://localhost:${PORT}/list-experiments`, TIMEOUT),
     getExperiment: await openWebSocket(`ws://localhost:${PORT}/get-experiment`, TIMEOUT),
-    listPaths: await openWebSocket(`ws://localhost:${PORT}/list-experiment-paths`, TIMEOUT),
+    listExperimentPaths: await openWebSocket(`ws://localhost:${PORT}/list-experiment-paths`, TIMEOUT),
     writeExperiment: await openWebSocket(`ws://localhost:${PORT}/write-experiment`, TIMEOUT),
   }
 }
@@ -82,12 +82,12 @@ function socketSend(socket: WebSocket, message: object | null): Promise<Response
   })
 }
 
-function getRoot(): Promise<GetRootDirResponse> {
+function getRootDir(): Promise<GetRootDirResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
   const {
-    getRoot: wsGetRoot,
+    getRootDir: wsGetRoot,
   } = webSockets
 
   return socketSend(wsGetRoot, null) as Promise<GetRootDirResponse>
@@ -118,12 +118,12 @@ function getExperiment(options: GetExperimentOptions): Promise<GetExperimentResp
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
-function listPaths(options: ListExperimentPathsOptions): Promise<ListExperimentPathsResponse> {
+function listExperimentPaths(options: ListExperimentPathsOptions): Promise<ListExperimentPathsResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
   const {
-    listPaths: wsListPaths,
+    listExperimentPaths: wsListPaths,
   } = webSockets
 
   return socketSend(wsListPaths, options) as Promise<ListExperimentPathsResponse>
@@ -146,9 +146,9 @@ function writeExperiment(options: WriteExperimentOptions): Promise<WriteExperime
 export {
   connect,
   disconnect,
-  getRoot,
+  getRootDir,
   listExperiments,
   getExperiment,
-  listPaths,
+  listExperimentPaths,
   writeExperiment,
 }
