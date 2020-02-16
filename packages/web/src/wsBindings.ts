@@ -90,7 +90,8 @@ function getRoot(): Promise<GetRootDirResponse> {
     getRoot: wsGetRoot,
   } = webSockets
 
-  return socketSend(wsGetRoot, '')
+  return socketSend(wsGetRoot, '') as Promise<GetRootDirResponse>
+  // TODO (0x326) [2020-03-02]: Verify response object
 }
 
 function listExperiments(options: ListExperimentsOptions): Promise<ListExperimentsResponse> {
@@ -106,7 +107,8 @@ function listExperiments(options: ListExperimentsOptions): Promise<ListExperimen
     filter,
   } = options
 
-  return socketSend(wsListExperiments, JSON.stringify({ path, filter }))
+  return socketSend(wsListExperiments, JSON.stringify({ path, filter })) as Promise<ListExperimentsResponse>
+  // TODO (0x326) [2020-03-02]: Verify response object
 }
 
 function getExperiment(options: GetExperimentOptions): Promise<GetExperimentResponse> {
@@ -120,7 +122,8 @@ function getExperiment(options: GetExperimentOptions): Promise<GetExperimentResp
     path,
   } = options
 
-  return socketSend(wsGetExperiment, path)
+  return socketSend(wsGetExperiment, path) as Promise<GetExperimentResponse>
+  // TODO (0x326) [2020-03-02]: Verify response object
 }
 
 function listPaths(options: ListExperimentPathsOptions): Promise<ListExperimentPathsResponse> {
@@ -131,7 +134,8 @@ function listPaths(options: ListExperimentPathsOptions): Promise<ListExperimentP
     listPaths: wsListPaths,
   } = webSockets
 
-  return socketSend(wsListPaths, JSON.stringify(options))
+  return socketSend(wsListPaths, JSON.stringify(options)) as Promise<ListExperimentPathsResponse>
+  // TODO (0x326) [2020-03-02]: Verify response object
 }
 
 function writeExperiment(options: WriteExperimentOptions): Promise<WriteExperimentResponse> {
@@ -146,7 +150,8 @@ function writeExperiment(options: WriteExperimentOptions): Promise<WriteExperime
     path,
   } = options
 
-  return socketSend(wsWriteExperiment, JSON.stringify({ path, data }))
+  return socketSend(wsWriteExperiment, JSON.stringify({ path, data })) as Promise<WriteExperimentResponse>
+  // TODO (0x326) [2020-03-02]: Verify response object
 }
 
 
