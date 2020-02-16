@@ -157,10 +157,6 @@ async function listExperiments(
     filter,
   } = query
 
-  if (!filePath) {
-    throw new Error('No query path provided')
-  }
-
   const allFiles = await readdir(filePath, {
     encoding: 'utf-8',
     boundary: ROOT_PATH,
@@ -210,10 +206,6 @@ async function listExperimentPaths(
     dateStart,
     dateEnd,
   } = query
-
-  if (!filePath) {
-    throw new Error('No path provided')
-  }
 
   let paths = await readdir(filePath, {
     encoding: 'utf-8',
