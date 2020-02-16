@@ -65,7 +65,12 @@ function disconnect(): void {
     throw new Error('Sockets are already closed')
   }
 
-  Object.values(webSockets).map((socket) => socket !== null && socket.close())
+  Object.values(webSockets)
+    .forEach((socket) => {
+      if (socket !== null) {
+        socket.close()
+      }
+    })
   webSockets = null
 }
 
