@@ -66,7 +66,7 @@ function disconnect(): void {
   webSockets = null
 }
 
-function socketSend(socket: WebSocket, message: string): Promise<Response> {
+function socketSend(socket: WebSocket, message: object | null): Promise<Response> {
   return new Promise((resolve, reject): void => {
     socket.addEventListener('message', (event) => {
       const { data } = event
@@ -78,7 +78,7 @@ function socketSend(socket: WebSocket, message: string): Promise<Response> {
       resolve(parsed)
     })
 
-    socket.send(message)
+    socket.send(JSON.stringify(message))
   })
 }
 
@@ -90,7 +90,7 @@ function getRoot(): Promise<GetRootDirResponse> {
     getRoot: wsGetRoot,
   } = webSockets
 
-  return socketSend(wsGetRoot, '') as Promise<GetRootDirResponse>
+  return socketSend(wsGetRoot, null) as Promise<GetRootDirResponse>
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
@@ -102,12 +102,7 @@ function listExperiments(options: ListExperimentsOptions): Promise<ListExperimen
     listExperiments: wsListExperiments,
   } = webSockets
 
-  const {
-    path,
-    filter,
-  } = options
-
-  return socketSend(wsListExperiments, JSON.stringify({ path, filter })) as Promise<ListExperimentsResponse>
+  return socketSend(wsListExperiments, options) as Promise<ListExperimentsResponse>
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
@@ -118,11 +113,8 @@ function getExperiment(options: GetExperimentOptions): Promise<GetExperimentResp
   const {
     getExperiment: wsGetExperiment,
   } = webSockets
-  const {
-    path,
-  } = options
 
-  return socketSend(wsGetExperiment, path) as Promise<GetExperimentResponse>
+  return socketSend(wsGetExperiment, options) as Promise<GetExperimentResponse>
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
@@ -134,7 +126,7 @@ function listPaths(options: ListExperimentPathsOptions): Promise<ListExperimentP
     listPaths: wsListPaths,
   } = webSockets
 
-  return socketSend(wsListPaths, JSON.stringify(options)) as Promise<ListExperimentPathsResponse>
+  return socketSend(wsListPaths, options) as Promise<ListExperimentPathsResponse>
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
@@ -145,12 +137,8 @@ function writeExperiment(options: WriteExperimentOptions): Promise<WriteExperime
   const {
     writeExperiment: wsWriteExperiment,
   } = webSockets
-  const {
-    data,
-    path,
-  } = options
 
-  return socketSend(wsWriteExperiment, JSON.stringify({ path, data })) as Promise<WriteExperimentResponse>
+  return socketSend(wsWriteExperiment, options) as Promise<WriteExperimentResponse>
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
