@@ -172,19 +172,6 @@ async function listExperiments(
   return experiments
 }
 
-
-// //////////////////////////////////////////////////////////////////////////////////////////
-//  experiment file names:                                                                //
-//  to make certain operations quicker, we can encode certain information in file names   //
-//  so that we don't have to open an experiment file to test whether it matches a query.  //
-//                                                                                        //
-//  Proposed format:                                                                      //
-//  <experimentName>_<dateInitialized>_<primaryExperimenter>                              //
-//                                                                                        //
-// We should also store active experiments in an /active dir and archived experiments in  //
-// a /archive dir                                                                         //
-// //////////////////////////////////////////////////////////////////////////////////////////
-
 /**
  *
  * @param query
