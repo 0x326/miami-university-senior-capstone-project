@@ -76,17 +76,17 @@ export interface ListExperimentsResponse extends Response {
 }
 
 async function handleListExperiments(
-  parsed: ListExperimentsOptions,
+  options: ListExperimentsOptions,
 ): Promise<ListExperimentsResponse> {
   try {
     try {
-      const wrappedExperiments = await listExperiments(parsed)
+      const wrappedExperiments = await listExperiments(options)
       return {
         status: Status.OK,
         data: wrappedExperiments,
       }
     } catch (error) {
-      console.error(`listExperiments resulted in error: ${error} when given query:`, parsed)
+      console.error(`listExperiments resulted in error: ${error} when given query:`, options)
       return {
         status: Status.FAIL,
         message: error.toString(),
@@ -112,10 +112,10 @@ export interface GetExperimentResponse extends Response {
 }
 
 async function handleGetExperiment(
-  data: GetExperimentOptions,
+  options: GetExperimentOptions,
 ): Promise<GetExperimentResponse> {
   try {
-    const { path } = data
+    const { path } = options
     try {
       const wrappedExperiment = await getExperiment(path)
       return {
@@ -153,17 +153,17 @@ export interface ListExperimentPathsResponse extends Response {
 }
 
 async function handleListExperimentPaths(
-  parsed: ListExperimentPathsOptions,
+  options: ListExperimentPathsOptions,
 ): Promise<ListExperimentPathsResponse> {
   try {
     try {
-      const paths = await listExperimentPaths(parsed)
+      const paths = await listExperimentPaths(options)
       return {
         status: Status.OK,
         data: paths,
       }
     } catch (error) {
-      console.error(`listExperimentPaths resulted in error: ${error} when given query:`, parsed)
+      console.error(`listExperimentPaths resulted in error: ${error} when given query:`, options)
       return {
         status: Status.FAIL,
         message: error.toString(),
@@ -189,18 +189,18 @@ export interface WriteExperimentResponse extends Response {
 }
 
 async function handleWriteExperiment(
-  parsed: WriteExperimentOptions,
+  options: WriteExperimentOptions,
 ): Promise<WriteExperimentResponse> {
   try {
-    if (parsed.path && parsed.data) {
+    if (options.path && options.data) {
       // await valid(JSON.parse(parsed.String(data)))
       try {
-        await writeExperiment(parsed)
-        console.log(`==Saved the following object at ${parsed.path}`)
-        console.log(parsed.data)
+        await writeExperiment(options)
+        console.log(`==Saved the following object at ${options.path}`)
+        console.log(options.data)
         return {
           status: Status.OK,
-          message: `Saved experiment at ${parsed.path}`,
+          message: `Saved experiment at ${options.path}`,
         }
       } catch (error) {
         console.error(error)
@@ -210,7 +210,7 @@ async function handleWriteExperiment(
         }
       }
     } else {
-      console.error('==Passed object is missing either a path or data field', parsed)
+      console.error('==Passed object is missing either a path or data field', options)
       return {
         status: Status.FAIL,
         message: 'Need both a path and data',
