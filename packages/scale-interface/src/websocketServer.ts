@@ -101,7 +101,9 @@ async function handleListExperiments(
   }
 }
 
-export type GetExperimentOptions = string
+export interface GetExperimentOptions {
+  path: string;
+}
 
 export interface GetExperimentResponse extends Response {
   status: Status;
@@ -113,7 +115,7 @@ async function handleGetExperiment(
   data: GetExperimentOptions,
 ): Promise<GetExperimentResponse> {
   try {
-    const path = String(data)
+    const { path } = JSON.parse(String(data))
     try {
       const wrappedExperiment = await getExperiment(path)
       return {

@@ -1,6 +1,7 @@
 import {
   Status,
   Response,
+  GetRootDirResponse,
   ListExperimentsOptions,
   ListExperimentsResponse,
   GetExperimentOptions,
@@ -81,7 +82,7 @@ function socketSend(socket: WebSocket, message: string): Promise<Response> {
   })
 }
 
-function getRoot(): Promise<string> {
+function getRoot(): Promise<GetRootDirResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -90,7 +91,6 @@ function getRoot(): Promise<string> {
   } = webSockets
 
   return socketSend(wsGetRoot, '')
-    .then((response) => String(response.data))
 }
 
 function listExperiments(options: ListExperimentsOptions): Promise<ListExperimentsResponse> {
@@ -116,7 +116,9 @@ function getExperiment(options: GetExperimentOptions): Promise<GetExperimentResp
   const {
     getExperiment: wsGetExperiment,
   } = webSockets
-  const path = options
+  const {
+    path,
+  } = options
 
   return socketSend(wsGetExperiment, path)
 }
