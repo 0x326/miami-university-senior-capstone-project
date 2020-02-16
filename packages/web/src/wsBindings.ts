@@ -125,8 +125,7 @@ function getExperiment(path: string): Promise<ExperimentWrapper> {
     .then((response) => response.data as ExperimentWrapper)
 }
 
-function listPaths(query: ListPathsQuery):
-  Promise<Array<string>> {
+function listPaths(query: ListPathsQuery): Promise<Array<string>> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
