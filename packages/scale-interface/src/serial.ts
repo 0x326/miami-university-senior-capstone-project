@@ -119,25 +119,25 @@ async function close(): Promise<void> {
   }
 }
 
-enum ActionReply {
+export enum ActionReply {
   ZEROED_BALANCE,
   CHANGED_UNITS,
 }
 
-enum MeasurementType {
+export enum MeasurementType {
   STABLE_WEIGHT = 'ST',
   STABLE_COUNTING = 'QT',
   UNSTABLE_WEIGHT = 'US',
   OUT_OF_RANGE = 'OL',
 }
 
-interface Measurement {
+export interface Measurement {
   type: MeasurementType;
   value: number;
   unit: Unit;
 }
 
-type Unit = 'g' | 'pc' | '%' | 'oz' | 'lb' | 'ozt' | 'ct' | 'momme' | 'dwt' | 'grain' | 'tael'
+export type Unit = 'g' | 'pc' | '%' | 'oz' | 'lb' | 'ozt' | 'ct' | 'momme' | 'dwt' | 'grain' | 'tael'
 
 function parse(data: string): Measurement | ActionReply {
   if (data === 'Z') {
