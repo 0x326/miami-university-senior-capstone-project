@@ -201,12 +201,6 @@ function createServer(
   port: number,
 ): http.Server {
   const server = http.createServer()
-  // different webSocket servers for different actions
-  const wssGetRootDir = createWebSocketHandler(handleGetRootDir)
-  const wssListExperiments = createWebSocketHandler(handleListExperiments)
-  const wssGetExperiment = createWebSocketHandler(handleGetExperiment)
-  const wssListPaths = createWebSocketHandler(handleListExperimentPaths)
-  const wssWriteExperiment = createWebSocketHandler(handleWriteExperiment)
   const wssScaleData = new WebSocketServer({ noServer: true })
 
   wssScaleData.on('connection', (ws) => {
@@ -229,11 +223,11 @@ function createServer(
   })
 
   const routes = Map<WebSocketServer>({
-    '/get-root-dir': wssGetRootDir,
-    '/list-experiments': wssListExperiments,
-    '/get-experiment': wssGetExperiment,
-    '/list-experiment-paths': wssListPaths,
-    '/write-experiment': wssWriteExperiment,
+    '/get-root-dir': createWebSocketHandler(handleGetRootDir),
+    '/list-experiments': createWebSocketHandler(handleListExperiments),
+    '/get-experiment': createWebSocketHandler(handleGetExperiment),
+    '/list-experiment-paths': createWebSocketHandler(handleListExperimentPaths),
+    '/write-experiment': createWebSocketHandler(handleWriteExperiment),
     '/scale-data': wssScaleData,
   })
 
