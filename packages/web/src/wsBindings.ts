@@ -23,7 +23,10 @@ let webSockets: null | {
   writeExperiment: WebSocket;
 } = null
 
-function openWebSocket(path: string, timeout: number): Promise<WebSocket> {
+function openWebSocket(
+  path: string,
+  timeout: number,
+): Promise<WebSocket> {
   return new Promise((resolve, reject): void => {
     const rejectTimer = setTimeout(() => {
       reject(new Error('Could not open socket because connection exceeded timeout'))
@@ -66,7 +69,10 @@ function disconnect(): void {
   webSockets = null
 }
 
-function socketSend(socket: WebSocket, message: object | null): Promise<Response> {
+function socketSend(
+  socket: WebSocket,
+  message: object | null,
+): Promise<Response> {
   return new Promise((resolve, reject): void => {
     socket.addEventListener('message', (event) => {
       const { data } = event
@@ -94,7 +100,9 @@ function getRootDir(): Promise<GetRootDirResponse> {
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
-function listExperiments(options: ListExperimentsOptions): Promise<ListExperimentsResponse> {
+function listExperiments(
+  options: ListExperimentsOptions,
+): Promise<ListExperimentsResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -106,7 +114,9 @@ function listExperiments(options: ListExperimentsOptions): Promise<ListExperimen
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
-function getExperiment(options: GetExperimentOptions): Promise<GetExperimentResponse> {
+function getExperiment(
+  options: GetExperimentOptions,
+): Promise<GetExperimentResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -118,7 +128,9 @@ function getExperiment(options: GetExperimentOptions): Promise<GetExperimentResp
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
-function listExperimentPaths(options: ListExperimentPathsOptions): Promise<ListExperimentPathsResponse> {
+function listExperimentPaths(
+  options: ListExperimentPathsOptions,
+): Promise<ListExperimentPathsResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -130,7 +142,9 @@ function listExperimentPaths(options: ListExperimentPathsOptions): Promise<ListE
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
-function writeExperiment(options: WriteExperimentOptions): Promise<WriteExperimentResponse> {
+function writeExperiment(
+  options: WriteExperimentOptions,
+): Promise<WriteExperimentResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
