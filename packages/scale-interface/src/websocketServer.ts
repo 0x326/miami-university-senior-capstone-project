@@ -51,7 +51,12 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
   return webSocketServer
 }
 
-function handleGetRootDir(): Promise<Response> {
+export interface GetRootDirResponse extends Response {
+  status: Status;
+  data: string;
+}
+
+function handleGetRootDir(): Promise<GetRootDirResponse> {
   return Promise.resolve({
     status: Status.OK,
     data: ROOT_PATH,
@@ -63,9 +68,15 @@ export interface ListExperimentsOptions {
   filter: null | Experiment;
 }
 
+export interface ListExperimentsResponse extends Response {
+  status: Status;
+  data?: Array<ExperimentWrapper>;
+  message?: string;
+}
+
 async function handleListExperiments(
   data: ListExperimentsOptions,
-): Promise<Response> {
+): Promise<ListExperimentsResponse> {
   try {
     const parsed = JSON.parse(String(data))
     try {
@@ -92,9 +103,15 @@ async function handleListExperiments(
 
 export type GetExperimentOptions = string
 
+export interface GetExperimentResponse extends Response {
+  status: Status;
+  data?: ExperimentWrapper;
+  message?: string;
+}
+
 async function handleGetExperiment(
   data: GetExperimentOptions,
-): Promise<Response> {
+): Promise<GetExperimentResponse> {
   try {
     const path = String(data)
     try {
@@ -127,9 +144,15 @@ export interface ListExperimentPathsOptions {
   dateEnd: Date;
 }
 
+export interface ListExperimentPathsResponse extends Response {
+  status: Status;
+  data?: Array<string>;
+  message?: string;
+}
+
 async function handleListExperimentPaths(
   data: ListExperimentPathsOptions,
-): Promise<Response> {
+): Promise<ListExperimentPathsResponse> {
   try {
     const parsed = JSON.parse(String(data))
     try {
@@ -159,9 +182,14 @@ export interface WriteExperimentOptions {
   data: Experiment;
 }
 
+export interface WriteExperimentResponse extends Response {
+  status: Status;
+  message?: string;
+}
+
 async function handleWriteExperiment(
   data: WriteExperimentOptions,
-): Promise<Response> {
+): Promise<WriteExperimentResponse> {
   try {
     const parsed = JSON.parse(String(data))
     if (parsed.path && parsed.data) {
