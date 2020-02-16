@@ -80,7 +80,7 @@ const {
   port: number;
 }
 
-const deviceConnected = open(device, {
+open(device, {
   baudRate,
   dataBits,
   parity: bitParity,
