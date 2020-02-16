@@ -1,9 +1,4 @@
 import {
-  Experiment,
-  ExperimentWrapper,
-} from '../../scale-interface/src/fsOperations'
-
-import {
   Status,
   Response,
   ListExperimentsOptions,
@@ -18,15 +13,6 @@ import {
 
 const PORT = 8081
 const TIMEOUT = 1500
-
-interface ListPathsQuery {
-  path: string;
-  experimentName?: void | string;
-  primaryExperimenter?: void | string;
-  dateStart?: void | number;
-  dateEnd?: void | number;
-}
-
 
 // import * as assert from 'assert'
 
