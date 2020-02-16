@@ -6,6 +6,14 @@ import {
 import {
   Status,
   Response,
+  ListExperimentsOptions,
+  ListExperimentsResponse,
+  GetExperimentOptions,
+  GetExperimentResponse,
+  ListExperimentPathsOptions,
+  ListExperimentPathsResponse,
+  WriteExperimentOptions,
+  WriteExperimentResponse,
 } from '../../scale-interface/src/websocketServer'
 
 const PORT = 8081
@@ -101,7 +109,7 @@ function getRoot(): Promise<string> {
     .then((response) => String(response.data))
 }
 
-function listExperiments(path: string, filter?: Experiment): Promise<Array<ExperimentWrapper>> {
+function listExperiments(options: ListExperimentsOptions): Promise<ListExperimentsResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -109,23 +117,27 @@ function listExperiments(path: string, filter?: Experiment): Promise<Array<Exper
     listExperiments: wsListExperiments,
   } = webSockets
 
+  const {
+    path,
+    filter,
+  } = options
+
   return socketSend(wsListExperiments, JSON.stringify({ path, filter }))
-    .then((response) => response.data as Array<ExperimentWrapper>)
 }
 
-function getExperiment(path: string): Promise<ExperimentWrapper> {
+function getExperiment(options: GetExperimentOptions): Promise<GetExperimentResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
   const {
     getExperiment: wsGetExperiment,
   } = webSockets
+  const path = options
 
   return socketSend(wsGetExperiment, path)
-    .then((response) => response.data as ExperimentWrapper)
 }
 
-function listPaths(query: ListPathsQuery): Promise<Array<string>> {
+function listPaths(options: ListExperimentPathsOptions): Promise<ListExperimentPathsResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -133,20 +145,22 @@ function listPaths(query: ListPathsQuery): Promise<Array<string>> {
     listPaths: wsListPaths,
   } = webSockets
 
-  return socketSend(wsListPaths, JSON.stringify(query))
-    .then((response) => response.data as Array<string>)
+  return socketSend(wsListPaths, JSON.stringify(options))
 }
 
-function writeExperiment(data: Experiment, path: string): Promise<string> {
+function writeExperiment(options: WriteExperimentOptions): Promise<WriteExperimentResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
   const {
     writeExperiment: wsWriteExperiment,
   } = webSockets
+  const {
+    data,
+    path,
+  } = options
 
   return socketSend(wsWriteExperiment, JSON.stringify({ path, data }))
-    .then((response) => String(response.message))
 }
 
 
