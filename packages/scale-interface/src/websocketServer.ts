@@ -10,8 +10,8 @@ import {
 } from 'ws'
 
 import {
+  Measurement,
   subscribe,
-  requestBalance,
 } from './serial'
 
 import {
@@ -48,6 +48,22 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
           .then((response) => ws
             .send(JSON.stringify(response)))
       }))
+
+  return webSocketServer
+}
+
+function createWebSocketEmitter<EmitterData>(
+  emitter: () => AsyncGenerator<EmitterData>,
+): WebSocketServer {
+  const webSocketServer = new WebSocketServer({ noServer: true })
+
+  webSocketServer
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    .on('connection', async (ws) => {
+      for await (const message of emitter()) {
+        ws.send(JSON.stringify(message))
+      }
+    })
 
   return webSocketServer
 }
@@ -237,30 +253,20 @@ async function handleWriteExperiment(
 
 const scaleDataEndpoint = '/scale-data'
 
+export interface ScaleData extends Measurement {
+
+}
+
+async function* emitScaleData(): AsyncGenerator<ScaleData> {
+  for await (const data of subscribe()) {
+    yield data
+  }
+}
+
 function createServer(
   port: number,
 ): http.Server {
   const server = http.createServer()
-  const wssScaleData = new WebSocketServer({ noServer: true })
-
-  wssScaleData.on('connection', (ws) => {
-    Promise.all([
-      Promise.resolve()
-        .then(() => subscribe())
-        .then(async (iterator) => {
-          for await (const data of iterator) {
-            console.log('Received data', data)
-          }
-        }),
-
-      Promise.resolve()
-        .then(() => setInterval(() => {
-          requestBalance()
-            .then((data) => console.log('Received data (by request)', data))
-        }, 1000)),
-    ])
-      .catch((error) => console.error('Error while interacting with scale', error))
-  })
 
   const routes = Map<WebSocketServer>({
     [getRootDirEndpoint]: createWebSocketHandler(handleGetRootDir),
@@ -268,7 +274,7 @@ function createServer(
     [getExperimentEndpoint]: createWebSocketHandler(handleGetExperiment),
     [listExperimentPathsEndpoint]: createWebSocketHandler(handleListExperimentPaths),
     [writeExperimentEndpoint]: createWebSocketHandler(handleWriteExperiment),
-    [scaleDataEndpoint]: wssScaleData,
+    [scaleDataEndpoint]: createWebSocketEmitter(emitScaleData),
   })
 
   server.on('upgrade', (request, socket, head) => {
