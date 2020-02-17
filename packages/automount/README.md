@@ -10,8 +10,7 @@ sudo systemctl enable scale_interface_automount@.service
 systemctl status scale_interface_automount@.service
 ```
 
-
----
+## Details
 
 Udev rules and systemd service written in /automount project directory to detect
 a valid scale interface USB device at /dev and mount this device to
