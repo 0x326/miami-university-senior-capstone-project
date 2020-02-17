@@ -91,8 +91,12 @@ function socketSend(
       const { data } = event
       // Trust that objects from `scale-interface` implement Resp
       const parsed: Response = JSON.parse(data)
-      if (parsed.status === Status.FAIL) {
-        reject(new Error(parsed.message))
+      const {
+        status,
+        message: responseMessage,
+      } = parsed
+      if (status === Status.FAIL) {
+        reject(new Error(responseMessage))
       }
       resolve(parsed)
     }
