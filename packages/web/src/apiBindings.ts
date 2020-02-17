@@ -85,7 +85,9 @@ function socketSend(
   message: object | null,
 ): Promise<Response> {
   return new Promise((resolve, reject): void => {
-    socket.addEventListener('message', (event) => {
+    const onMessage = (event: MessageEvent): void => {
+      socket.removeEventListener('message', onMessage)
+
       const { data } = event
       // Trust that objects from `scale-interface` implement Resp
       const parsed: Response = JSON.parse(data)
@@ -93,8 +95,9 @@ function socketSend(
         reject(new Error(parsed.message))
       }
       resolve(parsed)
-    })
+    }
 
+    socket.addEventListener('message', onMessage)
     socket.send(JSON.stringify(message))
   })
 }
