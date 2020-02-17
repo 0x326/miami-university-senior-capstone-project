@@ -12,9 +12,10 @@ systemctl status scale_interface_automount@.service
 
 ## Details
 
-Udev rules and systemd service written in `/automount` project directory to detect
-a valid scale interface USB device at `/dev` and mount this device to
-`/media/scale_interface_mountpoint`. This mountpoint will be created and destroyed
-automatically, so if it exists, the program can assume a valid USB device is
-attached. The locations of where these two files should be saved to in the
-Raspberry Pi's filesystem is documented as a comment at the top of each file.
+Detects new USB devices in `/dev` and mounts them to `/media/scale_interface_mountpoint`.
+(Note: This currently only supports one USB device at a time).
+
+The mount directory (`/media/scale_interface_mountpoint`) will be removed on unmount.
+
+The locations of where these two files should be saved
+is documented as a comment at the top of each file.
