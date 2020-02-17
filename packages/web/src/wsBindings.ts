@@ -96,7 +96,7 @@ function socketSend(
   })
 }
 
-function getRootDir(): Promise<GetRootDirResponse> {
+async function getRootDir(): Promise<GetRootDirResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -104,11 +104,13 @@ function getRootDir(): Promise<GetRootDirResponse> {
     getRootDir: wsGetRoot,
   } = webSockets
 
-  return socketSend(wsGetRoot, null) as Promise<GetRootDirResponse>
+  const response = await socketSend(wsGetRoot, null) as GetRootDirResponse
   // TODO (0x326) [2020-03-02]: Verify response object
+
+  return response
 }
 
-function listExperiments(
+async function listExperiments(
   options: ListExperimentsOptions,
 ): Promise<ListExperimentsResponse> {
   if (webSockets === null) {
@@ -118,11 +120,13 @@ function listExperiments(
     listExperiments: wsListExperiments,
   } = webSockets
 
-  return socketSend(wsListExperiments, options) as Promise<ListExperimentsResponse>
+  const response = await socketSend(wsListExperiments, options) as ListExperimentsResponse
   // TODO (0x326) [2020-03-02]: Verify response object
+
+  return response
 }
 
-function getExperiment(
+async function getExperiment(
   options: GetExperimentOptions,
 ): Promise<GetExperimentResponse> {
   if (webSockets === null) {
@@ -132,11 +136,13 @@ function getExperiment(
     getExperiment: wsGetExperiment,
   } = webSockets
 
-  return socketSend(wsGetExperiment, options) as Promise<GetExperimentResponse>
+  const response = await socketSend(wsGetExperiment, options) as GetExperimentResponse
   // TODO (0x326) [2020-03-02]: Verify response object
+
+  return response
 }
 
-function listExperimentPaths(
+async function listExperimentPaths(
   options: ListExperimentPathsOptions,
 ): Promise<ListExperimentPathsResponse> {
   if (webSockets === null) {
@@ -146,11 +152,13 @@ function listExperimentPaths(
     listExperimentPaths: wsListPaths,
   } = webSockets
 
-  return socketSend(wsListPaths, options) as Promise<ListExperimentPathsResponse>
+  const response = await socketSend(wsListPaths, options) as ListExperimentPathsResponse
   // TODO (0x326) [2020-03-02]: Verify response object
+
+  return response
 }
 
-function writeExperiment(
+async function writeExperiment(
   options: WriteExperimentOptions,
 ): Promise<WriteExperimentResponse> {
   if (webSockets === null) {
@@ -160,8 +168,10 @@ function writeExperiment(
     writeExperiment: wsWriteExperiment,
   } = webSockets
 
-  return socketSend(wsWriteExperiment, options) as Promise<WriteExperimentResponse>
+  const response = await socketSend(wsWriteExperiment, options) as WriteExperimentResponse
   // TODO (0x326) [2020-03-02]: Verify response object
+
+  return response
 }
 
 
