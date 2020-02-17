@@ -1,12 +1,15 @@
 # Auto-mount script for Linux
 
-- udev rules go in  `/etc/udev/rules.d/99-scale-interface.rules`
+## Usage
 
-- systemd service goes in `/etc/systemd/system/scale_interface_automount@.service`
+```bash
+sudo cp 99-scale-interface.rules /etc/udev/rules.d/
+sudo cp scale_interface_automount@.service /etc/systemd/system/
 
-- run `systemctl enable scale_interface_automount@.service`
+sudo systemctl enable scale_interface_automount@.service
+systemctl status scale_interface_automount@.service
+```
 
-- check its status with `systemctl status scale_interface_automount@.service`
 
 ---
 
