@@ -95,7 +95,7 @@ function socketSend(
         status,
         message: responseMessage,
       } = parsed
-      if (status === Status.FAIL) {
+      if (status !== Status.OK) {
         reject(new Error(responseMessage))
       }
       resolve(parsed)
