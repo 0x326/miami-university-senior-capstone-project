@@ -16,6 +16,3 @@ Detects new USB devices in `/dev` and mounts them to `/media/scale_interface_mou
 (Note: This currently only supports one USB device at a time).
 
 The mount directory (`/media/scale_interface_mountpoint`) will be removed on unmount.
-
-The locations of where these two files should be saved
-is documented as a comment at the top of each file.

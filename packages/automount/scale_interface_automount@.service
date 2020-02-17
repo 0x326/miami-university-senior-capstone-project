@@ -1,4 +1,3 @@
-# /etc/systemd/system/scale_interface_automount@.service
 [Unit]
 Description=Attach scale-interface USB device at /dev/%i to /media/scale_interface_mountpoint/
 
