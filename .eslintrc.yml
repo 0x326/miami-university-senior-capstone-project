@@ -155,6 +155,24 @@ rules:
 
         dir: false  # "directory"
 
+        prom:
+          promise: true
+
+        proms:
+          promises: true
+
+        ws:
+          webSocket: true
+
+        wss:
+          webSocketServer: true
+
+        websocket:
+          webSocket: true
+
+        resp:
+          response: true
+
         # React terminology
         props: false
 
