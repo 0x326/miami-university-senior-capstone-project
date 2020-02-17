@@ -5,7 +5,7 @@ import {
   open,
 } from './serial'
 
-import { createServer } from './websocketServer'
+import { createServer } from './webSocketServer'
 
 const {
   SENTRY_DSN,

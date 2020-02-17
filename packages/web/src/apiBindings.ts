@@ -10,7 +10,7 @@ import {
   ListExperimentPathsResponse,
   WriteExperimentOptions,
   WriteExperimentResponse,
-} from '../../scale-interface/src/websocketServer'
+} from '../../scale-interface/src/webSocketServer'
 import {
   ExperimentWrapper,
 } from '../../scale-interface/src/fsOperations'
@@ -104,10 +104,10 @@ async function getRootDir(): Promise<string> {
     throw new Error('Socket is not open')
   }
   const {
-    getRootDir: wsGetRoot,
+    getRootDir: webSocket,
   } = webSockets
 
-  const response = await socketSend(wsGetRoot, null) as GetRootDirResponse
+  const response = await socketSend(webSocket, null) as GetRootDirResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 
   const {
@@ -124,10 +124,10 @@ async function listExperiments(
     throw new Error('Socket is not open')
   }
   const {
-    listExperiments: wsListExperiments,
+    listExperiments: webSocket,
   } = webSockets
 
-  const response = await socketSend(wsListExperiments, options) as ListExperimentsResponse
+  const response = await socketSend(webSocket, options) as ListExperimentsResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 
   const {
@@ -144,10 +144,10 @@ async function getExperiment(
     throw new Error('Socket is not open')
   }
   const {
-    getExperiment: wsGetExperiment,
+    getExperiment: webSocket,
   } = webSockets
 
-  const response = await socketSend(wsGetExperiment, options) as GetExperimentResponse
+  const response = await socketSend(webSocket, options) as GetExperimentResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 
   const {
@@ -164,10 +164,10 @@ async function listExperimentPaths(
     throw new Error('Socket is not open')
   }
   const {
-    listExperimentPaths: wsListPaths,
+    listExperimentPaths: webSocket,
   } = webSockets
 
-  const response = await socketSend(wsListPaths, options) as ListExperimentPathsResponse
+  const response = await socketSend(webSocket, options) as ListExperimentPathsResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 
   const {
@@ -184,10 +184,10 @@ async function writeExperiment(
     throw new Error('Socket is not open')
   }
   const {
-    writeExperiment: wsWriteExperiment,
+    writeExperiment: webSocket,
   } = webSockets
 
-  const response = await socketSend(wsWriteExperiment, options) as WriteExperimentResponse
+  const response = await socketSend(webSocket, options) as WriteExperimentResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 

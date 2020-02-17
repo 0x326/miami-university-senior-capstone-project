@@ -41,11 +41,11 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
   const webSocketServer = new WebSocketServer({ noServer: true })
 
   webSocketServer
-    .on('connection', (ws) => ws
+    .on('connection', (webSocket) => webSocket
       .on('message', (data) => {
         const parsedData: HandlerData = JSON.parse(String(data))
         handler(parsedData)
-          .then((response) => ws
+          .then((response) => webSocket
             .send(JSON.stringify(response)))
       }))
 
@@ -59,9 +59,9 @@ function createWebSocketEmitter<EmitterData>(
 
   webSocketServer
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    .on('connection', async (ws) => {
+    .on('connection', async (webSocket) => {
       for await (const message of emitter()) {
-        ws.send(JSON.stringify(message))
+        webSocket.send(JSON.stringify(message))
       }
     })
 
@@ -280,12 +280,12 @@ function createServer(
   server.on('upgrade', (request, socket, head) => {
     const { pathname } = url.parse(request.url)
     console.log(`Request for ${pathname}`)
-    const wss = routes.get(pathname || '')
+    const webSocketServer = routes.get(pathname || '')
 
-    if (wss !== undefined) {
+    if (webSocketServer !== undefined) {
       console.log(`Creating websocket server to handle ${pathname}`)
-      wss.handleUpgrade(request, socket, head, (ws) => {
-        wss.emit('connection', ws, request)
+      webSocketServer.handleUpgrade(request, socket, head, (webSocket) => {
+        webSocketServer.emit('connection', webSocket, request)
       })
     } else {
       console.log('Request is not a valid path, destroying socket')
