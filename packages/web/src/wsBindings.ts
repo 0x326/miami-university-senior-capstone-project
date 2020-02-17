@@ -11,6 +11,9 @@ import {
   WriteExperimentOptions,
   WriteExperimentResponse,
 } from '../../scale-interface/src/websocketServer'
+import {
+  ExperimentWrapper,
+} from '../../scale-interface/src/fsOperations'
 
 let webSockets: null | {
   getRootDir: WebSocket;
@@ -96,7 +99,7 @@ function socketSend(
   })
 }
 
-async function getRootDir(): Promise<GetRootDirResponse> {
+async function getRootDir(): Promise<string> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -107,12 +110,16 @@ async function getRootDir(): Promise<GetRootDirResponse> {
   const response = await socketSend(wsGetRoot, null) as GetRootDirResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 
-  return response
+  const {
+    data: dirPath,
+  } = response
+
+  return dirPath
 }
 
 async function listExperiments(
   options: ListExperimentsOptions,
-): Promise<ListExperimentsResponse> {
+): Promise<Array<ExperimentWrapper>> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -123,12 +130,16 @@ async function listExperiments(
   const response = await socketSend(wsListExperiments, options) as ListExperimentsResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 
-  return response
+  const {
+    data: experiments,
+  } = response
+
+  return experiments
 }
 
 async function getExperiment(
   options: GetExperimentOptions,
-): Promise<GetExperimentResponse> {
+): Promise<ExperimentWrapper> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -139,12 +150,16 @@ async function getExperiment(
   const response = await socketSend(wsGetExperiment, options) as GetExperimentResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 
-  return response
+  const {
+    data: experiment,
+  } = response
+
+  return experiment
 }
 
 async function listExperimentPaths(
   options: ListExperimentPathsOptions,
-): Promise<ListExperimentPathsResponse> {
+): Promise<Array<string>> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -155,12 +170,16 @@ async function listExperimentPaths(
   const response = await socketSend(wsListPaths, options) as ListExperimentPathsResponse
   // TODO (0x326) [2020-03-02]: Verify response object
 
-  return response
+  const {
+    data: experimentPaths,
+  } = response
+
+  return experimentPaths
 }
 
 async function writeExperiment(
   options: WriteExperimentOptions,
-): Promise<WriteExperimentResponse> {
+): Promise<void> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -170,8 +189,6 @@ async function writeExperiment(
 
   const response = await socketSend(wsWriteExperiment, options) as WriteExperimentResponse
   // TODO (0x326) [2020-03-02]: Verify response object
-
-  return response
 }
 
 
