@@ -1,4 +1,5 @@
-parser: espree
+parserOptions:
+  project: ./tsconfig.json
 
 env:
   node: true
