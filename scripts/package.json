@@ -1,0 +1,12 @@
+{
+  "name": "scripts",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "progress": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/progress": "^2.0.3"
+  }
+}
