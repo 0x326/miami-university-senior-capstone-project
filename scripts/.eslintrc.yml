@@ -1,0 +1,14 @@
+parser: espree
+
+env:
+  node: true
+
+rules:
+  unicorn/filename-case:
+    - error
+    - cases:
+        kebabCase: true
+
+  import/no-extraneous-dependencies: off
+
+  '@typescript-eslint/*': off
