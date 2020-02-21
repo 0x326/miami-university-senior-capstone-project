@@ -44,6 +44,7 @@ export interface ExperimentMetaData extends Readonly<{
   experimentName: string;
   experimentLeadName: string;
   startDate: Dayjs;
+  lastUpdated: Dayjs;
   sessionCount: number;
   bottlesPerCage: number;
   weighsPerBottle: number;
@@ -105,6 +106,7 @@ function NewExperiment(props: Props): JSX.Element {
                       experimentName,
                       experimentLeadName,
                       startDate: dayjs(startDate),
+                      lastUpdated: dayjs(),
                       sessionCount: Number(sessionCount),
                       bottlesPerCage: Number(bottlesPerCage),
                       weighsPerBottle: Number(weighsPerBottle),

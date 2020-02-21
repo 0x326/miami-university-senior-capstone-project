@@ -34,6 +34,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
     experimentName,
     experimentLeadName,
     startDate,
+    lastUpdated,
     sessionCount,
     bottlesPerCage,
     weighsPerBottle,
@@ -63,6 +64,8 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       </Typography>
       <Typography use="body1" tag="p">
         Last Updated:
+        {' '}
+        {lastUpdated.format('YYYY-MM-DD')}
       </Typography>
       <Typography use="body1" tag="p">
         Sessions per Cage:
