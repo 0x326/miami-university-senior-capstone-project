@@ -1,10 +1,7 @@
-import React, {
-  useState,
-} from 'react'
+import React from 'react'
 
 import {
   TopAppBar,
-  TopAppBarActionItem,
   TopAppBarFixedAdjust,
   TopAppBarNavigationIcon,
   TopAppBarRow,
