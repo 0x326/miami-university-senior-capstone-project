@@ -17,6 +17,9 @@ import {
 } from '@rmwc/typography'
 import '@material/typography/dist/mdc.typography.css'
 
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
 import {
   ExperimentMetaData,
 } from '../new/NewExperimentView'
@@ -39,6 +42,8 @@ function ExperimentMetadataView(props: Props): JSX.Element {
     bottlesPerCage,
     weighsPerBottle,
   } = experimentMetadata
+
+  dayjs.extend(relativeTime)
 
   return (
     <>
@@ -66,6 +71,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
         Last Updated:
         {' '}
         {lastUpdated.format('YYYY-MM-DD')}
+        {lastUpdated.fromNow()}
       </Typography>
       <Typography use="body1" tag="p">
         Sessions per Cage:
