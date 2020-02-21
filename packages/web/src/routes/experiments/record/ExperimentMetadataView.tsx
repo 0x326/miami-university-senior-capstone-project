@@ -67,7 +67,6 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       <Typography use="body1" tag="p">
         Last Updated:
         {' '}
-        {lastUpdated.format('YYYY-MM-DD')}
         {lastUpdated.fromNow()}
       </Typography>
       <Typography use="body1" tag="p">
