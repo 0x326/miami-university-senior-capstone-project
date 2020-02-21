@@ -21,6 +21,8 @@ import {
   ExperimentMetaData,
 } from '../new/NewExperimentView'
 
+dayjs.extend(relativeTime)
+
 interface Props {
   experimentMetadata: ExperimentMetaData;
 }
@@ -39,8 +41,6 @@ function ExperimentMetadataView(props: Props): JSX.Element {
     bottlesPerCage,
     weighsPerBottle,
   } = experimentMetadata
-
-  dayjs.extend(relativeTime)
 
   return (
     <>
