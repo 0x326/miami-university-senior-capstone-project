@@ -59,7 +59,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       <Typography use="body1" tag="p">
         Start Date:
         {' '}
-        {startDate}
+        {startDate.format('YYYY-MM-DD')}
       </Typography>
       <Typography use="body1" tag="p">
         Last Updated:
