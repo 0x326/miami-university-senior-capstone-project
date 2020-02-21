@@ -44,31 +44,40 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       <TopAppBar>
         <TopAppBarRow>
           <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu"/>
+            <TopAppBarNavigationIcon icon="menu" />
             <TopAppBarTitle>{experimentName}</TopAppBarTitle>
           </TopAppBarSection>
-          <TopAppBarSection alignEnd>
-          </TopAppBarSection>
+          <TopAppBarSection alignEnd />
         </TopAppBarRow>
       </TopAppBar>
       <TopAppBarFixedAdjust />
-      <Typography use= "body1" tag="p">
-        Primary Experimentor: {experimentLeadName}
+      <Typography use="body1" tag="p">
+        Primary Experimentor:
+        {' '}
+        {experimentLeadName}
       </Typography>
-      <Typography use= "body1" tag="p">
-        Start Date: {startDate}
+      <Typography use="body1" tag="p">
+        Start Date:
+        {' '}
+        {startDate}
       </Typography>
-      <Typography use= "body1" tag="p">
+      <Typography use="body1" tag="p">
         Last Updated:
       </Typography>
-      <Typography use= "body1" tag="p">
-        Sessions per Cage: {sessionCount}
+      <Typography use="body1" tag="p">
+        Sessions per Cage:
+        {' '}
+        {sessionCount}
       </Typography>
-      <Typography use= "body1" tag="p">
-        Bottles per Cage: {bottlesPerCage}
+      <Typography use="body1" tag="p">
+        Bottles per Cage:
+        {' '}
+        {bottlesPerCage}
       </Typography>
-      <Typography use= "body1" tag="p">
-        Weights per Bottle: {weighsPerBottle}
+      <Typography use="body1" tag="p">
+        Weights per Bottle:
+        {' '}
+        {weighsPerBottle}
       </Typography>
     </>
   )

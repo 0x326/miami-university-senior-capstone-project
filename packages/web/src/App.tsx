@@ -19,9 +19,7 @@ import {
 
 import uuid from 'uuid/v4'
 
-import dayjs, {
-  Dayjs,
-} from 'dayjs'
+import dayjs from 'dayjs'
 
 import ExperimentDashboard, {
   ExperimentData,

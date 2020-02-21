@@ -20,8 +20,9 @@ import {
 
 import NoMatch from '../NoMatch'
 import {
-  ExperimentId
+  ExperimentId,
 } from '../../App'
+
 import ExperimentList from './ExperimentList'
 import ExperimentMetadataView from './record/ExperimentMetadataView'
 import NewExperiment, {
