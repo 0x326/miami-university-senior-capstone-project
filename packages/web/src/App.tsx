@@ -63,7 +63,7 @@ const App: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   // TODO (wael27) [2020-03-15]: Delete this eslint-disable comment
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>()
     .withMutations((experimentMap) => experimentMap
       .set('experiment-1', {
