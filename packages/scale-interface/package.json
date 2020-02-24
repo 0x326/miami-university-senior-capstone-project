@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "start": "echo \"\u001b[33mWARNING: Types will not be checked\u001b[0m\" && parcel watch --target node src/index.ts",
+    "start": "node dist/index.js",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
     "test": "jest",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
