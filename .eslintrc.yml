@@ -32,9 +32,14 @@ rules:
 
   no-console: off
 
+  no-continue: off
+
+  no-plusplus: off
+
   import/order:
     - error
     - newlines-between: always-and-inside-groups
+
 
   import/no-cycle: error
 
@@ -43,6 +48,7 @@ rules:
     - consistent: true
       # ImportDeclaration: always
       # ExportDeclaration: always
+
 
   react/prefer-read-only-props: error
   react/jsx-key: error
@@ -150,6 +156,8 @@ rules:
         args: false  # "arguments"
 
         dir: false  # "directory"
+
+        ret: false
 
         # React terminology
         props: false
