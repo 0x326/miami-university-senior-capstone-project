@@ -2,3 +2,7 @@ site_name: My Docs
 
 theme:
   name: material
+
+repo_name: 0x326/miami-university-senior-capstone-project
+repo_url: https://gitlab.com/0x326/miami-university-senior-capstone-project
+edit_uri: /-/edit/master/docs/
