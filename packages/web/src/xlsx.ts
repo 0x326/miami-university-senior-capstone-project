@@ -32,16 +32,11 @@ import { ExperimentId } from './App'
 // import { ExperimentMetaData } from './routes/experiments/new/NewExperimentView'
 // import { CageSessionData } from './routes/experiment-dashboard/CageSessionTable'
 
-export interface ExperimentKVPairs {
-    a: string;
-}
-
 
 // 0 indexed cell sheet rows
 const SessRow = 0
 const labRow = 1
 const datRowBegin = 2
-
 
 
 // TODO raise helpful errors instead of assert
@@ -129,28 +124,7 @@ s2 ...
 
 Have we confirmed id fields will be numbers?
 
-These functions would be simpler if our data structure(s) for representing
-experiment data was simpler. Is there a reason we're using maps and then
-providing order to them with lists as opposed to just using lists?
-
 */
-
-// interface Experiment {
-//	 eid: number;
-//	 racks: {
-//	   cageid: number;
-//	   cageData: [{
-//		 sessionNum: number;
-//		 sessionData: [{
-//		   rowLabel: string;	 // before/after
-//		   rowData: {
-//			 bottleType: string;
-//			 weight: number;
-//		   }
-//		 }]
-//	   }]
-//	 }
-// }
 
 // avert your eyes
 function parseData(ds: XLSX.WorkSheet,
@@ -162,7 +136,7 @@ function parseData(ds: XLSX.WorkSheet,
         cageid = 3
     }
 
-    function treatmentPair(datPair: [XLSX.CellObject, XLSX.CellObject]): Map<string, number> {
+    function treatmentPair(datPair: [XLSX.CellObject, XLSX.CellObject]): [string, number] {
         assert(datPair[0].t === 'n') // weights should be numbers
         assert(datPair[1].t === 's') // labels should be strings
 
@@ -170,9 +144,7 @@ function parseData(ds: XLSX.WorkSheet,
         assert(regRes && regRes[1].length > 0) // no empty treatments
         let treatment = (regRes as RegExpExecArray)[1]
         let weight = datPair[0].v as number
-        let ret: Map<string, number> = Map()
-        ret = ret.set(treatment, weight)
-        return ret
+        return [treatment, weight]
     }
 
     const enc_cell = XLSX.utils.encode_cell // alias for readability
@@ -209,15 +181,23 @@ function parseData(ds: XLSX.WorkSheet,
                         ] as [XLSX.CellObject, XLSX.CellObject])
 
                     // pre weights are in first half, post in other half
-                    let preWeights = {
+                    const preWeights = {
                         rowLabel: "Pre",
-                        rowData: dataPairs.slice(0, Math.floor(dataPairs.length / 2))
-                            .map((x) => treatmentPair(x))
+                        rowData: Map().withMutations((rowDat) => {
+                            for (let cellPair of dataPairs.slice(0, Math.floor(dataPairs.length / 2))) {
+                                let datPair = treatmentPair(cellPair)
+                                rowDat.set(datPair[0], datPair[1])
+                            }
+                        })
                     }
-                    let postWeights = {
+                    const postWeights = {
                         rowLabel: "Post",
-                        rowData: dataPairs.slice(Math.floor(dataPairs.length / 2))
-                            .map((x) => treatmentPair(x))
+                        rowData: Map().withMutations((rowDat) => {
+                            for (let cellPair of dataPairs.slice(Math.floor(dataPairs.length / 2))) {
+                                let datPair = treatmentPair(cellPair)
+                                rowDat.set(datPair[0], datPair[1])
+                            }
+                        })
                     }
                     const session = {
                         sessionNumber: sessNum,
@@ -226,39 +206,79 @@ function parseData(ds: XLSX.WorkSheet,
                     sessions.push(session)
                 }
                 let ret: Map<CageId, CageData> = Map()
-                ret = ret.set(cageid, sessions)
+                ret = ret.set(cageid, sessions.asImmutable())
                 racks.set(rackid, (racks.get(rackid) as any).merge(ret))
             }
         })))
 }
 
-function binToDisplay(dat: Uint8Array | any):
-    [ExperimentData, CageDisplayOrder, RackDisplayOrder, ExperimentKVPairs] | void {
-    // const wb = XLSX.read(dat, { type: 'array' })
-    const wb = XLSX.readFile('./test.xlsx')
+function binToDisplay(dat: Uint8Array):
+    [{ [key: string]: string | number | null }, // metadata
+        Map<string, ExperimentData>,
+        RackDisplayOrder,
+        CageDisplayOrder,
+    ] {
+
+    const wb = XLSX.read(dat, { type: 'array' })
     const kvPairs = parseMeta(wb.Sheets.Metadata)
     const experimentData = parseData(wb.Sheets.Data, kvPairs)
 
-    console.log(kvPairs)
-    console.log("===")
-    let e = experimentData.toJS() as any
-    console.log(e)
+    // bleh
+    const onlyKey = experimentData.keySeq().toArray()[0]
+    const rackOrder = List(experimentData.getIn([onlyKey]).keySeq().toArray().sort() as [RackId])
 
-    // print all sssion data for rack 1, cage 2
-    // let x = e['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM']['1']['2']
-    // for (let o of x) {
-    //	   console.log(o.sessionNumber)
-    //	   for (let d of o.cageSessionData)
-    //		   console.log(d)
+    const cageOrder = Map().asMutable() as CageDisplayOrder
+    rackOrder.map((rackid) => cageOrder.set(rackid, experimentData.getIn([onlyKey, rackid]).keySeq().toArray().sort()))
 
-    console.log("==========")
-    // here's one method of getting deeply nested values
-    console.log(experimentData.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM', 1, 2, 0]))
-    console.log(experimentData.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM', 1, 2, 0, "cageSessionData", 0, "rowData", 0]).toJS())
-    console.log("==========")
+    // console.log(experimentData.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM',
+    // 1, 2, 0, "cageSessionData", 0, "rowData", "h2o"]))
 
-    // }
+    return [kvPairs, experimentData, rackOrder, cageOrder.asImmutable()]
 }
 
+// test functionality
+import * as fs from 'fs'
+const dat = new Uint8Array(fs.readFileSync("./test.xlsx"))
+binToDisplay(dat)
 
-binToDisplay(null)
+
+/*
+THIS!
+{
+    'Addiction study 12_Quinn_10/20/2019, 12:00:00 AM':
+    {
+        // rackids
+        1: {
+            // cageids
+            1: {
+                sessionNumber: 1,
+                cageSessionData: [
+                    {
+                        rowLabel: "Pre",
+                        rowData: {
+                            "etoh": 10,
+                            "h2o": 12
+                        }
+                    },
+                    {
+                        rowLabel: "Post",
+                        rowData: {
+                            "etoh", 10,
+                            "h2o", 12
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+*/
+
+function displayToWB(
+    metadat: { [key: string]: string | number | null },
+    experiment: Map<string, ExperimentData>,
+    rdo: RackDisplayOrder,
+    cdo: CageDisplayOrder,
+): XLSX.WorkBook | void {
+    const ret = XLSX.utils.book_new()
+}
