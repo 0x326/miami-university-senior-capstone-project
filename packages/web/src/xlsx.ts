@@ -149,8 +149,9 @@ function parseData(ds: XLSX.WorkSheet,
 
     const enc_cell = XLSX.utils.encode_cell // alias for readability
     const sessColStart = 5 // TODO serialize in Metadata
-    const colsPerSess = pairs["cols/session"] as number
-    const numTreatments = pairs["num treatments"] as number
+    const colsPerSess = pairs["num treatments"] as number * 2 // pre and post weights for each treatment
+    // if there are more weights per session than pre and post, we should use below instead:
+    // const colsPerSess = pairs['cols/session'] as number
 
     const eid = String(pairs['experiment title']) + "_"
         + String(pairs['primary experimenter']) + "_"
@@ -174,7 +175,7 @@ function parseData(ds: XLSX.WorkSheet,
                 let sessions = List().asMutable()
                 for (let j = sessColStart, sessNum = 1; ds[enc_cell({ r: i, c: j })]; j += colsPerSess, ++sessNum) {
                     // each session has numTreatments * 2 datapoints because only pre and post weights
-                    let dataPairs = Array.from(Array(2 * numTreatments).keys()) // => range(0, 2 * numTreatments)
+                    let dataPairs = Array.from(Array(colsPerSess).keys()) // => range(0, 2 * numTreatments)
                         .map(x => [
                             ds[enc_cell({ r: i, c: j + x })],	  // weight cell
                             ds[enc_cell({ r: labRow, c: j + x })] // label cell
