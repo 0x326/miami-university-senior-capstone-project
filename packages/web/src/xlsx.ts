@@ -201,7 +201,7 @@ function parseData(ds: XLSX.WorkSheet,
                     }
                     const session = {
                         sessionNumber: sessNum,
-                        cageSessionData: [preWeights, postWeights]
+                        cageSessionData: List([preWeights, postWeights])
                     }
                     sessions.push(session)
                 }
@@ -214,7 +214,7 @@ function parseData(ds: XLSX.WorkSheet,
 
 function binToDisplay(dat: Uint8Array):
     [{ [key: string]: string | number | null }, // metadata
-        Map<string, ExperimentData>,
+        Map<string, ExperimentData>,            // experiment
         RackDisplayOrder,
         CageDisplayOrder,
     ] {
@@ -230,16 +230,23 @@ function binToDisplay(dat: Uint8Array):
     const cageOrder = Map().asMutable() as CageDisplayOrder
     rackOrder.map((rackid) => cageOrder.set(rackid, experimentData.getIn([onlyKey, rackid]).keySeq().toArray().sort()))
 
-    // console.log(experimentData.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM',
-    // 1, 2, 0, "cageSessionData", 0, "rowData", "h2o"]))
-
     return [kvPairs, experimentData, rackOrder, cageOrder.asImmutable()]
 }
 
 // test functionality
 import * as fs from 'fs'
 const dat = new Uint8Array(fs.readFileSync("./test.xlsx"))
-binToDisplay(dat)
+const [metadat, experiment, rdo, cdo] = binToDisplay(dat)
+// print entire experiment
+console.log(experiment.toJS())
+console.log("===")
+// print 2nd rack 3rd cage data
+console.log(experiment.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM',
+    2, 3]).toJS())
+console.log("===")
+// print 2nd rack 3rd cage, 0th session cageSessionData
+console.log(experiment.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM',
+    2, 3, 0, "cageSessionData"]).toJS())
 
 
 /*
@@ -273,7 +280,6 @@ THIS!
     }
 }
 */
-
 function displayToWB(
     metadat: { [key: string]: string | number | null },
     experiment: Map<string, ExperimentData>,
