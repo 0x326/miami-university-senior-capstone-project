@@ -99,6 +99,7 @@
     "uuid": "^3.3.3"
   },
   "scripts": {
+    "postinstall": "node ../../scripts/ln.js ../api-interfaces node_modules/api-interfaces",
     "start": "react-scripts start",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
     "test": "react-scripts test",

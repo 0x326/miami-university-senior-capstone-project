@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "postinstall": "node ../../scripts/ln.js ../api-interfaces node_modules/api-interfaces",
     "start": "node dist/index.js",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
     "test": "jest",
