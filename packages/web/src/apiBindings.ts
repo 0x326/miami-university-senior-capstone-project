@@ -126,7 +126,7 @@ async function getRootDir(): Promise<string> {
 
 async function listExperiments(
   options: ListExperimentsOptions,
-): Promise<Array<ExperimentWrapper>> {
+): Promise<Array<ExperimentWrapper> | undefined> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -146,7 +146,7 @@ async function listExperiments(
 
 async function getExperiment(
   options: GetExperimentOptions,
-): Promise<ExperimentWrapper> {
+): Promise<ExperimentWrapper | undefined> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -166,7 +166,7 @@ async function getExperiment(
 
 async function listExperimentPaths(
   options: ListExperimentPathsOptions,
-): Promise<Array<string>> {
+): Promise<Array<string> | undefined> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
