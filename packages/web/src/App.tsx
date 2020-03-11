@@ -44,12 +44,14 @@ import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
+import ScaleApiTester from './ScaleApiTester'
 
 export type ExperimentId = RouteId
 
 const viewOptions: RouteMap = Map<ExperimentId, DisplayName>().withMutations((map) => map
   .set('experiment-dashboard', 'Experiment Dashboard')
-  .set('experiments', 'Experiments'))
+  .set('experiments', 'Experiments')
+  .set('scale-api-tester', 'Scale API tester'))
 
 const App: React.FC = () => {
   const history = useHistory()
@@ -255,6 +257,9 @@ const App: React.FC = () => {
               history.push('/experiments')
             })}
           />
+        </Route>
+        <Route path="/scale-api-tester">
+          <ScaleApiTester/>
         </Route>
         <Route path="*">
           <NoMatch
