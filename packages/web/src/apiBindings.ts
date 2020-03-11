@@ -196,15 +196,16 @@ async function writeExperiment(
     writeExperiment: webSocket,
   } = webSockets
 
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const response = await socketSend(webSocket, options) as WriteExperimentResponse
-  // TODO (0x326) [2020-03-02]: Verify response object
+  // TODO (0x326) [2020-03-15]: Verify response object
 }
 
-async function scaleData(
+function scaleData(
   callback: (measurement: ScaleData) => void,
-): Promise<void> {
+): void {
   if (webSockets === null) {
-    console.log("scaleData func ran but errored.")
+    console.log('scaleData func ran but errored.')
     throw new Error('Socket is not open')
   }
   const {

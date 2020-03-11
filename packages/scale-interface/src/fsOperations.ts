@@ -3,17 +3,17 @@ import path from 'path'
 import _ from 'lodash'
 import Joi from '@hapi/joi'
 
-import {
-  readFile,
-  readdir,
-  writeFile,
-} from './fs'
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Experiment,
   ExperimentWrapper,
 } from 'api-interfaces/dist'
+
+import {
+  readFile,
+  readdir,
+  writeFile,
+} from './fs'
 
 const schema = Joi.object({
   name: Joi.string()

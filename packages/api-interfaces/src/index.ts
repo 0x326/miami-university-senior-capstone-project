@@ -138,5 +138,5 @@ export {
   getExperimentEndpoint,
   listExperimentPathsEndpoint,
   writeExperimentEndpoint,
-  scaleDataEndpoint
+  scaleDataEndpoint,
 }
