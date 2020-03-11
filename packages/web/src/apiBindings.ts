@@ -22,6 +22,7 @@ let webSockets: null | {
   getExperiment: WebSocket;
   listExperimentPaths: WebSocket;
   writeExperiment: WebSocket;
+  scaleData: WebSocket;
 } = null
 
 function openWebSocket(
@@ -64,6 +65,7 @@ async function connect(
     getExperiment: await openWebSocket(`${baseURI}/get-experiment`, timeout),
     listExperimentPaths: await openWebSocket(`${baseURI}/list-experiment-paths`, timeout),
     writeExperiment: await openWebSocket(`${baseURI}/write-experiment`, timeout),
+    scaleData: await openWebSocket(`${baseURI}/scale-data`, timeout),
   }
 }
 
@@ -199,6 +201,20 @@ async function writeExperiment(
   // TODO (0x326) [2020-03-02]: Verify response object
 }
 
+async function scaleData(
+  callback: (measurement: ScaleData) => void,
+): Promise<void> {
+  if (webSockets === null) {
+    console.log("scaleData func ran but errored.")
+    throw new Error('Socket is not open')
+  }
+  const {
+    scaleData: webSocket,
+  } = webSockets
+
+  webSocket.addEventListener('message', ({ data }) => callback(data))
+  // TODO (0x326) [2020-03-02]: Verify object
+}
 
 export {
   connect,
@@ -208,4 +224,5 @@ export {
   getExperiment,
   listExperimentPaths,
   writeExperiment,
+  scaleData,
 }
