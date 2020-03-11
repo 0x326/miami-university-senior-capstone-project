@@ -11,8 +11,6 @@ import {
   WriteExperimentOptions,
   WriteExperimentResponse,
   ScaleData,
-} from 'api-interfaces/dist'
-import {
   ExperimentWrapper,
 } from 'api-interfaces/dist'
 
