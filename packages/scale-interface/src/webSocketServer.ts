@@ -10,30 +10,36 @@ import {
 } from 'ws'
 
 import {
-  Measurement,
+  Status,
+  GetRootDirResponse,
+  ListExperimentPathsOptions,
+  ListExperimentsResponse,
+  GetExperimentOptions,
+  GetExperimentResponse,
+  ListExperimentPathsResponse,
+  ListExperimentsOptions,
+  WriteExperimentOptions,
+  WriteExperimentResponse,
+  ScaleData,
+  getRootDirEndpoint,
+  listExperimentsEndpoint,
+  getExperimentEndpoint,
+  listExperimentPathsEndpoint,
+  writeExperimentEndpoint,
+  scaleDataEndpoint,
+} from 'api-interfaces/dist'
+
+import {
   subscribe,
 } from './serial'
 
 import {
   ROOT_PATH,
-  Experiment,
   listExperiments,
   getExperiment,
   writeExperiment,
   listExperimentPaths,
-  ExperimentWrapper,
 } from './fsOperations'
-
-enum Status {
-  OK = 'OK',
-  FAIL = 'FAIL'
-}
-
-export interface Response {
-  status: Status;
-  data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
-  message?: string;
-}
 
 function createWebSocketHandler<HandlerData, HandlerResponse>(
   handler: (data: HandlerData) => Promise<HandlerResponse>,
@@ -68,31 +74,11 @@ function createWebSocketEmitter<EmitterData>(
   return webSocketServer
 }
 
-const getRootDirEndpoint = '/get-root-dir'
-
-export interface GetRootDirResponse extends Response {
-  status: Status;
-  data: string;
-}
-
 function handleGetRootDir(): Promise<GetRootDirResponse> {
   return Promise.resolve({
     status: Status.OK,
     data: ROOT_PATH,
   })
-}
-
-const listExperimentsEndpoint = '/list-experiments'
-
-export interface ListExperimentsOptions {
-  path: string;
-  filter: null | Experiment;
-}
-
-export interface ListExperimentsResponse extends Response {
-  status: Status;
-  data?: Array<ExperimentWrapper>;
-  message?: string;
 }
 
 async function handleListExperiments(
@@ -119,18 +105,6 @@ async function handleListExperiments(
       message: error.toString(),
     }
   }
-}
-
-const getExperimentEndpoint = '/get-experiment'
-
-export interface GetExperimentOptions {
-  path: string;
-}
-
-export interface GetExperimentResponse extends Response {
-  status: Status;
-  data?: ExperimentWrapper;
-  message?: string;
 }
 
 async function handleGetExperiment(
@@ -160,22 +134,6 @@ async function handleGetExperiment(
   }
 }
 
-const listExperimentPathsEndpoint = '/list-experiment-paths'
-
-export interface ListExperimentPathsOptions {
-  path: string;
-  experimentName: string;
-  primaryExperimenter: string;
-  dateStart: Date;
-  dateEnd: Date;
-}
-
-export interface ListExperimentPathsResponse extends Response {
-  status: Status;
-  data?: Array<string>;
-  message?: string;
-}
-
 async function handleListExperimentPaths(
   options: ListExperimentPathsOptions,
 ): Promise<ListExperimentPathsResponse> {
@@ -200,18 +158,6 @@ async function handleListExperimentPaths(
       message: error.toString(),
     }
   }
-}
-
-const writeExperimentEndpoint = '/write-experiment'
-
-export interface WriteExperimentOptions {
-  path: string;
-  data: Experiment;
-}
-
-export interface WriteExperimentResponse extends Response {
-  status: Status;
-  message?: string;
 }
 
 async function handleWriteExperiment(
@@ -249,12 +195,6 @@ async function handleWriteExperiment(
       message: error.toString(),
     }
   }
-}
-
-const scaleDataEndpoint = '/scale-data'
-
-export interface ScaleData extends Measurement {
-
 }
 
 async function* emitScaleData(): AsyncGenerator<ScaleData> {
