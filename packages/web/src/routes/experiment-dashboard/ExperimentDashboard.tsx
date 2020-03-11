@@ -34,13 +34,14 @@ import {
 
 import CageSessions, {
   CageData,
+  Cage,
 } from './CageSessions'
 
 export type RackId = number
 export type CageId = number
-export interface ExperimentData extends Map<RackId, Map<CageId, CageData>> {}
-export interface CageDisplayOrder extends Map<RackId, List<CageId>> {}
-export interface RackDisplayOrder extends List<RackId> {}
+export interface ExperimentData extends Map<RackId, Map<CageId, Cage>> { }
+export interface CageDisplayOrder extends Map<RackId, List<CageId>> { }
+export interface RackDisplayOrder extends List<RackId> { }
 
 interface Props {
   onDrawerOpen: () => void;

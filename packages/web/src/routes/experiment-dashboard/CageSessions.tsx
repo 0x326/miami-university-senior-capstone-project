@@ -20,10 +20,15 @@ import CageSessionTable, {
 import '@material/list/dist/mdc.list.css'
 import '@rmwc/list/collapsible-list.css'
 
+
 export interface CageData extends List<Readonly<{
   sessionNumber: number;
   cageSessionData: CageSessionData;
-}>> {}
+}>> { }
+export interface Cage {
+  isDummy: boolean;
+  cageData: CageData;
+}
 
 interface Props {
   cageNumber: number;
