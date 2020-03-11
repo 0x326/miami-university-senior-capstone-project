@@ -159,6 +159,8 @@ rules:
 
         ret: false
 
+        res: false  # result
+
         # React terminology
         props: false
 
