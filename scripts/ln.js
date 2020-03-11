@@ -18,4 +18,8 @@ const [
 const absoluteTarget = path.resolve(target)
 const absoluteLinkName = path.resolve(linkName)
 
-fs.symlinkSync(absoluteTarget, absoluteLinkName, 'junction')
+try {
+  fs.symlinkSync(absoluteTarget, absoluteLinkName, 'junction')
+} catch (error) {
+  console.error(`${error.name}: ${error.message}`)
+}
