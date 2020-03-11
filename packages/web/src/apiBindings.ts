@@ -43,7 +43,7 @@ function openWebSocket(
       // Deallocate socket
       socket = null
     })
-    // TODO (wimmeldj) [2020-03-01]: Add event listener for 'error' event
+    // TODO (wimmeldj) [2020-03-15]: Add event listener for 'error' event
   })
 }
 
@@ -117,7 +117,7 @@ async function getRootDir(): Promise<string> {
   } = webSockets
 
   const response = await socketSend(webSocket, null) as GetRootDirResponse
-  // TODO (0x326) [2020-03-02]: Verify response object
+  // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
     data: dirPath,
@@ -137,7 +137,7 @@ async function listExperiments(
   } = webSockets
 
   const response = await socketSend(webSocket, options) as ListExperimentsResponse
-  // TODO (0x326) [2020-03-02]: Verify response object
+  // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
     data: experiments,
@@ -157,7 +157,7 @@ async function getExperiment(
   } = webSockets
 
   const response = await socketSend(webSocket, options) as GetExperimentResponse
-  // TODO (0x326) [2020-03-02]: Verify response object
+  // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
     data: experiment,
@@ -177,7 +177,7 @@ async function listExperimentPaths(
   } = webSockets
 
   const response = await socketSend(webSocket, options) as ListExperimentPathsResponse
-  // TODO (0x326) [2020-03-02]: Verify response object
+  // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
     data: experimentPaths,
@@ -212,7 +212,7 @@ async function scaleData(
   } = webSockets
 
   webSocket.addEventListener('message', ({ data }) => callback(data))
-  // TODO (0x326) [2020-03-02]: Verify object
+  // TODO (0x326) [2020-03-15]: Verify object
 }
 
 export {
