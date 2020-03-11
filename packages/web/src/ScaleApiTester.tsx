@@ -35,10 +35,10 @@ function ScaleApiTester(props: Props): JSX.Element {
         >
           Connect to Node.js server
         </button>
-       </p>
-       <p>
-         The current weight is: {weight}
-       </p>
+      </p>
+      <p>
+        The current weight is: {weight}
+      </p>
     </>
   )
 }
