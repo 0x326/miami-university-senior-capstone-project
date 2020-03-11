@@ -2,7 +2,7 @@ import React, {
   useState,
 } from 'react'
 
-import  {
+import {
   connect,
   scaleData,
 } from './apiBindings'
@@ -31,7 +31,8 @@ function ScaleApiTester(props: Props): JSX.Element {
               // setWeight()
             }))
             .catch(() => setConnectionStatus('error'))
-        }}>
+        }}
+        >
           Connect to Node.js server
         </button>
        </p>

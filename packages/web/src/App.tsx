@@ -259,7 +259,7 @@ const App: React.FC = () => {
           />
         </Route>
         <Route path="/scale-api-tester">
-          <ScaleApiTester/>
+          <ScaleApiTester />
         </Route>
         <Route path="*">
           <NoMatch
