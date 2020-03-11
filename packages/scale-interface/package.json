@@ -8,6 +8,7 @@
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
     "test": "jest",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
+    "prebuild": "cd ../api-interfaces/ && yarn build",
     "build": "tsc --noEmit && parcel build --target node src/index.ts",
     "analyze-build": "source-map-explorer 'dist/*.js'"
   },

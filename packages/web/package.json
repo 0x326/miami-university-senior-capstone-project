@@ -100,10 +100,12 @@
   },
   "scripts": {
     "postinstall": "node ../../scripts/ln.js ../api-interfaces node_modules/api-interfaces",
+    "prestart": "cd ../api-interfaces/ && yarn build",
     "start": "react-scripts start",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
     "test": "react-scripts test",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+    "prebuild": "cd ../api-interfaces/ && yarn build",
     "build": "react-scripts build",
     "analyze-build": "source-map-explorer 'build/static/js/*.js'",
     "eject": "react-scripts eject"

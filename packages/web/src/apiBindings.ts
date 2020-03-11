@@ -10,10 +10,11 @@ import {
   ListExperimentPathsResponse,
   WriteExperimentOptions,
   WriteExperimentResponse,
-} from '../../scale-interface/src/webSocketServer'
+  ScaleData,
+} from 'api-interfaces/dist'
 import {
   ExperimentWrapper,
-} from '../../scale-interface/src/fsOperations'
+} from 'api-interfaces/dist'
 
 let webSockets: null | {
   getRootDir: WebSocket;
