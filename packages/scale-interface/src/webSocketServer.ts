@@ -9,6 +9,7 @@ import {
   Server as WebSocketServer,
 } from 'ws'
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
   GetRootDirResponse,

@@ -9,6 +9,7 @@ import {
   writeFile,
 } from './fs'
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Experiment,
   ExperimentWrapper,
