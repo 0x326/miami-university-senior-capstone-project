@@ -20,6 +20,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
+import { Button } from '@rmwc/button'
 
 dayjs.extend(relativeTime)
 
@@ -84,6 +85,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
         {' '}
         {weighsPerBottle}
       </Typography>
+      <Button label="Begin" raised />
     </>
   )
 }
