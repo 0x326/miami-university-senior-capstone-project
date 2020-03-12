@@ -19,7 +19,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 import {
   ExperimentMetaData,
-} from '../new/NewExperimentView'
+} from '../../new/NewExperimentView'
 
 dayjs.extend(relativeTime)
 
@@ -55,7 +55,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       </TopAppBar>
       <TopAppBarFixedAdjust />
       <Typography use="body1" tag="p">
-        Primary Experimentor:
+        Primary Experimentor: hmm
         {' '}
         {experimentLeadName}
       </Typography>
