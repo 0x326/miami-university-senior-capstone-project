@@ -35,6 +35,9 @@ const SessRow = 0
 const labRow = 1
 const datRowBegin = 2
 
+// RackId, CageId, and isDummy do not vary across sessions
+const staticColCount = 3
+
 // 0 indexed columns
 enum labs {
   rackid = 0,
@@ -50,7 +53,6 @@ const numbers = [
   'cols/session',
   'date initialized',
   'num treatments',
-  'num static identifiers',
 ]
 
 // keys that have comma separated values
@@ -64,7 +66,6 @@ function parseMeta(sheet: XLSX.WorkSheet): Metadata {
     'date initialized': null,
     'experiment title': null,
     'last updated': null,
-    'num static identifiers': null,
     'num treatments': null,
     'primary experimenter': null,
     'total sessions': null,
@@ -254,15 +255,14 @@ function experimentToWS(
   cdo: CageDisplayOrder,
 ): XLSX.WorkSheet {
   const aoa = []
-  const staticIdCount = m['num static identifiers'] as number
   const treatmentCnt = m['num treatments'] as number
   const colsPerSession = treatmentCnt * 2
   const sessCnt = m['total sessions'] as number
   const treatments = m.treatments as string[]
 
   // first row. session headers
-  aoa[SessRow] = Array(staticIdCount)
-  for (let i = 1, x = staticIdCount; i <= sessCnt; x += colsPerSession, ++i) aoa[SessRow][x] = `Session ${i}`
+  aoa[SessRow] = Array(staticColCount)
+  for (let i = 1, x = staticColCount; i <= sessCnt; x += colsPerSession, ++i) aoa[SessRow][x] = `Session ${i}`
 
   // second row. all other labels
   aoa[labRow] = []
