@@ -30,16 +30,16 @@ export interface Metadata {
 }
 
 
-// 0 indexed rows
-const SessRow = 0
-const labRow = 1
-const datRowBegin = 2
-
 // RackId, CageId, and isDummy do not vary across sessions
 const staticColCount = 3
 
-// 0 indexed columns
-enum labs {
+// rows and columns are 0 indexed
+enum rows {
+  sessions = 0,
+  labels = 1,
+  dataBegin = 2,
+}
+enum cols {
   rackid = 0,
   cageid = 1,
   isDummy = 2,
@@ -162,21 +162,21 @@ function parseData(ds: XLSX.WorkSheet, pairs: Metadata): Map<ExperimentId, Exper
   return Map<ExperimentId, ExperimentData>().withMutations((experiment) => experiment
     .set(eid, Map<RackId, Map<CageId, Cage>>().withMutations((racks) => {
       // parse row by row
-      for (let i = datRowBegin; ds[XLSX.utils.encode_cell({ c: 0, r: i })]; ++i) {
+      for (let i = rows.dataBegin; ds[XLSX.utils.encode_cell({ c: 0, r: i })]; ++i) {
         // parse row constants
-        const rackid = ds[XLSX.utils.encode_cell({ c: labs.rackid, r: i })].v
-        const cageid = ds[XLSX.utils.encode_cell({ c: labs.cageid, r: i })].v
-        const isDummy = ds[XLSX.utils.encode_cell({ c: labs.isDummy, r: i })]
+        const rackid = ds[XLSX.utils.encode_cell({ c: cols.rackid, r: i })].v
+        const cageid = ds[XLSX.utils.encode_cell({ c: cols.cageid, r: i })].v
+        const isDummy = ds[XLSX.utils.encode_cell({ c: cols.isDummy, r: i })]
 
         const sessions = List().asMutable()
-        for (let j = labs.sessColStart, sessNumber = 1;
+        for (let j = cols.sessColStart, sessNumber = 1;
           ds[XLSX.utils.encode_cell({ r: i, c: j })];
           j += colsPerSess, ++sessNumber) {
           /* eslint-disable unicorn/prefer-spread */
           const dataPairs = Array.from(Array(colsPerSess).keys()) // => range(0, 2 * numTreatments)
             .map((x) => [
               ds[XLSX.utils.encode_cell({ r: i, c: j + x })], // weight cell
-              ds[XLSX.utils.encode_cell({ r: labRow, c: j + x })], // label cell
+              ds[XLSX.utils.encode_cell({ r: rows.labels, c: j + x })], // label cell
             ] as [XLSX.CellObject, XLSX.CellObject])
 
           // pre weights are in first half, post in other half
@@ -261,30 +261,30 @@ function experimentToWS(
   const treatments = m.treatments as string[]
 
   // first row. session headers
-  aoa[SessRow] = Array(staticColCount)
-  for (let i = 1, x = staticColCount; i <= sessCnt; x += colsPerSession, ++i) aoa[SessRow][x] = `Session ${i}`
+  aoa[rows.sessions] = Array(staticColCount)
+  for (let i = 1, x = staticColCount; i <= sessCnt; x += colsPerSession, ++i) aoa[rows.sessions][x] = `Session ${i}`
 
   // second row. all other labels
-  aoa[labRow] = []
-  aoa[labRow][0] = 'RackID'
-  aoa[labRow][1] = 'CageID'
-  aoa[labRow][2] = 'is Dummy'
+  aoa[rows.labels] = []
+  aoa[rows.labels][0] = 'RackID'
+  aoa[rows.labels][1] = 'CageID'
+  aoa[rows.labels][2] = 'is Dummy'
   /* eslint-disable no-mixed-operators */
   for (let j = 3; j < colsPerSession * sessCnt + 3;) {
     const preCol = j
-    for (; j < preCol + treatmentCnt; ++j) aoa[labRow][j] = `pre (${treatments[j % preCol]})`
+    for (; j < preCol + treatmentCnt; ++j) aoa[rows.labels][j] = `pre (${treatments[j % preCol]})`
     const postCol = j
-    for (; j < postCol + treatmentCnt; ++j) aoa[labRow][j] = `post (${treatments[j % postCol]})`
+    for (; j < postCol + treatmentCnt; ++j) aoa[rows.labels][j] = `post (${treatments[j % postCol]})`
   }
 
-  let i = datRowBegin
+  let i = rows.dataBegin
   for (const [rid, cages] of rdo.map((x) => [x, cdo.get(x)]).toArray() as [number, number[]][]) {
     for (const cid of cages) {
       const cage = ex.getIn([rid, cid]) as Cage
       aoa[i] = []
-      aoa[i][labs.rackid] = rid
-      aoa[i][labs.cageid] = cid
-      aoa[i][labs.isDummy] = cage.isDummy
+      aoa[i][cols.rackid] = rid
+      aoa[i][cols.cageid] = cid
+      aoa[i][cols.isDummy] = cage.isDummy
 
       const sessionData = (cage.cageData)
         .sort((a, b) => (a.sessionNumber >= b.sessionNumber ? 1 : -1))
