@@ -93,6 +93,18 @@ cache:
     - node_modules/
     - .yarn
 
+build-web:
+  stage: build
+  image: node:lts
+  before_script:
+    - yarn install
+  script:
+    - cd packages/web/
+    - yarn build
+  artifacts:
+    paths:
+      - packages/web/build
+
 lint:
   stage: test
   image: node:lts
@@ -111,11 +123,10 @@ pages:
   only:
     - master
 
+  dependencies:
+    - build-web
+
   script:
-    - yarn install
-    - cd packages/web/
-    - yarn build
-    - cd ../..
     - mv packages/web/build/ public/
 
   artifacts:
