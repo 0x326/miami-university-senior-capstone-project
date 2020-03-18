@@ -97,7 +97,7 @@ build-web:
   stage: build
   image: node:lts
   before_script:
-    - yarn install
+    - yarn install --cache-folder .yarn/cache
   script:
     - cd packages/web/
     - yarn build
@@ -109,7 +109,7 @@ build-scale-interface:
   stage: build
   image: node:lts
   before_script:
-    - yarn install
+    - yarn install --cache-folder .yarn/cache
   script:
     - cd packages/scale-interface/
     - yarn build
@@ -122,7 +122,7 @@ lint:
   image: node:lts
 
   before_script:
-    - yarn install
+    - yarn install --cache-folder .yarn/cache
 
   script: yarn lint
 
