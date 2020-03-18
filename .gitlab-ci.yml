@@ -105,6 +105,18 @@ build-web:
     paths:
       - packages/web/build
 
+build-scale-interface:
+  stage: build
+  image: node:lts
+  before_script:
+    - yarn install
+  script:
+    - cd packages/scale-interface/
+    - yarn build
+  artifacts:
+    paths:
+      - packages/scale-interface/build
+
 lint:
   stage: test
   image: node:lts

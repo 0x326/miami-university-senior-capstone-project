@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
-    "build": "tsc --noEmit && parcel build --target node src/index.ts",
+    "build": "tsc --noEmit && parcel build --target node -d build/ src/index.ts",
     "analyze-build": "source-map-explorer 'dist/*.js'"
   },
   "devDependencies": {
