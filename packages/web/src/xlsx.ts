@@ -4,7 +4,7 @@
 
 import assert from 'assert'
 
-import * as XLSX from 'xlsx' // alias for readability
+import * as XLSX from 'xlsx'
 
 import {
   List,
