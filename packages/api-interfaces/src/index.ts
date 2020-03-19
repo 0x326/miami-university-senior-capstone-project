@@ -124,12 +124,8 @@ export interface WriteExperimentResponse extends Response {
 const scaleDataEndpoint = '/scale-data'
 
 
-// Copy the contents of Measurement and other undefined interfaces into here
-// so that we don't depend on Node.js-only components
 export interface ScaleData extends Measurement {
-  type: MeasurementType;
-  value: number;
-  unit: Unit;
+
 }
 
 export {

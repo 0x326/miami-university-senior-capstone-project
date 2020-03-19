@@ -49,14 +49,17 @@ function openWebSocket(
 
 async function connect(
   host = 'localhost',
-  port = 8081,
+  port = 8080,
   timeout = 1500,
 ): Promise<void> {
+  console.log("Connecting...")
   if (webSockets !== null) {
     throw new Error('Sockets are already open')
   }
 
   const baseURI = `ws://${host}:${port}`
+
+  console.log("Initializing Web Sockets")
 
   webSockets = {
     getRootDir: await openWebSocket(`${baseURI}/get-root-dir`, timeout),
@@ -66,6 +69,8 @@ async function connect(
     writeExperiment: await openWebSocket(`${baseURI}/write-experiment`, timeout),
     scaleData: await openWebSocket(`${baseURI}/scale-data`, timeout),
   }
+
+  console.log("Web Sockets Initialized")
 }
 
 function disconnect(): void {

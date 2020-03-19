@@ -3,6 +3,10 @@ import React, {
 } from 'react'
 
 import {
+  Measurement,
+} from 'api-interfaces/dist'
+
+import {
   connect,
   scaleData,
 } from './apiBindings'
@@ -17,7 +21,7 @@ function ScaleApiTester(props: Props): JSX.Element {
   } = props
 
   const [connectionStatus, setConnectionStatus] = useState('disconnected')
-  const [weight, setWeight] = useState('Unknown')
+  const [weight, setWeight] = useState<Measurement | null>(null)
   return (
     <>
       <p>
@@ -28,7 +32,7 @@ function ScaleApiTester(props: Props): JSX.Element {
           connect()
             .then(() => setConnectionStatus('connected'))
             .then(() => scaleData((measurement) => {
-              // setWeight()
+              setWeight(measurement)
             }))
             .catch(() => setConnectionStatus('error'))
         }}
@@ -37,7 +41,7 @@ function ScaleApiTester(props: Props): JSX.Element {
         </button>
       </p>
       <p>
-        The current weight is: {weight}
+        The current weight is: {weight !== null && weight.value}
       </p>
     </>
   )
