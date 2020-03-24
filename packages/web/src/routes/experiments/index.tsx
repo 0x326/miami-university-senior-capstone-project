@@ -69,11 +69,13 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         <Route exact path={`${url}/record/view`}>
           <ExperimentMetadataView
             experimentMetadata={experimentMetadata.get('experiment-1') as ExperimentMetaData}
+            onRecord={(): void => history.push(`${url}/record/session`)}
           />
         </Route>
         <Route exact path={`${url}/record/session`}>
           <ExperimentMetadataView
             experimentMetadata={experimentMetadata.get('experiment-1') as ExperimentMetaData}
+            onRecord={(): void => history.push(`${url}/new`)}
           />
         </Route>
         <Route path="*">

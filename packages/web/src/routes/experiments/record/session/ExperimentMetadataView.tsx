@@ -55,7 +55,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       </TopAppBar>
       <TopAppBarFixedAdjust />
       <Typography use="body1" tag="p">
-        Primary Experimentor: hmm
+        Primary Experimentor:
         {' '}
         {experimentLeadName}
       </Typography>

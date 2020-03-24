@@ -14,23 +14,27 @@ import {
 } from '@rmwc/typography'
 import '@material/typography/dist/mdc.typography.css'
 
+import { Button } from '@rmwc/button'
+
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
-import { Button } from '@rmwc/button'
+
 
 dayjs.extend(relativeTime)
 
 interface Props {
   experimentMetadata: ExperimentMetaData;
+  onRecord: () => void;
 }
 
 function ExperimentMetadataView(props: Props): JSX.Element {
   const {
     experimentMetadata,
+    onRecord,
   } = props
 
   const {
@@ -56,7 +60,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       </TopAppBar>
       <TopAppBarFixedAdjust />
       <Typography use="body1" tag="p">
-        Primary Experimentor: Wael
+        Primary Experimentor:
         {' '}
         {experimentLeadName}
       </Typography>
@@ -85,7 +89,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
         {' '}
         {weighsPerBottle}
       </Typography>
-      <Button label="Begin" raised />
+      <Button label="Begin" raised onClick={onRecord} />
     </>
   )
 }
