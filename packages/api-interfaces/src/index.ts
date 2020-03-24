@@ -19,7 +19,8 @@ export interface Response<Data> {
   message?: string;
 }
 
-const getRootDirEndpoint = '/get-root-dir'
+export type GetRootDirEndpoint = '/get-root-dir'
+const getRootDirEndpoint: GetRootDirEndpoint = '/get-root-dir'
 
 export interface GetRootDirResponse extends Response<string> {}
 
@@ -45,7 +46,8 @@ export interface ExperimentWrapper {
   data: Experiment;
 }
 
-const listExperimentsEndpoint = '/list-experiments'
+export type ListExperimentsEndpoint = '/list-experiments'
+const listExperimentsEndpoint: ListExperimentsEndpoint = '/list-experiments'
 
 export interface ListExperimentsOptions {
   path: string;
@@ -54,7 +56,8 @@ export interface ListExperimentsOptions {
 
 export interface ListExperimentsResponse extends Response<Array<ExperimentWrapper>> {}
 
-const getExperimentEndpoint = '/get-experiment'
+export type GetExperimentEndpoint = '/get-experiment'
+const getExperimentEndpoint: GetExperimentEndpoint = '/get-experiment'
 
 export interface GetExperimentOptions {
   path: string;
@@ -62,7 +65,8 @@ export interface GetExperimentOptions {
 
 export interface GetExperimentResponse extends Response<ExperimentWrapper> {}
 
-const listExperimentPathsEndpoint = '/list-experiment-paths'
+export type ListExperimentPathsEndpoint = '/list-experiment-paths'
+const listExperimentPathsEndpoint: ListExperimentPathsEndpoint = '/list-experiment-paths'
 
 export interface ListExperimentPathsOptions {
   path: string;
@@ -92,7 +96,8 @@ export interface Measurement {
 type SubLabel = [string, Array<string | SubLabelArray>]
 interface SubLabelArray extends Array<SubLabel> { }
 
-const writeExperimentEndpoint = '/write-experiment'
+export type WriteExperimentEndpoint = '/write-experiment'
+const writeExperimentEndpoint: WriteExperimentEndpoint = '/write-experiment'
 
 export type Unit = 'g' | 'pc' | '%' | 'oz' | 'lb' | 'ozt' | 'ct' | 'momme' | 'dwt' | 'grain' | 'tael'
 
@@ -103,7 +108,8 @@ export interface WriteExperimentOptions {
 
 export interface WriteExperimentResponse extends Response<null> {}
 
-const scaleDataEndpoint = '/scale-data'
+export type ScaleDataEndpoint = '/scale-data'
+const scaleDataEndpoint: ScaleDataEndpoint = '/scale-data'
 
 
 // Copy the contents of Measurement and other undefined interfaces into here
