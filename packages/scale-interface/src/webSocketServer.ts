@@ -97,6 +97,7 @@ async function handleListExperiments(
       return {
         status: Status.FAIL,
         message: error.toString(),
+        data: [],
       }
     }
   } catch (error) {
@@ -104,6 +105,7 @@ async function handleListExperiments(
     return {
       status: Status.FAIL,
       message: error.toString(),
+      data: [],
     }
   }
 }
@@ -124,6 +126,7 @@ async function handleGetExperiment(
       return {
         status: Status.FAIL,
         message: error.toString(),
+        data: null,
       }
     }
   } catch (error) {
@@ -131,6 +134,7 @@ async function handleGetExperiment(
     return {
       status: Status.FAIL,
       message: error.toString(),
+      data: null,
     }
   }
 }
@@ -150,6 +154,7 @@ async function handleListExperimentPaths(
       return {
         status: Status.FAIL,
         message: error.toString(),
+        data: [],
       }
     }
   } catch (error) {
@@ -157,6 +162,7 @@ async function handleListExperimentPaths(
     return {
       status: Status.FAIL,
       message: error.toString(),
+      data: [],
     }
   }
 }
@@ -174,12 +180,14 @@ async function handleWriteExperiment(
         return {
           status: Status.OK,
           message: `Saved experiment at ${options.path}`,
+          data: null,
         }
       } catch (error) {
         console.error(error)
         return {
           status: Status.FAIL,
           message: error.toString(),
+          data: null,
         }
       }
     } else {
@@ -187,6 +195,7 @@ async function handleWriteExperiment(
       return {
         status: Status.FAIL,
         message: 'Need both a path and data',
+        data: null,
       }
     }
   } catch (error) {
@@ -194,6 +203,7 @@ async function handleWriteExperiment(
     return {
       status: Status.FAIL,
       message: error.toString(),
+      data: null,
     }
   }
 }

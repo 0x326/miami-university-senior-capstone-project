@@ -13,18 +13,15 @@ export enum Status {
   FAIL = 'FAIL'
 }
 
-export interface Response {
+export interface Response<Data> {
   status: Status;
-  data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
+  data: Data;
   message?: string;
 }
 
 const getRootDirEndpoint = '/get-root-dir'
 
-export interface GetRootDirResponse extends Response {
-  status: Status;
-  data: string;
-}
+export interface GetRootDirResponse extends Response<string> {}
 
 export interface Experiment {
   name: string;
@@ -55,11 +52,7 @@ export interface ListExperimentsOptions {
   filter: null | Experiment;
 }
 
-export interface ListExperimentsResponse extends Response {
-  status: Status;
-  data?: Array<ExperimentWrapper>;
-  message?: string;
-}
+export interface ListExperimentsResponse extends Response<Array<ExperimentWrapper>> {}
 
 const getExperimentEndpoint = '/get-experiment'
 
@@ -67,11 +60,7 @@ export interface GetExperimentOptions {
   path: string;
 }
 
-export interface GetExperimentResponse extends Response {
-  status: Status;
-  data?: ExperimentWrapper;
-  message?: string;
-}
+export interface GetExperimentResponse extends Response<ExperimentWrapper> {}
 
 const listExperimentPathsEndpoint = '/list-experiment-paths'
 
@@ -83,11 +72,7 @@ export interface ListExperimentPathsOptions {
   dateEnd: Date;
 }
 
-export interface ListExperimentPathsResponse extends Response {
-  status: Status;
-  data?: Array<string>;
-  message?: string;
-}
+export interface ListExperimentPathsResponse extends Response<Array<string>> {}
 
 export enum MeasurementType {
   STABLE_WEIGHT = 'ST',
@@ -116,10 +101,7 @@ export interface WriteExperimentOptions {
   data: Experiment;
 }
 
-export interface WriteExperimentResponse extends Response {
-  status: Status;
-  message?: string;
-}
+export interface WriteExperimentResponse extends Response<null> {}
 
 const scaleDataEndpoint = '/scale-data'
 

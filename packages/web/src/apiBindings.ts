@@ -85,14 +85,14 @@ function disconnect(): void {
 function socketSend(
   socket: WebSocket,
   message: object | null,
-): Promise<Response> {
+): Promise<Response<unknown>> {
   return new Promise((resolve, reject): void => {
     const onMessage = (event: MessageEvent): void => {
       socket.removeEventListener('message', onMessage)
 
       const { data } = event
       // Trust that objects from `scale-interface` implement Resp
-      const parsed: Response = JSON.parse(data)
+      const parsed: Response<unknown> = JSON.parse(data)
       const {
         status,
         message: responseMessage,
