@@ -116,7 +116,8 @@ async function getRootDir(): Promise<string> {
     getRootDir: webSocket,
   } = webSockets
 
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
   const response = await socketSend(webSocket, null) as GetRootDirResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
@@ -137,7 +138,8 @@ async function listExperiments(
     listExperiments: webSocket,
   } = webSockets
 
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
   const response = await socketSend(webSocket, options) as ListExperimentsResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
@@ -158,7 +160,8 @@ async function getExperiment(
     getExperiment: webSocket,
   } = webSockets
 
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
   const response = await socketSend(webSocket, options) as GetExperimentResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
@@ -179,7 +182,8 @@ async function listExperimentPaths(
     listExperimentPaths: webSocket,
   } = webSockets
 
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
   const response = await socketSend(webSocket, options) as ListExperimentPathsResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
@@ -200,7 +204,8 @@ async function writeExperiment(
     writeExperiment: webSocket,
   } = webSockets
 
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
   const response = await socketSend(webSocket, options) as WriteExperimentResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 }
