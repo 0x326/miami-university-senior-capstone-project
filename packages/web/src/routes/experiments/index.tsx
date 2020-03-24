@@ -25,6 +25,7 @@ import {
 
 import ExperimentList from './ExperimentList'
 import ExperimentMetadataView from './record/view/ExperimentMetadataView'
+import ExperimentRecordData from './record/session/ExperimentRecordSession'
 import NewExperiment, {
   ExperimentMetaData,
 } from './new/NewExperimentView'
@@ -73,9 +74,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
           />
         </Route>
         <Route exact path={`${url}/record/session`}>
-          <ExperimentMetadataView
+          <ExperimentRecordData
             experimentMetadata={experimentMetadata.get('experiment-1') as ExperimentMetaData}
-            onRecord={(): void => history.push(`${url}/new`)}
+            onEnd={(): void => history.push(`${url}/record/view`)}
           />
         </Route>
         <Route path="*">

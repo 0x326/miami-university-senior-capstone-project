@@ -14,6 +14,8 @@ import {
 } from '@rmwc/typography'
 import '@material/typography/dist/mdc.typography.css'
 
+import { Button } from '@rmwc/button'
+
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
@@ -21,15 +23,18 @@ import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
 
+
 dayjs.extend(relativeTime)
 
 interface Props {
   experimentMetadata: ExperimentMetaData;
+  onEnd: () => void;
 }
 
-function ExperimentMetadataView(props: Props): JSX.Element {
+function ExperimentRecodSession(props: Props): JSX.Element {
   const {
     experimentMetadata,
+    onEnd,
   } = props
 
   const {
@@ -84,8 +89,12 @@ function ExperimentMetadataView(props: Props): JSX.Element {
         {' '}
         {weighsPerBottle}
       </Typography>
+      {/* while (int i<{...bottlesPerCage}) {
+
+      } */}
+      <Button label="Finish" raised onClick={onEnd} />
     </>
   )
 }
 
-export default ExperimentMetadataView
+export default ExperimentRecodSession
