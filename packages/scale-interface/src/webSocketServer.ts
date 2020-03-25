@@ -72,31 +72,38 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
   const webSocketServer = new WebSocketServer({ noServer: true })
 
   webSocketServer
-    .on('connection', (webSocket) => webSocket
-      .on('message', (data) => {
-        const parsedData: HandlerData = JSON.parse(String(data))
+    .on('connection', (webSocket) => {
+      console.log('webSocketServer got new connection')
 
-        handler(parsedData)
-          .then(
-            (responseData) => {
-              webSocket
-                .send(JSON.stringify({
-                  status: Status.OK,
-                  data: responseData,
-                }))
-            },
-            (error) => {
-              console.error(error.toString())
+      webSocket
+        .on('message', (data) => {
+          const parsedData: HandlerData = JSON.parse(String(data))
+          console.log('webSocket got message')
 
-              webSocket
-                .send(JSON.stringify({
-                  status: Status.FAIL,
-                  message: error.toString(),
-                  data: null,
-                }))
-            },
-          )
-      }))
+          handler(parsedData)
+            .then(
+              (responseData) => {
+                console.log('Handling succeeded. Sending reply')
+                webSocket
+                  .send(JSON.stringify({
+                    status: Status.OK,
+                    data: responseData,
+                  }))
+              },
+              (error) => {
+                console.log('Handling failed. Sending error')
+                console.error(error.toString())
+
+                webSocket
+                  .send(JSON.stringify({
+                    status: Status.FAIL,
+                    message: error.toString(),
+                    data: null,
+                  }))
+              },
+            )
+        })
+    })
 
   return webSocketServer
 }
