@@ -46,21 +46,21 @@ async function readJSON(
 
 beforeEach(async () => {
   try {
-    await mkdir('./SCALE_INTERFACE_DAT/', {
+    await mkdir(TEST_DIRECTORY, {
       mode: 0o777,
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { /* Do Nothing */ }
 
   try {
-    await mkdir('./SCALE_INTERFACE_DAT/active', {
+    await mkdir(ACTIVE, {
       mode: 0o777,
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { /* Do Nothing */ }
 
   try {
-    await mkdir('./SCALE_INTERFACE_DAT/archive', {
+    await mkdir(ARCHIVE, {
       mode: 0o777,
       boundary: TEST_DIRECTORY,
     })
@@ -68,10 +68,10 @@ beforeEach(async () => {
 })
 
 afterEach(async () => {
-  const activeDirectory = await readdir('./SCALE_INTERFACE_DAT/active', {
+  const activeDirectory = await readdir(ACTIVE, {
     boundary: TEST_DIRECTORY,
   })
-  const archiveDirectory = await readdir('./SCALE_INTERFACE_DAT/archive', {
+  const archiveDirectory = await readdir(ARCHIVE, {
     boundary: TEST_DIRECTORY,
   })
 
@@ -87,19 +87,19 @@ afterEach(async () => {
   } catch (error) { console.error(error) }
 
   try {
-    await rmdir('./SCALE_INTERFACE_DAT/active', {
+    await rmdir(ACTIVE, {
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { /* Do Nothing */ }
 
   try {
-    await rmdir('./SCALE_INTERFACE_DAT/archive', {
+    await rmdir(ARCHIVE, {
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { console.error(error) }
 
   try {
-    await rmdir('./SCALE_INTERFACE_DAT/', {
+    await rmdir(TEST_DIRECTORY, {
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { /* Do Nothing */ }
