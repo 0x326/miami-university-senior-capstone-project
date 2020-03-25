@@ -77,7 +77,7 @@ Resp {
     JSON.stringify(
         {
             path: 'path',
-            data: experimentObj
+            data: experimentObj,
         }
     )
     ```
@@ -100,7 +100,7 @@ Resp {
       {
         path: '/somepath',
         experimentName?: 'some experiment',
-        primaryExperimenter?: 'some name'
+        primaryExperimenter?: 'some name',
         dateStart?: +new Date('2019'),
         dateEnd?: + new Date('2020'),
       }
