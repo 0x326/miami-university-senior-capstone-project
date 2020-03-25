@@ -17,16 +17,16 @@ import {
 } from './fs'
 
 import {
-  ROOT_PATH,
+  rootPath,
   listExperimentPaths,
   writeExperiment,
   getExperiment,
   listExperiments,
 } from './fsOperations'
 
-const TEST_DIRECTORY = ROOT_PATH
-const ACTIVE = join(TEST_DIRECTORY, 'active')
-const ARCHIVE = join(TEST_DIRECTORY, 'archive')
+const testDirectory = rootPath
+const active = join(testDirectory, 'active')
+const archive = join(testDirectory, 'archive')
 
 async function readJSON(
   path: string,
@@ -47,61 +47,61 @@ async function readJSON(
 
 beforeEach(async () => {
   try {
-    await mkdir(TEST_DIRECTORY, {
+    await mkdir(testDirectory, {
       mode: 0o777,
-      boundary: TEST_DIRECTORY,
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
 
   try {
-    await mkdir(ACTIVE, {
+    await mkdir(active, {
       mode: 0o777,
-      boundary: TEST_DIRECTORY,
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
 
   try {
-    await mkdir(ARCHIVE, {
+    await mkdir(archive, {
       mode: 0o777,
-      boundary: TEST_DIRECTORY,
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
 })
 
 afterEach(async () => {
-  const activeDirectory = await readdir(ACTIVE, {
-    boundary: TEST_DIRECTORY,
+  const activeDirectory = await readdir(active, {
+    boundary: testDirectory,
   })
-  const archiveDirectory = await readdir(ARCHIVE, {
-    boundary: TEST_DIRECTORY,
+  const archiveDirectory = await readdir(archive, {
+    boundary: testDirectory,
   })
 
   try {
     await Promise.all([
-      ...activeDirectory.map((fileName) => unlink(join(ACTIVE, fileName), {
-        boundary: ACTIVE,
+      ...activeDirectory.map((fileName) => unlink(join(active, fileName), {
+        boundary: active,
       })),
-      ...archiveDirectory.map((fileName) => unlink(join(ARCHIVE, fileName), {
-        boundary: ARCHIVE,
+      ...archiveDirectory.map((fileName) => unlink(join(archive, fileName), {
+        boundary: archive,
       })),
     ])
   } catch (error) { console.error(error) }
 
   try {
-    await rmdir(ACTIVE, {
-      boundary: TEST_DIRECTORY,
+    await rmdir(active, {
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
 
   try {
-    await rmdir(ARCHIVE, {
-      boundary: TEST_DIRECTORY,
+    await rmdir(archive, {
+      boundary: testDirectory,
     })
   } catch (error) { console.error(error) }
 
   try {
-    await rmdir(TEST_DIRECTORY, {
-      boundary: TEST_DIRECTORY,
+    await rmdir(testDirectory, {
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
 })
@@ -114,7 +114,7 @@ describe('Test valid', () => {
       const exampleExperimentName = '_1572730420004_quinn'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -125,7 +125,7 @@ describe('Test valid', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -138,7 +138,7 @@ describe('Test valid', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -149,7 +149,7 @@ describe('Test valid', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_dr_quinn'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -162,7 +162,7 @@ describe('Test valid', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -175,7 +175,7 @@ describe('Test valid', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -190,7 +190,7 @@ describe('Test valid', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -203,7 +203,7 @@ describe('Test valid', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -216,10 +216,10 @@ describe('Test getExperiment', () => {
     const { fileContent } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
 
-    await writeFile(join(ACTIVE, exampleExperimentName), fileContent, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName), fileContent, {
+      boundary: testDirectory,
     })
-    const rtnExpr = await getExperiment(join(ACTIVE, exampleExperimentName))
+    const rtnExpr = await getExperiment(join(active, exampleExperimentName))
     expect(JSON.stringify(rtnExpr))
       .toBe(fileContent)
   })
@@ -232,7 +232,7 @@ describe('Test listExperiments', () => {
     const { parsedContent: exampleExperiment } = await readJSON('src/sampleExperiments/valid.json')
 
     await expect(listExperiments({
-      path: ACTIVE,
+      path: active,
       filter: exampleExperiment as Experiment,
     }))
       .resolves.toHaveLength(0)
@@ -243,8 +243,8 @@ describe('Test listExperiments', () => {
     const { parsedContent: exampleExperiment, fileContent } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
 
-    await writeFile(join(ACTIVE, exampleExperimentName), fileContent, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName), fileContent, {
+      boundary: testDirectory,
     })
 
     // Genrate comparison array
@@ -252,7 +252,7 @@ describe('Test listExperiments', () => {
       exampleExperiment,
     ]
     await expect(listExperiments({
-      path: ACTIVE,
+      path: active,
       filter: exampleExperiment as Experiment,
     }))
       .resolves.toBe(compareListExperiments)
@@ -263,7 +263,7 @@ describe('Test listExperiments', () => {
 describe('Test listExperimentPaths', () => {
   it('returns no experiment path', async () => {
     expect(await listExperimentPaths({
-      path: ACTIVE,
+      path: active,
       experimentName: '',
       primaryExperimenter: '',
       dateStart: new Date(1572730420004),
@@ -276,18 +276,18 @@ describe('Test listExperimentPaths', () => {
     const { fileContent } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-    await writeFile(join(ACTIVE, exampleExperimentName), fileContent, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName), fileContent, {
+      boundary: testDirectory,
     })
     expect(await listExperimentPaths({
-      path: ACTIVE,
+      path: active,
       experimentName: 'Addiction Study 12',
       primaryExperimenter: 'quinn',
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
       .toBe([
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
       ])
   })
 
@@ -298,22 +298,22 @@ describe('Test listExperimentPaths', () => {
     const { fileContent: fileContent2 } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName2 = 'Addiction Study 12_1572730420004_quinn2'
 
-    await writeFile(join(ACTIVE, exampleExperimentName), fileContent, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName), fileContent, {
+      boundary: testDirectory,
     })
-    await writeFile(join(ACTIVE, exampleExperimentName2), fileContent2, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName2), fileContent2, {
+      boundary: testDirectory,
     })
     expect(await listExperimentPaths({
-      path: ACTIVE,
+      path: active,
       experimentName: 'Addiction Study 12',
       primaryExperimenter: 'quinn',
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
       .toBe([
-        join(ACTIVE, exampleExperimentName),
-        join(ACTIVE, exampleExperimentName2),
+        join(active, exampleExperimentName),
+        join(active, exampleExperimentName2),
       ])
   })
 })
@@ -323,12 +323,12 @@ describe('Test writeExperiment', () => {
     const { parsedContent: exampleExperiment, fileContent } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
     await writeExperiment(
-      join(ACTIVE, exampleExperimentName),
+      join(active, exampleExperimentName),
       exampleExperiment as Experiment,
     )
 
-    const experimentFile = await readFile(join(ACTIVE, exampleExperimentName), {
-      boundary: TEST_DIRECTORY,
+    const experimentFile = await readFile(join(active, exampleExperimentName), {
+      boundary: testDirectory,
     })
     expect((experimentFile.toString()))
       .toBe(fileContent)
@@ -340,7 +340,7 @@ describe('Test writeExperiment', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)
@@ -351,7 +351,7 @@ describe('Test writeExperiment', () => {
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
       await expect(writeExperiment(
-        join(ACTIVE, exampleExperimentName),
+        join(active, exampleExperimentName),
         exampleInvalidExperiment as Experiment,
       ))
         .rejects.toBeInstanceOf(Error)

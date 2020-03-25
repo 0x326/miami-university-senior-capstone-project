@@ -7,14 +7,14 @@ console.log(`
 `)
 
 
-const PORT = 8080
+const port = 8080
 
-const webSocketGetRoot = new WebSocket(`ws://localhost:${PORT}/get-root-dir`)
-const webSocketListExperiments = new WebSocket(`ws://localhost:${PORT}/list-experiments`)
-const webSocketGetExperiment = new WebSocket(`ws://localhost:${PORT}/get-experiment`)
-const webSocketListPaths = new WebSocket(`ws://localhost:${PORT}/list-experiment-paths`)
-const webSocketWriteExperiment = new WebSocket(`ws://localhost:${PORT}/write-experiment`)
-const webSocketScaleData = new WebSocket(`ws://localhost:${PORT}/scale-data`)
+const webSocketGetRoot = new WebSocket(`ws://localhost:${port}/get-root-dir`)
+const webSocketListExperiments = new WebSocket(`ws://localhost:${port}/list-experiments`)
+const webSocketGetExperiment = new WebSocket(`ws://localhost:${port}/get-experiment`)
+const webSocketListPaths = new WebSocket(`ws://localhost:${port}/list-experiment-paths`)
+const webSocketWriteExperiment = new WebSocket(`ws://localhost:${port}/write-experiment`)
+const webSocketScaleData = new WebSocket(`ws://localhost:${port}/scale-data`)
 
 webSocketGetRoot.addEventListener('message', ({ data }) => {
   console.log('/get-root-dir')

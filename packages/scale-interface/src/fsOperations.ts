@@ -72,7 +72,7 @@ const schema = Joi.object({
   ),
 })
 
-const ROOT_PATH = './SCALE_INTERFACE_DAT'
+const rootPath = './SCALE_INTERFACE_DAT'
 
 /**
  * uses Joi to validate form of data.
@@ -100,7 +100,7 @@ async function getExperiment(
 ): Promise<Experiment> {
   const data = await readFile(searchPath, {
     encoding: 'utf-8',
-    boundary: ROOT_PATH,
+    boundary: rootPath,
   })
   const parsed = valid(JSON.parse(String(data)))
 
@@ -121,7 +121,7 @@ async function listExperiments(
 
   const allFiles = await readdir(filePath, {
     encoding: 'utf-8',
-    boundary: ROOT_PATH,
+    boundary: rootPath,
   })
 
   const experiments: Array<Experiment> = await Promise.all(allFiles
@@ -158,7 +158,7 @@ async function listExperimentPaths(
 
   let paths = await readdir(filePath, {
     encoding: 'utf-8',
-    boundary: ROOT_PATH,
+    boundary: rootPath,
   })
 
   if (dateStart && dateEnd) {
@@ -204,12 +204,12 @@ async function writeExperiment(
   }
   return writeFile(filePath, JSON.stringify(valid(data)), {
     encoding: 'utf-8',
-    boundary: ROOT_PATH,
+    boundary: rootPath,
   })
 }
 
 export {
-  ROOT_PATH,
+  rootPath,
   valid,
   listExperiments,
   listExperimentPaths,

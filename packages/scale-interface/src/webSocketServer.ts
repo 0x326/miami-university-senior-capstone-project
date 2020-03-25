@@ -59,7 +59,7 @@ import {
 } from './serial'
 
 import {
-  ROOT_PATH,
+  rootPath,
   listExperiments,
   getExperiment,
   writeExperiment,
@@ -125,7 +125,7 @@ function createWebSocketEmitter<EmitterData>(
 }
 
 function handleGetRootDir(): Promise<GetRootDirResponse> {
-  return Promise.resolve(ROOT_PATH)
+  return Promise.resolve(rootPath)
 }
 
 async function handleListExperiments(
