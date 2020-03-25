@@ -46,12 +46,12 @@ import {
 } from 'api-interfaces/dist/write-experiment'
 
 let webSockets: null | {
-  getRootDir: WebSocket;
-  listExperiments: WebSocket;
-  getExperiment: WebSocket;
-  listExperimentPaths: WebSocket;
-  writeExperiment: WebSocket;
-  scaleData: WebSocket;
+  [getRootDirEndpoint]: WebSocket;
+  [listExperimentsEndpoint]: WebSocket;
+  [getExperimentEndpoint]: WebSocket;
+  [listExperimentPathsEndpoint]: WebSocket;
+  [writeExperimentEndpoint]: WebSocket;
+  [scaleDataEndpoint]: WebSocket;
 } = null
 
 function openWebSocket(
@@ -89,12 +89,12 @@ async function connect(
   const baseURI = `ws://${host}:${port}`
 
   webSockets = {
-    getRootDir: await openWebSocket(`${baseURI}${getRootDirEndpoint}`, timeout),
-    listExperiments: await openWebSocket(`${baseURI}${listExperimentsEndpoint}`, timeout),
-    getExperiment: await openWebSocket(`${baseURI}${getExperimentEndpoint}`, timeout),
-    listExperimentPaths: await openWebSocket(`${baseURI}${listExperimentPathsEndpoint}`, timeout),
-    writeExperiment: await openWebSocket(`${baseURI}${writeExperimentEndpoint}`, timeout),
-    scaleData: await openWebSocket(`${baseURI}${scaleDataEndpoint}`, timeout),
+    [getRootDirEndpoint]: await openWebSocket(`${baseURI}${getRootDirEndpoint}`, timeout),
+    [listExperimentsEndpoint]: await openWebSocket(`${baseURI}${listExperimentsEndpoint}`, timeout),
+    [getExperimentEndpoint]: await openWebSocket(`${baseURI}${getExperimentEndpoint}`, timeout),
+    [listExperimentPathsEndpoint]: await openWebSocket(`${baseURI}${listExperimentPathsEndpoint}`, timeout),
+    [writeExperimentEndpoint]: await openWebSocket(`${baseURI}${writeExperimentEndpoint}`, timeout),
+    [scaleDataEndpoint]: await openWebSocket(`${baseURI}${scaleDataEndpoint}`, timeout),
   }
 }
 
@@ -143,7 +143,7 @@ async function getRootDir(): Promise<string> {
     throw new Error('Socket is not open')
   }
   const {
-    getRootDir: webSocket,
+    [getRootDirEndpoint]: webSocket,
   } = webSockets
 
   // eslint-disable-next-line max-len
@@ -165,7 +165,7 @@ async function listExperiments(
     throw new Error('Socket is not open')
   }
   const {
-    listExperiments: webSocket,
+    [listExperimentsEndpoint]: webSocket,
   } = webSockets
 
   // eslint-disable-next-line max-len
@@ -187,7 +187,7 @@ async function getExperiment(
     throw new Error('Socket is not open')
   }
   const {
-    getExperiment: webSocket,
+    [getExperimentEndpoint]: webSocket,
   } = webSockets
 
   // eslint-disable-next-line max-len
@@ -209,7 +209,7 @@ async function listExperimentPaths(
     throw new Error('Socket is not open')
   }
   const {
-    listExperimentPaths: webSocket,
+    [listExperimentPathsEndpoint]: webSocket,
   } = webSockets
 
   // eslint-disable-next-line max-len
@@ -231,7 +231,7 @@ async function writeExperiment(
     throw new Error('Socket is not open')
   }
   const {
-    writeExperiment: webSocket,
+    [writeExperimentEndpoint]: webSocket,
   } = webSockets
 
   // eslint-disable-next-line max-len
@@ -248,7 +248,7 @@ function scaleData(
     throw new Error('Socket is not open')
   }
   const {
-    scaleData: webSocket,
+    [scaleDataEndpoint]: webSocket,
   } = webSockets
 
   webSocket.addEventListener('message', ({ data }) => callback(data))
