@@ -262,14 +262,14 @@ describe('Test listExperiments', () => {
 // Need to fix listExperimentPaths function. It is returning the experiment names and not the paths.
 describe('Test listExperimentPaths', () => {
   it('returns no experiment path', async () => {
-    expect(await listExperimentPaths({
+    await expect(listExperimentPaths({
       path: active,
       experimentName: '',
       primaryExperimenter: '',
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
-      .toStrictEqual([])
+      .resolves.toStrictEqual([])
   })
 
   it('returns one experiment path', async () => {
@@ -279,14 +279,14 @@ describe('Test listExperimentPaths', () => {
     await writeFile(join(active, exampleExperimentName), fileContent, {
       boundary: testDirectory,
     })
-    expect(await listExperimentPaths({
+    await expect(listExperimentPaths({
       path: active,
       experimentName: 'Addiction Study 12',
       primaryExperimenter: 'quinn',
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
-      .toStrictEqual([
+      .resolves.toStrictEqual([
         join(active, exampleExperimentName),
       ])
   })
@@ -304,14 +304,14 @@ describe('Test listExperimentPaths', () => {
     await writeFile(join(active, exampleExperimentName2), fileContent2, {
       boundary: testDirectory,
     })
-    expect(await listExperimentPaths({
+    await expect(listExperimentPaths({
       path: active,
       experimentName: 'Addiction Study 12',
       primaryExperimenter: 'quinn',
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
-      .toStrictEqual([
+      .resolves.toStrictEqual([
         join(active, exampleExperimentName),
         join(active, exampleExperimentName2),
       ])
