@@ -24,8 +24,8 @@ import {
 } from './fsOperations'
 
 const TEST_DIRECTORY = './SCALE_INTERFACE_DAT/'
-const ACTIVE = './SCALE_INTERFACE_DAT/active/'
-const ARCHIVE = './SCALE_INTERFACE_DAT/archive/'
+const ACTIVE = join(TEST_DIRECTORY, 'active')
+const ARCHIVE = join(TEST_DIRECTORY, 'archive')
 
 async function readJSON(
   path: string,
