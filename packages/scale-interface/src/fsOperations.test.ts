@@ -17,13 +17,14 @@ import {
 } from './fs'
 
 import {
+  ROOT_PATH,
   listExperimentPaths,
   writeExperiment,
   getExperiment,
   listExperiments,
 } from './fsOperations'
 
-const TEST_DIRECTORY = './SCALE_INTERFACE_DAT/'
+const TEST_DIRECTORY = ROOT_PATH
 const ACTIVE = join(TEST_DIRECTORY, 'active')
 const ARCHIVE = join(TEST_DIRECTORY, 'archive')
 
