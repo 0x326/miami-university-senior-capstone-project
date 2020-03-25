@@ -12,7 +12,6 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
-  Response,
 } from 'api-interfaces/dist/common'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -68,7 +67,7 @@ import {
 } from './fsOperations'
 
 function createWebSocketHandler<HandlerData, HandlerResponse>(
-  handler: (data: HandlerData) => Promise<Response<HandlerResponse>>,
+  handler: (data: HandlerData) => Promise<HandlerResponse>,
 ): WebSocketServer {
   const webSocketServer = new WebSocketServer({ noServer: true })
 
@@ -76,9 +75,27 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
     .on('connection', (webSocket) => webSocket
       .on('message', (data) => {
         const parsedData: HandlerData = JSON.parse(String(data))
+
         handler(parsedData)
-          .then((response) => webSocket
-            .send(JSON.stringify(response)))
+          .then(
+            (responseData) => {
+              webSocket
+                .send(JSON.stringify({
+                  status: Status.OK,
+                  data: responseData,
+                }))
+            },
+            (error) => {
+              console.error(error.toString())
+
+              webSocket
+                .send(JSON.stringify({
+                  status: Status.FAIL,
+                  message: error.toString(),
+                  data: null,
+                }))
+            },
+          )
       }))
 
   return webSocketServer
@@ -100,137 +117,60 @@ function createWebSocketEmitter<EmitterData>(
   return webSocketServer
 }
 
-function handleGetRootDir(): Promise<Response<GetRootDirResponse>> {
-  return Promise.resolve({
-    status: Status.OK,
-    data: ROOT_PATH,
-  })
+function handleGetRootDir(): Promise<GetRootDirResponse> {
+  return Promise.resolve(ROOT_PATH)
 }
 
 async function handleListExperiments(
   options: ListExperimentsOptions,
-): Promise<Response<ListExperimentsResponse>> {
+): Promise<ListExperimentsResponse> {
   try {
-    try {
-      const wrappedExperiments = await listExperiments(options)
-      return {
-        status: Status.OK,
-        data: wrappedExperiments,
-      }
-    } catch (error) {
-      console.error(`listExperiments resulted in error: ${error} when given query:`, options)
-      return {
-        status: Status.FAIL,
-        message: error.toString(),
-        data: [],
-      }
-    }
+    const wrappedExperiments = await listExperiments(options)
+
+    return wrappedExperiments
   } catch (error) {
-    console.error(error)
-    return {
-      status: Status.FAIL,
-      message: error.toString(),
-      data: [],
-    }
+    throw new Error(`listExperiments resulted in error: ${error} when given query: ${options}`)
   }
 }
 
 async function handleGetExperiment(
   options: GetExperimentOptions,
-): Promise<Response<GetExperimentResponse>> {
+): Promise<GetExperimentResponse> {
+  const { path } = options
   try {
-    const { path } = options
-    try {
-      const wrappedExperiment = await getExperiment(path)
-      return {
-        status: Status.OK,
-        data: wrappedExperiment,
-      }
-    } catch (error) {
-      console.error(`getExperiment on path ${path} resulted in error ${error}`)
-      return {
-        status: Status.FAIL,
-        message: error.toString(),
-        data: null,
-      }
-    }
+    const wrappedExperiment = await getExperiment(path)
+
+    return wrappedExperiment
   } catch (error) {
-    console.error(error)
-    return {
-      status: Status.FAIL,
-      message: error.toString(),
-      data: null,
-    }
+    throw new Error(`getExperiment on path ${path} resulted in error ${error}`)
   }
 }
 
 async function handleListExperimentPaths(
   options: ListExperimentPathsOptions,
-): Promise<Response<ListExperimentPathsResponse>> {
+): Promise<ListExperimentPathsResponse> {
   try {
-    try {
-      const paths = await listExperimentPaths(options)
-      return {
-        status: Status.OK,
-        data: paths,
-      }
-    } catch (error) {
-      console.error(`listExperimentPaths resulted in error: ${error} when given query:`, options)
-      return {
-        status: Status.FAIL,
-        message: error.toString(),
-        data: [],
-      }
-    }
+    const paths = await listExperimentPaths(options)
+
+    return paths
   } catch (error) {
-    console.error(error)
-    return {
-      status: Status.FAIL,
-      message: error.toString(),
-      data: [],
-    }
+    throw new Error(`listExperimentPaths resulted in error: ${error} when given query: ${options}`)
   }
 }
 
 async function handleWriteExperiment(
   options: WriteExperimentOptions,
-): Promise<Response<WriteExperimentResponse>> {
-  try {
-    if (options.path && options.data) {
-      // await valid(JSON.parse(parsed.String(data)))
-      try {
-        await writeExperiment(options)
-        console.log(`==Saved the following object at ${options.path}`)
-        console.log(options.data)
-        return {
-          status: Status.OK,
-          message: `Saved experiment at ${options.path}`,
-          data: null,
-        }
-      } catch (error) {
-        console.error(error)
-        return {
-          status: Status.FAIL,
-          message: error.toString(),
-          data: null,
-        }
-      }
-    } else {
-      console.error('==Passed object is missing either a path or data field', options)
-      return {
-        status: Status.FAIL,
-        message: 'Need both a path and data',
-        data: null,
-      }
-    }
-  } catch (error) {
-    console.error('==Do not write badly formatted object to disk', error)
-    return {
-      status: Status.FAIL,
-      message: error.toString(),
-      data: null,
-    }
+): Promise<WriteExperimentResponse> {
+  if (options.path && options.data) {
+    // await valid(JSON.parse(parsed.String(data)))
+    await writeExperiment(options)
+    console.log(`==Saved the following object at ${options.path}`)
+    console.log(options.data)
+
+    return null
   }
+
+  throw new Error(`==Passed object is missing either a path or data field: ${options}`)
 }
 
 async function* emitScaleData(): AsyncGenerator<ScaleData> {

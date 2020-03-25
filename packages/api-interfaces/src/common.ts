@@ -5,7 +5,7 @@ export enum Status {
 
 export interface Response<Data> {
   status: Status;
-  data: Data;
+  data: Data | null;
   message?: string;
 }
 

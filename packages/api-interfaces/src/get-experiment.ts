@@ -9,4 +9,4 @@ export interface GetExperimentOptions {
   path: string;
 }
 
-export type GetExperimentResponse = ExperimentWrapper | null
+export type GetExperimentResponse = ExperimentWrapper
