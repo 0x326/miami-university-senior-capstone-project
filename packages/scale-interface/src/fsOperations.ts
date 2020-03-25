@@ -73,7 +73,7 @@ const schema = Joi.object({
   ),
 })
 
-const ROOT_PATH = '/media/scale_interface_mountpoint'
+const ROOT_PATH = './SCALE_INTERFACE_DAT'
 
 /**
  * uses Joi to validate form of data.
