@@ -221,7 +221,7 @@ describe('Test getExperiment', () => {
     })
     const experiment = await getExperiment(join(active, exampleExperimentName))
     expect(JSON.stringify(experiment))
-      .toBe(fileContent)
+      .toStrictEqual(fileContent)
   })
 })
 
@@ -255,7 +255,7 @@ describe('Test listExperiments', () => {
       path: active,
       filter: exampleExperiment as Experiment,
     }))
-      .resolves.toBe(compareListExperiments)
+      .resolves.toStrictEqual(compareListExperiments)
   })
 })
 
@@ -269,7 +269,7 @@ describe('Test listExperimentPaths', () => {
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
-      .toEqual([])
+      .toStrictEqual([])
   })
 
   it('returns one experiment path', async () => {
@@ -286,7 +286,7 @@ describe('Test listExperimentPaths', () => {
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
-      .toBe([
+      .toStrictEqual([
         join(active, exampleExperimentName),
       ])
   })
@@ -311,7 +311,7 @@ describe('Test listExperimentPaths', () => {
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
-      .toBe([
+      .toStrictEqual([
         join(active, exampleExperimentName),
         join(active, exampleExperimentName2),
       ])
@@ -331,7 +331,7 @@ describe('Test writeExperiment', () => {
       boundary: testDirectory,
     })
     expect((experimentFile.toString()))
-      .toBe(fileContent)
+      .toStrictEqual(fileContent)
   })
 
   describe('Test incorrect experiment format', () => {
