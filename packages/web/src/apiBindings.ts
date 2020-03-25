@@ -45,6 +45,11 @@ import {
   WriteExperimentResponse,
 } from 'api-interfaces/dist/write-experiment'
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  Endpoint,
+} from 'api-interfaces/dist'
+
 let webSockets: null | {
   [getRootDirEndpoint]: WebSocket;
   [listExperimentsEndpoint]: WebSocket;
@@ -113,9 +118,16 @@ function disconnect(): void {
 }
 
 function socketSend(
-  socket: WebSocket,
+  endpoint: Endpoint,
   message: object | null,
 ): Promise<Response<unknown>> {
+  if (webSockets === null) {
+    throw new Error('Socket is not open')
+  }
+  const {
+    [endpoint]: socket,
+  } = webSockets
+
   return new Promise((resolve, reject): void => {
     const onMessage = (event: MessageEvent): void => {
       socket.removeEventListener('message', onMessage)
@@ -139,16 +151,9 @@ function socketSend(
 }
 
 async function getRootDir(): Promise<string> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    [getRootDirEndpoint]: webSocket,
-  } = webSockets
-
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
-  const response = await socketSend(webSocket, null) as GetRootDirResponse
+  const response = await socketSend(getRootDirEndpoint, null) as GetRootDirResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
@@ -161,16 +166,9 @@ async function getRootDir(): Promise<string> {
 async function listExperiments(
   options: ListExperimentsOptions,
 ): Promise<Array<ExperimentWrapper> | undefined> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    [listExperimentsEndpoint]: webSocket,
-  } = webSockets
-
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
-  const response = await socketSend(webSocket, options) as ListExperimentsResponse
+  const response = await socketSend(listExperimentsEndpoint, options) as ListExperimentsResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
@@ -183,16 +181,9 @@ async function listExperiments(
 async function getExperiment(
   options: GetExperimentOptions,
 ): Promise<ExperimentWrapper | undefined> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    [getExperimentEndpoint]: webSocket,
-  } = webSockets
-
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
-  const response = await socketSend(webSocket, options) as GetExperimentResponse
+  const response = await socketSend(getExperimentEndpoint, options) as GetExperimentResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
@@ -205,16 +196,9 @@ async function getExperiment(
 async function listExperimentPaths(
   options: ListExperimentPathsOptions,
 ): Promise<Array<string> | undefined> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    [listExperimentPathsEndpoint]: webSocket,
-  } = webSockets
-
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
-  const response = await socketSend(webSocket, options) as ListExperimentPathsResponse
+  const response = await socketSend(listExperimentPathsEndpoint, options) as ListExperimentPathsResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
@@ -227,16 +211,9 @@ async function listExperimentPaths(
 async function writeExperiment(
   options: WriteExperimentOptions,
 ): Promise<void> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    [writeExperimentEndpoint]: webSocket,
-  } = webSockets
-
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
-  const response = await socketSend(webSocket, options) as WriteExperimentResponse
+  const response = await socketSend(writeExperimentEndpoint, options) as WriteExperimentResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 }
 
