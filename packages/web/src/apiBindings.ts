@@ -138,10 +138,10 @@ function socketSend(
       const parsed: EndpointResponse = JSON.parse(data)
       const {
         status,
-        message: responseMessage,
+        message,
       } = parsed
       if (status !== Status.OK) {
-        reject(new Error(responseMessage))
+        reject(new Error(message))
       }
       resolve(parsed)
     }
