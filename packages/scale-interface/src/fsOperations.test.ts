@@ -47,12 +47,14 @@ beforeEach(async () => {
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { /* Do Nothing */ }
+
   try {
     await mkdir('./SCALE_INTERFACE_DAT/active', {
       mode: 0o777,
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { /* Do Nothing */ }
+
   try {
     await mkdir('./SCALE_INTERFACE_DAT/archive', {
       mode: 0o777,
@@ -85,11 +87,13 @@ afterEach(async () => {
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { /* Do Nothing */ }
+
   try {
     await rmdir('./SCALE_INTERFACE_DAT/archive', {
       boundary: TEST_DIRECTORY,
     })
   } catch (error) { console.error(error) }
+
   try {
     await rmdir('./SCALE_INTERFACE_DAT/', {
       boundary: TEST_DIRECTORY,
@@ -107,7 +111,8 @@ describe('Test valid', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
 
     it('writes an experiment with an underscore in name value', async () => {
@@ -117,7 +122,8 @@ describe('Test valid', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -129,7 +135,8 @@ describe('Test valid', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
 
     it('writes an experiment with an underscore in the primaryExperimenter value', async () => {
@@ -139,7 +146,8 @@ describe('Test valid', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -151,7 +159,8 @@ describe('Test valid', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -163,7 +172,8 @@ describe('Test valid', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -177,7 +187,8 @@ describe('Test valid', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -189,7 +200,8 @@ describe('Test valid', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 })
@@ -203,7 +215,8 @@ describe('Test getExperiment', () => {
       boundary: TEST_DIRECTORY,
     })
     const rtnExpr = await getExperiment(ACTIVE + exampleExperimentName)
-    expect(JSON.stringify(rtnExpr.data)).toBe(fileContent)
+    expect(JSON.stringify(rtnExpr.data))
+      .toBe(fileContent)
   })
 })
 
@@ -213,7 +226,10 @@ describe('Test listExperiments', () => {
   test('Empty return array', async () => {
     const { parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid.json')
 
-    await expect(listExperiments({ path: ACTIVE, filter: exampleExperiment as Experiment }))
+    await expect(listExperiments({
+      path: ACTIVE,
+      filter: exampleExperiment as Experiment,
+    }))
       .resolves.toHaveLength(0)
   })
 
@@ -231,14 +247,21 @@ describe('Test listExperiments', () => {
     await expect(listExperiments({
       path: ACTIVE,
       filter: exampleExperiment as Experiment,
-    })).resolves.toBe(compareListExperiments)
+    }))
+      .resolves.toBe(compareListExperiments)
   })
 })
 
 // Need to fix listExperimentPaths function. It is returning the experiment names and not the paths.
 describe('Test listExperimentPaths', () => {
   it('returns no experiment path', async () => {
-    expect(await listExperimentPaths({ path: ACTIVE, experimentName: '', primaryExperimenter: '', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) }))
+    expect(await listExperimentPaths({
+      path: ACTIVE,
+      experimentName: '',
+      primaryExperimenter: '',
+      dateStart: new Date(1572730420004),
+      dateEnd: new Date(1572730420004),
+    }))
       .toEqual([])
   })
 
@@ -249,7 +272,14 @@ describe('Test listExperimentPaths', () => {
     await writeFile(ACTIVE + exampleExperimentName, fileContent, {
       boundary: TEST_DIRECTORY,
     })
-    expect(await listExperimentPaths({ path: ACTIVE, experimentName: 'Addiction Study 12', primaryExperimenter: 'quinn', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) })).toBe([ACTIVE + exampleExperimentName])
+    expect(await listExperimentPaths({
+      path: ACTIVE,
+      experimentName: 'Addiction Study 12',
+      primaryExperimenter: 'quinn',
+      dateStart: new Date(1572730420004),
+      dateEnd: new Date(1572730420004),
+    }))
+      .toBe([ACTIVE + exampleExperimentName])
   })
 
   it('returns multiple experiment paths', async () => {
@@ -265,7 +295,17 @@ describe('Test listExperimentPaths', () => {
     await writeFile(ACTIVE + exampleExperimentName2, fileContent2, {
       boundary: TEST_DIRECTORY,
     })
-    expect(await listExperimentPaths({ path: ACTIVE, experimentName: 'Addiction Study 12', primaryExperimenter: 'quinn', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) })).toBe([ACTIVE + exampleExperimentName, ACTIVE + exampleExperimentName2])
+    expect(await listExperimentPaths({
+      path: ACTIVE,
+      experimentName: 'Addiction Study 12',
+      primaryExperimenter: 'quinn',
+      dateStart: new Date(1572730420004),
+      dateEnd: new Date(1572730420004),
+    }))
+      .toBe([
+        ACTIVE + exampleExperimentName,
+        ACTIVE + exampleExperimentName2,
+      ])
   })
 })
 
@@ -281,7 +321,8 @@ describe('Test writeExperiment', () => {
     const experimentFile = await readFile(ACTIVE + exampleExperimentName, {
       boundary: TEST_DIRECTORY,
     })
-    expect((experimentFile.toString())).toBe(fileContent)
+    expect((experimentFile.toString()))
+      .toBe(fileContent)
   })
 
   describe('Test incorrect experiment format', () => {
@@ -292,7 +333,8 @@ describe('Test writeExperiment', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
 
     it('it does not write an experiment adding a new variable, totalBottlesPerSession', async () => {
@@ -302,7 +344,8 @@ describe('Test writeExperiment', () => {
       await expect(writeExperiment({
         path: ACTIVE + exampleExperimentName,
         data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      }))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 })
