@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
-  Response,
   ExperimentWrapper,
 } from 'api-interfaces/dist/common'
 
@@ -48,6 +47,8 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Endpoint,
+  EndpointOptions,
+  EndpointResponse,
 } from 'api-interfaces/dist'
 
 let webSockets: null | {
@@ -119,8 +120,8 @@ function disconnect(): void {
 
 function socketSend(
   endpoint: Endpoint,
-  message: object,
-): Promise<Response<unknown>> {
+  message: EndpointOptions,
+): Promise<EndpointResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -134,7 +135,7 @@ function socketSend(
 
       const { data } = event
       // Trust that objects from `scale-interface` implement Resp
-      const parsed: Response<unknown> = JSON.parse(data)
+      const parsed: EndpointResponse = JSON.parse(data)
       const {
         status,
         message: responseMessage,
