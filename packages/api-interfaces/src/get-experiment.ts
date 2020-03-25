@@ -1,5 +1,4 @@
 import {
-  Response,
   ExperimentWrapper,
 } from './common'
 
@@ -10,4 +9,4 @@ export interface GetExperimentOptions {
   path: string;
 }
 
-export interface GetExperimentResponse extends Response<ExperimentWrapper | null> {}
+export type GetExperimentResponse = ExperimentWrapper | null

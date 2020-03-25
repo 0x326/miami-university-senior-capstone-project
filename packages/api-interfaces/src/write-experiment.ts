@@ -1,5 +1,4 @@
 import {
-  Response,
   Experiment,
 } from './common'
 
@@ -11,4 +10,4 @@ export interface WriteExperimentOptions {
   data: Experiment;
 }
 
-export interface WriteExperimentResponse extends Response<null> {}
+export type WriteExperimentResponse = null

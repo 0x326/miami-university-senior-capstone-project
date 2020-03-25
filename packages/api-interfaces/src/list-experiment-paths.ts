@@ -1,7 +1,3 @@
-import {
-  Response,
-} from './common'
-
 export type ListExperimentPathsEndpoint = '/list-experiment-paths'
 export const listExperimentPathsEndpoint: ListExperimentPathsEndpoint = '/list-experiment-paths'
 
@@ -13,4 +9,4 @@ export interface ListExperimentPathsOptions {
   dateEnd: Date;
 }
 
-export interface ListExperimentPathsResponse extends Response<Array<string>> {}
+export type ListExperimentPathsResponse = Array<string>

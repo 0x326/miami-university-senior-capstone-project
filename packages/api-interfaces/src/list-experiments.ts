@@ -1,5 +1,4 @@
 import {
-  Response,
   Experiment,
   ExperimentWrapper,
 } from './common'
@@ -12,4 +11,4 @@ export interface ListExperimentsOptions {
   filter: null | Experiment;
 }
 
-export interface ListExperimentsResponse extends Response<Array<ExperimentWrapper>> {}
+export type ListExperimentsResponse = Array<ExperimentWrapper>

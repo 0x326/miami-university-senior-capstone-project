@@ -12,6 +12,7 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
+  Response,
 } from 'api-interfaces/dist/common'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -67,7 +68,7 @@ import {
 } from './fsOperations'
 
 function createWebSocketHandler<HandlerData, HandlerResponse>(
-  handler: (data: HandlerData) => Promise<HandlerResponse>,
+  handler: (data: HandlerData) => Promise<Response<HandlerResponse>>,
 ): WebSocketServer {
   const webSocketServer = new WebSocketServer({ noServer: true })
 
@@ -99,7 +100,7 @@ function createWebSocketEmitter<EmitterData>(
   return webSocketServer
 }
 
-function handleGetRootDir(): Promise<GetRootDirResponse> {
+function handleGetRootDir(): Promise<Response<GetRootDirResponse>> {
   return Promise.resolve({
     status: Status.OK,
     data: ROOT_PATH,
@@ -108,7 +109,7 @@ function handleGetRootDir(): Promise<GetRootDirResponse> {
 
 async function handleListExperiments(
   options: ListExperimentsOptions,
-): Promise<ListExperimentsResponse> {
+): Promise<Response<ListExperimentsResponse>> {
   try {
     try {
       const wrappedExperiments = await listExperiments(options)
@@ -136,7 +137,7 @@ async function handleListExperiments(
 
 async function handleGetExperiment(
   options: GetExperimentOptions,
-): Promise<GetExperimentResponse> {
+): Promise<Response<GetExperimentResponse>> {
   try {
     const { path } = options
     try {
@@ -165,7 +166,7 @@ async function handleGetExperiment(
 
 async function handleListExperimentPaths(
   options: ListExperimentPathsOptions,
-): Promise<ListExperimentPathsResponse> {
+): Promise<Response<ListExperimentPathsResponse>> {
   try {
     try {
       const paths = await listExperimentPaths(options)
@@ -193,7 +194,7 @@ async function handleListExperimentPaths(
 
 async function handleWriteExperiment(
   options: WriteExperimentOptions,
-): Promise<WriteExperimentResponse> {
+): Promise<Response<WriteExperimentResponse>> {
   try {
     if (options.path && options.data) {
       // await valid(JSON.parse(parsed.String(data)))
