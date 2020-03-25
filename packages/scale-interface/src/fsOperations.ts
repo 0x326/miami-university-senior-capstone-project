@@ -81,7 +81,7 @@ const ROOT_PATH = '/media/scale_interface_mountpoint'
  */
 function valid(data: Experiment): Experiment {
   if (!data) {
-    throw new Error('==Data sent to valid() is null')
+    throw new Error('Data sent to valid() is null')
   }
 
   const {

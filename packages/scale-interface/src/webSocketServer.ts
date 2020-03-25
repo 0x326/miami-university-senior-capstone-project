@@ -171,13 +171,13 @@ async function handleWriteExperiment(
   if (options.path && options.data) {
     // await valid(JSON.parse(parsed.String(data)))
     await writeExperiment(options)
-    console.log(`==Saved the following object at ${options.path}`)
+    console.log(`Saved the following object at ${options.path}`)
     console.log(options.data)
 
     return null
   }
 
-  throw new Error(`==Passed object is missing either a path or data field: ${options}`)
+  throw new Error(`Passed object is missing either a path or data field: ${options}`)
 }
 
 async function* emitScaleData(): AsyncGenerator<ScaleData> {

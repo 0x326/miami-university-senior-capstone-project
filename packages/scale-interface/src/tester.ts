@@ -17,39 +17,39 @@ const webSocketWriteExperiment = new WebSocket(`ws://localhost:${PORT}/write-exp
 const webSocketScaleData = new WebSocket(`ws://localhost:${PORT}/scale-data`)
 
 webSocketGetRoot.addEventListener('message', ({ data }) => {
-  console.log('==/get-root-dir')
+  console.log('/get-root-dir')
   console.log(JSON.parse(String(data)))
-  console.log('===')
+  console.log('')
 })
 
 webSocketListExperiments.addEventListener('message', ({ data }) => {
-  console.log('==/list-experiments')
+  console.log('/list-experiments')
   console.log(JSON.parse(String(data)))
-  console.log('===')
+  console.log('')
 })
 
 webSocketGetExperiment.addEventListener('message', ({ data }) => {
-  console.log('==/get-experiment')
+  console.log('/get-experiment')
   console.log(JSON.parse(String(data)))
-  console.log('===')
+  console.log('')
 })
 
 webSocketListPaths.addEventListener('message', ({ data }) => {
-  console.log('==/list-paths')
+  console.log('/list-paths')
   console.log(JSON.parse(String(data)))
-  console.log('===')
+  console.log('')
 })
 
 webSocketWriteExperiment.addEventListener('message', ({ data }) => {
-  console.log('==/write-experiment')
+  console.log('/write-experiment')
   console.log(JSON.parse(String(data)))
-  console.log('===')
+  console.log('')
 })
 
 webSocketScaleData.addEventListener('message', ({ data }) => {
-  console.log('==/scale-data')
+  console.log('/scale-data')
   console.log(JSON.parse(String(data)))
-  console.log('===')
+  console.log('')
 })
 
 webSocketGetRoot.addEventListener('open', () => {
