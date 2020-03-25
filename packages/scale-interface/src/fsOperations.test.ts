@@ -1,3 +1,8 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  Experiment,
+} from 'api-interfaces/dist/common'
+
 import {
   mkdir,
   rmdir,
@@ -12,7 +17,6 @@ import {
   writeExperiment,
   getExperiment,
   listExperiments,
-  Experiment,
 } from './fsOperations'
 
 const TEST_DIRECTORY = './SCALE_INTERFACE_DAT/'
