@@ -36,36 +36,36 @@ Resp {
 
   - Query: stringified JSON obj
 
-```typescript
-JSON.stringify(
-    {
-        path: 'somePath',
-        filter?: {
-            name?: "something",
-            primaryExperimenter?: "something",
-            isComplete?: true|false,
-            ...
+    ```typescript
+    JSON.stringify(
+        {
+            path: 'somePath',
+            filter?: {
+                name?: "something",
+                primaryExperimenter?: "something",
+                isComplete?: true|false,
+                ...
+            }
         }
-    }
-)
-```
+    )
+    ```
 
   - ExperimentWrapper as defined in `fsOperations.ts`
 
-```typescript
-export interface ExperimentWrapper {
-  path: string;
-  data: Experiment;
-}
-```
+    ```typescript
+    export interface ExperimentWrapper {
+      path: string;
+      data: Experiment;
+    }
+    ```
 
 - `/get-experiment` returns a single wrapped experiment at a given path
 
   - Query: a string representing a path to an experiment json file
 
-``` text
-"/somepath"
-```
+    ``` text
+    "/somepath"
+    ```
 
 - `/write-experiment`: save experiment at a particular pat. Doesn't return
   anything, but _does_ give you a message that contains either the error
@@ -73,14 +73,14 @@ export interface ExperimentWrapper {
 
   - Query: stringified ExperimentWrapper
 
-```typescript
-JSON.stringify(
-    {
-        path: "path",
-        data: experimentObj
-    }
-)
-```
+    ```typescript
+    JSON.stringify(
+        {
+            path: "path",
+            data: experimentObj
+        }
+    )
+    ```
 
 - `/list-experiment-paths` returns list of experiment **paths** (strings) at
   given path that match query
@@ -95,17 +95,17 @@ JSON.stringify(
 
   - Query: stringified json object
 
-```typescript
-JSON.stringify(
-  {
-    path: "/somepath",
-    experimentName?: "some experiment",
-    primaryExperimenter?: "some name"
-    dateStart?: +new Date('2019'),
-    dateEnd?: + new Date('2020'),
-  }
-)
-```
+    ```typescript
+    JSON.stringify(
+      {
+        path: "/somepath",
+        experimentName?: "some experiment",
+        primaryExperimenter?: "some name"
+        dateStart?: +new Date('2019'),
+        dateEnd?: + new Date('2020'),
+      }
+    )
+    ```
 
 ## Initiated by scale
 
