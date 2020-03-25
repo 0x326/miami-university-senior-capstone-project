@@ -219,8 +219,8 @@ describe('Test getExperiment', () => {
     await writeFile(join(active, exampleExperimentName), fileContent, {
       boundary: testDirectory,
     })
-    const rtnExpr = await getExperiment(join(active, exampleExperimentName))
-    expect(JSON.stringify(rtnExpr))
+    const experiment = await getExperiment(join(active, exampleExperimentName))
+    expect(JSON.stringify(experiment))
       .toBe(fileContent)
   })
 })
