@@ -7,34 +7,40 @@ import {
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
+  getExperimentEndpoint,
   GetExperimentOptions,
   GetExperimentResponse,
 } from 'api-interfaces/dist/get-experiment'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
+  getRootDirEndpoint,
   GetRootDirResponse,
 } from 'api-interfaces/dist/get-root-dir'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
+  listExperimentPathsEndpoint,
   ListExperimentPathsOptions,
   ListExperimentPathsResponse,
 } from 'api-interfaces/dist/list-experiment-paths'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
+  listExperimentsEndpoint,
   ListExperimentsOptions,
   ListExperimentsResponse,
 } from 'api-interfaces/dist/list-experiments'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
+  scaleDataEndpoint,
   ScaleData,
 } from 'api-interfaces/dist/scale-data'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
+  writeExperimentEndpoint,
   WriteExperimentOptions,
   WriteExperimentResponse,
 } from 'api-interfaces/dist/write-experiment'
@@ -83,12 +89,12 @@ async function connect(
   const baseURI = `ws://${host}:${port}`
 
   webSockets = {
-    getRootDir: await openWebSocket(`${baseURI}/get-root-dir`, timeout),
-    listExperiments: await openWebSocket(`${baseURI}/list-experiments`, timeout),
-    getExperiment: await openWebSocket(`${baseURI}/get-experiment`, timeout),
-    listExperimentPaths: await openWebSocket(`${baseURI}/list-experiment-paths`, timeout),
-    writeExperiment: await openWebSocket(`${baseURI}/write-experiment`, timeout),
-    scaleData: await openWebSocket(`${baseURI}/scale-data`, timeout),
+    getRootDir: await openWebSocket(`${baseURI}${getRootDirEndpoint}`, timeout),
+    listExperiments: await openWebSocket(`${baseURI}${listExperimentsEndpoint}`, timeout),
+    getExperiment: await openWebSocket(`${baseURI}${getExperimentEndpoint}`, timeout),
+    listExperimentPaths: await openWebSocket(`${baseURI}${listExperimentPathsEndpoint}`, timeout),
+    writeExperiment: await openWebSocket(`${baseURI}${writeExperimentEndpoint}`, timeout),
+    scaleData: await openWebSocket(`${baseURI}${scaleDataEndpoint}`, timeout),
   }
 }
 
