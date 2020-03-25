@@ -13,11 +13,11 @@ ws.onmessage = event => console.log(JSON.parse(event.data))
 ws.send(<query>)
 ```
 
-When I say a route "returns" X, I mean it returns a Resp object as defined in
-webSocketServer where the X is the value of data.
+When I say a route "returns" X, I mean it returns a `Response` object as defined in
+`webSocketServer.ts` where the X is the value of data.
 
 ```typescript
-interface Resp {
+interface Response {
   status: 'OK' | 'FAIL';
   data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
   message?: string;
@@ -34,7 +34,7 @@ interface Resp {
 
 - `/list-experiments` returns a list of wrappedExperiments matching `query.filter`
 
-  - Query: stringified JSON obj
+  - Query: stringified JSON object
 
     ```typescript
     JSON.stringify( {
@@ -48,7 +48,7 @@ interface Resp {
     })
     ```
 
-  - ExperimentWrapper as defined in `fsOperations.ts`
+  - `ExperimentWrapper`, as defined in `fsOperations.ts`:
 
     ```typescript
     export interface ExperimentWrapper {
@@ -59,10 +59,10 @@ interface Resp {
 
 - `/get-experiment` returns a single wrapped experiment at a given path
 
-  - Query: a string representing a path to an experiment json file
+  - Query: a string representing a path to an experiment JSON file
 
-    ``` text
-    '/somepath'
+    ```typescript
+    JSON.stringify('/somepath')
     ```
 
 - `/write-experiment`: save experiment at a particular pat. Doesn't return
@@ -74,7 +74,7 @@ interface Resp {
     ```typescript
     JSON.stringify({
       path: 'path',
-      data: experimentObj,
+      data: experimentObject,
     })
     ```
 
@@ -89,7 +89,7 @@ interface Resp {
   - If you want all experiments at the given path, use empty strings
     and don't provide dates
 
-  - Query: stringified json object
+  - Query: stringified JSON object
 
     ```typescript
     JSON.stringify({
