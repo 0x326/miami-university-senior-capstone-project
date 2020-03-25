@@ -6,7 +6,6 @@ import Joi from '@hapi/joi'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Experiment,
-  ExperimentWrapper,
 } from 'api-interfaces/dist/common'
 
 import {
@@ -80,10 +79,6 @@ const ROOT_PATH = './SCALE_INTERFACE_DAT'
  * @param data
  */
 function valid(data: Experiment): Experiment {
-  if (!data) {
-    throw new Error('Data sent to valid() is null')
-  }
-
   const {
     value,
     error,
@@ -102,16 +97,14 @@ function valid(data: Experiment): Experiment {
  */
 async function getExperiment(
   searchPath: string,
-): Promise<ExperimentWrapper> {
+): Promise<Experiment> {
   const data = await readFile(searchPath, {
     encoding: 'utf-8',
     boundary: ROOT_PATH,
   })
   const parsed = valid(JSON.parse(String(data)))
-  return {
-    path: searchPath,
-    data: parsed,
-  }
+
+  return parsed
 }
 
 
@@ -120,7 +113,7 @@ async function listExperiments(
     path: string;
     filter: null | Experiment;
   },
-): Promise<Array<ExperimentWrapper>> {
+): Promise<Array<Experiment>> {
   const {
     path: filePath,
     filter,
@@ -131,11 +124,11 @@ async function listExperiments(
     boundary: ROOT_PATH,
   })
 
-  const experiments: Array<ExperimentWrapper> = await Promise.all(allFiles
+  const experiments: Array<Experiment> = await Promise.all(allFiles
     .map((experimentPath) => getExperiment(path.join(filePath, experimentPath))))
 
   if (filter !== null) {
-    return experiments.filter((wrappedExperiment) => _.isMatch(wrappedExperiment.data, filter))
+    return experiments.filter((experiment) => _.isMatch(experiment, filter))
   }
 
   return experiments
@@ -197,16 +190,11 @@ async function listExperimentPaths(
 
 /**
  * simply writes stringified experiment json to file at path.
- * @param wrapped
  */
 async function writeExperiment(
-  wrapped: ExperimentWrapper,
+  filePath: string,
+  data: Experiment,
 ): Promise<void> {
-  const {
-    path: filePath,
-    data,
-  } = wrapped
-
   // validate file path
   const lMatch = /^.*?_/.exec(filePath)
   const rMatch = /_[^_]*?$/.exec(filePath)

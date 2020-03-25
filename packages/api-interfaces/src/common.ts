@@ -39,9 +39,3 @@ export interface Experiment {
   subSessionLabelsEnd: Array<string | SubLabel>;
   cages: Array<Cage>;
 }
-
-// wraps an experiment to provide the path of the file it was read from
-export interface ExperimentWrapper {
-  path: string;
-  data: Experiment;
-}

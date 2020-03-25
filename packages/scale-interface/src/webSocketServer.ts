@@ -132,9 +132,9 @@ async function handleListExperiments(
   options: ListExperimentsOptions,
 ): Promise<ListExperimentsResponse> {
   try {
-    const wrappedExperiments = await listExperiments(options)
+    const experiments = await listExperiments(options)
 
-    return wrappedExperiments
+    return experiments
   } catch (error) {
     throw new Error(`listExperiments resulted in error: ${error} when given query: ${options}`)
   }
@@ -145,9 +145,9 @@ async function handleGetExperiment(
 ): Promise<GetExperimentResponse> {
   const { path } = options
   try {
-    const wrappedExperiment = await getExperiment(path)
+    const experiment = await getExperiment(path)
 
-    return wrappedExperiment
+    return experiment
   } catch (error) {
     throw new Error(`getExperiment on path ${path} resulted in error ${error}`)
   }
@@ -168,11 +168,16 @@ async function handleListExperimentPaths(
 async function handleWriteExperiment(
   options: WriteExperimentOptions,
 ): Promise<WriteExperimentResponse> {
-  if (options.path && options.data) {
+  const {
+    path,
+    data,
+  } = options
+
+  if (path && data) {
     // await valid(JSON.parse(parsed.String(data)))
-    await writeExperiment(options)
-    console.log(`Saved the following object at ${options.path}`)
-    console.log(options.data)
+    await writeExperiment(path, data)
+    console.log(`Saved the following object at ${path}`)
+    console.log(data)
 
     return null
   }

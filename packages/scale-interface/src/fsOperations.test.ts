@@ -112,10 +112,10 @@ describe('Test valid', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/emptyName.json')
       const exampleExperimentName = '_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
 
@@ -123,10 +123,10 @@ describe('Test valid', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/underscoreInName.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
   })
@@ -136,10 +136,10 @@ describe('Test valid', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/emptyPrimaryExperimenter.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
 
@@ -147,10 +147,10 @@ describe('Test valid', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/underscoreInPrimaryExperimenter.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_dr_quinn'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
   })
@@ -160,10 +160,10 @@ describe('Test valid', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/zeroDateInitialized.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
   })
@@ -173,10 +173,10 @@ describe('Test valid', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/zeroLastUpdated.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
   })
@@ -188,10 +188,10 @@ describe('Test valid', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/zeroTotalSessions.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
   })
@@ -201,10 +201,10 @@ describe('Test valid', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/zeroTotalSessions.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
   })
@@ -219,7 +219,7 @@ describe('Test getExperiment', () => {
       boundary: TEST_DIRECTORY,
     })
     const rtnExpr = await getExperiment(join(ACTIVE, exampleExperimentName))
-    expect(JSON.stringify(rtnExpr.data))
+    expect(JSON.stringify(rtnExpr))
       .toBe(fileContent)
   })
 })
@@ -321,10 +321,10 @@ describe('Test writeExperiment', () => {
   it('writes a valid experiment', async () => {
     const { parsedContent: exampleExperiment, fileContent } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
-    await writeExperiment({
-      path: join(ACTIVE, exampleExperimentName),
-      data: exampleExperiment as Experiment,
-    })
+    await writeExperiment(
+      join(ACTIVE, exampleExperimentName),
+      exampleExperiment as Experiment,
+    )
 
     const experimentFile = await readFile(join(ACTIVE, exampleExperimentName), {
       boundary: TEST_DIRECTORY,
@@ -338,10 +338,10 @@ describe('Test writeExperiment', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/noName.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
 
@@ -349,10 +349,10 @@ describe('Test writeExperiment', () => {
       const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/noExtraKeys.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: join(ACTIVE, exampleExperimentName),
-        data: exampleInvalidExperiment as Experiment,
-      }))
+      await expect(writeExperiment(
+        join(ACTIVE, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
         .rejects.toBeInstanceOf(Error)
     })
   })

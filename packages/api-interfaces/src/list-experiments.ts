@@ -1,6 +1,5 @@
 import {
   Experiment,
-  ExperimentWrapper,
 } from './common'
 
 export type ListExperimentsEndpoint = '/list-experiments'
@@ -11,4 +10,4 @@ export interface ListExperimentsOptions {
   filter: null | Experiment;
 }
 
-export type ListExperimentsResponse = Array<ExperimentWrapper>
+export type ListExperimentsResponse = Array<Experiment>

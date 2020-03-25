@@ -2,7 +2,7 @@
 import {
   Status,
   Response,
-  ExperimentWrapper,
+  Experiment,
 } from 'api-interfaces/dist/common'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -216,7 +216,7 @@ async function getRootDir(): Promise<string> {
 
 async function listExperiments(
   options: ListExperimentsOptions,
-): Promise<Array<ExperimentWrapper> | undefined> {
+): Promise<Array<Experiment> | undefined> {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const experiments = await socketSend(listExperimentsEndpoint, options)
@@ -226,7 +226,7 @@ async function listExperiments(
 
 async function getExperiment(
   options: GetExperimentOptions,
-): Promise<ExperimentWrapper | undefined> {
+): Promise<Experiment | undefined> {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const experiment = await socketSend(getExperimentEndpoint, options)
