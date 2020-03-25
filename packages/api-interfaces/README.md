@@ -3,7 +3,7 @@ if some error occurred
 
 You initialize connections like so:
 
-``` javascript
+```typescript
 const ws = new WebSocket("ws://localhost:<port>/<path>")
 // create an onmessage handler e.g.
 ws.onmessage = event => console.log(JSON.parse(event.data))
@@ -13,7 +13,7 @@ ws.send(<query>)
 When I say a route "returns" X, I mean it returns a Resp object as defined in
 webSocketServer where the X is the value of data.
 
-```javascript
+```typescript
 Resp {
   status: 'OK' | 'FAIL';
   data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
@@ -30,7 +30,7 @@ Initiated by web
 
 -   /list-experiments returns a list of wrappedExperiments matching query.filter
     -   Query: stringified JSON obj
-``` javascript
+```typescript
 JSON.stringify(
     {
         path: 'somePath',
@@ -44,7 +44,7 @@ JSON.stringify(
 )
 ```
     - ExperimentWrapper as defined in fsOperations
-```javascript
+```typescript
 export interface ExperimentWrapper {
   path: string;
   data: Experiment;
@@ -61,7 +61,7 @@ export interface ExperimentWrapper {
     anything, but _does_ give you a message that contains either the error
     message for a failure or "Saved experiment at <some path>"
     -   Query: stringified ExperimentWrapper
-``` javascript
+```typescript
 JSON.stringify(
     {
         path: "path",
@@ -78,7 +78,7 @@ JSON.stringify(
     -   If you want all experiments at the given path, use empty strings
         and don\'t provide dates
     -   Query: stringified json object
-``` javascript
+```typescript
 JSON.stringify(
     {
         path: "/somepath",
