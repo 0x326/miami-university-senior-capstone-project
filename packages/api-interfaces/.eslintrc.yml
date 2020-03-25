@@ -1,0 +1,8 @@
+parserOptions:
+  project: ./tsconfig.json
+
+rules:
+  unicorn/filename-case:
+    - error
+    - cases:
+        kebabCase: true
