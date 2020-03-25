@@ -1,3 +1,5 @@
+# api-interfaces
+
 All websockets will send either stringified JSON if success or \'FAIL\'
 if some error occurred
 
@@ -20,8 +22,8 @@ Resp {
   message?: string;
 }
 ```
-Initiated by web
-====================================
+
+## Initiated by web
 
 -   /get-root-dir returns root directory of experiments /archived and /active
     are found
@@ -90,8 +92,7 @@ JSON.stringify(
 )
 ```
 
-Initiated by scale
-======================================
+## Initiated by scale
 
 -   /scale-data. Initiates connection with scale. Just create a
     websocket client to it. You don\'t need to send it a message.
