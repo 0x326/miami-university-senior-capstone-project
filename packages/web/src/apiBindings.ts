@@ -176,6 +176,28 @@ function socketSend(
       if (status !== Status.OK) {
         reject(new Error(message))
       }
+
+      switch (endpoint) {
+        default:
+          reject(new Error('Response object cannot be validated. This is an oversight in the source code'))
+          break
+
+        // TODO (0x326) [2020-03-15]: Verify response objects
+        case getRootDirEndpoint:
+          break
+
+        case listExperimentsEndpoint:
+          break
+
+        case getExperimentEndpoint:
+          break
+
+        case listExperimentPathsEndpoint:
+          break
+
+        case writeExperimentEndpoint:
+          break
+      }
       resolve(data)
     }
 
@@ -198,7 +220,6 @@ async function listExperiments(
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const experiments = await socketSend(listExperimentsEndpoint, options)
-  // TODO (0x326) [2020-03-15]: Verify response object
 
   return experiments
 }
@@ -209,7 +230,6 @@ async function getExperiment(
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const experiment = await socketSend(getExperimentEndpoint, options)
-  // TODO (0x326) [2020-03-15]: Verify response object
 
   return experiment
 }
@@ -220,7 +240,6 @@ async function listExperimentPaths(
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const experimentPaths = await socketSend(listExperimentPathsEndpoint, options)
-  // TODO (0x326) [2020-03-15]: Verify response object
 
   return experimentPaths
 }
@@ -231,7 +250,6 @@ async function writeExperiment(
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const response = await socketSend(writeExperimentEndpoint, options)
-  // TODO (0x326) [2020-03-15]: Verify response object
 }
 
 function scaleData(
