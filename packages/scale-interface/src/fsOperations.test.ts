@@ -247,7 +247,9 @@ describe('Test listExperiments', () => {
     })
 
     // Genrate comparison array
-    const compareListExperiments = [exampleExperiment]
+    const compareListExperiments = [
+      exampleExperiment,
+    ]
     await expect(listExperiments({
       path: ACTIVE,
       filter: exampleExperiment as Experiment,
@@ -283,7 +285,9 @@ describe('Test listExperimentPaths', () => {
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
-      .toBe([join(ACTIVE, exampleExperimentName)])
+      .toBe([
+        join(ACTIVE, exampleExperimentName),
+      ])
   })
 
   it('returns multiple experiment paths', async () => {
