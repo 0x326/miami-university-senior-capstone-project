@@ -164,17 +164,17 @@ function socketSend(
     const onMessage = (event: MessageEvent): void => {
       socket.removeEventListener('message', onMessage)
 
-      const { data } = event
+      const { data: rawResponse } = event
       // Trust that objects from `scale-interface` implement Resp
-      const parsed: EndpointResponse = JSON.parse(data)
+      const response: EndpointResponse = JSON.parse(rawResponse)
       const {
         status,
         message,
-      } = parsed
+      } = response
       if (status !== Status.OK) {
         reject(new Error(message))
       }
-      resolve(parsed)
+      resolve(response)
     }
 
     socket.addEventListener('message', onMessage)
