@@ -61,7 +61,7 @@ export interface ExperimentWrapper {
 
 -   /write-experiment: save experiment at a particular pat. Doesn't return
     anything, but _does_ give you a message that contains either the error
-    message for a failure or "Saved experiment at <some path>"
+    message for a failure or "Saved experiment at SOME_PATH"
     -   Query: stringified ExperimentWrapper
 ```typescript
 JSON.stringify(
