@@ -6,3 +6,7 @@ rules:
     - error
     - cases:
         kebabCase: true
+
+  # For some reason, this rule doesn't work properly on these files
+  import/prefer-default-export:
+    - off
