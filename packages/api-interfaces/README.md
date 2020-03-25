@@ -17,7 +17,7 @@ When I say a route "returns" X, I mean it returns a Resp object as defined in
 webSocketServer where the X is the value of data.
 
 ```typescript
-Resp {
+interface Resp {
   status: 'OK' | 'FAIL';
   data?: ExperimentWrapper | Array<ExperimentWrapper> | Array<string> | string;
   message?: string;
