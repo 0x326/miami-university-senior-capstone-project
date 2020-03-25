@@ -12,23 +12,47 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
-  GetRootDirResponse,
-  ListExperimentPathsOptions,
-  ListExperimentsResponse,
+} from 'api-interfaces/dist/common'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  getExperimentEndpoint,
   GetExperimentOptions,
   GetExperimentResponse,
+} from 'api-interfaces/dist/get-experiment'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  getRootDirEndpoint,
+  GetRootDirResponse,
+} from 'api-interfaces/dist/get-root-dir'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  listExperimentPathsEndpoint,
+  ListExperimentPathsOptions,
   ListExperimentPathsResponse,
+} from 'api-interfaces/dist/list-experiment-paths'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  listExperimentsEndpoint,
   ListExperimentsOptions,
+  ListExperimentsResponse,
+} from 'api-interfaces/dist/list-experiments'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  scaleDataEndpoint,
+  ScaleData,
+} from 'api-interfaces/dist/scale-data'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  writeExperimentEndpoint,
   WriteExperimentOptions,
   WriteExperimentResponse,
-  ScaleData,
-  getRootDirEndpoint,
-  listExperimentsEndpoint,
-  getExperimentEndpoint,
-  listExperimentPathsEndpoint,
-  writeExperimentEndpoint,
-  scaleDataEndpoint,
-} from 'api-interfaces/dist'
+} from 'api-interfaces/dist/write-experiment'
 
 import {
   subscribe,

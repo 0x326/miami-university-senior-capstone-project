@@ -2,18 +2,42 @@
 import {
   Status,
   Response,
-  GetRootDirResponse,
-  ListExperimentsOptions,
-  ListExperimentsResponse,
+  ExperimentWrapper,
+} from 'api-interfaces/dist/common'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
   GetExperimentOptions,
   GetExperimentResponse,
+} from 'api-interfaces/dist/get-experiment'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  GetRootDirResponse,
+} from 'api-interfaces/dist/get-root-dir'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
   ListExperimentPathsOptions,
   ListExperimentPathsResponse,
+} from 'api-interfaces/dist/list-experiment-paths'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  ListExperimentsOptions,
+  ListExperimentsResponse,
+} from 'api-interfaces/dist/list-experiments'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  ScaleData,
+} from 'api-interfaces/dist/scale-data'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
   WriteExperimentOptions,
   WriteExperimentResponse,
-  ScaleData,
-  ExperimentWrapper,
-} from 'api-interfaces/dist'
+} from 'api-interfaces/dist/write-experiment'
 
 let webSockets: null | {
   getRootDir: WebSocket;

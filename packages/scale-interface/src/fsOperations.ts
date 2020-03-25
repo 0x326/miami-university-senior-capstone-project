@@ -7,7 +7,7 @@ import Joi from '@hapi/joi'
 import {
   Experiment,
   ExperimentWrapper,
-} from 'api-interfaces/dist'
+} from 'api-interfaces/dist/common'
 
 import {
   readFile,
