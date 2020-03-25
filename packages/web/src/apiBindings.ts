@@ -120,7 +120,7 @@ function disconnect(): void {
 
 function socketSend(
   endpoint: Endpoint,
-  message: EndpointOptions,
+  options: EndpointOptions,
 ): Promise<EndpointResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
@@ -147,7 +147,7 @@ function socketSend(
     }
 
     socket.addEventListener('message', onMessage)
-    socket.send(JSON.stringify(message))
+    socket.send(JSON.stringify(options))
   })
 }
 
