@@ -24,7 +24,7 @@ interface Response {
 }
 ```
 
-## Initiated by web
+## Initiated by `web`
 
 - `/get-root-dir` returns root directory of experiments `/archived` and `/active`
   are found
@@ -101,7 +101,7 @@ interface Response {
     })
     ```
 
-## Initiated by scale
+## Initiated by `scale-interface`
 
 - `/scale-data`. Initiates connection with scale. Just create a
   websocket client to it. You don't need to send it a message.
