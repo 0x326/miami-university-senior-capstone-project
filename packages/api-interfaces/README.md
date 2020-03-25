@@ -37,17 +37,15 @@ Resp {
   - Query: stringified JSON obj
 
     ```typescript
-    JSON.stringify(
-        {
-            path: 'somePath',
-            filter?: {
-                name?: 'something',
-                primaryExperimenter?: 'something',
-                isComplete?: true|false,
-                ...
-            }
-        }
-    )
+    JSON.stringify( {
+      path: 'somePath',
+      filter?: {
+        name?: 'something',
+        primaryExperimenter?: 'something',
+        isComplete?: true|false,
+        ...
+      }
+    })
     ```
 
   - ExperimentWrapper as defined in `fsOperations.ts`
@@ -74,12 +72,10 @@ Resp {
   - Query: stringified ExperimentWrapper
 
     ```typescript
-    JSON.stringify(
-        {
-            path: 'path',
-            data: experimentObj,
-        }
-    )
+    JSON.stringify({
+      path: 'path',
+      data: experimentObj,
+    })
     ```
 
 - `/list-experiment-paths` returns list of experiment **paths** (strings) at
@@ -96,15 +92,13 @@ Resp {
   - Query: stringified json object
 
     ```typescript
-    JSON.stringify(
-      {
-        path: '/somepath',
-        experimentName?: 'some experiment',
-        primaryExperimenter?: 'some name',
-        dateStart?: +new Date('2019'),
-        dateEnd?: + new Date('2020'),
-      }
-    )
+    JSON.stringify({
+      path: '/somepath',
+      experimentName?: 'some experiment',
+      primaryExperimenter?: 'some name',
+      dateStart?: +new Date('2019'),
+      dateEnd?: + new Date('2020'),
+    })
     ```
 
 ## Initiated by scale
