@@ -128,32 +128,32 @@ function disconnect(): void {
 function socketSend(
   endpoint: GetExperimentEndpoint,
   options: GetExperimentOptions,
-): Promise<Response<GetExperimentResponse>>
+): Promise<GetExperimentResponse>
 
 function socketSend(
   endpoint: GetRootDirEndpoint,
   options: GetRootDirOptions,
-): Promise<Response<GetRootDirResponse>>
+): Promise<GetRootDirResponse>
 
 function socketSend(
   endpoint: ListExperimentPathsEndpoint,
   options: ListExperimentPathsOptions,
-): Promise<Response<ListExperimentPathsResponse>>
+): Promise<ListExperimentPathsResponse>
 
 function socketSend(
   endpoint: ListExperimentsEndpoint,
   options: ListExperimentsOptions,
-): Promise<Response<ListExperimentsResponse>>
+): Promise<ListExperimentsResponse>
 
 function socketSend(
   endpoint: WriteExperimentEndpoint,
   options: WriteExperimentOptions,
-): Promise<Response<WriteExperimentResponse>>
+): Promise<WriteExperimentResponse>
 
 function socketSend(
   endpoint: Endpoint,
   options: EndpointOptions,
-): Promise<Response<EndpointResponse>> {
+): Promise<EndpointResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
@@ -171,11 +171,12 @@ function socketSend(
       const {
         status,
         message,
+        data,
       } = response
       if (status !== Status.OK) {
         reject(new Error(message))
       }
-      resolve(response)
+      resolve(data)
     }
 
     socket.addEventListener('message', onMessage)
@@ -186,11 +187,7 @@ function socketSend(
 async function getRootDir(): Promise<string> {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(getRootDirEndpoint, {})
-
-  const {
-    data: dirPath,
-  } = response
+  const dirPath = await socketSend(getRootDirEndpoint, {})
 
   return dirPath
 }
@@ -200,12 +197,8 @@ async function listExperiments(
 ): Promise<Array<ExperimentWrapper> | undefined> {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(listExperimentsEndpoint, options)
+  const experiments = await socketSend(listExperimentsEndpoint, options)
   // TODO (0x326) [2020-03-15]: Verify response object
-
-  const {
-    data: experiments,
-  } = response
 
   return experiments
 }
@@ -215,12 +208,8 @@ async function getExperiment(
 ): Promise<ExperimentWrapper | undefined> {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(getExperimentEndpoint, options)
+  const experiment = await socketSend(getExperimentEndpoint, options)
   // TODO (0x326) [2020-03-15]: Verify response object
-
-  const {
-    data: experiment,
-  } = response
 
   return experiment
 }
@@ -230,12 +219,8 @@ async function listExperimentPaths(
 ): Promise<Array<string> | undefined> {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(listExperimentPathsEndpoint, options)
+  const experimentPaths = await socketSend(listExperimentPathsEndpoint, options)
   // TODO (0x326) [2020-03-15]: Verify response object
-
-  const {
-    data: experimentPaths,
-  } = response
 
   return experimentPaths
 }
