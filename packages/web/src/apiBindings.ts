@@ -119,7 +119,7 @@ function disconnect(): void {
 
 function socketSend(
   endpoint: Endpoint,
-  message: object | null,
+  message: object,
 ): Promise<Response<unknown>> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
@@ -153,7 +153,7 @@ function socketSend(
 async function getRootDir(): Promise<string> {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-unnecessary-type-assertion
-  const response = await socketSend(getRootDirEndpoint, null) as GetRootDirResponse
+  const response = await socketSend(getRootDirEndpoint, {}) as GetRootDirResponse
   // TODO (0x326) [2020-03-15]: Verify response object
 
   const {
