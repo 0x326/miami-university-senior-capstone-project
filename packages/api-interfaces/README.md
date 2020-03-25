@@ -6,7 +6,7 @@ if some error occurred
 You initialize connections like so:
 
 ```typescript
-const ws = new WebSocket("ws://localhost:<port>/<path>")
+const ws = new WebSocket('ws://localhost:<port>/<path>')
 // create an onmessage handler e.g.
 ws.onmessage = event => console.log(JSON.parse(event.data))
 // call websocket with query
@@ -41,8 +41,8 @@ Resp {
         {
             path: 'somePath',
             filter?: {
-                name?: "something",
-                primaryExperimenter?: "something",
+                name?: 'something',
+                primaryExperimenter?: 'something',
                 isComplete?: true|false,
                 ...
             }
@@ -64,7 +64,7 @@ Resp {
   - Query: a string representing a path to an experiment json file
 
     ``` text
-    "/somepath"
+    '/somepath'
     ```
 
 - `/write-experiment`: save experiment at a particular pat. Doesn't return
@@ -76,7 +76,7 @@ Resp {
     ```typescript
     JSON.stringify(
         {
-            path: "path",
+            path: 'path',
             data: experimentObj
         }
     )
@@ -98,9 +98,9 @@ Resp {
     ```typescript
     JSON.stringify(
       {
-        path: "/somepath",
-        experimentName?: "some experiment",
-        primaryExperimenter?: "some name"
+        path: '/somepath',
+        experimentName?: 'some experiment',
+        primaryExperimenter?: 'some name'
         dateStart?: +new Date('2019'),
         dateEnd?: + new Date('2020'),
       }
