@@ -22,6 +22,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
+import { TextField } from '@rmwc/textfield'
 
 
 dayjs.extend(relativeTime)
@@ -31,7 +32,7 @@ interface Props {
   onEnd: () => void;
 }
 
-function ExperimentRecodSession(props: Props): JSX.Element {
+function ExperimentRecodSessionView(props: Props): JSX.Element {
   const {
     experimentMetadata,
     onEnd,
@@ -60,35 +61,14 @@ function ExperimentRecodSession(props: Props): JSX.Element {
       </TopAppBar>
       <TopAppBarFixedAdjust />
       <Typography use="body1" tag="p">
-        Primary Experimentor:
-        {' '}
-        {experimentLeadName}
+        Bottle 1
+        <br/>
+        <TextField
+          label="Enter Weight"
+          type="double"
+        />
       </Typography>
-      <Typography use="body1" tag="p">
-        Start Date:
-        {' '}
-        {startDate.format('YYYY-MM-DD')}
-      </Typography>
-      <Typography use="body1" tag="p">
-        Last Updated:
-        {' '}
-        {lastUpdated.fromNow()}
-      </Typography>
-      <Typography use="body1" tag="p">
-        Sessions per Cage:
-        {' '}
-        {sessionCount}
-      </Typography>
-      <Typography use="body1" tag="p">
-        Bottles per Cage:
-        {' '}
-        {bottlesPerCage}
-      </Typography>
-      <Typography use="body1" tag="p">
-        Weights per Bottle:
-        {' '}
-        {weighsPerBottle}
-      </Typography>
+
       {/* while (int i<{...bottlesPerCage}) {
 
       } */}
@@ -97,4 +77,4 @@ function ExperimentRecodSession(props: Props): JSX.Element {
   )
 }
 
-export default ExperimentRecodSession
+export default ExperimentRecodSessionView
