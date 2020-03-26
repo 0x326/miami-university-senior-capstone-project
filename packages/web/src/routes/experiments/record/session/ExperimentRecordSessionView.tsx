@@ -20,6 +20,9 @@ import { Button } from '@rmwc/button'
 import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
+import {
+  DataRecordingScreen,
+} from './DataRecordingScreen'
 import { TextField } from '@rmwc/textfield'
 
 
@@ -56,19 +59,12 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
         </TopAppBarRow>
       </TopAppBar>
       <TopAppBarFixedAdjust />
-      <Typography use="body1" tag="p">
-        Bottle 1
-        <br/>
-        <TextField
-          label="Enter Weight"
-          type="double"
-        />
-      </Typography>
 
-      {/* while (int i<{...bottlesPerCage}) {
-
-      } */}
-      <Button label="Finish" raised onClick={onEnd} />
+      <DataRecordingScreen
+        bottleName="bottle 1"
+        isLast={false}
+        onSubmit={(weight) => console.log(`Got weight: ${weight}`)}
+      />
     </>
   )
 }
