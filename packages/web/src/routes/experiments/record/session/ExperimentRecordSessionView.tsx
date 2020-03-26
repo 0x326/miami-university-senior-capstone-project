@@ -16,16 +16,12 @@ import '@material/typography/dist/mdc.typography.css'
 
 import { Button } from '@rmwc/button'
 
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 
 import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
 import { TextField } from '@rmwc/textfield'
 
-
-dayjs.extend(relativeTime)
 
 interface Props {
   experimentMetadata: ExperimentMetaData;
