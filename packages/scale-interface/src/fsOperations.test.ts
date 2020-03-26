@@ -2,6 +2,12 @@ import {
   join,
 } from 'path'
 
+import {
+  zip,
+} from 'lodash'
+
+import prettyFormat from 'pretty-format'
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Experiment,
@@ -23,6 +29,36 @@ import {
   getExperiment,
   listExperiments,
 } from './fsOperations'
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace,no-redeclare
+  namespace jest {
+    interface Matchers<R, T> {
+      toStrictEqualArray<E>(expected: Array<E>): R;
+    }
+  }
+}
+
+expect.extend({
+  toStrictEqualArray<E>(received: Array<E>, expected: Array<E>) {
+    const pass = zip(received, expected)
+      .every(([receivedElement, expectedElement]) => receivedElement === expectedElement)
+
+    let message: () => string
+    if (pass) {
+      message = (): string => `Expected not strictly equal to: ${prettyFormat(expected)}
+Received: ${prettyFormat(received)}`
+    } else {
+      message = (): string => `Expected: ${prettyFormat(expected)}
+Received: ${prettyFormat(received)}`
+    }
+
+    return {
+      pass,
+      message,
+    }
+  },
+})
 
 const testDirectory = rootPath
 const active = join(testDirectory, 'active')
