@@ -1,6 +1,8 @@
 import path from 'path'
 
-import _ from 'lodash'
+import {
+  isMatch,
+} from 'lodash'
 import Joi from '@hapi/joi'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -128,7 +130,7 @@ async function listExperiments(
     .map((experimentPath) => getExperiment(path.join(filePath, experimentPath))))
 
   if (filter !== null) {
-    return experiments.filter((experiment) => _.isMatch(experiment, filter))
+    return experiments.filter((experiment) => isMatch(experiment, filter))
   }
 
   return experiments
