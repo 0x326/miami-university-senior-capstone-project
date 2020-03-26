@@ -71,7 +71,7 @@ async function readJSON(
   parsedContent: object;
 }> {
   const fileBuffer = await readFile(path, {
-    boundary: 'src/sampleExperiments/',
+    boundary: './',
   })
   const fileContent = String(fileBuffer)
   const parsedContent = JSON.parse(fileContent)
