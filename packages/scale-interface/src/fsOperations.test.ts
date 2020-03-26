@@ -249,15 +249,15 @@ describe('Test valid', () => {
 
 describe('Test getExperiment', () => {
   it('returns an experiment', async () => {
-    const { fileContent } = await readJSON('src/sampleExperiments/valid.json')
+    const { fileContent, parsedContent: exampleValidExperiment } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
 
     await writeFile(join(active, exampleExperimentName), fileContent, {
       boundary: testDirectory,
     })
     const experiment = await getExperiment(join(active, exampleExperimentName))
-    expect(JSON.stringify(experiment))
-      .toStrictEqual(fileContent)
+    expect(experiment)
+      .toStrictEqual(exampleValidExperiment)
   })
 })
 
@@ -283,15 +283,13 @@ describe('Test listExperiments', () => {
       boundary: testDirectory,
     })
 
-    // Genrate comparison array
-    const compareListExperiments = [
-      exampleExperiment,
-    ]
-    await expect(listExperiments({
+    const [experiment] = await listExperiments({
       path: active,
       filter: exampleExperiment as Experiment,
-    }))
-      .resolves.toStrictEqual(compareListExperiments)
+    })
+
+    expect(experiment)
+      .toStrictEqual(exampleExperiment)
   })
 })
 
@@ -305,7 +303,7 @@ describe('Test listExperimentPaths', () => {
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
     }))
-      .resolves.toStrictEqual([])
+      .resolves.toHaveLength(0)
   })
 
   it('returns one experiment path', async () => {
@@ -315,16 +313,17 @@ describe('Test listExperimentPaths', () => {
     await writeFile(join(active, exampleExperimentName), fileContent, {
       boundary: testDirectory,
     })
-    await expect(listExperimentPaths({
+
+    const [experimentPath] = await listExperimentPaths({
       path: active,
       experimentName: 'Addiction Study 12',
       primaryExperimenter: 'quinn',
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
-    }))
-      .resolves.toStrictEqual([
-        join(active, exampleExperimentName),
-      ])
+    })
+
+    expect(experimentPath)
+      .toStrictEqual(join(active, exampleExperimentName))
   })
 
   it('returns multiple experiment paths', async () => {
@@ -340,34 +339,37 @@ describe('Test listExperimentPaths', () => {
     await writeFile(join(active, exampleExperimentName2), fileContent2, {
       boundary: testDirectory,
     })
-    await expect(listExperimentPaths({
+
+    const expectedExperimentPaths = [
+      join(active, exampleExperimentName),
+      join(active, exampleExperimentName2),
+    ]
+
+    const experimentPaths = await listExperimentPaths({
       path: active,
       experimentName: 'Addiction Study 12',
       primaryExperimenter: 'quinn',
       dateStart: new Date(1572730420004),
       dateEnd: new Date(1572730420004),
-    }))
-      .resolves.toStrictEqual([
-        join(active, exampleExperimentName),
-        join(active, exampleExperimentName2),
-      ])
+    })
+
+    expect(experimentPaths)
+      .toStrictEqualArray(expectedExperimentPaths)
   })
 })
 
 describe('Test writeExperiment', () => {
   it('writes a valid experiment', async () => {
-    const { parsedContent: exampleExperiment, fileContent } = await readJSON('src/sampleExperiments/valid.json')
+    const { parsedContent: exampleExperiment } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
     await writeExperiment(
       join(active, exampleExperimentName),
       exampleExperiment as Experiment,
     )
 
-    const experimentFile = await readFile(join(active, exampleExperimentName), {
-      boundary: testDirectory,
-    })
-    expect((experimentFile.toString()))
-      .toStrictEqual(fileContent)
+    const { parsedContent: experiment } = await readJSON(join(active, exampleExperimentName))
+    expect(experiment)
+      .toStrictEqual(exampleExperiment)
   })
 
   describe('Test incorrect experiment format', () => {
