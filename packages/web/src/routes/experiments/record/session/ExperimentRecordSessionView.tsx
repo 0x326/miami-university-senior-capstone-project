@@ -1,4 +1,11 @@
-import React from 'react'
+import React, {
+  useState,
+} from 'react'
+
+import {
+  List,
+  Map
+} from 'immutable'
 
 import {
   TopAppBar,
@@ -16,6 +23,10 @@ import '@material/typography/dist/mdc.typography.css'
 
 import { Button } from '@rmwc/button'
 
+import {
+  CageId,
+  BottleType,
+} from '../../../types'
 
 import {
   ExperimentMetaData,
@@ -47,6 +58,13 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
     weighsPerBottle,
   } = experimentMetadata
 
+  const [bottleTypesToRecord, setBottleTypesToRecord] = useState(List<BottleType>())
+  const [bottleType, setBottleType] = useState<BottleType>('H₂0')
+  const [cageIdsToRecord, setCageIdsToRecord] = useState(List<CageId>())
+  const [dataEntries, setDataEntries] = useState(Map<CageId, number>())
+
+  const cageIdToRecord = cageIdsToRecord.first()
+
   return (
     <>
       <TopAppBar>
@@ -61,9 +79,27 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
       <TopAppBarFixedAdjust />
 
       <DataRecordingScreen
-        bottleName="bottle 1"
-        isLast={false}
-        onSubmit={(weight) => console.log(`Got weight: ${weight}`)}
+        bottleName={`Bottle ${cageIdToRecord} (${bottleType})`}
+        isLast={cageIdsToRecord.size <= 1}
+        onSubmit={(weight: number): void => {
+          setDataEntries((prevDataEntries) => prevDataEntries
+            .set(cageIdToRecord, weight))
+
+          if (cageIdsToRecord.size <= 1 && bottleTypesToRecord.size >= 2) {
+            // TODO (wael27) [2020-03-29]: Think about switching to next bottle type
+
+            setCageIdsToRecord()  // TODO (wael27) [2020-03-29]: Reset to the full list
+
+            const newBottleTypesToRecord = bottleTypesToRecord.shift()
+            setBottleType(newBottleTypesToRecord.first())
+            setBottleTypesToRecord(newBottleTypesToRecord)
+          } else {
+            setCageIdsToRecord((prevCageIdsToRecord) => prevCageIdsToRecord.shift())
+          }
+
+          // TODO (wael27) [2020-03-29]: Call when we are done with the last bottle of the last bottle type
+          onEnd(dataEntries)
+        })}
       />
     </>
   )
