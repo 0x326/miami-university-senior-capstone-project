@@ -164,8 +164,6 @@ function socketSend(
 
   return new Promise((resolve, reject): void => {
     const onMessage = (event: MessageEvent): void => {
-      socket.removeEventListener('message', onMessage)
-
       const { data: rawResponse } = event
       // Trust that objects from `scale-interface` implement Resp
       const response: Response<EndpointResponse> = JSON.parse(rawResponse)
@@ -199,7 +197,9 @@ function socketSend(
         case writeExperimentEndpoint:
           break
       }
+
       resolve(data)
+      socket.removeEventListener('message', onMessage)
     }
 
     const request: Request<EndpointOptions> = {
