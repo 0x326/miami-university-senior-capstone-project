@@ -220,7 +220,7 @@ async function* subscribe(includeActionReplies = false): AsyncGenerator<Measurem
   // Set the stream to 'flowing' if it is not already
   setImmediate(() => parser.resume())
   for await (const data of parserCopy) {
-    const parsedData = parse(data)
+    const parsedData = parse(String(data))
     switch (parsedData) {
       case ActionReply.ZEROED_BALANCE:
       case ActionReply.CHANGED_UNITS:
