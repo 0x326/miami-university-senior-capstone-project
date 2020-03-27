@@ -81,6 +81,7 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
         .on('message', (data) => {
           const parsedData: Request<HandlerData> = JSON.parse(String(data))
           const {
+            requestId,
             options,
           } = parsedData
           console.log('webSocket got message')
@@ -90,6 +91,7 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
               (responseData): Response<HandlerResponse> => {
                 console.log('Handling succeeded. Sending reply')
                 return {
+                  responseId: requestId,
                   status: Status.OK,
                   data: responseData,
                 }
@@ -99,6 +101,7 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
                 console.error(error.toString())
 
                 return {
+                  responseId: requestId,
                   status: Status.FAIL,
                   message: error.toString(),
                   data: null,

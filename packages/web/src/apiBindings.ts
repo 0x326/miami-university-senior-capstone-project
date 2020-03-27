@@ -1,3 +1,7 @@
+import {
+  v4 as uuid4,
+} from 'uuid'
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
@@ -163,15 +167,23 @@ function socketSend(
   } = webSockets
 
   return new Promise((resolve, reject): void => {
+    const requestId = uuid4()
     const onMessage = (event: MessageEvent): void => {
       const { data: rawResponse } = event
       // Trust that objects from `scale-interface` implement Resp
       const response: Response<EndpointResponse> = JSON.parse(rawResponse)
       const {
+        responseId,
         status,
         message,
         data,
       } = response
+
+      if (responseId !== requestId) {
+        // This isn't our response. Wait for the next one
+        return
+      }
+
       if (status !== Status.OK) {
         reject(new Error(message))
       }
@@ -203,6 +215,7 @@ function socketSend(
     }
 
     const request: Request<EndpointOptions> = {
+      requestId,
       options,
     }
 
