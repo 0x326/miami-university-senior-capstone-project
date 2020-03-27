@@ -13,6 +13,7 @@ import {
 import {
   Status,
   Request,
+  Response,
 } from 'api-interfaces/dist/common'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -86,26 +87,25 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
 
           handler(options)
             .then(
-              (responseData) => {
+              (responseData): Response<HandlerResponse> => {
                 console.log('Handling succeeded. Sending reply')
-                webSocket
-                  .send(JSON.stringify({
-                    status: Status.OK,
-                    data: responseData,
-                  }))
+                return {
+                  status: Status.OK,
+                  data: responseData,
+                }
               },
-              (error) => {
+              (error): Response<HandlerResponse> => {
                 console.log('Handling failed. Sending error')
                 console.error(error.toString())
 
-                webSocket
-                  .send(JSON.stringify({
-                    status: Status.FAIL,
-                    message: error.toString(),
-                    data: null,
-                  }))
+                return {
+                  status: Status.FAIL,
+                  message: error.toString(),
+                  data: null,
+                }
               },
             )
+            .then((response) => webSocket.send(JSON.stringify(response)))
         })
     })
 
