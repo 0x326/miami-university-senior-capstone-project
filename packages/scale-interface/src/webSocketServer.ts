@@ -2,6 +2,10 @@ import http from 'http'
 import url from 'url'
 
 import {
+  Socket,
+} from 'net'
+
+import {
   Map,
 } from 'immutable'
 
@@ -212,8 +216,8 @@ function createServer(
     [scaleDataEndpoint]: createWebSocketEmitter(emitScaleData),
   })
 
-  server.on('upgrade', (request, socket, head) => {
-    const { pathname } = url.parse(request.url)
+  server.on('upgrade', (request: http.IncomingMessage, socket: Socket, head: Buffer) => {
+    const { pathname } = url.parse(request.url || '')
     console.log(`Request for ${pathname}`)
     const webSocketServer = routes.get(pathname || '')
 
