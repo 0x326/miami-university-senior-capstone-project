@@ -2,26 +2,69 @@
 import {
   Status,
   Response,
-  GetRootDirResponse,
-  ListExperimentsOptions,
-  ListExperimentsResponse,
+  Experiment,
+} from 'api-interfaces/dist/common'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  getExperimentEndpoint,
+  GetExperimentEndpoint,
   GetExperimentOptions,
   GetExperimentResponse,
+} from 'api-interfaces/dist/get-experiment'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  getRootDirEndpoint,
+  GetRootDirEndpoint,
+  GetRootDirOptions,
+  GetRootDirResponse,
+} from 'api-interfaces/dist/get-root-dir'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  listExperimentPathsEndpoint,
+  ListExperimentPathsEndpoint,
   ListExperimentPathsOptions,
   ListExperimentPathsResponse,
+} from 'api-interfaces/dist/list-experiment-paths'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  listExperimentsEndpoint,
+  ListExperimentsEndpoint,
+  ListExperimentsOptions,
+  ListExperimentsResponse,
+} from 'api-interfaces/dist/list-experiments'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  scaleDataEndpoint,
+  ScaleData,
+} from 'api-interfaces/dist/scale-data'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  writeExperimentEndpoint,
+  WriteExperimentEndpoint,
   WriteExperimentOptions,
   WriteExperimentResponse,
-  ScaleData,
-  ExperimentWrapper,
+} from 'api-interfaces/dist/write-experiment'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  Endpoint,
+  EndpointOptions,
+  EndpointResponse,
 } from 'api-interfaces/dist'
 
 let webSockets: null | {
-  getRootDir: WebSocket;
-  listExperiments: WebSocket;
-  getExperiment: WebSocket;
-  listExperimentPaths: WebSocket;
-  writeExperiment: WebSocket;
-  scaleData: WebSocket;
+  [getRootDirEndpoint]: WebSocket;
+  [listExperimentsEndpoint]: WebSocket;
+  [getExperimentEndpoint]: WebSocket;
+  [listExperimentPathsEndpoint]: WebSocket;
+  [writeExperimentEndpoint]: WebSocket;
+  [scaleDataEndpoint]: WebSocket;
 } = null
 
 function openWebSocket(
@@ -62,12 +105,12 @@ async function connect(
   console.log('Initializing Web Sockets')
 
   webSockets = {
-    getRootDir: await openWebSocket(`${baseURI}/get-root-dir`, timeout),
-    listExperiments: await openWebSocket(`${baseURI}/list-experiments`, timeout),
-    getExperiment: await openWebSocket(`${baseURI}/get-experiment`, timeout),
-    listExperimentPaths: await openWebSocket(`${baseURI}/list-experiment-paths`, timeout),
-    writeExperiment: await openWebSocket(`${baseURI}/write-experiment`, timeout),
-    scaleData: await openWebSocket(`${baseURI}/scale-data`, timeout),
+    [getRootDirEndpoint]: await openWebSocket(`${baseURI}${getRootDirEndpoint}`, timeout),
+    [listExperimentsEndpoint]: await openWebSocket(`${baseURI}${listExperimentsEndpoint}`, timeout),
+    [getExperimentEndpoint]: await openWebSocket(`${baseURI}${getExperimentEndpoint}`, timeout),
+    [listExperimentPathsEndpoint]: await openWebSocket(`${baseURI}${listExperimentPathsEndpoint}`, timeout),
+    [writeExperimentEndpoint]: await openWebSocket(`${baseURI}${writeExperimentEndpoint}`, timeout),
+    [scaleDataEndpoint]: await openWebSocket(`${baseURI}${scaleDataEndpoint}`, timeout),
   }
 
   console.log('Web Sockets Initialized')
@@ -88,88 +131,110 @@ function disconnect(): void {
 }
 
 function socketSend(
-  socket: WebSocket,
-  message: object | null,
-): Promise<Response> {
-  return new Promise((resolve, reject): void => {
-    const onMessage = (event: MessageEvent): void => {
-      socket.removeEventListener('message', onMessage)
+  endpoint: GetExperimentEndpoint,
+  options: GetExperimentOptions,
+): Promise<GetExperimentResponse>
 
-      const { data } = event
-      // Trust that objects from `scale-interface` implement Resp
-      const parsed: Response = JSON.parse(data)
-      const {
-        status,
-        message: responseMessage,
-      } = parsed
-      if (status !== Status.OK) {
-        reject(new Error(responseMessage))
-      }
-      resolve(parsed)
-    }
+function socketSend(
+  endpoint: GetRootDirEndpoint,
+  options: GetRootDirOptions,
+): Promise<GetRootDirResponse>
 
-    socket.addEventListener('message', onMessage)
-    socket.send(JSON.stringify(message))
-  })
-}
+function socketSend(
+  endpoint: ListExperimentPathsEndpoint,
+  options: ListExperimentPathsOptions,
+): Promise<ListExperimentPathsResponse>
 
-async function getRootDir(): Promise<string> {
+function socketSend(
+  endpoint: ListExperimentsEndpoint,
+  options: ListExperimentsOptions,
+): Promise<ListExperimentsResponse>
+
+function socketSend(
+  endpoint: WriteExperimentEndpoint,
+  options: WriteExperimentOptions,
+): Promise<WriteExperimentResponse>
+
+function socketSend(
+  endpoint: Endpoint,
+  options: EndpointOptions,
+): Promise<EndpointResponse> {
   if (webSockets === null) {
     throw new Error('Socket is not open')
   }
   const {
-    getRootDir: webSocket,
+    [endpoint]: socket,
   } = webSockets
 
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(webSocket, null) as GetRootDirResponse
-  // TODO (0x326) [2020-03-15]: Verify response object
+  return new Promise((resolve, reject): void => {
+    const onMessage = (event: MessageEvent): void => {
+      socket.removeEventListener('message', onMessage)
 
-  const {
-    data: dirPath,
-  } = response
+      const { data: rawResponse } = event
+      // Trust that objects from `scale-interface` implement Resp
+      const response: Response<EndpointResponse> = JSON.parse(rawResponse)
+      const {
+        status,
+        message,
+        data,
+      } = response
+      if (status !== Status.OK) {
+        reject(new Error(message))
+      }
+
+      switch (endpoint) {
+        default:
+          reject(new Error('Response object cannot be validated. This is an oversight in the source code'))
+          break
+
+        // TODO (0x326) [2020-03-15]: Verify response objects
+        case getRootDirEndpoint:
+          break
+
+        case listExperimentsEndpoint:
+          break
+
+        case getExperimentEndpoint:
+          break
+
+        case listExperimentPathsEndpoint:
+          break
+
+        case writeExperimentEndpoint:
+          break
+      }
+      resolve(data)
+    }
+
+    socket.addEventListener('message', onMessage)
+    socket.send(JSON.stringify(options))
+  })
+}
+
+async function getRootDir(): Promise<string> {
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  const dirPath = await socketSend(getRootDirEndpoint, {})
 
   return dirPath
 }
 
 async function listExperiments(
   options: ListExperimentsOptions,
-): Promise<Array<ExperimentWrapper> | undefined> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    listExperiments: webSocket,
-  } = webSockets
-
+): Promise<Array<Experiment> | undefined> {
+  // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(webSocket, options) as ListExperimentsResponse
-  // TODO (0x326) [2020-03-15]: Verify response object
-
-  const {
-    data: experiments,
-  } = response
+  const experiments = await socketSend(listExperimentsEndpoint, options)
 
   return experiments
 }
 
 async function getExperiment(
   options: GetExperimentOptions,
-): Promise<ExperimentWrapper | undefined> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    getExperiment: webSocket,
-  } = webSockets
-
+): Promise<Experiment | undefined> {
+  // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(webSocket, options) as GetExperimentResponse
-  // TODO (0x326) [2020-03-15]: Verify response object
-
-  const {
-    data: experiment,
-  } = response
+  const experiment = await socketSend(getExperimentEndpoint, options)
 
   return experiment
 }
@@ -177,20 +242,9 @@ async function getExperiment(
 async function listExperimentPaths(
   options: ListExperimentPathsOptions,
 ): Promise<Array<string> | undefined> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    listExperimentPaths: webSocket,
-  } = webSockets
-
+  // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(webSocket, options) as ListExperimentPathsResponse
-  // TODO (0x326) [2020-03-15]: Verify response object
-
-  const {
-    data: experimentPaths,
-  } = response
+  const experimentPaths = await socketSend(listExperimentPathsEndpoint, options)
 
   return experimentPaths
 }
@@ -198,16 +252,9 @@ async function listExperimentPaths(
 async function writeExperiment(
   options: WriteExperimentOptions,
 ): Promise<void> {
-  if (webSockets === null) {
-    throw new Error('Socket is not open')
-  }
-  const {
-    writeExperiment: webSocket,
-  } = webSockets
-
+  // eslint-disable-next-line max-len
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const response = await socketSend(webSocket, options) as WriteExperimentResponse
-  // TODO (0x326) [2020-03-15]: Verify response object
+  const response = await socketSend(writeExperimentEndpoint, options)
 }
 
 function scaleData(
@@ -218,7 +265,7 @@ function scaleData(
     throw new Error('Socket is not open')
   }
   const {
-    scaleData: webSocket,
+    [scaleDataEndpoint]: webSocket,
   } = webSockets
 
   webSocket.addEventListener('message', ({ data }) => {

@@ -1,13 +1,14 @@
 import path from 'path'
 
-import _ from 'lodash'
+import {
+  isMatch,
+} from 'lodash'
 import Joi from '@hapi/joi'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Experiment,
-  ExperimentWrapper,
-} from 'api-interfaces/dist'
+} from 'api-interfaces/dist/common'
 
 import {
   readFile,
@@ -73,17 +74,13 @@ const schema = Joi.object({
   ),
 })
 
-const ROOT_PATH = '/media/scale_interface_mountpoint'
+const rootPath = './SCALE_INTERFACE_DAT'
 
 /**
  * uses Joi to validate form of data.
  * @param data
  */
 function valid(data: Experiment): Experiment {
-  if (!data) {
-    throw new Error('==Data sent to valid() is null')
-  }
-
   const {
     value,
     error,
@@ -102,16 +99,14 @@ function valid(data: Experiment): Experiment {
  */
 async function getExperiment(
   searchPath: string,
-): Promise<ExperimentWrapper> {
+): Promise<Experiment> {
   const data = await readFile(searchPath, {
     encoding: 'utf-8',
-    boundary: ROOT_PATH,
+    boundary: rootPath,
   })
   const parsed = valid(JSON.parse(String(data)))
-  return {
-    path: searchPath,
-    data: parsed,
-  }
+
+  return parsed
 }
 
 
@@ -120,7 +115,7 @@ async function listExperiments(
     path: string;
     filter: null | Experiment;
   },
-): Promise<Array<ExperimentWrapper>> {
+): Promise<Array<Experiment>> {
   const {
     path: filePath,
     filter,
@@ -128,14 +123,14 @@ async function listExperiments(
 
   const allFiles = await readdir(filePath, {
     encoding: 'utf-8',
-    boundary: ROOT_PATH,
+    boundary: rootPath,
   })
 
-  const experiments: Array<ExperimentWrapper> = await Promise.all(allFiles
+  const experiments: Array<Experiment> = await Promise.all(allFiles
     .map((experimentPath) => getExperiment(path.join(filePath, experimentPath))))
 
   if (filter !== null) {
-    return experiments.filter((wrappedExperiment) => _.isMatch(wrappedExperiment.data, filter))
+    return experiments.filter((experiment) => isMatch(experiment, filter))
   }
 
   return experiments
@@ -165,7 +160,7 @@ async function listExperimentPaths(
 
   let paths = await readdir(filePath, {
     encoding: 'utf-8',
-    boundary: ROOT_PATH,
+    boundary: rootPath,
   })
 
   if (dateStart && dateEnd) {
@@ -197,16 +192,11 @@ async function listExperimentPaths(
 
 /**
  * simply writes stringified experiment json to file at path.
- * @param wrapped
  */
 async function writeExperiment(
-  wrapped: ExperimentWrapper,
+  filePath: string,
+  data: Experiment,
 ): Promise<void> {
-  const {
-    path: filePath,
-    data,
-  } = wrapped
-
   // validate file path
   const lMatch = /^.*?_/.exec(filePath)
   const rMatch = /_[^_]*?$/.exec(filePath)
@@ -216,12 +206,12 @@ async function writeExperiment(
   }
   return writeFile(filePath, JSON.stringify(valid(data)), {
     encoding: 'utf-8',
-    boundary: ROOT_PATH,
+    boundary: rootPath,
   })
 }
 
 export {
-  ROOT_PATH,
+  rootPath,
   valid,
   listExperiments,
   listExperimentPaths,

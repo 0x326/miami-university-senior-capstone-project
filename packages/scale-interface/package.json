@@ -5,8 +5,11 @@
   "scripts": {
     "postinstall": "node ../../scripts/ln.js ../api-interfaces node_modules/api-interfaces",
     "start": "node dist/index.js",
+    "prelint": "cd ../api-interfaces/ && yarn build",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
+    "pretest": "cd ../api-interfaces/ && yarn build",
     "test": "jest",
+    "pretest:debug": "cd ../api-interfaces/ && yarn build",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "prebuild": "cd ../api-interfaces/ && yarn build",
     "build": "tsc --noEmit && parcel build --target node src/index.ts",
@@ -30,6 +33,7 @@
     "@sentry/node": "^5.9.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
+    "pretty-format": "^25.2.0",
     "serialport": "^7.1.5",
     "ws": "^7.2.0",
     "yargs": "^14.0.0"

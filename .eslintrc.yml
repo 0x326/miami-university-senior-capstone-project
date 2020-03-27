@@ -173,6 +173,12 @@ rules:
         resp:
           response: true
 
+        rtn:
+          return: true
+
+        expr:
+          experiment: true
+
         # React terminology
         props: false
 

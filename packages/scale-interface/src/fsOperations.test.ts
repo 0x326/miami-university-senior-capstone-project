@@ -4,6 +4,21 @@ import {
 } from 'api-interfaces/dist'
 
 import {
+  join,
+} from 'path'
+
+import {
+  zip,
+} from 'lodash'
+
+import prettyFormat from 'pretty-format'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  Experiment,
+} from 'api-interfaces/dist/common'
+
+import {
   mkdir,
   rmdir,
   readdir,
@@ -13,15 +28,46 @@ import {
 } from './fs'
 
 import {
+  rootPath,
   listExperimentPaths,
   writeExperiment,
   getExperiment,
   listExperiments,
 } from './fsOperations'
 
-const TEST_DIRECTORY = './SCALE_INTERFACE_DAT/'
-const ACTIVE = './SCALE_INTERFACE_DAT/active/'
-const ARCHIVE = './SCALE_INTERFACE_DAT/archive/'
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace,no-redeclare
+  namespace jest {
+    interface Matchers<R, T> {
+      toStrictEqualArray<E>(expected: Array<E>): R;
+    }
+  }
+}
+
+expect.extend({
+  toStrictEqualArray<E>(received: Array<E>, expected: Array<E>) {
+    const pass = zip(received, expected)
+      .every(([receivedElement, expectedElement]) => receivedElement === expectedElement)
+
+    let message: () => string
+    if (pass) {
+      message = (): string => `Expected not strictly equal to: ${prettyFormat(expected)}
+Received: ${prettyFormat(received)}`
+    } else {
+      message = (): string => `Expected: ${prettyFormat(expected)}
+Received: ${prettyFormat(received)}`
+    }
+
+    return {
+      pass,
+      message,
+    }
+  },
+})
+
+const testDirectory = rootPath
+const active = join(testDirectory, 'active')
+const archive = join(testDirectory, 'archive')
 
 async function readJSON(
   path: string,
@@ -30,7 +76,7 @@ async function readJSON(
   parsedContent: object;
 }> {
   const fileBuffer = await readFile(path, {
-    boundary: 'sampleExperiments/',
+    boundary: './',
   })
   const fileContent = String(fileBuffer)
   const parsedContent = JSON.parse(fileContent)
@@ -42,57 +88,61 @@ async function readJSON(
 
 beforeEach(async () => {
   try {
-    await mkdir('./SCALE_INTERFACE_DAT/', {
+    await mkdir(testDirectory, {
       mode: 0o777,
-      boundary: TEST_DIRECTORY,
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
+
   try {
-    await mkdir('./SCALE_INTERFACE_DAT/active', {
+    await mkdir(active, {
       mode: 0o777,
-      boundary: TEST_DIRECTORY,
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
+
   try {
-    await mkdir('./SCALE_INTERFACE_DAT/archive', {
+    await mkdir(archive, {
       mode: 0o777,
-      boundary: TEST_DIRECTORY,
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
 })
 
 afterEach(async () => {
-  const activeDirectory = await readdir('./SCALE_INTERFACE_DAT/active', {
-    boundary: TEST_DIRECTORY,
+  const activeDirectory = await readdir(active, {
+    boundary: testDirectory,
   })
-  const archiveDirectory = await readdir('./SCALE_INTERFACE_DAT/archive', {
-    boundary: TEST_DIRECTORY,
+  const archiveDirectory = await readdir(archive, {
+    boundary: testDirectory,
   })
 
   try {
     await Promise.all([
-      ...activeDirectory.map((fileName) => unlink(ACTIVE + fileName, {
-        boundary: ACTIVE,
+      ...activeDirectory.map((fileName) => unlink(join(active, fileName), {
+        boundary: active,
       })),
-      ...archiveDirectory.map((fileName) => unlink(ARCHIVE + fileName, {
-        boundary: ARCHIVE,
+      ...archiveDirectory.map((fileName) => unlink(join(archive, fileName), {
+        boundary: archive,
       })),
     ])
   } catch (error) { console.error(error) }
 
   try {
-    await rmdir('./SCALE_INTERFACE_DAT/active', {
-      boundary: TEST_DIRECTORY,
+    await rmdir(active, {
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
+
   try {
-    await rmdir('./SCALE_INTERFACE_DAT/archive', {
-      boundary: TEST_DIRECTORY,
+    await rmdir(archive, {
+      boundary: testDirectory,
     })
   } catch (error) { console.error(error) }
+
   try {
-    await rmdir('./SCALE_INTERFACE_DAT/', {
-      boundary: TEST_DIRECTORY,
+    await rmdir(testDirectory, {
+      boundary: testDirectory,
     })
   } catch (error) { /* Do Nothing */ }
 })
@@ -101,69 +151,75 @@ afterEach(async () => {
 describe('Test valid', () => {
   describe('testing name', () => {
     it('writes an experiment with an empty name value', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/emptyName.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/emptyName.json')
       const exampleExperimentName = '_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
 
     it('writes an experiment with an underscore in name value', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/underscoreInName.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/underscoreInName.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
   describe('testing primaryExperimenter', () => {
     it('writes an experiment with an empty primaryExperimenter value', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/emptyPrimaryExperimenter.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/emptyPrimaryExperimenter.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
 
     it('writes an experiment with an underscore in the primaryExperimenter value', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/underscoreInPrimaryExperimenter.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/underscoreInPrimaryExperimenter.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_dr_quinn'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
   describe('testing dateInitialized', () => {
     it('writes an experiment with a zero dateInitialized value', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/zeroDateInitialized.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/zeroDateInitialized.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
   describe('testing lastUpdated', () => {
     it('writes an experiment with a zero lastUpdated value', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/zeroLastUpdated.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/zeroLastUpdated.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -171,39 +227,42 @@ describe('Test valid', () => {
 
   describe('testing totalSessions', () => {
     it('writes an experiment with a zero totalSessions value', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/zeroTotalSessions.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/zeroTotalSessions.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 
   describe('testing totColsBegin vs subSessionLabelsBegin', () => {
     it('writes an experiment with a zero totalSessions value', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/zeroTotalSessions.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/zeroTotalSessions.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 })
 
 describe('Test getExperiment', () => {
   it('returns an experiment', async () => {
-    const { fileContent } = await readJSON('sampleExperiments/valid.json')
+    const { fileContent, parsedContent: exampleValidExperiment } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
 
-    await writeFile(ACTIVE + exampleExperimentName, fileContent, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName), fileContent, {
+      boundary: testDirectory,
     })
-    const rtnExpr = await getExperiment(ACTIVE + exampleExperimentName)
-    expect(JSON.stringify(rtnExpr.data)).toBe(fileContent)
+    const experiment = await getExperiment(join(active, exampleExperimentName))
+    expect(experiment)
+      .toStrictEqual(exampleValidExperiment)
   })
 })
 
@@ -211,98 +270,134 @@ describe('Test getExperiment', () => {
 describe('Test listExperiments', () => {
   // No saved experiments
   test('Empty return array', async () => {
-    const { parsedContent: exampleExperiment } = await readJSON('sampleExperiments/valid.json')
+    const { parsedContent: exampleExperiment } = await readJSON('src/sampleExperiments/valid.json')
 
-    await expect(listExperiments({ path: ACTIVE, filter: exampleExperiment as Experiment }))
+    await expect(listExperiments({
+      path: active,
+      filter: exampleExperiment as Experiment,
+    }))
       .resolves.toHaveLength(0)
   })
 
   // One saved experiment
   test('One element returned', async () => {
-    const { parsedContent: exampleExperiment, fileContent } = await readJSON('sampleExperiments/valid.json')
+    const { parsedContent: exampleExperiment, fileContent } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1571826295869_quinn'
 
-    await writeFile(ACTIVE + exampleExperimentName, fileContent, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName), fileContent, {
+      boundary: testDirectory,
     })
 
-    // Genrate comparison array
-    const compareListExperiments = [exampleExperiment]
-    await expect(listExperiments({
-      path: ACTIVE,
+    const [experiment] = await listExperiments({
+      path: active,
       filter: exampleExperiment as Experiment,
-    })).resolves.toBe(compareListExperiments)
+    })
+
+    expect(experiment)
+      .toStrictEqual(exampleExperiment)
   })
 })
 
 // Need to fix listExperimentPaths function. It is returning the experiment names and not the paths.
 describe('Test listExperimentPaths', () => {
   it('returns no experiment path', async () => {
-    expect(await listExperimentPaths({ path: ACTIVE, experimentName: '', primaryExperimenter: '', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) }))
-      .toEqual([])
+    await expect(listExperimentPaths({
+      path: active,
+      experimentName: '',
+      primaryExperimenter: '',
+      dateStart: new Date(1572730420004),
+      dateEnd: new Date(1572730420004),
+    }))
+      .resolves.toHaveLength(0)
   })
 
   it('returns one experiment path', async () => {
-    const { fileContent } = await readJSON('sampleExperiments/valid.json')
+    const { fileContent } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-    await writeFile(ACTIVE + exampleExperimentName, fileContent, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName), fileContent, {
+      boundary: testDirectory,
     })
-    expect(await listExperimentPaths({ path: ACTIVE, experimentName: 'Addiction Study 12', primaryExperimenter: 'quinn', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) })).toBe([ACTIVE + exampleExperimentName])
+
+    const [experimentPath] = await listExperimentPaths({
+      path: active,
+      experimentName: 'Addiction Study 12',
+      primaryExperimenter: 'quinn',
+      dateStart: new Date(1572730420004),
+      dateEnd: new Date(1572730420004),
+    })
+
+    expect(experimentPath)
+      .toStrictEqual(join(active, exampleExperimentName))
   })
 
   it('returns multiple experiment paths', async () => {
-    const { fileContent } = await readJSON('sampleExperiments/valid.json')
+    const { fileContent } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-    const { fileContent: fileContent2 } = await readJSON('sampleExperiments/valid.json')
+    const { fileContent: fileContent2 } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName2 = 'Addiction Study 12_1572730420004_quinn2'
 
-    await writeFile(ACTIVE + exampleExperimentName, fileContent, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName), fileContent, {
+      boundary: testDirectory,
     })
-    await writeFile(ACTIVE + exampleExperimentName2, fileContent2, {
-      boundary: TEST_DIRECTORY,
+    await writeFile(join(active, exampleExperimentName2), fileContent2, {
+      boundary: testDirectory,
     })
-    expect(await listExperimentPaths({ path: ACTIVE, experimentName: 'Addiction Study 12', primaryExperimenter: 'quinn', dateStart: new Date(1572730420004), dateEnd: new Date(1572730420004) })).toBe([ACTIVE + exampleExperimentName, ACTIVE + exampleExperimentName2])
+
+    const expectedExperimentPaths = [
+      join(active, exampleExperimentName),
+      join(active, exampleExperimentName2),
+    ]
+
+    const experimentPaths = await listExperimentPaths({
+      path: active,
+      experimentName: 'Addiction Study 12',
+      primaryExperimenter: 'quinn',
+      dateStart: new Date(1572730420004),
+      dateEnd: new Date(1572730420004),
+    })
+
+    expect(experimentPaths)
+      .toStrictEqualArray(expectedExperimentPaths)
   })
 })
 
 describe('Test writeExperiment', () => {
   it('writes a valid experiment', async () => {
-    const { parsedContent: exampleExperiment, fileContent } = await readJSON('sampleExperiments/valid.json')
+    const { parsedContent: exampleExperiment } = await readJSON('src/sampleExperiments/valid.json')
     const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
-    await writeExperiment({
-      path: ACTIVE + exampleExperimentName,
-      data: exampleExperiment as Experiment,
-    })
+    await writeExperiment(
+      join(active, exampleExperimentName),
+      exampleExperiment as Experiment,
+    )
 
-    const experimentFile = await readFile(ACTIVE + exampleExperimentName, {
-      boundary: TEST_DIRECTORY,
-    })
-    expect((experimentFile.toString())).toBe(fileContent)
+    const { parsedContent: experiment } = await readJSON(join(active, exampleExperimentName))
+    expect(experiment)
+      .toStrictEqual(exampleExperiment)
   })
 
   describe('Test incorrect experiment format', () => {
     it('does not write an experiment without the name variable', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/noName.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/noName.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
 
     it('it does not write an experiment adding a new variable, totalBottlesPerSession', async () => {
-      const { parsedContent: exampleInvalidExperiment } = await readJSON('sampleExperiments/noExtraKeys.json')
+      const { parsedContent: exampleInvalidExperiment } = await readJSON('src/sampleExperiments/noExtraKeys.json')
       const exampleExperimentName = 'Addiction Study 12_1572730420004_quinn'
 
-      await expect(writeExperiment({
-        path: ACTIVE + exampleExperimentName,
-        data: exampleInvalidExperiment as Experiment,
-      })).rejects.toBeInstanceOf(Error)
+      await expect(writeExperiment(
+        join(active, exampleExperimentName),
+        exampleInvalidExperiment as Experiment,
+      ))
+        .rejects.toBeInstanceOf(Error)
     })
   })
 })

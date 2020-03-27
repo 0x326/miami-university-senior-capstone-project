@@ -12,30 +12,54 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
-  GetRootDirResponse,
-  ListExperimentPathsOptions,
-  ListExperimentsResponse,
+} from 'api-interfaces/dist/common'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  getExperimentEndpoint,
   GetExperimentOptions,
   GetExperimentResponse,
+} from 'api-interfaces/dist/get-experiment'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  getRootDirEndpoint,
+  GetRootDirResponse,
+} from 'api-interfaces/dist/get-root-dir'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  listExperimentPathsEndpoint,
+  ListExperimentPathsOptions,
   ListExperimentPathsResponse,
+} from 'api-interfaces/dist/list-experiment-paths'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  listExperimentsEndpoint,
   ListExperimentsOptions,
+  ListExperimentsResponse,
+} from 'api-interfaces/dist/list-experiments'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  scaleDataEndpoint,
+  ScaleData,
+} from 'api-interfaces/dist/scale-data'
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  writeExperimentEndpoint,
   WriteExperimentOptions,
   WriteExperimentResponse,
-  ScaleData,
-  getRootDirEndpoint,
-  listExperimentsEndpoint,
-  getExperimentEndpoint,
-  listExperimentPathsEndpoint,
-  writeExperimentEndpoint,
-  scaleDataEndpoint,
-} from 'api-interfaces/dist'
+} from 'api-interfaces/dist/write-experiment'
 
 import {
   subscribe,
 } from './serial'
 
 import {
-  ROOT_PATH,
+  rootPath,
   listExperiments,
   getExperiment,
   writeExperiment,
@@ -48,13 +72,38 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
   const webSocketServer = new WebSocketServer({ noServer: true })
 
   webSocketServer
-    .on('connection', (webSocket) => webSocket
-      .on('message', (data) => {
-        const parsedData: HandlerData = JSON.parse(String(data))
-        handler(parsedData)
-          .then((response) => webSocket
-            .send(JSON.stringify(response)))
-      }))
+    .on('connection', (webSocket) => {
+      console.log('webSocketServer got new connection')
+
+      webSocket
+        .on('message', (data) => {
+          const parsedData: HandlerData = JSON.parse(String(data))
+          console.log('webSocket got message')
+
+          handler(parsedData)
+            .then(
+              (responseData) => {
+                console.log('Handling succeeded. Sending reply')
+                webSocket
+                  .send(JSON.stringify({
+                    status: Status.OK,
+                    data: responseData,
+                  }))
+              },
+              (error) => {
+                console.log('Handling failed. Sending error')
+                console.error(error.toString())
+
+                webSocket
+                  .send(JSON.stringify({
+                    status: Status.FAIL,
+                    message: error.toString(),
+                    data: null,
+                  }))
+              },
+            )
+        })
+    })
 
   return webSocketServer
 }
@@ -76,62 +125,31 @@ function createWebSocketEmitter<EmitterData>(
 }
 
 function handleGetRootDir(): Promise<GetRootDirResponse> {
-  return Promise.resolve({
-    status: Status.OK,
-    data: ROOT_PATH,
-  })
+  return Promise.resolve(rootPath)
 }
 
 async function handleListExperiments(
   options: ListExperimentsOptions,
 ): Promise<ListExperimentsResponse> {
   try {
-    try {
-      const wrappedExperiments = await listExperiments(options)
-      return {
-        status: Status.OK,
-        data: wrappedExperiments,
-      }
-    } catch (error) {
-      console.error(`listExperiments resulted in error: ${error} when given query:`, options)
-      return {
-        status: Status.FAIL,
-        message: error.toString(),
-      }
-    }
+    const experiments = await listExperiments(options)
+
+    return experiments
   } catch (error) {
-    console.error(error)
-    return {
-      status: Status.FAIL,
-      message: error.toString(),
-    }
+    throw new Error(`listExperiments resulted in error: ${error} when given query: ${options}`)
   }
 }
 
 async function handleGetExperiment(
   options: GetExperimentOptions,
 ): Promise<GetExperimentResponse> {
+  const { path } = options
   try {
-    const { path } = options
-    try {
-      const wrappedExperiment = await getExperiment(path)
-      return {
-        status: Status.OK,
-        data: wrappedExperiment,
-      }
-    } catch (error) {
-      console.error(`getExperiment on path ${path} resulted in error ${error}`)
-      return {
-        status: Status.FAIL,
-        message: error.toString(),
-      }
-    }
+    const experiment = await getExperiment(path)
+
+    return experiment
   } catch (error) {
-    console.error(error)
-    return {
-      status: Status.FAIL,
-      message: error.toString(),
-    }
+    throw new Error(`getExperiment on path ${path} resulted in error ${error}`)
   }
 }
 
@@ -139,63 +157,32 @@ async function handleListExperimentPaths(
   options: ListExperimentPathsOptions,
 ): Promise<ListExperimentPathsResponse> {
   try {
-    try {
-      const paths = await listExperimentPaths(options)
-      return {
-        status: Status.OK,
-        data: paths,
-      }
-    } catch (error) {
-      console.error(`listExperimentPaths resulted in error: ${error} when given query:`, options)
-      return {
-        status: Status.FAIL,
-        message: error.toString(),
-      }
-    }
+    const paths = await listExperimentPaths(options)
+
+    return paths
   } catch (error) {
-    console.error(error)
-    return {
-      status: Status.FAIL,
-      message: error.toString(),
-    }
+    throw new Error(`listExperimentPaths resulted in error: ${error} when given query: ${options}`)
   }
 }
 
 async function handleWriteExperiment(
   options: WriteExperimentOptions,
 ): Promise<WriteExperimentResponse> {
-  try {
-    if (options.path && options.data) {
-      // await valid(JSON.parse(parsed.String(data)))
-      try {
-        await writeExperiment(options)
-        console.log(`==Saved the following object at ${options.path}`)
-        console.log(options.data)
-        return {
-          status: Status.OK,
-          message: `Saved experiment at ${options.path}`,
-        }
-      } catch (error) {
-        console.error(error)
-        return {
-          status: Status.FAIL,
-          message: error.toString(),
-        }
-      }
-    } else {
-      console.error('==Passed object is missing either a path or data field', options)
-      return {
-        status: Status.FAIL,
-        message: 'Need both a path and data',
-      }
-    }
-  } catch (error) {
-    console.error('==Do not write badly formatted object to disk', error)
-    return {
-      status: Status.FAIL,
-      message: error.toString(),
-    }
+  const {
+    path,
+    data,
+  } = options
+
+  if (path && data) {
+    // await valid(JSON.parse(parsed.String(data)))
+    await writeExperiment(path, data)
+    console.log(`Saved the following object at ${path}`)
+    console.log(data)
+
+    return null
   }
+
+  throw new Error(`Passed object is missing either a path or data field: ${options}`)
 }
 
 async function* emitScaleData(): AsyncGenerator<ScaleData> {
