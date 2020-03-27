@@ -76,7 +76,7 @@ async function readJSON(
   const fileContent = String(fileBuffer)
   const parsedContent = JSON.parse(fileContent)
   return {
-    fileContent: JSON.stringify(parsedContent),
+    fileContent: JSON.stringify(parsedContent, undefined, '  '),
     parsedContent,
   }
 }

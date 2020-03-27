@@ -204,7 +204,7 @@ async function writeExperiment(
   if (!lMatch || !rMatch || !dateMatch) {
     throw new Error(`Attempted to write experiment data with invalid path name: ${filePath}`)
   }
-  return writeFile(filePath, JSON.stringify(valid(data)), {
+  return writeFile(filePath, JSON.stringify(valid(data), undefined, '  '), {
     encoding: 'utf-8',
     boundary: rootPath,
   })
