@@ -41,7 +41,7 @@ function ScaleApiTester(props: Props): JSX.Element {
         </button>
       </p>
       <p>
-        The current weight is: {weight !== null && weight.value}
+        The current weight is: {weight !== null && `${weight.value} ${weight.unit}`}
       </p>
     </>
   )

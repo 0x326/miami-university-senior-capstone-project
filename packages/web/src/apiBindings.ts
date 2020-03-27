@@ -221,7 +221,11 @@ function scaleData(
     scaleData: webSocket,
   } = webSockets
 
-  webSocket.addEventListener('message', ({ data }) => callback(data))
+  webSocket.addEventListener('message', ({ data }) => {
+    const parsedData = JSON.parse(data)
+    console.log(`Got data: ${parsedData}`)
+    callback(parsedData)
+  })
   // TODO (0x326) [2020-03-15]: Verify object
 }
 
