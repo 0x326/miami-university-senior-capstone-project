@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
+  Request,
   Response,
   Experiment,
 } from 'api-interfaces/dist/common'
@@ -201,8 +202,12 @@ function socketSend(
       resolve(data)
     }
 
+    const request: Request<EndpointOptions> = {
+      options,
+    }
+
     socket.addEventListener('message', onMessage)
-    socket.send(JSON.stringify(options))
+    socket.send(JSON.stringify(request))
   })
 }
 

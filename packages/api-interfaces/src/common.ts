@@ -3,6 +3,10 @@ export enum Status {
   FAIL = 'FAIL'
 }
 
+export interface Request<Options> {
+  options: Options;
+}
+
 export interface Response<Data> {
   status: Status;
   data: Data | null;

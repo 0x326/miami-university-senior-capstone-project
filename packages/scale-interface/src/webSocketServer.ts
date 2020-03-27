@@ -12,6 +12,7 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
+  Request,
 } from 'api-interfaces/dist/common'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -77,10 +78,13 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
 
       webSocket
         .on('message', (data) => {
-          const parsedData: HandlerData = JSON.parse(String(data))
+          const parsedData: Request<HandlerData> = JSON.parse(String(data))
+          const {
+            options,
+          } = parsedData
           console.log('webSocket got message')
 
-          handler(parsedData)
+          handler(options)
             .then(
               (responseData) => {
                 console.log('Handling succeeded. Sending reply')
