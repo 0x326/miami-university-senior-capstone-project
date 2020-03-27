@@ -24,7 +24,7 @@ const {
     description: 'Serial device to scale',
     type: 'string',
     demandOption: true,
-    default: 'COM5',//''/dev/ttyUSB0',
+    default: 'COM5', // ''/dev/ttyUSB0',
   })
   .option('baud-rate', {
     description: 'Device baud rate',

@@ -2,6 +2,7 @@ import React, {
   useState,
 } from 'react'
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Measurement,
 } from 'api-interfaces/dist'
@@ -11,37 +12,35 @@ import {
   scaleData,
 } from './apiBindings'
 
-interface Props {
-
-}
-
-function ScaleApiTester(props: Props): JSX.Element {
-  const {
-
-  } = props
-
+function ScaleApiTester(): JSX.Element {
   const [connectionStatus, setConnectionStatus] = useState('disconnected')
   const [weight, setWeight] = useState<Measurement | null>(null)
   return (
     <>
       <p>
-        You are currently {connectionStatus}
+        You are currently
+        {' '}
+        {connectionStatus}
       </p>
       <p>
-        <button onClick={() => {
-          connect()
-            .then(() => setConnectionStatus('connected'))
-            .then(() => scaleData((measurement) => {
-              setWeight(measurement)
-            }))
-            .catch(() => setConnectionStatus('error'))
-        }}
+        <button
+          type="button"
+          onClick={(): void => {
+            connect()
+              .then(() => setConnectionStatus('connected'))
+              .then(() => scaleData((measurement) => {
+                setWeight(measurement)
+              }))
+              .catch(() => setConnectionStatus('error'))
+          }}
         >
           Connect to Node.js server
         </button>
       </p>
       <p>
-        The current weight is: {weight !== null && `${weight.value} ${weight.unit}`}
+        The current weight is:
+        {' '}
+        {weight !== null && `${weight.value} ${weight.unit}`}
       </p>
     </>
   )
