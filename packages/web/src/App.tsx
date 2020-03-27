@@ -17,7 +17,9 @@ import {
   useHistory,
 } from 'react-router-dom'
 
-import uuid from 'uuid/v4'
+import {
+  v4 as uuid4,
+} from 'uuid'
 
 import ExperimentDashboard, {
   ExperimentData,
@@ -245,7 +247,7 @@ const App: React.FC = () => {
                 experimentName,
               } = experimentMetaData
 
-              const experimentId = uuid()
+              const experimentId = uuid4()
               setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
               setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
                 .set(experimentId, experimentName))
