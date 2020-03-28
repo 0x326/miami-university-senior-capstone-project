@@ -3,9 +3,9 @@ import yargs from 'yargs'
 
 import {
   open,
-  subscribe,
-  requestBalance,
 } from './serial'
+
+import { createServer } from './webSocketServer'
 
 const {
   SENTRY_DSN,
@@ -59,39 +59,33 @@ const {
       'odd',
     ],
   })
+  .option('port', {
+    description: 'Websocket port',
+    type: 'number',
+    demandOption: true,
+    default: 8080,
+  })
 
 const {
   device,
   'baud-rate': baudRate,
   'data-bits': dataBits,
   'bit-parity': bitParity,
+  port,
 } = argv as {
   device: string;
   'baud-rate': 1200 | 2400 | 4800 | 9600;
   'data-bits': 7 | 8;
   'bit-parity': 'none' | 'even' | 'odd';
+  port: number;
 }
 
-const deviceConnected = open(device, {
+open(device, {
   baudRate,
   dataBits,
   parity: bitParity,
 })
-  .then(() => console.log('Scale connected'))
-
-Promise.all([
-  deviceConnected
-    .then(() => subscribe())
-    .then(async (iterator) => {
-      for await (const data of iterator) {
-        console.log('Received data', data)
-      }
-    }),
-
-  deviceConnected
-    .then(() => setInterval(() => {
-      requestBalance()
-        .then((data) => console.log('Received data (by request)', data))
-    }, 1000)),
-])
-  .catch((error) => console.error('Error while interacting with scale', error))
+  .then(() => {
+    console.log('Scale connected')
+  })
+  .then(() => createServer(port))

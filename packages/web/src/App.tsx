@@ -1,5 +1,5 @@
-// TODO (0x326) [2020-04-01] Remove extraneous @material dependencies
-// TODO (0x326) [2020-04-01] Remove extraneous @rmwc dependencies
+// TODO (0x326) [2020-05-10] Remove extraneous @material dependencies
+// TODO (0x326) [2020-05-10] Remove extraneous @rmwc dependencies
 
 import React, {
   useState,
@@ -17,7 +17,9 @@ import {
   useHistory,
 } from 'react-router-dom'
 
-import uuid from 'uuid/v4'
+import {
+  v4 as uuid4,
+} from 'uuid'
 
 import dayjs from 'dayjs'
 
@@ -62,7 +64,7 @@ const App: React.FC = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  // TODO (wael27) [2020-03-15]: Delete this eslint-disable comment
+  // TODO (wael27) [2020-05-10]: Delete this eslint-disable comment
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>()
     .withMutations((experimentMap) => experimentMap
@@ -274,7 +276,7 @@ const App: React.FC = () => {
                 experimentName,
               } = experimentMetaData
 
-              const experimentId = uuid()
+              const experimentId = uuid4()
               setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
               setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
                 .set(experimentId, experimentName))
