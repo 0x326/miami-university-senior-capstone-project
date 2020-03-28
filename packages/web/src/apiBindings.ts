@@ -104,14 +104,17 @@ function openWebSocket(
 
 async function connect(
   host = 'localhost',
-  port = 8081,
+  port = 8080,
   timeout = 1500,
 ): Promise<void> {
+  console.log('Connecting...')
   if (webSockets !== null) {
     throw new Error('Sockets are already open')
   }
 
   const baseURI = `ws://${host}:${port}`
+
+  console.log('Initializing Web Sockets')
 
   webSockets = {
     [getRootDirEndpoint]: await openWebSocket(`${baseURI}${getRootDirEndpoint}`, timeout),
@@ -121,6 +124,8 @@ async function connect(
     [writeExperimentEndpoint]: await openWebSocket(`${baseURI}${writeExperimentEndpoint}`, timeout),
     [scaleDataEndpoint]: await openWebSocket(`${baseURI}${scaleDataEndpoint}`, timeout),
   }
+
+  console.log('Web Sockets Initialized')
 }
 
 function disconnect(): void {
@@ -288,7 +293,11 @@ function scaleData(
     [scaleDataEndpoint]: webSocket,
   } = webSockets
 
-  webSocket.addEventListener('message', ({ data }) => callback(data))
+  webSocket.addEventListener('message', ({ data }) => {
+    const parsedData = JSON.parse(data)
+    console.log(`Got data: ${parsedData}`)
+    callback(parsedData)
+  })
   // TODO (0x326) [2020-06-01]: Verify object
 }
 

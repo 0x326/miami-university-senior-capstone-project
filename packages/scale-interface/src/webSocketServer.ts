@@ -210,7 +210,9 @@ async function handleWriteExperiment(
 }
 
 async function* emitScaleData(): AsyncGenerator<ScaleData> {
+  console.log('Attempting to emit data...')
   for await (const data of subscribe()) {
+    console.log(`Got scale data: ${data}`)
     yield data
   }
 }
@@ -218,8 +220,10 @@ async function* emitScaleData(): AsyncGenerator<ScaleData> {
 function createServer(
   port: number,
 ): http.Server {
+  console.log('Creating Server...')
   const server = http.createServer()
-
+  console.log('Created Server')
+  console.log('Creating Websockets...')
   const routes = Map<WebSocketServer>({
     [getRootDirEndpoint]: createWebSocketHandler(handleGetRootDir),
     [listExperimentsEndpoint]: createWebSocketHandler(handleListExperiments),
@@ -228,6 +232,7 @@ function createServer(
     [writeExperimentEndpoint]: createWebSocketHandler(handleWriteExperiment),
     [scaleDataEndpoint]: createWebSocketEmitter(emitScaleData),
   })
+  console.log('Created Websockets')
 
   server.on('upgrade', (request: http.IncomingMessage, socket: Socket, head: Buffer) => {
     try {

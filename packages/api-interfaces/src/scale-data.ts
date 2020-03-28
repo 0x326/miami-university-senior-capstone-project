@@ -21,7 +21,5 @@ export type ScaleDataEndpoint = '/scale-data'
 export const scaleDataEndpoint: ScaleDataEndpoint = '/scale-data'
 
 export interface ScaleData extends Measurement {
-  type: MeasurementType;
-  value: number;
-  unit: Unit;
+
 }
