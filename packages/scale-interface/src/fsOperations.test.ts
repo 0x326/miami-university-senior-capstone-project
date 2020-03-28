@@ -1,8 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import {
-  Experiment,
-} from 'api-interfaces/dist'
-
 import {
   join,
 } from 'path'

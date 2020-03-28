@@ -5,7 +5,7 @@ import React, {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Measurement,
-} from 'api-interfaces/dist'
+} from 'api-interfaces/dist/scale-data'
 
 import {
   connect,
