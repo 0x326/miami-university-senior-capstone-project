@@ -86,6 +86,9 @@ include:
   - template: Security/SAST.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/ci/templates/Security/SAST.gitlab-ci.yml
 
 cache:
+  key:
+    files:
+      - yarn.lock
   paths:
     - node_modules/
     - .yarn

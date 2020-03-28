@@ -5,7 +5,7 @@ const ProgressBar = require('progress')
 
 console.log(chalk.yellow('Git hook failed! Press Ctrl-C to cancel'))
 
-const duration = 3000
+const duration = 4000
 const updateInterval = 100
 
 const progressText = `[:bar] ${chalk.dim(':eta seconds until override')}`
