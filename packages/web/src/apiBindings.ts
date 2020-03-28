@@ -77,20 +77,27 @@ function openWebSocket(
   timeout: number,
 ): Promise<WebSocket> {
   return new Promise((resolve, reject): void => {
+    let socket: WebSocket | null = null
+
     const rejectTimer = setTimeout(() => {
       reject(new Error('Could not open socket because connection exceeded timeout'))
+      socket = null
     }, timeout)
 
-    let socket: WebSocket | null = new WebSocket(path)
-    socket.addEventListener('open', () => {
+    socket = new WebSocket(path)
+    const onOpen = (): void => {
       clearTimeout(rejectTimer)
-      resolve(socket as WebSocket)
-    })
-    socket.addEventListener('close', () => {
+      if (socket !== null) {
+        resolve(socket)
+      }
+    }
+    const onClose = (): void => {
       console.log(`Socket to ${path} closed.`)
       // Deallocate socket
       socket = null
-    })
+    }
+    socket.addEventListener('open', onOpen)
+    socket.addEventListener('close', onClose)
     // TODO (wimmeldj) [2020-03-15]: Add event listener for 'error' event
   })
 }
