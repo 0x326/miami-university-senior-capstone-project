@@ -2,6 +2,10 @@ import http from 'http'
 import url from 'url'
 
 import {
+  Socket,
+} from 'net'
+
+import {
   Map,
 } from 'immutable'
 
@@ -12,6 +16,8 @@ import {
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
+  Request,
+  Response,
 } from 'api-interfaces/dist/common'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -77,31 +83,41 @@ function createWebSocketHandler<HandlerData, HandlerResponse>(
 
       webSocket
         .on('message', (data) => {
-          const parsedData: HandlerData = JSON.parse(String(data))
-          console.log('webSocket got message')
+          try {
+            const parsedData: Request<HandlerData> = JSON.parse(String(data))
+            const {
+              requestId,
+              options,
+            } = parsedData
+            console.log('webSocket got message')
 
-          handler(parsedData)
-            .then(
-              (responseData) => {
-                console.log('Handling succeeded. Sending reply')
-                webSocket
-                  .send(JSON.stringify({
+            handler(options)
+              .then(
+                (responseData): Response<HandlerResponse> => {
+                  console.log('Handling succeeded. Sending reply')
+                  return {
+                    responseId: requestId,
                     status: Status.OK,
                     data: responseData,
-                  }))
-              },
-              (error) => {
-                console.log('Handling failed. Sending error')
-                console.error(error.toString())
+                  }
+                },
+                (error): Response<HandlerResponse> => {
+                  console.log('Handling failed. Sending error')
+                  console.error(error.toString())
 
-                webSocket
-                  .send(JSON.stringify({
+                  return {
+                    responseId: requestId,
                     status: Status.FAIL,
                     message: error.toString(),
                     data: null,
-                  }))
-              },
-            )
+                  }
+                },
+              )
+              .then((response) => webSocket.send(JSON.stringify(response)))
+              .catch((error) => console.error('Error on request reply', error))
+          } catch (error) {
+            console.error('Uncaught error in message handler:', error)
+          }
         })
     })
 
@@ -116,8 +132,12 @@ function createWebSocketEmitter<EmitterData>(
   webSocketServer
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     .on('connection', async (webSocket) => {
-      for await (const message of emitter()) {
-        webSocket.send(JSON.stringify(message))
+      try {
+        for await (const message of emitter()) {
+          webSocket.send(JSON.stringify(message))
+        }
+      } catch (error) {
+        console.error('Uncaught error in emitter', error)
       }
     })
 
@@ -210,19 +230,23 @@ function createServer(
   })
   console.log('Created Websockets')
 
-  server.on('upgrade', (request, socket, head) => {
-    const { pathname } = url.parse(request.url)
-    console.log(`Request for ${pathname}`)
-    const webSocketServer = routes.get(pathname || '')
+  server.on('upgrade', (request: http.IncomingMessage, socket: Socket, head: Buffer) => {
+    try {
+      const { pathname } = url.parse(request.url || '')
+      console.log(`Request for ${pathname}`)
+      const webSocketServer = routes.get(pathname || '')
 
-    if (webSocketServer !== undefined) {
-      console.log(`Creating websocket server to handle ${pathname}`)
-      webSocketServer.handleUpgrade(request, socket, head, (webSocket) => {
-        webSocketServer.emit('connection', webSocket, request)
-      })
-    } else {
-      console.log('Request is not a valid path, destroying socket')
-      socket.destroy()
+      if (webSocketServer !== undefined) {
+        console.log(`Creating websocket server to handle ${pathname}`)
+        webSocketServer.handleUpgrade(request, socket, head, (webSocket) => {
+          webSocketServer.emit('connection', webSocket, request)
+        })
+      } else {
+        console.log('Request is not a valid path, destroying socket')
+        socket.destroy()
+      }
+    } catch (error) {
+      console.error('Uncaught error in http.Server upgrade:', error)
     }
   })
   server.listen(port)

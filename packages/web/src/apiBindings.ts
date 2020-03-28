@@ -1,6 +1,11 @@
+import {
+  v4 as uuid4,
+} from 'uuid'
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   Status,
+  Request,
   Response,
   Experiment,
 } from 'api-interfaces/dist/common'
@@ -72,20 +77,27 @@ function openWebSocket(
   timeout: number,
 ): Promise<WebSocket> {
   return new Promise((resolve, reject): void => {
+    let socket: WebSocket | null = null
+
     const rejectTimer = setTimeout(() => {
       reject(new Error('Could not open socket because connection exceeded timeout'))
+      socket = null
     }, timeout)
 
-    let socket: WebSocket | null = new WebSocket(path)
-    socket.addEventListener('open', () => {
+    socket = new WebSocket(path)
+    const onOpen = (): void => {
       clearTimeout(rejectTimer)
-      resolve(socket as WebSocket)
-    })
-    socket.addEventListener('close', () => {
+      if (socket !== null) {
+        resolve(socket)
+      }
+    }
+    const onClose = (): void => {
       console.log(`Socket to ${path} closed.`)
       // Deallocate socket
       socket = null
-    })
+    }
+    socket.addEventListener('open', onOpen)
+    socket.addEventListener('close', onClose)
     // TODO (wimmeldj) [2020-03-15]: Add event listener for 'error' event
   })
 }
@@ -167,17 +179,23 @@ function socketSend(
   } = webSockets
 
   return new Promise((resolve, reject): void => {
+    const requestId = uuid4()
     const onMessage = (event: MessageEvent): void => {
-      socket.removeEventListener('message', onMessage)
-
       const { data: rawResponse } = event
       // Trust that objects from `scale-interface` implement Resp
       const response: Response<EndpointResponse> = JSON.parse(rawResponse)
       const {
+        responseId,
         status,
         message,
         data,
       } = response
+
+      if (responseId !== requestId) {
+        // This isn't our response. Wait for the next one
+        return
+      }
+
       if (status !== Status.OK) {
         reject(new Error(message))
       }
@@ -203,11 +221,18 @@ function socketSend(
         case writeExperimentEndpoint:
           break
       }
+
       resolve(data)
+      socket.removeEventListener('message', onMessage)
+    }
+
+    const request: Request<EndpointOptions> = {
+      requestId,
+      options,
     }
 
     socket.addEventListener('message', onMessage)
-    socket.send(JSON.stringify(options))
+    socket.send(JSON.stringify(request))
   })
 }
 

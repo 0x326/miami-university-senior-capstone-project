@@ -1,0 +1,15 @@
+parserOptions:
+  project: ./tsconfig.json
+
+env:
+  node: true
+
+rules:
+  unicorn/filename-case:
+    - error
+    - cases:
+        kebabCase: true
+
+  import/no-extraneous-dependencies: off
+
+  '@typescript-eslint/no-var-requires': off
