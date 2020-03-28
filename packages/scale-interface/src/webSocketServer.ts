@@ -134,7 +134,11 @@ function createWebSocketEmitter<EmitterData>(
     .on('connection', async (webSocket) => {
       try {
         for await (const message of emitter()) {
-          webSocket.send(JSON.stringify(message))
+          try {
+            webSocket.send(JSON.stringify(message))
+          } catch (error) {
+            console.error('Error on data emit', error)
+          }
         }
       } catch (error) {
         console.error('Uncaught error in emitter', error)
