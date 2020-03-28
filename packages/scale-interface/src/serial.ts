@@ -28,6 +28,14 @@ let serialPort: {
 } | null = null
 let portCloseError: Error | null = null
 
+// Define a function that satisfies the typechecker, but should *never* be possible to call
+const throwError = (): void => {
+  throw new Error('Programming error - This function should be never be possible to call')
+}
+
+// Define a function that satisfies the typechecker, but is safe to call
+const noop = (): void => {}
+
 function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void> {
   if (serialPort !== null) {
     throw new Error('Port is already open')
@@ -56,14 +64,10 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
   }))
 
   const parserOnce: ParserOnce = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let resolveAttach: (() => void) | any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let rejectAttach: ((error: Error) => void) | any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let resolveData: ((data: string) => void) | any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let rejectData: ((error: Error) => void) | any
+    let resolveAttach: (() => void) = throwError
+    let rejectAttach: ((error: Error) => void) = throwError
+    let resolveData: ((data: string) => void) = throwError
+    let rejectData: ((error: Error) => void) = throwError
 
     const attachPromise: Promise<void> = new Promise((resolve, reject): void => {
       [resolveAttach, rejectAttach] = [resolve, reject]
@@ -73,8 +77,19 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
     })
 
     try {
-      parser.once('data', (data: string) => resolveData(data))
-      parser.once('error', (error: Error) => rejectData(error))
+      let onceData: (data: string) => void = noop
+      let onceError: (error: Error) => void = noop
+
+      onceData = (data: string): void => {
+        resolveData(data)
+        parser.removeListener('error', onceError)
+      }
+      onceError = (error: Error): void => {
+        rejectData(error)
+        parser.removeListener('data', onceData)
+      }
+      parser.once('data', onceData)
+      parser.once('error', onceError)
       resolveAttach()
     } catch (error) {
       rejectAttach(error)
