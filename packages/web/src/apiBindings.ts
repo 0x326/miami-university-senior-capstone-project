@@ -98,7 +98,7 @@ function openWebSocket(
     }
     socket.addEventListener('open', onOpen)
     socket.addEventListener('close', onClose)
-    // TODO (wimmeldj) [2020-03-15]: Add event listener for 'error' event
+    // TODO (wimmeldj) [2020-06-01]: Add event listener for 'error' event
   })
 }
 
@@ -200,7 +200,7 @@ function socketSend(
           reject(new Error('Response object cannot be validated. This is an oversight in the source code'))
           break
 
-        // TODO (0x326) [2020-03-15]: Verify response objects
+        // TODO (0x326) [2020-06-01]: Verify response objects
         case getRootDirEndpoint:
           break
 
@@ -289,7 +289,7 @@ function scaleData(
   } = webSockets
 
   webSocket.addEventListener('message', ({ data }) => callback(data))
-  // TODO (0x326) [2020-03-15]: Verify object
+  // TODO (0x326) [2020-06-01]: Verify object
 }
 
 export {
