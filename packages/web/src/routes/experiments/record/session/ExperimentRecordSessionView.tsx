@@ -24,9 +24,12 @@ import '@material/typography/dist/mdc.typography.css'
 import { Button } from '@rmwc/button'
 
 import {
-  CageId,
   BottleType,
-} from '../../../types'
+} from '../../../../types'
+
+import {
+  CageId,
+} from '../../../experiment-dashboard/ExperimentDashboard'
 
 import {
   ExperimentMetaData,
