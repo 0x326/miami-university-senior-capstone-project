@@ -24,25 +24,25 @@ import {
 } from './App'
 
 const sampleExperimentMetadata = Map<ExperimentId, ExperimentMetaData>()
-    .withMutations((experimentMap) => experimentMap
-      .set('experiment-1', {
-        experimentName: 'Experiment 1',
-        experimentLeadName: 'Dr. Quinn',
-        startDate: dayjs('2020-01-01'),
-        lastUpdated: dayjs('2020-02-04'),
-        sessionCount: 20,
-        bottlesPerCage: 2,
-        weighsPerBottle: 2,
-      })
-      .set('experiment-2', {
-        experimentName: 'Experiment 2',
-        experimentLeadName: 'Prof. Stahr',
-        startDate: dayjs('2020-01-07'),
-        lastUpdated: dayjs('2020-01-08'),
-        sessionCount: 20,
-        bottlesPerCage: 2,
-        weighsPerBottle: 2,
-      }))
+  .withMutations((experimentMap) => experimentMap
+    .set('experiment-1', {
+      experimentName: 'Experiment 1',
+      experimentLeadName: 'Dr. Quinn',
+      startDate: dayjs('2020-01-01'),
+      lastUpdated: dayjs('2020-02-04'),
+      sessionCount: 20,
+      bottlesPerCage: 2,
+      weighsPerBottle: 2,
+    })
+    .set('experiment-2', {
+      experimentName: 'Experiment 2',
+      experimentLeadName: 'Prof. Stahr',
+      startDate: dayjs('2020-01-07'),
+      lastUpdated: dayjs('2020-01-08'),
+      sessionCount: 20,
+      bottlesPerCage: 2,
+      weighsPerBottle: 2,
+    }))
 
 const sampleExperiments = Map<ExperimentId, ExperimentData>()
   .withMutations((experimentMap) => experimentMap
