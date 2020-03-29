@@ -1,0 +1,4 @@
+KERNEL!="sd[a-z][1-9]", GOTO="SCALE_INTERFACE_BLOCK_END"
+ACTION=="add", RUN+="/bin/systemctl start scale_interface_automount@%k.service"
+ACTION=="remove", RUN+="/bin/systemctl stop scale_interface_automount@%k.service"
+LABEL="SCALE_INTERFACE_BLOCK_END"

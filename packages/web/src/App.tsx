@@ -1,5 +1,5 @@
-// TODO (0x326) [2020-04-01] Remove extraneous @material dependencies
-// TODO (0x326) [2020-04-01] Remove extraneous @rmwc dependencies
+// TODO (0x326) [2020-05-10] Remove extraneous @material dependencies
+// TODO (0x326) [2020-05-10] Remove extraneous @rmwc dependencies
 
 import React, {
   useState,
@@ -17,7 +17,11 @@ import {
   useHistory,
 } from 'react-router-dom'
 
-import uuid from 'uuid/v4'
+import {
+  v4 as uuid4,
+} from 'uuid'
+
+import dayjs from 'dayjs'
 
 import ExperimentDashboard, {
   ExperimentData,
@@ -34,6 +38,10 @@ import {
 } from './routes/experiment-dashboard/CageSessions'
 
 import {
+  ExperimentMetaData,
+} from './routes/experiments/new/NewExperimentView'
+
+import {
   BottleType,
   RouteId,
   DisplayName,
@@ -44,18 +52,42 @@ import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
+import ScaleApiTester from './ScaleApiTester'
 
 export type ExperimentId = RouteId
 
 const viewOptions: RouteMap = Map<ExperimentId, DisplayName>().withMutations((map) => map
   .set('experiment-dashboard', 'Experiment Dashboard')
-  .set('experiments', 'Experiments'))
+  .set('experiments', 'Experiments')
+  .set('scale-api-tester', 'Scale API tester'))
 
 const App: React.FC = () => {
   const history = useHistory()
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
+  // TODO (wael27) [2020-05-10]: Delete this eslint-disable comment
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>()
+    .withMutations((experimentMap) => experimentMap
+      .set('experiment-1', {
+        experimentName: 'Experiment 1',
+        experimentLeadName: 'Dr. Quinn',
+        startDate: dayjs('2020-01-01'),
+        lastUpdated: dayjs('2020-02-04'),
+        sessionCount: 20,
+        bottlesPerCage: 2,
+        weighsPerBottle: 2,
+      })
+      .set('experiment-2', {
+        experimentName: 'Experiment 2',
+        experimentLeadName: 'Prof. Stahr',
+        startDate: dayjs('2020-01-07'),
+        lastUpdated: dayjs('2020-01-08'),
+        sessionCount: 20,
+        bottlesPerCage: 2,
+        weighsPerBottle: 2,
+      })))
   const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>()
     .withMutations((experimentMap) => experimentMap
       .set('experiment-1', Map<RackId, Map<CageId, CageData>>().withMutations((map) => map
@@ -240,12 +272,13 @@ const App: React.FC = () => {
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
             experimentIds={experimentDisplayOrder}
             experiments={experimentDisplayNames}
+            experimentMetadata={experimentMetadata}
             onCreateExperiment={((experimentMetaData): void => {
               const {
                 experimentName,
               } = experimentMetaData
 
-              const experimentId = uuid()
+              const experimentId = uuid4()
               setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
               setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
                 .set(experimentId, experimentName))
@@ -255,6 +288,9 @@ const App: React.FC = () => {
               history.push('/experiments')
             })}
           />
+        </Route>
+        <Route path="/scale-api-tester">
+          <ScaleApiTester />
         </Route>
         <Route path="*">
           <NoMatch

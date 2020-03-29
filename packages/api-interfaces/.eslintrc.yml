@@ -1,0 +1,15 @@
+parserOptions:
+  project: ./tsconfig.json
+
+rules:
+  unicorn/filename-case:
+    - error
+    - cases:
+        kebabCase: true
+
+  '@typescript-eslint/no-empty-interface':
+    - off
+
+  # For some reason, this rule doesn't work properly on these files
+  import/prefer-default-export:
+    - off

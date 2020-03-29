@@ -22,6 +22,10 @@ rules:
     - error
     - never
 
+  curly:
+    - error
+    - all
+
   no-mixed-operators:
     - error
     - allowSamePrecedence: true
@@ -159,7 +163,31 @@ rules:
 
         ret: false
 
-        res: false  # result
+        res: false
+
+        prom:
+          promise: true
+
+        proms:
+          promises: true
+
+        ws:
+          webSocket: true
+
+        wss:
+          webSocketServer: true
+
+        websocket:
+          webSocket: true
+
+        resp:
+          response: true
+
+        rtn:
+          return: true
+
+        expr:
+          experiment: true
 
         # React terminology
         props: false

@@ -3,21 +3,39 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "start": "echo \"\u001b[33mWARNING: Types will not be checked\u001b[0m\" && parcel watch --target node src/index.ts",
+    "postinstall": "node ../../scripts/ln.js ../api-interfaces node_modules/api-interfaces",
+    "start": "node dist/index.js",
+    "prelint": "cd ../api-interfaces/ && yarn build",
     "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
-    "build": "tsc --noEmit && parcel build --target node src/index.ts",
+    "pretest": "cd ../api-interfaces/ && yarn build",
+    "test": "jest",
+    "pretest:debug": "cd ../api-interfaces/ && yarn build",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
+    "prebuild": "cd ../api-interfaces/ && yarn build",
+    "build": "tsc --noEmit && parcel build --target node -d build/ src/index.ts",
     "analyze-build": "source-map-explorer 'dist/*.js'"
   },
   "devDependencies": {
+    "@types/hapi__joi": "^16.0.2",
+    "@types/jest": "^24.0.22",
+    "@types/lodash": "^4.14.144",
+    "@types/node": "^12.12.5",
     "@types/serialport": "^7.0.4",
+    "@types/ws": "^6.0.3",
     "@types/yargs": "^13.0.3",
+    "jest": "^24.9.0",
     "parcel-bundler": "^1.12.3",
+    "ts-jest": "^24.1.0",
     "typescript": "3.6.3"
   },
   "dependencies": {
+    "@hapi/joi": "^16.1.7",
     "@sentry/node": "^5.9.0",
     "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.15",
+    "pretty-format": "^24.9.0",
     "serialport": "^7.1.5",
+    "ws": "^7.2.0",
     "yargs": "^14.0.0"
   }
 }
