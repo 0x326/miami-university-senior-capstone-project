@@ -319,10 +319,11 @@ function displayToWB(
   experiment: ExperimentData,
   rdo: RackDisplayOrder,
   cdo: CageDisplayOrder,
+  dm: DummyMap,
 ): XLSX.WorkBook {
   const ret = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(ret, metadataToWS(metadat), 'Metadata')
-  XLSX.utils.book_append_sheet(ret, experimentToWS(metadat, experiment, rdo, cdo), 'Data')
+  XLSX.utils.book_append_sheet(ret, experimentToWS(metadat, experiment, rdo, cdo, dm), 'Data')
   return ret
 }
 
@@ -335,23 +336,25 @@ export {
 
 // import * as fs from 'fs'
 // const dat = new Uint8Array(fs.readFileSync('./test.xlsx'))
-// const [metadat, experiment, rdo, cdo] = binToDisplay(dat)
+// const [metadat, experiment, rdo, cdo, dm] = binToDisplay(dat)
 // // print entire experiment
 // console.log('====\nParsed Experiment:\n====')
 // console.log(experiment.toJS())
 // console.log('====\nExperiment without uid:\n====')
 // console.log((experiment as any).get('Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM').toJS())
-// console.log('====\n1st rack 1st cage 0th session data:\n====')
-// console.log(experiment.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM',
-//   1, 1, 'cageData', 0, 'cageSessionData']).toJS())
+// // console.log('====\n1st rack 1st cage 0th session data:\n====')
+// // console.log(experiment.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM',
+// //   1, 1, 'cageData', 0, 'cageSessionData']).toJS())
 // console.log('====\nMetadat:\n====')
 // console.log(metadat)
 // console.log('====\ncdo:\n====')
 // console.log(cdo.toJS())
+// console.log('====\ndummy map:\n====')
+// console.log(dm.toJS())
 // console.log('====\ndisplayToWb:\n====')
 // const wb = displayToWB(metadat,
 //   (experiment as any).get('Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM'),
-//   rdo, cdo)
+//   rdo, cdo, dm)
 // XLSX.writeFile(wb, 'out.xlsx')
 
 
