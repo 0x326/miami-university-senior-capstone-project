@@ -1,5 +1,5 @@
-// TODO (0x326) [2020-04-01] Remove extraneous @material dependencies
-// TODO (0x326) [2020-04-01] Remove extraneous @rmwc dependencies
+// TODO (0x326) [2020-05-10] Remove extraneous @material dependencies
+// TODO (0x326) [2020-05-10] Remove extraneous @rmwc dependencies
 
 import React, {
   useEffect,
@@ -12,19 +12,25 @@ import {
 } from 'immutable'
 
 import {
-  Link,
   Route,
+  Redirect,
   Switch,
   useHistory,
 } from 'react-router-dom'
 
-import uuid from 'uuid/v4'
+import {
+  v4 as uuid4,
+} from 'uuid'
 
 import ExperimentDashboard, {
   ExperimentData,
   CageDisplayOrder,
   RackDisplayOrder,
 } from './routes/experiment-dashboard/ExperimentDashboard'
+
+import {
+  ExperimentMetaData,
+} from './routes/experiments/new/NewExperimentView'
 
 import ExperimentsSwitch from './routes/experiments'
 
@@ -40,12 +46,15 @@ import useSnackbar from './useSnackbar'
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
+import NoMatch from './routes/NoMatch'
+import ScaleApiTester from './ScaleApiTester'
 
 export type ExperimentId = RouteId
 
 const viewOptions: RouteMap = Map<ExperimentId, DisplayName>().withMutations((map) => map
   .set('experiment-dashboard', 'Experiment Dashboard')
-  .set('experiments', 'Experiments'))
+  .set('experiments', 'Experiments')
+  .set('scale-api-tester', 'Scale API tester'))
 
 const App: React.FC = () => {
   const history = useHistory()
@@ -54,6 +63,7 @@ const App: React.FC = () => {
   const [snackbar, snackbarQueuePush] = useSnackbar()
 
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
+  const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>())
   const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>())
   const [experimentDisplayNames, setExperimentDisplayNames] = useState(Map<ExperimentId, DisplayName>())
   const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List<ExperimentId>())
@@ -63,12 +73,14 @@ const App: React.FC = () => {
   useEffect(() => {
     import('./sampleData')
       .then(({
+        sampleExperimentMetadata,
         sampleExperiments,
         sampleExperimentDisplayNames,
         sampleExperimentDisplayOrder,
         sampleCageDisplayOrders,
         sampleRackDisplayOrder,
       }) => {
+        setExperimentMetadata(sampleExperimentMetadata)
         setExperiments(sampleExperiments)
         setExperimentDisplayNames(sampleExperimentDisplayNames)
         setExperimentDisplayOrder(sampleExperimentDisplayOrder)
@@ -93,17 +105,7 @@ const App: React.FC = () => {
       />
       <Switch>
         <Route exact path="/">
-          <ul>
-            <li>
-              <Link to="/experiment-dashboard">Experiment Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/experiments">Experiments</Link>
-            </li>
-            <li>
-              <Link to="/experiments/new">New Experiment</Link>
-            </li>
-          </ul>
+          <Redirect to="/experiments" />
         </Route>
         <Route path="/experiment-dashboard">
           <ExperimentDashboard
@@ -119,12 +121,13 @@ const App: React.FC = () => {
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
             experimentIds={experimentDisplayOrder}
             experiments={experimentDisplayNames}
+            experimentMetadata={experimentMetadata}
             onCreateExperiment={((experimentMetaData): void => {
               const {
                 experimentName,
               } = experimentMetaData
 
-              const experimentId = uuid()
+              const experimentId = uuid4()
               setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
               setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
                 .set(experimentId, experimentName))
@@ -133,6 +136,15 @@ const App: React.FC = () => {
 
               history.push('/experiments')
             })}
+          />
+        </Route>
+        <Route path="/scale-api-tester">
+          <ScaleApiTester />
+        </Route>
+        <Route path="*">
+          <NoMatch
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            suggestedNavigationLink={viewOptions}
           />
         </Route>
       </Switch>

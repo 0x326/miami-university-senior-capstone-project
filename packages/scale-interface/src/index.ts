@@ -1,7 +1,11 @@
 import { init as sentryInit } from '@sentry/node'
 import yargs from 'yargs'
 
-import { createServer } from './websocketServer'
+import {
+  open,
+} from './serial'
+
+import { createServer } from './webSocketServer'
 
 const {
   SENTRY_DSN,
@@ -20,7 +24,7 @@ const {
     description: 'Serial device to scale',
     type: 'string',
     demandOption: true,
-    default: '/dev/ttyUSB0',
+    default: 'COM5', // ''/dev/ttyUSB0',
   })
   .option('baud-rate', {
     description: 'Device baud rate',
@@ -62,19 +66,26 @@ const {
     default: 8080,
   })
 
-export interface ScaleConfig {
+const {
+  device,
+  'baud-rate': baudRate,
+  'data-bits': dataBits,
+  'bit-parity': bitParity,
+  port,
+} = argv as {
   device: string;
-  baudRate: 1200 | 2400 | 4800 | 9600;
-  dataBits: 7 | 8;
-  bitParity: 'none' | 'even' | 'odd';
+  'baud-rate': 1200 | 2400 | 4800 | 9600;
+  'data-bits': 7 | 8;
+  'bit-parity': 'none' | 'even' | 'odd';
+  port: number;
 }
 
-const scaleConfig = {
-  device: argv.device,
-  baudRate: argv.baudRate,
-  dataBits: argv.dataBits,
-  bitParity: argv.bitParity,
-} as ScaleConfig
-
-
-createServer(argv.port, scaleConfig)
+open(device, {
+  baudRate,
+  dataBits,
+  parity: bitParity,
+})
+  .then(() => {
+    console.log('Scale connected')
+  })
+  .then(() => createServer(port))

@@ -86,16 +86,43 @@ include:
   - template: Security/SAST.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/ci/templates/Security/SAST.gitlab-ci.yml
 
 cache:
+  key:
+    files:
+      - yarn.lock
   paths:
     - node_modules/
     - .yarn
+
+build-web:
+  stage: build
+  image: node:lts
+  before_script:
+    - yarn install --cache-folder .yarn/cache
+  script:
+    - cd packages/web/
+    - yarn build
+  artifacts:
+    paths:
+      - packages/web/build
+
+build-scale-interface:
+  stage: build
+  image: node:lts
+  before_script:
+    - yarn install --cache-folder .yarn/cache
+  script:
+    - cd packages/scale-interface/
+    - yarn build
+  artifacts:
+    paths:
+      - packages/scale-interface/build
 
 lint:
   stage: test
   image: node:lts
 
   before_script:
-    - yarn install
+    - yarn install --cache-folder .yarn/cache
 
   script: yarn lint
 
@@ -108,11 +135,10 @@ pages:
   only:
     - master
 
+  dependencies:
+    - build-web
+
   script:
-    - yarn install
-    - cd packages/web/
-    - yarn build
-    - cd ../..
     - mv packages/web/build/ public/
 
   artifacts:

@@ -1,5 +1,6 @@
 extends:
   - plugin:you-dont-need-lodash-underscore/compatible
+  - plugin:you-dont-need-momentjs/recommended
   - plugin:jest/recommended
   - plugin:jest-formatting/recommended
   - plugin:security/recommended
@@ -20,6 +21,10 @@ rules:
   semi:
     - error
     - never
+
+  curly:
+    - error
+    - all
 
   no-mixed-operators:
     - error
@@ -149,6 +154,30 @@ rules:
         args: false  # "arguments"
 
         dir: false  # "directory"
+
+        prom:
+          promise: true
+
+        proms:
+          promises: true
+
+        ws:
+          webSocket: true
+
+        wss:
+          webSocketServer: true
+
+        websocket:
+          webSocket: true
+
+        resp:
+          response: true
+
+        rtn:
+          return: true
+
+        expr:
+          experiment: true
 
         # React terminology
         props: false

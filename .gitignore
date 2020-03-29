@@ -13,6 +13,12 @@ build
 # NPM lock file - We use yarn.lock instead
 package-lock.json
 
+# Codemod bookmarks
+.codemod.bookmark
+
+# Yarn cache
+.yarn
+
 #### C ####
 # Prerequisites
 *.d
@@ -1217,3 +1223,6 @@ DerivedData/
 
 ## Gcc Patch
 /*.gcno
+
+#### Custom Overrides ####
+!/scripts

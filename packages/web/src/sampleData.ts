@@ -3,11 +3,16 @@ import {
   Map,
 } from 'immutable'
 
+import dayjs from 'dayjs'
+
 import {
   CageId,
   ExperimentData,
   RackId,
 } from './routes/experiment-dashboard/ExperimentDashboard'
+import {
+  ExperimentMetaData,
+} from './routes/experiments/new/NewExperimentView'
 import {
   CageData,
 } from './routes/experiment-dashboard/CageSessions'
@@ -17,6 +22,27 @@ import {
 import {
   ExperimentId,
 } from './App'
+
+const sampleExperimentMetadata = Map<ExperimentId, ExperimentMetaData>()
+    .withMutations((experimentMap) => experimentMap
+      .set('experiment-1', {
+        experimentName: 'Experiment 1',
+        experimentLeadName: 'Dr. Quinn',
+        startDate: dayjs('2020-01-01'),
+        lastUpdated: dayjs('2020-02-04'),
+        sessionCount: 20,
+        bottlesPerCage: 2,
+        weighsPerBottle: 2,
+      })
+      .set('experiment-2', {
+        experimentName: 'Experiment 2',
+        experimentLeadName: 'Prof. Stahr',
+        startDate: dayjs('2020-01-07'),
+        lastUpdated: dayjs('2020-01-08'),
+        sessionCount: 20,
+        bottlesPerCage: 2,
+        weighsPerBottle: 2,
+      }))
 
 const sampleExperiments = Map<ExperimentId, ExperimentData>()
   .withMutations((experimentMap) => experimentMap
@@ -179,6 +205,7 @@ const sampleRackDisplayOrder = List.of(1, 2)
 
 export {
   sampleExperiments,
+  sampleExperimentMetadata,
   sampleExperimentDisplayNames,
   sampleExperimentDisplayOrder,
   sampleCageDisplayOrders,
