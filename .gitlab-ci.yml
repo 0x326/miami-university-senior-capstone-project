@@ -119,8 +119,12 @@ build-scale-interface:
 
 build-docs:
   stage: build
-  image: squidfunk/mkdocs-material
-  script: build
+  image:
+    name: squidfunk/mkdocs-material
+    entrypoint:
+      - ''
+  script:
+    - mkdocs build
   artifacts:
     paths:
       - site
