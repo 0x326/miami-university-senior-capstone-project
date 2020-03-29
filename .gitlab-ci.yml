@@ -117,6 +117,14 @@ build-scale-interface:
     paths:
       - packages/scale-interface/build
 
+build-docs:
+  stage: build
+  image: squidfunk/mkdocs-material
+  script: build
+  artifacts:
+    paths:
+      - site
+
 lint:
   stage: test
   image: node:lts
@@ -137,10 +145,12 @@ pages:
 
   dependencies:
     - build-web
+    - build-docs
 
   script:
     - mkdir public/
     - mv packages/web/build/ public/app
+    - mv site/ public/docs
 
   artifacts:
     paths:
