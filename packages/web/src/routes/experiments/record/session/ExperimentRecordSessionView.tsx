@@ -99,7 +99,7 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
 
           // TODO (wael27) [2020-03-29]: Call when we are done with the last bottle of the last bottle type
           onEnd(dataEntries)
-        })}
+        }}
       />
     </>
   )
