@@ -25,10 +25,6 @@ export interface CageData extends List<Readonly<{
   sessionNumber: number;
   cageSessionData: CageSessionData;
 }>> { }
-export interface Cage {
-  isDummy: boolean;
-  cageData: CageData;
-}
 
 interface Props {
   cageNumber: number;
