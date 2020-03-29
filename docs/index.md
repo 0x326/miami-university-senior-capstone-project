@@ -2,6 +2,15 @@
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
+## Building these docs
+
+```bash
+pip3 install mkdocs mkdocs-material
+
+cd miami-university-senior-capstone-project/
+mkdocs build
+```
+
 ## Commands
 
 * `mkdocs new [dir-name]` - Create a new project.
