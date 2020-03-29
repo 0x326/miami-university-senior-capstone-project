@@ -2,7 +2,7 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://0x326.gitlab.io/miami-university-senior-capstone-project/",
+  "homepage": "https://0x326.gitlab.io/miami-university-senior-capstone-project/app/",
   "dependencies": {
     "@material/animation": "^3.1.0",
     "@material/auto-init": "^3.1.0",

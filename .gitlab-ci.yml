@@ -139,7 +139,8 @@ pages:
     - build-web
 
   script:
-    - mv packages/web/build/ public/
+    - mkdir public/
+    - mv packages/web/build/ public/app
 
   artifacts:
     paths:
