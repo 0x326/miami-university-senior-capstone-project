@@ -121,26 +121,6 @@ function parseMeta(sheet: XLSX.WorkSheet): Metadata {
   return kv
 }
 
-
-/*
-Expects this column layout where ratid, experimental condition, rackid, and cageid are always present
-
-session labels like:
-s1 H2O (before)
-s1 H2O (after)
-s1 EtOH (before)
-s1 EtOH (after)
-s2 ...
-
-1 ratid      | experimental condition  | rackid | cageid |  s1 measure 1 |... s1 measure n | 2 measure 1 ...
-2        |                         |        |        |               |                 |
-3        |                         |        |        |               |                 |
-4        |                         |        |        |               |                 |
-
-Have we confirmed id fields will be numbers?
-
-*/
-
 function treatmentPair(datPair: [XLSX.CellObject, XLSX.CellObject]): [string, number] {
   assert(datPair[0].t === 'n') // weights should be numbers
   assert(datPair[1].t === 's') // labels should be strings
