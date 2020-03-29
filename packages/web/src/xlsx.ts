@@ -140,7 +140,7 @@ function parseData(ds: XLSX.WorkSheet, pairs: Metadata): [Map<ExperimentId, Expe
     String(pairs['primary experimenter'])}_${
     String(new Date(pairs['date initialized'] as number).toLocaleString())}`
 
-  const dumbMap = Map<List<number>, boolean>().asMutable()
+  const dummyMap = Map<List<number>, boolean>().asMutable()
 
   const data = Map<ExperimentId, ExperimentData>().withMutations((experiment) => experiment
     .set(eid, Map<RackId, Map<CageId, CageData>>().withMutations((racks) => {
@@ -194,7 +194,7 @@ function parseData(ds: XLSX.WorkSheet, pairs: Metadata): [Map<ExperimentId, Expe
         // TODO (wimmeldj) [2020-04-01] tolerate booleans too
         assert(isDummy.t === 'n' || isDummy.t === 'b')
 
-        if (isDummy.t === 'n') { dumbMap.set(List.of(rackid, cageid), isDummy.v === 1) } else { dumbMap.set(List.of(rackid, cageid), isDummy.v) }
+        if (isDummy.t === 'n') { dummyMap.set(List.of(rackid, cageid), isDummy.v === 1) } else { dummyMap.set(List.of(rackid, cageid), isDummy.v) }
 
         if (racks.get(rackid) === undefined) {
           racks.set(rackid, ret)
@@ -204,7 +204,7 @@ function parseData(ds: XLSX.WorkSheet, pairs: Metadata): [Map<ExperimentId, Expe
       }
     })))
 
-  return [data, dumbMap.asImmutable()]
+  return [data, dummyMap.asImmutable()]
 }
 
 function binToDisplay(dat: Uint8Array):
