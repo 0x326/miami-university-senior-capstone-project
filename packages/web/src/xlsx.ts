@@ -91,7 +91,7 @@ function parseMeta(sheet: XLSX.WorkSheet): Metadata {
   }
 
   for (let i = 1; i < keys.length; ++i) {
-    if (!keys[i]) continue
+    if (!keys[i]) { continue }
 
     const keyobj = keys[i]
     assert(keyobj.t === 's') // keys must be strings
@@ -194,11 +194,13 @@ function parseData(ds: XLSX.WorkSheet, pairs: Metadata): [Map<ExperimentId, Expe
         // TODO (wimmeldj) [2020-04-01] tolerate booleans too
         assert(isDummy.t === 'n' || isDummy.t === 'b')
 
-        if (isDummy.t === 'n') dumbMap.set(List.of(rackid, cageid), isDummy.v === 1)
-        else dumbMap.set(List.of(rackid, cageid), isDummy.v)
+        if (isDummy.t === 'n') { dumbMap.set(List.of(rackid, cageid), isDummy.v === 1) } else { dumbMap.set(List.of(rackid, cageid), isDummy.v) }
 
-        if (racks.get(rackid) === undefined) racks.set(rackid, ret)
-        else racks.set(rackid, (racks.get(rackid) as Map<CageId, CageData>).merge(ret))
+        if (racks.get(rackid) === undefined) {
+          racks.set(rackid, ret)
+        } else {
+          racks.set(rackid, (racks.get(rackid) as Map<CageId, CageData>).merge(ret))
+        }
       }
     })))
 
@@ -230,7 +232,7 @@ function binToDisplay(dat: Uint8Array):
 function metadataToWS(m: Metadata): XLSX.WorkSheet {
   const sortedKeys = Object.keys(m).sort()
   const aoa = sortedKeys.map((k) => {
-    if (lists.includes(k)) return [k, (m[k] as string[]).join(',')]
+    if (lists.includes(k)) { return [k, (m[k] as string[]).join(',')] }
     return [k, m[k]]
   })
   return XLSX.utils.aoa_to_sheet(aoa)
@@ -251,7 +253,7 @@ function experimentToWS(
 
   // first row. session headers
   aoa[rows.sessions] = Array(staticColCount)
-  for (let i = 1, x = staticColCount; i <= sessCnt; x += colsPerSession, ++i) aoa[rows.sessions][x] = `Session ${i}`
+  for (let i = 1, x = staticColCount; i <= sessCnt; x += colsPerSession, ++i) { aoa[rows.sessions][x] = `Session ${i}` }
 
   // second row. all other labels
   aoa[rows.labels] = []
@@ -261,9 +263,9 @@ function experimentToWS(
   /* eslint-disable no-mixed-operators */
   for (let j = 3; j < colsPerSession * sessCnt + 3;) {
     const preCol = j
-    for (; j < preCol + treatmentCnt; ++j) aoa[rows.labels][j] = `pre (${treatments[j % preCol]})`
+    for (; j < preCol + treatmentCnt; ++j) { aoa[rows.labels][j] = `pre (${treatments[j % preCol]})` }
     const postCol = j
-    for (; j < postCol + treatmentCnt; ++j) aoa[rows.labels][j] = `post (${treatments[j % postCol]})`
+    for (; j < postCol + treatmentCnt; ++j) { aoa[rows.labels][j] = `post (${treatments[j % postCol]})` }
   }
 
   // data rows
@@ -285,8 +287,8 @@ function experimentToWS(
       for (const session of sessionData.toArray()) {
         const pre = session.get(0)
         const post = session.get(1)
-        if (pre) for (const t of treatments) aoa[i][j++] = pre.rowData.get(t)
-        if (pre && post) for (const t of treatments) aoa[i][j++] = post.rowData.get(t)
+        if (pre) { for (const t of treatments) { aoa[i][j++] = pre.rowData.get(t) } }
+        if (pre && post) { for (const t of treatments) { aoa[i][j++] = post.rowData.get(t) } }
       }
       ++i
     }
