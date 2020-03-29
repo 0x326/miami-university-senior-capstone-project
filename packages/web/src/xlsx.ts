@@ -20,7 +20,7 @@ import {
 } from './routes/experiment-dashboard/ExperimentDashboard'
 
 import {
-  Cage,
+  CageData,
 } from './routes/experiment-dashboard/CageSessions'
 
 import { ExperimentId } from './App'
@@ -29,6 +29,7 @@ export interface Metadata {
   [key: string]: string | number | string[] | null;
 }
 
+export interface DummyMap extends Map<List<number>, boolean> { }
 
 // RackId, CageId, and isDummy do not vary across sessions
 const staticColCount = 3
