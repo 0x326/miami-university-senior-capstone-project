@@ -153,20 +153,22 @@ function treatmentPair(datPair: [XLSX.CellObject, XLSX.CellObject]): [string, nu
 }
 
 // avert your eyes
-function parseData(ds: XLSX.WorkSheet, pairs: Metadata): Map<ExperimentId, ExperimentData> {
+function parseData(ds: XLSX.WorkSheet, pairs: Metadata): [Map<ExperimentId, ExperimentData>, DummyMap] {
   const colsPerSess = pairs['num treatments'] as number * 2 // pre and post weights for each treatment
 
   const eid = `${String(pairs['experiment title'])}_${
     String(pairs['primary experimenter'])}_${
     String(new Date(pairs['date initialized'] as number).toLocaleString())}`
 
-  return Map<ExperimentId, ExperimentData>().withMutations((experiment) => experiment
-    .set(eid, Map<RackId, Map<CageId, Cage>>().withMutations((racks) => {
+  const dumbMap = Map<List<number>, boolean>().asMutable()
+
+  const data = Map<ExperimentId, ExperimentData>().withMutations((experiment) => experiment
+    .set(eid, Map<RackId, Map<CageId, CageData>>().withMutations((racks) => {
       // parse row by row
       for (let i = rows.dataBegin; ds[XLSX.utils.encode_cell({ c: 0, r: i })]; ++i) {
         // parse row constants
-        const rackid = ds[XLSX.utils.encode_cell({ c: cols.rackid, r: i })].v
-        const cageid = ds[XLSX.utils.encode_cell({ c: cols.cageid, r: i })].v
+        const rackid = ds[XLSX.utils.encode_cell({ c: cols.rackid, r: i })].v as number
+        const cageid = ds[XLSX.utils.encode_cell({ c: cols.cageid, r: i })].v as number
         const isDummy = ds[XLSX.utils.encode_cell({ c: cols.isDummy, r: i })]
 
         const sessions = List().asMutable()
@@ -206,17 +208,21 @@ function parseData(ds: XLSX.WorkSheet, pairs: Metadata): Map<ExperimentId, Exper
           sessions.push(session)
         }
 
+        const ret: Map<CageId, CageData> = Map<CageId, CageData>()
+          .set(cageid, sessions.asImmutable())
+
         // TODO (wimmeldj) [2020-04-01] tolerate booleans too
-        assert(isDummy.t === 'n')
-        let ret: Map<CageId, Cage> = Map()
-        ret = ret.set(cageid, {
-          isDummy: isDummy.v === 1,
-          cageData: sessions.asImmutable(),
-        })
+        assert(isDummy.t === 'n' || isDummy.t === 'b')
+
+        if (isDummy.t === 'n') dumbMap.set(List.of(rackid, cageid), isDummy.v === 1)
+        else dumbMap.set(List.of(rackid, cageid), isDummy.v)
+
         if (racks.get(rackid) === undefined) racks.set(rackid, ret)
-        else racks.set(rackid, (racks.get(rackid) as Map<number, Cage>).merge(ret))
+        else racks.set(rackid, (racks.get(rackid) as Map<CageId, CageData>).merge(ret))
       }
     })))
+
+  return [data, dumbMap.asImmutable()]
 }
 
 function binToDisplay(dat: Uint8Array):
@@ -224,10 +230,11 @@ function binToDisplay(dat: Uint8Array):
     Map<string, ExperimentData>,
     RackDisplayOrder,
     CageDisplayOrder,
+    DummyMap,
   ] {
   const wb = XLSX.read(dat, { type: 'array' })
   const metadat = parseMeta(wb.Sheets.Metadata)
-  const experimentData = parseData(wb.Sheets.Data, metadat)
+  const [experimentData, dummies] = parseData(wb.Sheets.Data, metadat)
 
   // bleh
   const onlyKey = experimentData.keySeq().toArray()[0]
@@ -236,7 +243,7 @@ function binToDisplay(dat: Uint8Array):
   const cageOrder = Map().asMutable() as CageDisplayOrder
   rackOrder.map((rackid) => cageOrder.set(rackid, experimentData.getIn([onlyKey, rackid]).keySeq().toArray().sort()))
 
-  return [metadat, experimentData, rackOrder, cageOrder.asImmutable()]
+  return [metadat, experimentData, rackOrder, cageOrder.asImmutable(), dummies]
 }
 
 // Metadata sheet should be sorted
@@ -254,6 +261,7 @@ function experimentToWS(
   ex: ExperimentData,
   rdo: RackDisplayOrder,
   cdo: CageDisplayOrder,
+  dm: DummyMap,
 ): XLSX.WorkSheet {
   const aoa = []
   const treatmentCnt = m['num treatments'] as number
@@ -278,16 +286,18 @@ function experimentToWS(
     for (; j < postCol + treatmentCnt; ++j) aoa[rows.labels][j] = `post (${treatments[j % postCol]})`
   }
 
+  // data rows
   let i = rows.dataBegin
   for (const [rid, cages] of rdo.map((x) => [x, cdo.get(x)]).toArray() as [number, number[]][]) {
     for (const cid of cages) {
-      const cage = ex.getIn([rid, cid]) as Cage
+      // const cage = ex.getIn([rid, cid]) as Cage
+
       aoa[i] = []
       aoa[i][cols.rackid] = rid
       aoa[i][cols.cageid] = cid
-      aoa[i][cols.isDummy] = cage.isDummy
+      aoa[i][cols.isDummy] = dm.get(List.of(rid, cid))
 
-      const sessionData = (cage.cageData)
+      const sessionData = (ex.getIn([rid, cid]) as CageData)
         .sort((a, b) => (a.sessionNumber >= b.sessionNumber ? 1 : -1))
         .map((session) => session.cageSessionData)
 
