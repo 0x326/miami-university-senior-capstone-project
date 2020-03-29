@@ -4,6 +4,7 @@ parserOptions:
 env:
   browser: false
   node: true
+  jest: true
 
 rules:
   no-new-require: error
