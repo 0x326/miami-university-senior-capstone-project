@@ -12,7 +12,7 @@
     "pretest:debug": "cd ../api-interfaces/ && yarn build",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "prebuild": "cd ../api-interfaces/ && yarn build",
-    "build": "tsc --noEmit && parcel build --target node src/index.ts",
+    "build": "tsc --noEmit && parcel build --target node -d build/ src/index.ts",
     "analyze-build": "source-map-explorer 'dist/*.js'"
   },
   "devDependencies": {

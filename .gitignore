@@ -16,6 +16,9 @@ package-lock.json
 # Codemod bookmarks
 .codemod.bookmark
 
+# Yarn cache
+.yarn
+
 #### C ####
 # Prerequisites
 *.d
