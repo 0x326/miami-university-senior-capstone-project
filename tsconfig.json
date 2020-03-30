@@ -1,4 +1,6 @@
 {
+  // This tsconfig.json is a work-around for IDEs and is not used in any compilation step
+
   "compilerOptions": {
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
