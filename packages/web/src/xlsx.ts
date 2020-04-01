@@ -6,6 +6,10 @@ import assert from 'assert'
 
 import * as XLSX from 'xlsx'
 
+import dayjs, {
+  Dayjs,
+} from 'dayjs'
+
 import {
   List,
   Map,
@@ -25,6 +29,9 @@ import {
 
 import { ExperimentId } from './App'
 
+import { ExperimentMetaData } from './routes/experiments/new/NewExperimentView'
+
+// for simpler parsing
 export interface Metadata {
   [key: string]: string | number | string[] | null;
 }
