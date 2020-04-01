@@ -1,7 +1,3 @@
-/* eslint-disable security/detect-object-injection */
-
-// detect-object-injection disabled becaue all cases are safe
-
 // TODO (wimmeldj) [2020-05-01] don't use unix timestamps. Use human readable and in locale
 
 import assert from 'assert'
