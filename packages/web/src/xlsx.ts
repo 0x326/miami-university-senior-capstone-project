@@ -67,7 +67,7 @@ const lists = [
   'treatments',
 ]
 
-function parseMeta(sheet: XLSX.WorkSheet): Metadata {
+function parseMeta(sheet: XLSX.WorkSheet): ExperimentMetaData {
   const kv: Metadata = {
     'date initialized': null,     // startDate: Dayjs
     'experiment title': null,     // experimentName
@@ -123,7 +123,16 @@ function parseMeta(sheet: XLSX.WorkSheet): Metadata {
   // ensure all keys were included
   Object.keys(kv).map((x) => assert(kv[x] !== null))
 
-  return kv
+  // translate to ExperimentMetaData type
+  return {
+    experimentName: kv['experiment title'] as string,
+    experimentLeadName: kv['primary experimenter'] as string,
+    startDate: dayjs.unix(kv['date initialized'] as number),
+    lastUpdated: dayjs.unix(kv['last updated'] as number),
+    sessionCount: kv['total sessions'] as number,
+    bottlesPerCage: kv['num treatments'] as number,
+    treatments: kv.treatments as string[],
+  }
 }
 
 function treatmentPair(datPair: [XLSX.CellObject, XLSX.CellObject]): [string, number] {
