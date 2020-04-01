@@ -68,7 +68,7 @@ function parseMeta(sheet: XLSX.WorkSheet): Metadata {
     'num treatments': null,       // bottlesPerCage
     'primary experimenter': null, // experimentLeadname
     'total sessions': null,       // sessionCount
-    treatments: null,             // weightsPerBottle
+    treatments: null,
   }
 
   const keys: XLSX.CellObject[] = []
