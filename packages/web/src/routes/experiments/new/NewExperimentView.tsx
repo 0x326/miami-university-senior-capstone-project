@@ -73,7 +73,7 @@ function NewExperiment(props: Props): JSX.Element {
   const isStartDateValid = dayjs(startDate).isValid()
   const isSessionCountValid = Number(sessionCount) > 0
   const isBottlesPerCageValid = Number(bottlesPerCage) > 0
-  const isTreatmentsValid = treatments.split(',').map((x) => x.trim()).length > 0
+  const isTreatmentsValid = treatments.trim().split(',').length > 0
 
   const areAllFieldsValid = [
     isExperimentNameValid,
@@ -109,7 +109,7 @@ function NewExperiment(props: Props): JSX.Element {
                       lastUpdated: dayjs(),
                       sessionCount: Number(sessionCount),
                       bottlesPerCage: Number(bottlesPerCage),
-                      treatments: treatments.split(',').map((x) => x.trim()), // store as list
+                      treatments: treatments.trim().split(',').map((x) => x.trim()), // store as list
                     })
                   }
                 }}
