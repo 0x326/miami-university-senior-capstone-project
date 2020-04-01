@@ -49,11 +49,10 @@ enum cols {
 
 // keys that should have a value of type number
 const numbers = [
-  'last updated',
-  'total sessions',
-  'cols/session',
   'date initialized',
+  'last updated',
   'num treatments',
+  'total sessions',
 ]
 
 // keys that have comma separated values
@@ -63,14 +62,13 @@ const lists = [
 
 function parseMeta(sheet: XLSX.WorkSheet): Metadata {
   const kv: Metadata = {
-    'cols/session': null,
-    'date initialized': null,
-    'experiment title': null,
-    'last updated': null,
-    'num treatments': null,
-    'primary experimenter': null,
-    'total sessions': null,
-    treatments: null,
+    'date initialized': null,     // startDate: Dayjs
+    'experiment title': null,     // experimentName
+    'last updated': null,         // lastUpdated Dayjs
+    'num treatments': null,       // bottlesPerCage
+    'primary experimenter': null, // experimentLeadname
+    'total sessions': null,       // sessionCount
+    treatments: null,             // weightsPerBottle
   }
 
   const keys: XLSX.CellObject[] = []
