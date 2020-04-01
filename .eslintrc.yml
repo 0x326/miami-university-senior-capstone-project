@@ -173,6 +173,7 @@ rules:
 
         ws:
           webSocket: true
+          worksheet: true
 
         wss:
           webSocketServer: true
