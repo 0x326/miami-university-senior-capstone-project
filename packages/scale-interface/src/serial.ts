@@ -34,6 +34,7 @@ const throwError = (): void => {
 }
 
 // Define a function that satisfies the typechecker, but is safe to call
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = (): void => {}
 
 function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void> {
