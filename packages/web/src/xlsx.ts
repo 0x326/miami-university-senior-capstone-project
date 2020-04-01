@@ -1,6 +1,7 @@
 /* eslint-disable security/detect-object-injection */
 
 // TODO (wimmeldj) [2020-04-01] Still need to persist comments
+// TODO (wimmeldj) [2020-05-01] don't use unix timestamps. Use human readable and in locale
 
 import assert from 'assert'
 
@@ -337,19 +338,18 @@ export {
   displayToWB,
 }
 
-// test functionality
+// // test functionality
 
 // import * as fs from 'fs'
-// const dat = new Uint8Array(fs.readFileSync('./test.xlsx'))
+// let dat = new Uint8Array(fs.readFileSync('./test.xlsx'))
 // const [metadat, experiment, rdo, cdo, dm] = binToDisplay(dat)
+
+// console.log("====\n metadat \n====")
+// console.log(metadat)
+
 // // print entire experiment
 // console.log('====\nParsed Experiment:\n====')
 // console.log(experiment.toJS())
-// console.log('====\nExperiment without uid:\n====')
-// console.log((experiment as any).get('Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM').toJS())
-// // console.log('====\n1st rack 1st cage 0th session data:\n====')
-// // console.log(experiment.getIn(['Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM',
-// //   1, 1, 'cageData', 0, 'cageSessionData']).toJS())
 // console.log('====\nMetadat:\n====')
 // console.log(metadat)
 // console.log('====\ncdo:\n====')
@@ -357,11 +357,18 @@ export {
 // console.log('====\ndummy map:\n====')
 // console.log(dm.toJS())
 // console.log('====\ndisplayToWb:\n====')
-// const wb = displayToWB(metadat,
-//   (experiment as any).get('Addiction Study 12_Quinn_10/20/2019, 12:00:00 AM'),
+// let wb = displayToWB(metadat,
+//   (experiment as any).get('Addiction Study 12_Quinn_Mon, 19 Jan 1970 04:32:24 GMT'),
 //   rdo, cdo, dm)
-// XLSX.writeFile(wb, 'out.xlsx')
+// XLSX.writeFile(wb, 'from-test.xlsx')
 
+// // do it again, but use output from-test as input
+// dat = new Uint8Array(fs.readFileSync('./from-test.xlsx'))
+// const again = binToDisplay(dat)
+// wb = displayToWB(again[0],
+//   (again[1] as any).get('Addiction Study 12_Quinn_Mon, 19 Jan 1970 04:32:24 GMT'),
+//   again[2], again[3], again[4])
+// XLSX.writeFile(wb, 'from-from-test.xlsx')
 
 /*
 THIS!
