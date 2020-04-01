@@ -37,7 +37,7 @@ ReactDOM.render((
 serviceWorker.unregister()
 
 // TODO [2020-05-01]: Remove these once the library is actually imported at least once elsewhere in the project
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-unused-expressions
 binToDisplay
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-unused-expressions
 displayToWB
