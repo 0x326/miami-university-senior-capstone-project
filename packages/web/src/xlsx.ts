@@ -221,7 +221,7 @@ function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentI
 }
 
 function binToDisplay(dat: Uint8Array):
-  [Metadata,
+  [ExperimentMetaData,
     Map<string, ExperimentData>,
     RackDisplayOrder,
     CageDisplayOrder,
@@ -242,27 +242,27 @@ function binToDisplay(dat: Uint8Array):
 }
 
 // Metadata sheet should be sorted
-function metadataToWS(m: Metadata): XLSX.WorkSheet {
-  const sortedKeys = Object.keys(m).sort()
+function metadataToWS(md: Metadata): XLSX.WorkSheet {
+  const sortedKeys = Object.keys(md).sort()
   const aoa = sortedKeys.map((k) => {
-    if (lists.includes(k)) { return [k, (m[k] as string[]).join(',')] }
-    return [k, m[k]]
+    if (lists.includes(k)) { return [k, (md[k] as string[]).join(',')] }
+    return [k, md[k]]
   })
   return XLSX.utils.aoa_to_sheet(aoa)
 }
 
 function experimentToWS(
-  m: Metadata,
+  md: Metadata,
   ex: ExperimentData,
   rdo: RackDisplayOrder,
   cdo: CageDisplayOrder,
   dm: DummyMap,
 ): XLSX.WorkSheet {
   const aoa = []
-  const treatmentCnt = m['num treatments'] as number
+  const treatmentCnt = md['num treatments'] as number
   const colsPerSession = treatmentCnt * 2
-  const sessCnt = m['total sessions'] as number
-  const treatments = m.treatments as string[]
+  const sessCnt = md['total sessions'] as number
+  const treatments = md.treatments as string[]
 
   // first row. session headers
   aoa[rows.sessions] = Array(staticColCount)
@@ -310,15 +310,25 @@ function experimentToWS(
 }
 
 function displayToWB(
-  metadat: Metadata,
-  experiment: ExperimentData,
+  metadata: ExperimentMetaData,
+  ex: ExperimentData,
   rdo: RackDisplayOrder,
   cdo: CageDisplayOrder,
   dm: DummyMap,
 ): XLSX.WorkBook {
   const ret = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(ret, metadataToWS(metadat), 'Metadata')
-  XLSX.utils.book_append_sheet(ret, experimentToWS(metadat, experiment, rdo, cdo, dm), 'Data')
+  // for simpler parsing
+  const md: Metadata = {
+    'date initialized': metadata.startDate.unix(),
+    'experiment title': metadata.experimentName,
+    'last updated': metadata.lastUpdated.unix(),
+    'num treatments': metadata.bottlesPerCage,
+    'primary experimenter': metadata.experimentLeadName,
+    'total sessions': metadata.sessionCount,
+    'treatments': metadata.treatments,
+  }
+  XLSX.utils.book_append_sheet(ret, metadataToWS(md), 'Metadata')
+  XLSX.utils.book_append_sheet(ret, experimentToWS(md, ex, rdo, cdo, dm), 'Data')
   return ret
 }
 
