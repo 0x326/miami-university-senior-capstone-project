@@ -80,7 +80,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
         {bottlesPerCage}
       </Typography>
       <Typography use="body1" tag="p">
-        Weights per Bottle:
+        Treatments:
         {' '}
         {treatments.join(', ')}
       </Typography>
