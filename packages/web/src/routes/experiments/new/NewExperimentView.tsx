@@ -47,8 +47,8 @@ export interface ExperimentMetaData extends Readonly<{
   lastUpdated: Dayjs;
   sessionCount: number;
   bottlesPerCage: number;
-  weighsPerBottle: number;
-}> {}
+  treatments: string[];
+}> { }
 
 interface Props {
   onCancelAction: () => void;
