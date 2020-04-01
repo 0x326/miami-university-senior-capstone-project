@@ -31,8 +31,12 @@ import { ExperimentId } from './App'
 import { ExperimentMetaData } from './routes/experiments/new/NewExperimentView'
 
 // for simpler parsing
-export interface Metadata {
+interface Metadata {
   [key: string]: string | number | string[] | null;
+}
+
+interface Comments {
+  [key: string]: XLSX.Comment;
 }
 
 export interface DummyMap extends Map<List<number>, boolean> { }
@@ -219,16 +223,25 @@ function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentI
   return [data, dummyMap.asImmutable()]
 }
 
+function parseComments(ws: XLSX.WorkSheet, ): Comments {
+  const comments: Comments = {}
+  for (let k of Object.keys(ws).filter(k => k !== "!ref" && ws[k].c))
+    comments[k] = ws[k].c
+  return comments
+}
+
 function binToDisplay(dat: Uint8Array):
   [ExperimentMetaData,
     Map<string, ExperimentData>,
     RackDisplayOrder,
     CageDisplayOrder,
     DummyMap,
+    Comments,
   ] {
   const wb = XLSX.read(dat, { type: 'array' })
   const metadat = parseMeta(wb.Sheets.Metadata)
   const [experimentData, dummies] = parseData(wb.Sheets.Data, metadat)
+  const comments = parseComments(wb.Sheets.Data); // only makes sense to persist comments in the data sheet
 
   // bleh
   const onlyKey = experimentData.keySeq().toArray()[0]
@@ -237,7 +250,7 @@ function binToDisplay(dat: Uint8Array):
   const cageOrder = Map().asMutable() as CageDisplayOrder
   rackOrder.map((rackid) => cageOrder.set(rackid, experimentData.getIn([onlyKey, rackid]).keySeq().toArray().sort()))
 
-  return [metadat, experimentData, rackOrder, cageOrder.asImmutable(), dummies]
+  return [metadat, experimentData, rackOrder, cageOrder.asImmutable(), dummies, comments]
 }
 
 // Metadata sheet should be sorted
