@@ -168,7 +168,6 @@ function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentI
         for (let j = cols.sessColStart, sessNumber = 1;
           ds[XLSX.utils.encode_cell({ r: i, c: j })];
           j += colsPerSess, ++sessNumber) {
-          /* eslint-disable unicorn/prefer-spread */
           const dataPairs = Array.from(Array(colsPerSess).keys()) // => range(0, 2 * numTreatments)
             .map((x) => [
               ds[XLSX.utils.encode_cell({ r: i, c: j + x })], // weight cell

@@ -21,6 +21,7 @@ overrides:
 
     rules:
       security/detect-object-injection: off
+      unicorn/prefer-spread: off # because using spread causes other issues
 
   - files:
     - 'src/AppModalDrawer.tsx'
