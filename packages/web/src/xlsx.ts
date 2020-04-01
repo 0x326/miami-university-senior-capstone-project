@@ -1,7 +1,6 @@
-/* eslint-disable security/detect-object-injection, unicorn/prevent-abbreviations */
+/* eslint-disable security/detect-object-injection */
 
 // detect-object-injection disabled becaue all cases are safe
-// unicorn disabled because ws obviously represents a worksheet, not a webSocket
 
 // TODO (wimmeldj) [2020-05-01] don't use unix timestamps. Use human readable and in locale
 
@@ -224,10 +223,10 @@ function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentI
   return [data, dummyMap.asImmutable()]
 }
 
-function parseComments(ws: XLSX.WorkSheet): Comments {
+function parseComments(sheet: XLSX.WorkSheet): Comments {
   const comments: Comments = {}
   /* eslint-disable no-shadow */
-  for (const k of Object.keys(ws).filter((k) => k !== '!ref' && ws[k].c)) { comments[k] = ws[k].c }
+  for (const k of Object.keys(sheet).filter((k) => k !== '!ref' && sheet[k].c)) { comments[k] = sheet[k].c }
   return comments
 }
 
