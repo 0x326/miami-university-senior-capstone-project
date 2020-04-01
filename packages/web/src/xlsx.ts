@@ -1,6 +1,8 @@
-/* eslint-disable security/detect-object-injection */
+/* eslint-disable security/detect-object-injection, unicorn/prevent-abbreviations */
 
-// TODO (wimmeldj) [2020-04-01] Still need to persist comments
+// detect-object-injection disabled becaue all cases are safe
+// unicorn disabled because ws obviously represents a worksheet, not a webSocket
+
 // TODO (wimmeldj) [2020-05-01] don't use unix timestamps. Use human readable and in locale
 
 import assert from 'assert'
@@ -93,7 +95,6 @@ function parseMeta(sheet: XLSX.WorkSheet): ExperimentMetaData {
       // eslint-disable-next-line no-cond-assign
     } else if (match = /^B(\d+)$/.exec(cellid)) { // B column has vals
       const col = parseInt(match[1], 10)
-      // eslint-disable-next-line security/detect-object-injection
       vals[col] = sheet[cellid]
     }
   }
@@ -223,10 +224,10 @@ function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentI
   return [data, dummyMap.asImmutable()]
 }
 
-function parseComments(ws: XLSX.WorkSheet, ): Comments {
+function parseComments(ws: XLSX.WorkSheet): Comments {
   const comments: Comments = {}
-  for (let k of Object.keys(ws).filter(k => k !== "!ref" && ws[k].c))
-    comments[k] = ws[k].c
+  /* eslint-disable no-shadow */
+  for (const k of Object.keys(ws).filter((k) => k !== '!ref' && ws[k].c)) { comments[k] = ws[k].c }
   return comments
 }
 
@@ -241,7 +242,7 @@ function binToDisplay(dat: Uint8Array):
   const wb = XLSX.read(dat, { type: 'array' })
   const metadat = parseMeta(wb.Sheets.Metadata)
   const [experimentData, dummies] = parseData(wb.Sheets.Data, metadat)
-  const comments = parseComments(wb.Sheets.Data); // only makes sense to persist comments in the data sheet
+  const comments = parseComments(wb.Sheets.Data) // only makes sense to persist comments in the data sheet
 
   // bleh
   const onlyKey = experimentData.keySeq().toArray()[0]
@@ -327,6 +328,7 @@ function displayToWB(
   rdo: RackDisplayOrder,
   cdo: CageDisplayOrder,
   dm: DummyMap,
+  co: Comments,
 ): XLSX.WorkBook {
   const ret = XLSX.utils.book_new()
   // for simpler parsing
@@ -340,7 +342,10 @@ function displayToWB(
     treatments: metadata.treatments,
   }
   XLSX.utils.book_append_sheet(ret, metadataToWS(md), 'Metadata')
-  XLSX.utils.book_append_sheet(ret, experimentToWS(md, ex, rdo, cdo, dm), 'Data')
+  const data = experimentToWS(md, ex, rdo, cdo, dm)
+  // apply comments
+  for (const k of Object.keys(data).filter((k) => k !== '!ref' && co[k])) { data[k].c = co[k] }
+  XLSX.utils.book_append_sheet(ret, data, 'Data')
   return ret
 }
 
@@ -353,7 +358,7 @@ export {
 
 // import * as fs from 'fs'
 // let dat = new Uint8Array(fs.readFileSync('./test.xlsx'))
-// const [metadat, experiment, rdo, cdo, dm] = binToDisplay(dat)
+// const [metadat, experiment, rdo, cdo, dm, co] = binToDisplay(dat)
 
 // console.log("====\n metadat \n====")
 // console.log(metadat)
@@ -367,10 +372,12 @@ export {
 // console.log(cdo.toJS())
 // console.log('====\ndummy map:\n====')
 // console.log(dm.toJS())
+// console.log('====\ncomments: \n====')
+// console.log(co)
 // console.log('====\ndisplayToWb:\n====')
 // let wb = displayToWB(metadat,
 //   (experiment as any).get('Addiction Study 12_Quinn_Mon, 19 Jan 1970 04:32:24 GMT'),
-//   rdo, cdo, dm)
+//   rdo, cdo, dm, co)
 // XLSX.writeFile(wb, 'from-test.xlsx')
 
 // // do it again, but use output from-test as input
@@ -378,7 +385,7 @@ export {
 // const again = binToDisplay(dat)
 // wb = displayToWB(again[0],
 //   (again[1] as any).get('Addiction Study 12_Quinn_Mon, 19 Jan 1970 04:32:24 GMT'),
-//   again[2], again[3], again[4])
+//   again[2], again[3], again[4], again[5])
 // XLSX.writeFile(wb, 'from-from-test.xlsx')
 
 /*
