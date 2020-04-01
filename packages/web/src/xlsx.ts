@@ -7,9 +7,7 @@ import assert from 'assert'
 
 import * as XLSX from 'xlsx'
 
-import dayjs, {
-  Dayjs,
-} from 'dayjs'
+import dayjs from 'dayjs'
 
 import {
   List,
@@ -70,12 +68,12 @@ const lists = [
 
 function parseMeta(sheet: XLSX.WorkSheet): ExperimentMetaData {
   const kv: Metadata = {
-    'date initialized': null,     // startDate: Dayjs
-    'experiment title': null,     // experimentName
-    'last updated': null,         // lastUpdated Dayjs
-    'num treatments': null,       // bottlesPerCage
+    'date initialized': null, // startDate: Dayjs
+    'experiment title': null, // experimentName
+    'last updated': null, // lastUpdated Dayjs
+    'num treatments': null, // bottlesPerCage
     'primary experimenter': null, // experimentLeadname
-    'total sessions': null,       // sessionCount
+    'total sessions': null, // sessionCount
     treatments: null,
   }
 
@@ -326,7 +324,7 @@ function displayToWB(
     'num treatments': metadata.bottlesPerCage,
     'primary experimenter': metadata.experimentLeadName,
     'total sessions': metadata.sessionCount,
-    'treatments': metadata.treatments,
+    treatments: metadata.treatments,
   }
   XLSX.utils.book_append_sheet(ret, metadataToWS(md), 'Metadata')
   XLSX.utils.book_append_sheet(ret, experimentToWS(md, ex, rdo, cdo, dm), 'Data')
@@ -338,7 +336,7 @@ export {
   displayToWB,
 }
 
-// // test functionality
+// test functionality
 
 // import * as fs from 'fs'
 // let dat = new Uint8Array(fs.readFileSync('./test.xlsx'))
