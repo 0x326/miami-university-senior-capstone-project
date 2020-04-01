@@ -223,13 +223,6 @@ function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentI
   return [data, dummyMap.asImmutable()]
 }
 
-function parseComments(sheet: XLSX.WorkSheet): Comments {
-  const comments: Comments = {}
-  /* eslint-disable no-shadow */
-  for (const k of Object.keys(sheet).filter((k) => k !== '!ref' && sheet[k].c)) { comments[k] = sheet[k].c }
-  return comments
-}
-
 function binToDisplay(dat: Uint8Array):
   [ExperimentMetaData,
     Map<string, ExperimentData>,
@@ -241,7 +234,9 @@ function binToDisplay(dat: Uint8Array):
   const wb = XLSX.read(dat, { type: 'array' })
   const metadat = parseMeta(wb.Sheets.Metadata)
   const [experimentData, dummies] = parseData(wb.Sheets.Data, metadat)
-  const comments = parseComments(wb.Sheets.Data) // only makes sense to persist comments in the data sheet
+  const comments: Comments = {}
+  /* eslint-disable no-shadow */
+  for (const k of Object.keys(wb.Sheets.Data).filter((k) => k !== '!ref' && wb.Sheets.Data[k].c)) { comments[k] = wb.Sheets.Data[k].c }
 
   // bleh
   const onlyKey = experimentData.keySeq().toArray()[0]
@@ -353,7 +348,7 @@ export {
   displayToWB,
 }
 
-// test functionality
+// // test functionality
 
 // import * as fs from 'fs'
 // let dat = new Uint8Array(fs.readFileSync('./test.xlsx'))
