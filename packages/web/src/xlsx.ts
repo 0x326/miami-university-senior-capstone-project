@@ -147,12 +147,12 @@ function treatmentPair(datPair: [XLSX.CellObject, XLSX.CellObject]): [string, nu
 }
 
 // avert your eyes
-function parseData(ds: XLSX.WorkSheet, pairs: Metadata): [Map<ExperimentId, ExperimentData>, DummyMap] {
-  const colsPerSess = pairs['num treatments'] as number * 2 // pre and post weights for each treatment
+function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentId, ExperimentData>, DummyMap] {
+  const colsPerSess = md.bottlesPerCage * 2 // pre and post weights for each treatment
 
-  const eid = `${String(pairs['experiment title'])}_${
-    String(pairs['primary experimenter'])}_${
-    String(new Date(pairs['date initialized'] as number).toLocaleString())}`
+  const eid = `${md.experimentName}_${
+    md.experimentLeadName}_${
+    String(md.startDate)}`
 
   const dummyMap = Map<List<number>, boolean>().asMutable()
 
@@ -205,7 +205,6 @@ function parseData(ds: XLSX.WorkSheet, pairs: Metadata): [Map<ExperimentId, Expe
         const ret: Map<CageId, CageData> = Map<CageId, CageData>()
           .set(cageid, sessions.asImmutable())
 
-        // TODO (wimmeldj) [2020-04-01] tolerate booleans too
         assert(isDummy.t === 'n' || isDummy.t === 'b')
 
         if (isDummy.t === 'n') { dummyMap.set(List.of(rackid, cageid), isDummy.v === 1) } else { dummyMap.set(List.of(rackid, cageid), isDummy.v) }
