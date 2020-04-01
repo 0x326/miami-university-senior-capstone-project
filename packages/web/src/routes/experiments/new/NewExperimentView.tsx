@@ -109,7 +109,7 @@ function NewExperiment(props: Props): JSX.Element {
                       lastUpdated: dayjs(),
                       sessionCount: Number(sessionCount),
                       bottlesPerCage: Number(bottlesPerCage),
-                      treatments: treatments.split(',').map((x) => x.trim()) // store as list
+                      treatments: treatments.split(',').map((x) => x.trim()), // store as list
                     })
                   }
                 }}
