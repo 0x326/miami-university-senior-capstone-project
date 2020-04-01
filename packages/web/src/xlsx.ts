@@ -37,7 +37,7 @@ interface Metadata {
   [key: string]: string | number | string[] | null;
 }
 
-interface Comments {
+export interface Comments {
   [key: string]: XLSX.Comment;
 }
 
