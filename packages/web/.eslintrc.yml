@@ -17,6 +17,13 @@ overrides:
       security/detect-unsafe-regex: off
 
   - files:
+    - 'src/xlsx.ts'
+
+    rules:
+      security/detect-object-injection: off
+      unicorn/prefer-spread: off # because using spread causes other issues
+
+  - files:
     - 'src/AppModalDrawer.tsx'
 
     rules:

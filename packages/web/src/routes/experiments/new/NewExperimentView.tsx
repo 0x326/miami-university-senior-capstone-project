@@ -47,8 +47,8 @@ export interface ExperimentMetaData extends Readonly<{
   lastUpdated: Dayjs;
   sessionCount: number;
   bottlesPerCage: number;
-  weighsPerBottle: number;
-}> {}
+  treatments: string[];
+}> { }
 
 interface Props {
   onCancelAction: () => void;
@@ -66,14 +66,14 @@ function NewExperiment(props: Props): JSX.Element {
   const [startDate, setStartDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [sessionCount, setSessionCount] = useState('1')
   const [bottlesPerCage, setBottlesPerCage] = useState('1')
-  const [weighsPerBottle, setWeighsPerBottle] = useState('1')
+  const [treatments, setTreatments] = useState('')
 
   const isExperimentNameValid = experimentName.length > 0
   const isExperimentLeadNameValid = experimentLeadName.length > 0
   const isStartDateValid = dayjs(startDate).isValid()
   const isSessionCountValid = Number(sessionCount) > 0
   const isBottlesPerCageValid = Number(bottlesPerCage) > 0
-  const isWeighsPerBottleValid = Number(weighsPerBottle) > 0
+  const isTreatmentsValid = treatments.trim().split(',').length > 0
 
   const areAllFieldsValid = [
     isExperimentNameValid,
@@ -81,7 +81,7 @@ function NewExperiment(props: Props): JSX.Element {
     isStartDateValid,
     isSessionCountValid,
     isBottlesPerCageValid,
-    isWeighsPerBottleValid,
+    isTreatmentsValid,
   ].every((valid) => valid)
 
   return (
@@ -109,7 +109,7 @@ function NewExperiment(props: Props): JSX.Element {
                       lastUpdated: dayjs(),
                       sessionCount: Number(sessionCount),
                       bottlesPerCage: Number(bottlesPerCage),
-                      weighsPerBottle: Number(weighsPerBottle),
+                      treatments: treatments.trim().split(',').map((x) => x.trim()), // store as list
                     })
                   }
                 }}
@@ -178,12 +178,12 @@ function NewExperiment(props: Props): JSX.Element {
           </GridCell>
           <GridCell span={4}>
             <TextField
-              label="Weighs per bottle"
-              type="number"
-              value={weighsPerBottle}
-              invalid={!isWeighsPerBottleValid}
+              label="Treatments"
+              type="text"
+              value={treatments}
+              invalid={!isTreatmentsValid}
               onChange={(event: FormEvent<HTMLInputElement>): void => {
-                setWeighsPerBottle(event.currentTarget.value)
+                setTreatments(event.currentTarget.value)
               }}
             />
           </GridCell>
