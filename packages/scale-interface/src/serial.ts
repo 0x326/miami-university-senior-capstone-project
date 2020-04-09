@@ -1,4 +1,8 @@
 import {
+  PassThrough,
+} from 'stream'
+
+import {
   promisify,
 } from 'util'
 
@@ -23,6 +27,14 @@ let serialPort: {
   parserOnce: ParserOnce;
 } | null = null
 let portCloseError: Error | null = null
+
+// Define a function that satisfies the typechecker, but should *never* be possible to call
+const throwError = (): void => {
+  throw new Error('Programming error - This function should be never be possible to call')
+}
+
+// Define a function that satisfies the typechecker, but is safe to call
+const noop = (): void => {}
 
 function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void> {
   if (serialPort !== null) {
@@ -52,14 +64,10 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
   }))
 
   const parserOnce: ParserOnce = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let resolveAttach: (() => void) | any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let rejectAttach: ((error: Error) => void) | any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let resolveData: ((data: string) => void) | any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let rejectData: ((error: Error) => void) | any
+    let resolveAttach: (() => void) = throwError
+    let rejectAttach: ((error: Error) => void) = throwError
+    let resolveData: ((data: string) => void) = throwError
+    let rejectData: ((error: Error) => void) = throwError
 
     const attachPromise: Promise<void> = new Promise((resolve, reject): void => {
       [resolveAttach, rejectAttach] = [resolve, reject]
@@ -69,8 +77,19 @@ function open(path: string, options: SerialPort.OpenOptions = {}): Promise<void>
     })
 
     try {
-      parser.once('data', (data: string) => resolveData(data))
-      parser.once('error', (error: Error) => rejectData(error))
+      let onceData: (data: string) => void = noop
+      let onceError: (error: Error) => void = noop
+
+      onceData = (data: string): void => {
+        resolveData(data)
+        parser.removeListener('error', onceError)
+      }
+      onceError = (error: Error): void => {
+        rejectData(error)
+        parser.removeListener('data', onceData)
+      }
+      parser.once('data', onceData)
+      parser.once('error', onceError)
       resolveAttach()
     } catch (error) {
       rejectAttach(error)
@@ -115,25 +134,25 @@ async function close(): Promise<void> {
   }
 }
 
-enum ActionReply {
+export enum ActionReply {
   ZEROED_BALANCE,
   CHANGED_UNITS,
 }
 
-enum MeasurementType {
+export enum MeasurementType {
   STABLE_WEIGHT = 'ST',
   STABLE_COUNTING = 'QT',
   UNSTABLE_WEIGHT = 'US',
   OUT_OF_RANGE = 'OL',
 }
 
-interface Measurement {
+export interface Measurement {
   type: MeasurementType;
   value: number;
   unit: Unit;
 }
 
-type Unit = 'g' | 'pc' | '%' | 'oz' | 'lb' | 'ozt' | 'ct' | 'momme' | 'dwt' | 'grain' | 'tael'
+export type Unit = 'g' | 'pc' | '%' | 'oz' | 'lb' | 'ozt' | 'ct' | 'momme' | 'dwt' | 'grain' | 'tael'
 
 function parse(data: string): Measurement | ActionReply {
   if (data === 'Z') {
@@ -198,9 +217,9 @@ function parse(data: string): Measurement | ActionReply {
   }
 }
 
-function subscribe(includeActionReplies: true): AsyncIterable<Measurement | ActionReply>
-function subscribe(includeActionReplies?: false): AsyncIterable<Measurement>
-async function* subscribe(includeActionReplies = false): AsyncIterable<Measurement | ActionReply> {
+function subscribe(includeActionReplies: true): AsyncGenerator<Measurement | ActionReply>
+function subscribe(includeActionReplies?: false): AsyncGenerator<Measurement>
+async function* subscribe(includeActionReplies = false): AsyncGenerator<Measurement | ActionReply> {
   if (serialPort === null) {
     throw new Error('Port is not open')
   }
@@ -209,10 +228,14 @@ async function* subscribe(includeActionReplies = false): AsyncIterable<Measureme
     parser,
   } = serialPort
 
+  // Pipe into new stream to allow multiple users
+  const parserCopy = new PassThrough()
+  parser.pipe(parserCopy)
+
   // Set the stream to 'flowing' if it is not already
   setImmediate(() => parser.resume())
-  for await (const data of parser) {
-    const parsedData = parse(data)
+  for await (const data of parserCopy) {
+    const parsedData = parse(String(data))
     switch (parsedData) {
       case ActionReply.ZEROED_BALANCE:
       case ActionReply.CHANGED_UNITS:

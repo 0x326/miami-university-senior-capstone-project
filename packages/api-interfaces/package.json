@@ -1,0 +1,12 @@
+{
+  "name": "api-interfaces",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext .tsx,.ts,.jsx,.js src/ --ignore-path ../../.eslintignore",
+    "build": "tsc --build"
+  },
+  "devDependencies": {
+    "typescript": "3.8.3"
+  }
+}
