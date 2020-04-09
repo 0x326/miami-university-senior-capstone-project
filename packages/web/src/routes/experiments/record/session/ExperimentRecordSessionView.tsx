@@ -24,17 +24,19 @@ import '@material/typography/dist/mdc.typography.css'
 import { Button } from '@rmwc/button'
 
 import {
-  CageId,
   BottleType,
-} from '../../../types'
+} from '../../../../types'
+
+import {
+  CageId,
+} from '../../../experiment-dashboard/ExperimentDashboard'
 
 import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
-import {
-  DataRecordingScreen,
-} from './DataRecordingScreen'
+
 import { TextField } from '@rmwc/textfield'
+import DataRecordingScreen from './DataRecordingScreen'
 
 
 interface Props {
@@ -63,7 +65,7 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
   const [cageIdsToRecord, setCageIdsToRecord] = useState(List<CageId>())
   const [dataEntries, setDataEntries] = useState(Map<CageId, number>())
 
-  const cageIdToRecord = cageIdsToRecord.first()
+  const cageIdToRecord: number = cageIdsToRecord.first()
 
   return (
     <>
@@ -86,9 +88,7 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
             .set(cageIdToRecord, weight))
 
           if (cageIdsToRecord.size <= 1 && bottleTypesToRecord.size >= 2) {
-            // TODO (wael27) [2020-03-29]: Think about switching to next bottle type
-
-            setCageIdsToRecord()  // TODO (wael27) [2020-03-29]: Reset to the full list
+            setCageIdsToRecord(cageIdsToRecord)
 
             const newBottleTypesToRecord = bottleTypesToRecord.shift()
             setBottleType(newBottleTypesToRecord.first())
@@ -97,9 +97,10 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
             setCageIdsToRecord((prevCageIdsToRecord) => prevCageIdsToRecord.shift())
           }
 
-          // TODO (wael27) [2020-03-29]: Call when we are done with the last bottle of the last bottle type
-          onEnd(dataEntries)
-        })}
+          if (cageIdsToRecord.size <= 1 && bottleTypesToRecord.size <= 1) {
+            onEnd()
+          }
+        }}
       />
     </>
   )

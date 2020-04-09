@@ -1,4 +1,7 @@
-import React, { useState } from 'react'
+import React, {
+  useState,
+  FormEvent,
+} from 'react'
 
 import {
   TopAppBar,
@@ -44,7 +47,7 @@ function DataRecordingScreen(props: Props): JSX.Element {
           label="Enter Weight"
           type="double"
           value={weight}
-          onChange={(newWeight) => setWeight(newWeight)}
+          onChange={(newWeight) => setWeight(newWeight.currentTarget.value)}
         />
       </Typography>
 
