@@ -142,6 +142,10 @@ const App: React.FC = () => {
         <Route path="/home">
           <LandingPage
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            // onExperimentDataChange={(newExperimentData): void => {
+            //   setExperiments(newExperimentData)
+            //   // Probably other things as well
+            // }}
           />
         </Route>
         <Route path="/scale-api-tester">

@@ -32,17 +32,21 @@ import { Button } from '@rmwc/button'
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarActionItem, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 import { Tooltip } from '@rmwc/tooltip'
 
+import {
+  binToDisplay,
+} from '../../xlsx'
+
 interface Props {
   onDrawerOpen: () => void;
+  // onExperimentDataChange: (newExperimentData) => void
 }
 
 function LandingPage(props: Props): JSX.Element {
   const {
     onDrawerOpen,
+    // onExperimentDataChange,
   } = props
 
-  const [file, setFile] = useState("A file");
-  const { url } = useRouteMatch() || { url: '' }
   const history = useHistory()
 
   return (
@@ -56,15 +60,20 @@ function LandingPage(props: Props): JSX.Element {
       </TopAppBarRow>
     </TopAppBar>
     <TopAppBarFixedAdjust />
-    <Button
+
+    <button
       onClick={e => history.push('/experiments/new') }
-    >New Experiment</Button>
-    <Button
-      value={file}
-      onClick={e => setFile("New File")}
-      type="file"
-    >Import Experiment</Button>
-    <span>{file}</span>
+    >New Experiment</button>
+
+    <FileInput
+      onFileUpload={(fileData) => {
+        // Call xlsx library
+        console.log(binToDisplay(new Uint8Array(fileData)))
+
+        // Ask parent to update experiment data
+        // onExperimentDataChange(/* This is where the new imported experiment data will be inserted*/)
+      }}
+    />
     </>
   )
 }

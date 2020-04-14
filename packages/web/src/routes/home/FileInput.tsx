@@ -1,30 +1,63 @@
-import React from 'react'
+import React, {
+  useRef,
+} from 'react'
 import { FormEvent } from 'react';
 
+// Old API (React classes)
+// class FooComponent {
+//   constructor(props) {
+//     super(props)
+
+//   }
+
+//   someCustomThing() {
+
+//   }
+
+//   // Special ("lifecycle method") -- Does not apply for these
+//   componentDidMount() {
+
+//   }
+
+//   render() {
+//     this.someCustomThing
+//   }
+// }
+
+
+
+// new API (React hooks)
+
 interface Props {
-  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
-}
-
-var fileInput = <input type="file" />
-
-function handleSubmit(event: FormEvent<HTMLFormElement>) {
-  event.preventDefault();
-  alert(
-    // `Selected file - ${fileInput.files[0].name}`
-  );
+  onFileUpload: (file: ArrayBuffer) => void;
 }
 
 function FileInput(props: Props): JSX.Element {
   const {
-
+    onFileUpload,
   } = props
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (inputRef.current !== null && inputRef.current.files !== null) {
+        const fileReader = new FileReader();
+        const file = inputRef.current.files[0]
+        // fileReader.readAsText(file)
+        fileReader.readAsArrayBuffer(file)
+
+        fileReader.onload = function() {
+          onFileUpload(fileReader.result as ArrayBuffer)
+        }
+    }
+  }
 
   return (
     <>
       <form onSubmit={handleSubmit}>
         <label>
-          Upload file:
-          <input type="file" />
+          <input type="file" ref={inputRef} />
         </label>
         <br />
         <button type="submit">Submit</button>
