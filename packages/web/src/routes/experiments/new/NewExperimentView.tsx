@@ -39,6 +39,7 @@ import '@rmwc/tooltip/tooltip.css'
 import dayjs, {
   Dayjs,
 } from 'dayjs'
+import { useHistory } from 'react-router-dom'
 
 export interface ExperimentMetaData extends Readonly<{
   experimentName: string;
@@ -84,6 +85,8 @@ function NewExperiment(props: Props): JSX.Element {
     isTreatmentsValid,
   ].every((valid) => valid)
 
+  const history = useHistory()
+
   return (
     <>
       <TopAppBar>
@@ -91,7 +94,7 @@ function NewExperiment(props: Props): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={onCancelAction}
+              onClick={e => history.goBack()}
             />
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>

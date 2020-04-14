@@ -48,6 +48,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
 import ScaleApiTester from './ScaleApiTester'
+import LandingPage from './routes/home'
 
 export type ExperimentId = RouteId
 
@@ -105,7 +106,7 @@ const App: React.FC = () => {
       />
       <Switch>
         <Route exact path="/">
-          <Redirect to="/experiments" />
+          <Redirect to="/home" />
         </Route>
         <Route path="/experiment-dashboard">
           <ExperimentDashboard
@@ -136,6 +137,11 @@ const App: React.FC = () => {
 
               history.push('/experiments')
             })}
+          />
+        </Route>
+        <Route path="/home">
+          <LandingPage
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
           />
         </Route>
         <Route path="/scale-api-tester">
