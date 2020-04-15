@@ -70,29 +70,29 @@ const App: React.FC = () => {
   const [cageDisplayOrders, setCageDisplayOrders] = useState<CageDisplayOrder>(Map())
   const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
 
-  useEffect(() => {
-    import('./sampleData')
-      .then(({
-        sampleExperimentMetadata,
-        sampleExperiments,
-        sampleExperimentDisplayNames,
-        sampleExperimentDisplayOrder,
-        sampleCageDisplayOrders,
-        sampleRackDisplayOrder,
-      }) => {
-        setExperimentMetadata(sampleExperimentMetadata)
-        setExperiments(sampleExperiments)
-        setExperimentDisplayNames(sampleExperimentDisplayNames)
-        setExperimentDisplayOrder(sampleExperimentDisplayOrder)
-        setCageDisplayOrders(sampleCageDisplayOrders)
-        setRackDisplayOrder(sampleRackDisplayOrder)
+  // useEffect(() => {
+  //   import('./sampleData')
+  //     .then(({
+  //       sampleExperimentMetadata,
+  //       sampleExperiments,
+  //       sampleExperimentDisplayNames,
+  //       sampleExperimentDisplayOrder,
+  //       sampleCageDisplayOrders,
+  //       sampleRackDisplayOrder,
+  //     }) => {
+  //       setExperimentMetadata(sampleExperimentMetadata)
+  //       setExperiments(sampleExperiments)
+  //       setExperimentDisplayNames(sampleExperimentDisplayNames)
+  //       setExperimentDisplayOrder(sampleExperimentDisplayOrder)
+  //       setCageDisplayOrders(sampleCageDisplayOrders)
+  //       setRackDisplayOrder(sampleRackDisplayOrder)
 
-        snackbarQueuePush({
-          message: 'Sample data loaded',
-          actions: List(),
-        })
-      })
-  }, [snackbarQueuePush])
+  //       snackbarQueuePush({
+  //         message: 'Sample data loaded',
+  //         actions: List(),
+  //       })
+  //     })
+  // }, [snackbarQueuePush])
 
   return (
     <>
