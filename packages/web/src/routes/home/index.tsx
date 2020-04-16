@@ -1,50 +1,48 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
-  useRouteMatch,
-  Switch,
-  Route,
   useHistory,
 } from 'react-router-dom'
 
 import {
-  List,
   Map,
 } from 'immutable'
 
 import {
-  DisplayName,
-  RouteId,
-  RouteMap,
+  experimentId,
 } from '../../types'
 
-import NoMatch from '../NoMatch'
 import {
   ExperimentId,
 } from '../../App'
 
 
 import FileInput from './FileInput'
-import NewExperiment, {
+import {
   ExperimentMetaData,
 } from '../experiments/new/NewExperimentView'
-import { Button } from '@rmwc/button'
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarActionItem, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
-import { Tooltip } from '@rmwc/tooltip'
 
 import {
-  binToDisplay,
+  binToDisplay, DummyMap,
 } from '../../xlsx'
+import { ExperimentData, RackDisplayOrder, CageDisplayOrder } from '../experiment-dashboard/ExperimentDashboard'
 
 interface Props {
   onDrawerOpen: () => void;
-  // onExperimentDataChange: (newExperimentData) => void
+  onExperimentDataChange: (newExperimentData : Map<string, ExperimentData>,
+    newMetaData: Map<string, ExperimentMetaData>,
+    newRackDisplayOrder: RackDisplayOrder,
+    newCageDisplayOrder: CageDisplayOrder,
+    newDummyMap: DummyMap) => void,
+  metaData: Map<ExperimentId, ExperimentMetaData>,
 }
 
 function LandingPage(props: Props): JSX.Element {
   const {
     onDrawerOpen,
-    // onExperimentDataChange,
+    onExperimentDataChange,
+    metaData,
   } = props
 
   const history = useHistory()
@@ -62,18 +60,25 @@ function LandingPage(props: Props): JSX.Element {
     <TopAppBarFixedAdjust />
 
     <button
-      onClick={e => history.push('/experiments/new') }
+      onClick={e => history.push('/experiments/new')}
     >New Experiment</button>
 
     <FileInput
       onFileUpload={(fileData) => {
         // Call xlsx library
-        console.log(binToDisplay(new Uint8Array(fileData)))
+        const [meta, ex, rdo, cdo, dm] = binToDisplay(new Uint8Array(fileData))
+        console.log(meta, ex, rdo, cdo, dm)
 
         // Ask parent to update experiment data
-        // onExperimentDataChange(/* This is where the new imported experiment data will be inserted*/)
+        onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm)
+
       }}
     />
+    <span>{JSON.stringify(metaData)}</span>
+    <br/>
+    <button
+      onClick={e => history.push('/')}
+    >Start Session</button>
     </>
   )
 }

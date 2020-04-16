@@ -44,7 +44,7 @@ function FileInput(props: Props): JSX.Element {
     if (inputRef.current !== null && inputRef.current.files !== null) {
         const fileReader = new FileReader();
         const file = inputRef.current.files[0]
-        // fileReader.readAsText(file)
+
         fileReader.readAsArrayBuffer(file)
 
         fileReader.onload = function() {

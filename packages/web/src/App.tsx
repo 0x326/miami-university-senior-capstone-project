@@ -70,6 +70,7 @@ const App: React.FC = () => {
   const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List<ExperimentId>())
   const [cageDisplayOrders, setCageDisplayOrders] = useState<CageDisplayOrder>(Map())
   const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
+  const [dummyMap, setDummyMap] = useState(Map<List<number>, boolean>())
 
   // useEffect(() => {
   //   import('./sampleData')
@@ -142,10 +143,14 @@ const App: React.FC = () => {
         <Route path="/home">
           <LandingPage
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
-            // onExperimentDataChange={(newExperimentData): void => {
-            //   setExperiments(newExperimentData)
-            //   // Probably other things as well
-            // }}
+            onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders, newDummyMap): void => {
+              setExperiments(newExperimentData)
+              setExperimentMetadata(newMetaData)
+              setRackDisplayOrder(newRackDisplayOrder)
+              setCageDisplayOrders(newCageDisplayOrders)
+              setDummyMap(newDummyMap)
+            }}
+            metaData={experimentMetadata}
           />
         </Route>
         <Route path="/scale-api-tester">
