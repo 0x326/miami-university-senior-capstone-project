@@ -77,7 +77,7 @@ function LandingPage(props: Props): JSX.Element {
     <span>{JSON.stringify(metaData)}</span>
     <br/>
     <button
-      onClick={e => history.push('/')}
+      onClick={e => history.push('/experiments/record/view')}
     >Start Session</button>
     </>
   )

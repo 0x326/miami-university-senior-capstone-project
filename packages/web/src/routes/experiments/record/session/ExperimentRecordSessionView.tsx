@@ -50,20 +50,20 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
     onEnd,
   } = props
 
-  const {
-    experimentName,
-    experimentLeadName,
-    startDate,
-    lastUpdated,
-    sessionCount,
-    bottlesPerCage,
-    weighsPerBottle,
-  } = experimentMetadata
+  // const {
+  //   // experimentName,
+  //   experimentLeadName,
+  //   startDate,
+  //   lastUpdated,
+  //   sessionCount,
+  //   bottlesPerCage,
+  // } = experimentMetadata
 
   const [bottleTypesToRecord, setBottleTypesToRecord] = useState(List<BottleType>())
   const [bottleType, setBottleType] = useState<BottleType>('H₂0')
   const [cageIdsToRecord, setCageIdsToRecord] = useState(List<CageId>())
   const [dataEntries, setDataEntries] = useState(Map<CageId, number>())
+  const [experimentName, setExperimentName] = useState(experimentMetadata.experimentName)
 
   const cageIdToRecord: number = cageIdsToRecord.first()
 

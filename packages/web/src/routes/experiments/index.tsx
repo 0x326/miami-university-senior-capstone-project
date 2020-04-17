@@ -16,6 +16,7 @@ import {
   DisplayName,
   RouteId,
   RouteMap,
+  experimentId,
 } from '../../types'
 
 import NoMatch from '../NoMatch'
@@ -69,7 +70,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route exact path={`${url}/record/view`}>
           <ExperimentMetadataView
-            experimentMetadata={experimentMetadata.get('experiment-1') as ExperimentMetaData}
+            experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onRecord={(): void => history.push(`${url}/record/session`)}
           />
         </Route>

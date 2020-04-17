@@ -39,6 +39,7 @@ import {
   RouteId,
   DisplayName,
   RouteMap,
+  experimentId,
 } from './types'
 
 import useSnackbar from './useSnackbar'
@@ -49,6 +50,8 @@ import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
 import ScaleApiTester from './ScaleApiTester'
 import LandingPage from './routes/home'
+import ExperimentRecodSessionView from './routes/experiments/record/session/ExperimentRecordSessionView'
+import ExperimentMetadataView from './routes/experiments/record/view/ExperimentMetadataView'
 
 export type ExperimentId = RouteId
 
