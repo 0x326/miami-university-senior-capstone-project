@@ -391,7 +391,6 @@ THIS!
         1: {
             // cageids
             1: {
-                isDummy: true,
                 cageData: [{
                     sessionNumber: 1,
                     cageSessionData: [
