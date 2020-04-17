@@ -42,28 +42,30 @@ import DataRecordingScreen from './DataRecordingScreen'
 interface Props {
   experimentMetadata: ExperimentMetaData;
   onEnd: () => void;
+  cageIds: List<number>,
 }
 
 function ExperimentRecodSessionView(props: Props): JSX.Element {
   const {
     experimentMetadata,
     onEnd,
+    cageIds,
   } = props
 
-  // const {
-  //   // experimentName,
-  //   experimentLeadName,
-  //   startDate,
-  //   lastUpdated,
-  //   sessionCount,
-  //   bottlesPerCage,
-  // } = experimentMetadata
+  const {
+    experimentName,
+    treatments,
+    experimentLeadName,
+    startDate,
+    lastUpdated,
+    sessionCount,
+    bottlesPerCage,
+  } = experimentMetadata
 
-  const [bottleTypesToRecord, setBottleTypesToRecord] = useState(List<BottleType>())
-  const [bottleType, setBottleType] = useState<BottleType>('H₂0')
-  const [cageIdsToRecord, setCageIdsToRecord] = useState(List<CageId>())
+  const [bottleTypesToRecord, setBottleTypesToRecord] = useState(List(treatments))
+  const [bottleType, setBottleType] = useState<BottleType>(List(treatments).first())
+  const [cageIdsToRecord, setCageIdsToRecord] = useState(cageIds)
   const [dataEntries, setDataEntries] = useState(Map<CageId, number>())
-  const [experimentName, setExperimentName] = useState(experimentMetadata.experimentName)
 
   const cageIdToRecord: number = cageIdsToRecord.first()
 

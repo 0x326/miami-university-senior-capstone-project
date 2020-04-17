@@ -50,6 +50,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
 
   const { url } = useRouteMatch() || { url: '' }
   const history = useHistory()
+  const cages = [1,2,3,4,5];
+  const cageList = List(cages);
 
   return (
     <>
@@ -76,8 +78,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route exact path={`${url}/record/session`}>
           <ExperimentRecordDataView
-            experimentMetadata={experimentMetadata.get('experiment-1') as ExperimentMetaData}
+            experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onEnd={(): void => history.push(`${url}/record/view`)}
+            cageIds={cageList}
           />
         </Route>
         <Route path="*">
