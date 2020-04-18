@@ -369,8 +369,11 @@ export {
 // console.log('====\ncomments: \n====')
 // console.log(co)
 // console.log('====\ndisplayToWb:\n====')
+// console.log(experiment.toJS())
+
+
 // let wb = displayToWB(metadat,
-//   (experiment as any).get('Addiction Study 12_Quinn_Mon, 19 Jan 1970 04:32:24 GMT'),
+//   (experiment as any).get(experimentId),
 //   rdo, cdo, dm, co)
 // XLSX.writeFile(wb, 'from-test.xlsx')
 
@@ -378,7 +381,7 @@ export {
 // dat = new Uint8Array(fs.readFileSync('./from-test.xlsx'))
 // const again = binToDisplay(dat)
 // wb = displayToWB(again[0],
-//   (again[1] as any).get('Addiction Study 12_Quinn_Mon, 19 Jan 1970 04:32:24 GMT'),
+//   (again[1] as any).get(experimentId),
 //   again[2], again[3], again[4], again[5])
 // XLSX.writeFile(wb, 'from-from-test.xlsx')
 
