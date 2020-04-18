@@ -70,24 +70,24 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const [bottleType, setBottleType] = useState<BottleType>(List(treatments).first())
   const [cageIdsToRecord, setCageIdsToRecord] = useState(cageIds)
   const [dataEntries, setDataEntries] = useState(Map<[RackId, CageId], number>())
+  const [refsToRecord, setRefsToRecord] = useState((): [RackId, CageId, BottleType][] => {
+    const ret: [RackId, CageId, BottleType][] = []
+    for (let bott of treatments)
+      for (let rid of rackDisplayOrder.toArray()) {
+        const cids = cageDisplayOrder.get(rid, null)
+        if (cids !== null)
+          for (let _ of treatments)
+            for (let cid of cids.toArray())
+              ret.push([rid, cid, bott])
+      }
+    return ret
+  })
 
   // [rid, cid, bott][]
   // 1, 2
   // 1: a b c
   // 2: d e
   // cids.map
-
-  const refsToRecord: [RackId, CageId][] = []
-  for (let rid of rackDisplayOrder.toArray()) {
-    const cids = cageDisplayOrder.get(rid, null)
-    if (cids !== null) {
-      for (let _ of treatments) {
-        for (let cid of cids.toArray()) {
-          refsToRecord.push([rid, cid])
-        }
-      }
-    }
-  }
 
   // const cageIdToRecord: number = cageIdsToRecord.first()
 
