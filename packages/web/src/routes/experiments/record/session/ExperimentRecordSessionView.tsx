@@ -47,7 +47,7 @@ interface Props {
   cageIds: List<number>,
 }
 
-function ExperimentRecodSessionView(props: Props): JSX.Element {
+function ExperimentRecordSessionView(props: Props): JSX.Element {
   const {
     rackDisplayOrder,
     cageDisplayOrder,
@@ -140,4 +140,4 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
   )
 }
 
-export default ExperimentRecodSessionView
+export default ExperimentRecordSessionView
