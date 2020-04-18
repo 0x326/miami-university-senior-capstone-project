@@ -105,18 +105,19 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
       <TopAppBarFixedAdjust />
 
       <DataRecordingScreen
-        bottleName={`Rack ${refsToRecord[0]}, Bottle ${refsToRecord[1]} (${refsToRecord[2]})`}
+        bottleName={`Rack ${refsToRecord[0][0]}, Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]})`}
         isLast={cageIdsToRecord.size <= 1}
         onSubmit={(weight: number): void => {
           const refToRecord = refsToRecord.shift()
           if (refToRecord) {
             const [rid, cid] = refToRecord
+            setDataEntries(dataEntries.set([rid, cid], weight))
+          } else {
+            onEnd()
           }
 
 
-          // if (cageDisplayOrder.get(rid, null)) {}
-
-
+          // if (cageDisplayOrder.get(rid, null)) { }
 
           // setDataEntries((prevDataEntries) => prevDataEntries
           //   .set(cageIdToRecord, weight))
@@ -131,9 +132,10 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
           //   setCageIdsToRecord((prevCageIdsToRecord) => prevCageIdsToRecord.shift())
           // }
 
-          if (cageIdsToRecord.size <= 1 && bottleTypesToRecord.size <= 1) {
-            onEnd()
-          }
+          // if (cageIdsToRecord.size <= 1 && bottleTypesToRecord.size <= 1) {
+          //   onEnd()
+          // }
+
         }}
       />
     </>
