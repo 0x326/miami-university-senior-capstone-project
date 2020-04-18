@@ -242,8 +242,8 @@ function binToDisplay(dat: Uint8Array):
   const onlyKey = experimentData.keySeq().toArray()[0]
   const rackOrder = List(experimentData.getIn([onlyKey]).keySeq().toArray().sort() as [RackId])
 
-  const cageOrder = Map().asMutable() as CageDisplayOrder
-  rackOrder.map((rackid) => cageOrder.set(rackid, experimentData.getIn([onlyKey, rackid]).keySeq().toArray().sort()))
+  const cageOrder = Map<RackId, List<CageId>>().asMutable()
+  rackOrder.map((rackid) => cageOrder.set(rackid, experimentData.getIn([onlyKey, rackid]).keySeq().sort().toList()))
 
   return [metadat, experimentData, rackOrder, cageOrder.asImmutable(), dummies, comments]
 }
@@ -290,10 +290,12 @@ function experimentToWS(
 
   // data rows
   let i = rows.dataBegin
-  for (const [rid, cages] of rdo.map((x) => [x, cdo.get(x)]).toArray() as [number, number[]][]) {
+  for (const [rid, cages] of rdo.map((x) => {
+    const cages = cdo.get(x)
+    if (cages) { return [x, cages.toArray()] }
+    return null
+  }).toArray() as [number, number[]][]) {
     for (const cid of cages) {
-      // const cage = ex.getIn([rid, cid]) as Cage
-
       aoa[i] = []
       aoa[i][cols.rackid] = rid
       aoa[i][cols.cageid] = cid
@@ -348,7 +350,7 @@ export {
   displayToWB,
 }
 
-// // test functionality
+// test functionality
 
 // import * as fs from 'fs'
 // let dat = new Uint8Array(fs.readFileSync('./test.xlsx'))
