@@ -30,11 +30,14 @@ import ExperimentRecordDataView from './record/session/ExperimentRecordSessionVi
 import NewExperiment, {
   ExperimentMetaData,
 } from './new/NewExperimentView'
+import { RackId, CageId,} from '../experiment-dashboard/ExperimentDashboard'
 
 interface Props {
   onDrawerOpen: () => void;
-  experimentIds: List<RouteId>;
-  experiments: RouteMap;
+  rackDisplayOrder: List<RackId>;
+  cageDisplayOrder: Map<RackId, List<CageId>>;
+  // experimentIds: List<RouteId>;
+  // experiments: RouteMap;
   experimentMetadata: Map<ExperimentId, ExperimentMetaData>;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
 }
@@ -42,8 +45,10 @@ interface Props {
 function ExperimentsSwitch(props: Props): JSX.Element {
   const {
     onDrawerOpen,
-    experimentIds,
-    experiments,
+    rackDisplayOrder,
+    cageDisplayOrder,
+    // experimentIds,
+    // experiments,
     onCreateExperiment,
     experimentMetadata,
   } = props
@@ -56,14 +61,14 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   return (
     <>
       <Switch>
-        <Route exact path={`${url}/`}>
+        {/* <Route exact path={`${url}/`}>
           <ExperimentList
             onDrawerOpen={onDrawerOpen}
             onNewExperimentAction={(): void => history.push(`${url}/new`)}
             experimentIds={experimentIds}
             experiments={experiments}
           />
-        </Route>
+        </Route> */}
         <Route exact path={`${url}/new`}>
           <NewExperiment
             onCancelAction={(): void => history.push(`${url}/`)}
@@ -78,6 +83,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route exact path={`${url}/record/session`}>
           <ExperimentRecordDataView
+            rackDisplayOrder={rackDisplayOrder}
+            cageDisplayOrder={cageDisplayOrder}
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onEnd={(): void => history.push(`${url}/record/view`)}
             cageIds={cageList}

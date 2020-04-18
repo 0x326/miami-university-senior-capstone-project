@@ -26,6 +26,7 @@ import ExperimentDashboard, {
   ExperimentData,
   CageDisplayOrder,
   RackDisplayOrder,
+  RackId,
 } from './routes/experiment-dashboard/ExperimentDashboard'
 
 import {
@@ -124,9 +125,14 @@ const App: React.FC = () => {
         <Route path="/experiments">
           <ExperimentsSwitch
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
-            experimentIds={experimentDisplayOrder}
-            experiments={experimentDisplayNames}
+            // experimentIds={experimentDisplayOrder}
+            // experiments={experimentDisplayNames}
             experimentMetadata={experimentMetadata}
+
+            rackDisplayOrder = {rackDisplayOrder}
+            cageDisplayOrder = {cageDisplayOrders}
+
+
             onCreateExperiment={((experimentMetaData): void => {
               const {
                 experimentName,
