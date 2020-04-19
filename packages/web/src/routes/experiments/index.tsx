@@ -31,6 +31,7 @@ import NewExperiment, {
   ExperimentMetaData,
 } from './new/NewExperimentView'
 import { RackId, CageId,} from '../experiment-dashboard/ExperimentDashboard'
+import ScaleApiTester from '../../ScaleApiTester'
 
 interface Props {
   onDrawerOpen: () => void;
@@ -47,8 +48,6 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     onDrawerOpen,
     rackDisplayOrder,
     cageDisplayOrder,
-    // experimentIds,
-    // experiments,
     onCreateExperiment,
     experimentMetadata,
   } = props
@@ -61,14 +60,6 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   return (
     <>
       <Switch>
-        {/* <Route exact path={`${url}/`}>
-          <ExperimentList
-            onDrawerOpen={onDrawerOpen}
-            onNewExperimentAction={(): void => history.push(`${url}/new`)}
-            experimentIds={experimentIds}
-            experiments={experiments}
-          />
-        </Route> */}
         <Route exact path={`${url}/new`}>
           <NewExperiment
             onCancelAction={(): void => history.push(`${url}/`)}
@@ -80,6 +71,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onRecord={(): void => history.push(`${url}/record/session`)}
           />
+          <br/><br/><br/><br/><br/>
+          <ScaleApiTester />
         </Route>
         <Route exact path={`${url}/record/session`}>
           <ExperimentRecordDataView

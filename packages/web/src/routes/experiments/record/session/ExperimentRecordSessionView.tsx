@@ -102,27 +102,6 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
           } else {
             onEnd()
           }
-
-
-          // if (cageDisplayOrder.get(rid, null)) { }
-
-          // setDataEntries((prevDataEntries) => prevDataEntries
-          //   .set(cageIdToRecord, weight))
-
-          // if (cageIdsToRecord.size <= 1 && bottleTypesToRecord.size >= 2) {
-          //   setCageIdsToRecord(cageIdsToRecord)
-
-          //   const newBottleTypesToRecord = bottleTypesToRecord.shift()
-          //   setBottleType(newBottleTypesToRecord.first())
-          //   setBottleTypesToRecord(newBottleTypesToRecord)
-          // } else {
-          //   setCageIdsToRecord((prevCageIdsToRecord) => prevCageIdsToRecord.shift())
-          // }
-
-          // if (cageIdsToRecord.size <= 1 && bottleTypesToRecord.size <= 1) {
-          //   onEnd()
-          // }
-
         }}
       />
     </>

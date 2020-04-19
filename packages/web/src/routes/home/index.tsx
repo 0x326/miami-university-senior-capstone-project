@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   useHistory,
@@ -21,7 +21,7 @@ import FileInput from './FileInput'
 import {
   ExperimentMetaData,
 } from '../experiments/new/NewExperimentView'
-import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarActionItem, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
+import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import {
   binToDisplay, DummyMap,
@@ -46,6 +46,7 @@ function LandingPage(props: Props): JSX.Element {
   } = props
 
   const history = useHistory()
+  const [confirmationMessage, setConfirmMessage] = useState("")
 
   return (
     <>
@@ -71,14 +72,21 @@ function LandingPage(props: Props): JSX.Element {
 
         // Ask parent to update experiment data
         onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm)
-
+        setConfirmMessage("File Uploaded")
       }}
     />
-    <span>{JSON.stringify(metaData)}</span>
     <br/>
+    <span>{confirmationMessage}</span>
+    <br/><br/>
     <button
-      onClick={e => history.push('/experiments/record/view')}
-    >Start Session</button>
+      onClick={e => {
+        if(confirmationMessage == "") {
+          alert("Please upload an experiment to begin session precheck.")
+        } else {
+          history.push('/experiments/record/view')}
+        }
+      }
+    >Start Session Precheck</button>
     </>
   )
 }
