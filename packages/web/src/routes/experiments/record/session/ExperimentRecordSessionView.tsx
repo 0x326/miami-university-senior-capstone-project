@@ -69,28 +69,20 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const [bottleTypesToRecord, setBottleTypesToRecord] = useState(List(treatments))
   const [bottleType, setBottleType] = useState<BottleType>(List(treatments).first())
   const [cageIdsToRecord, setCageIdsToRecord] = useState(cageIds)
-  const [dataEntries, setDataEntries] = useState(Map<[RackId, CageId], number>())
+  const [dataEntries, setDataEntries] = useState(Map<List<number | string>, number>())
   const [refsToRecord, setRefsToRecord] = useState((): [RackId, CageId, BottleType][] => {
     const ret: [RackId, CageId, BottleType][] = []
     for (let bott of treatments)
       for (let rid of rackDisplayOrder.toArray()) {
         const cids = cageDisplayOrder.get(rid, null)
         if (cids !== null)
-          for (let _ of treatments)
-            for (let cid of cids.toArray())
-              ret.push([rid, cid, bott])
+          for (let cid of cids.toArray())
+            ret.push([rid, cid, bott])
       }
     return ret
   })
 
-  // [rid, cid, bott][]
-  // 1, 2
-  // 1: a b c
-  // 2: d e
-  // cids.map
-
   // const cageIdToRecord: number = cageIdsToRecord.first()
-
   return (
     <>
       <TopAppBar>
@@ -110,8 +102,8 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
         onSubmit={(weight: number): void => {
           const refToRecord = refsToRecord.shift()
           if (refToRecord) {
-            const [rid, cid] = refToRecord
-            setDataEntries(dataEntries.set([rid, cid], weight))
+            const [rid, cid, bott] = refToRecord
+            setDataEntries(dataEntries.set(List.of<any>(rid, cid, bott), weight))
           } else {
             onEnd()
           }
