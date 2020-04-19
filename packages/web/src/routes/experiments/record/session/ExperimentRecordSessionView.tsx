@@ -96,7 +96,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
         onSubmit={(weight: number): void => {
           const refToRecord = refsToRecord.shift()
           console.log(refsToRecord.length)
-          if (refToRecord) {
+          if (refsToRecord.length > 0 && refToRecord) {
             const [rid, cid, bott] = refToRecord
             setDataEntries(dataEntries.set(List.of<any>(rid, cid, bott), weight))
           } else {
