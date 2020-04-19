@@ -16,12 +16,7 @@ import {
   TopAppBarTitle,
 } from '@rmwc/top-app-bar'
 
-import {
-  Typography,
-} from '@rmwc/typography'
 import '@material/typography/dist/mdc.typography.css'
-
-import { Button } from '@rmwc/button'
 
 import {
   BottleType,
@@ -35,7 +30,6 @@ import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
 
-import { TextField } from '@rmwc/textfield'
 import DataRecordingScreen from './DataRecordingScreen'
 
 
@@ -98,9 +92,10 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
 
       <DataRecordingScreen
         bottleName={`Rack ${refsToRecord[0][0]}, Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]})`}
-        isLast={cageIdsToRecord.size <= 1}
+        isLast={refsToRecord.length <= 1}
         onSubmit={(weight: number): void => {
           const refToRecord = refsToRecord.shift()
+          console.log(refsToRecord.length)
           if (refToRecord) {
             const [rid, cid, bott] = refToRecord
             setDataEntries(dataEntries.set(List.of<any>(rid, cid, bott), weight))
