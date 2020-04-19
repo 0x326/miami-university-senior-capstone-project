@@ -2,7 +2,6 @@
 // TODO (0x326) [2020-05-10] Remove extraneous @rmwc dependencies
 
 import React, {
-  useEffect,
   useState,
 } from 'react'
 
@@ -26,7 +25,6 @@ import ExperimentDashboard, {
   ExperimentData,
   CageDisplayOrder,
   RackDisplayOrder,
-  RackId,
 } from './routes/experiment-dashboard/ExperimentDashboard'
 
 import {
@@ -51,8 +49,6 @@ import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
 import ScaleApiTester from './ScaleApiTester'
 import LandingPage from './routes/home'
-import ExperimentRecodSessionView from './routes/experiments/record/session/ExperimentRecordSessionView'
-import ExperimentMetadataView from './routes/experiments/record/view/ExperimentMetadataView'
 
 export type ExperimentId = RouteId
 

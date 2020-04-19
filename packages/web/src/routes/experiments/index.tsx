@@ -15,7 +15,6 @@ import {
 import {
   DisplayName,
   RouteId,
-  RouteMap,
   experimentId,
 } from '../../types'
 
@@ -24,7 +23,6 @@ import {
   ExperimentId,
 } from '../../App'
 
-import ExperimentList from './ExperimentList'
 import ExperimentMetadataView from './record/view/ExperimentMetadataView'
 import ExperimentRecordDataView from './record/session/ExperimentRecordSessionView'
 import NewExperiment, {
@@ -37,8 +35,6 @@ interface Props {
   onDrawerOpen: () => void;
   rackDisplayOrder: List<RackId>;
   cageDisplayOrder: Map<RackId, List<CageId>>;
-  // experimentIds: List<RouteId>;
-  // experiments: RouteMap;
   experimentMetadata: Map<ExperimentId, ExperimentMetaData>;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
 }
