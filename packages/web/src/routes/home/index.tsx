@@ -67,12 +67,15 @@ function LandingPage(props: Props): JSX.Element {
     <FileInput
       onFileUpload={(fileData) => {
         // Call xlsx library
-        const [meta, ex, rdo, cdo, dm] = binToDisplay(new Uint8Array(fileData))
-        console.log(meta, ex, rdo, cdo, dm)
-
-        // Ask parent to update experiment data
-        onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm)
-        setConfirmMessage("File Uploaded")
+        try {
+          const [meta, ex, rdo, cdo, dm] = binToDisplay(new Uint8Array(fileData))
+          console.log(meta, ex, rdo, cdo, dm)
+          // Ask parent to update experiment data
+          onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm)
+          setConfirmMessage("File Uploaded")
+        } catch (e) {
+          alert("The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.")
+        }
       }}
     />
     <br/>
