@@ -130,18 +130,8 @@ const App: React.FC = () => {
 
 
             onCreateExperiment={((experimentMetaData): void => {
-              const {
-                experimentName,
-              } = experimentMetaData
-
-              const experimentId = uuid4()
-              setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
-              setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
-                .set(experimentId, experimentName))
-              setExperimentDisplayOrder((prevExperimentDisplayOrder) => prevExperimentDisplayOrder
-                .push(experimentId))
-
-              history.push('/experiments')
+              setExperimentMetadata(Map<string, ExperimentMetaData>().set(experimentId, experimentMetaData))
+              history.push('/experiments/record/view')
             })}
           />
         </Route>

@@ -40,6 +40,7 @@ import dayjs, {
   Dayjs,
 } from 'dayjs'
 import { useHistory } from 'react-router-dom'
+import { Button } from '@rmwc/button'
 
 export interface ExperimentMetaData extends Readonly<{
   experimentName: string;
@@ -190,6 +191,25 @@ function NewExperiment(props: Props): JSX.Element {
               }}
             />
           </GridCell>
+          <br/><br/>
+
+          <button
+          disabled={!areAllFieldsValid}
+          onClick={(): boolean | void => {
+            if (areAllFieldsValid) {
+              onDoneAction({
+                experimentName,
+                experimentLeadName,
+                startDate: dayjs(startDate),
+                lastUpdated: dayjs(),
+                sessionCount: Number(sessionCount),
+                bottlesPerCage: Number(bottlesPerCage),
+                treatments: treatments.trim().split(',').map((x) => x.trim()), // store as list
+              })
+            }
+          }}>
+            Create new experiment and begin session
+          </button>
         </Grid>
       </FormField>
     </>
