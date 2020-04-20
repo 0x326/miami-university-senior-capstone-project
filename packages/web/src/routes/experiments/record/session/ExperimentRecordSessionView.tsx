@@ -91,7 +91,9 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
       <TopAppBarFixedAdjust />
 
       <DataRecordingScreen
-        bottleName={`Rack ${refsToRecord[0][0]}, Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]})`}
+        bottleName={refsToRecord.length > 0
+          ? `Rack ${refsToRecord[0][0]}, Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]})`
+          : 'Done'}
         isLast={refsToRecord.length <= 1}
         onSubmit={(weight: number): void => {
           const refToRecord = refsToRecord.shift()
