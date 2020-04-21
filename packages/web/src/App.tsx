@@ -121,14 +121,10 @@ const App: React.FC = () => {
         <Route path="/experiments">
           <ExperimentsSwitch
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
-            // experimentIds={experimentDisplayOrder}
-            // experiments={experimentDisplayNames}
             experimentMetadata={experimentMetadata}
-
-            rackDisplayOrder = {rackDisplayOrder}
-            cageDisplayOrder = {cageDisplayOrders}
-
-
+            experiments={experiments}
+            rackDisplayOrder={rackDisplayOrder}
+            cageDisplayOrder={cageDisplayOrders}
             onCreateExperiment={((experimentMetaData): void => {
               setExperimentMetadata(Map<string, ExperimentMetaData>().set(experimentId, experimentMetaData))
               history.push('/experiments/record/view')
