@@ -114,7 +114,6 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                 })
 
                 if (isNewSession) {
-                  console.log("if if if", rid, cid)
                   // when new session, append pre to new session
                   cageData = cageData.push({
                     sessionNumber: last ? last.sessionNumber + 1 : 1,
