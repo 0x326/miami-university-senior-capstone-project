@@ -24,17 +24,18 @@ import {
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import {
-  binToDisplay, DummyMap,
+  binToDisplay, DummyMap, Comments,
 } from '../../xlsx'
 import { ExperimentData, RackDisplayOrder, CageDisplayOrder } from '../experiment-dashboard/ExperimentDashboard'
 
 interface Props {
   onDrawerOpen: () => void;
-  onExperimentDataChange: (newExperimentData : Map<string, ExperimentData>,
+  onExperimentDataChange: (newExperimentData: Map<string, ExperimentData>,
     newMetaData: Map<string, ExperimentMetaData>,
     newRackDisplayOrder: RackDisplayOrder,
     newCageDisplayOrder: CageDisplayOrder,
-    newDummyMap: DummyMap) => void,
+    newDummyMap: DummyMap,
+    comments: Comments) => void,
   metaData: Map<ExperimentId, ExperimentMetaData>,
 }
 
@@ -50,46 +51,47 @@ function LandingPage(props: Props): JSX.Element {
 
   return (
     <>
-    <TopAppBar>
-      <TopAppBarRow>
-        <TopAppBarSection alignStart>
-          <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
-          <TopAppBarTitle>Home</TopAppBarTitle>
-        </TopAppBarSection>
-      </TopAppBarRow>
-    </TopAppBar>
-    <TopAppBarFixedAdjust />
+      <TopAppBar>
+        <TopAppBarRow>
+          <TopAppBarSection alignStart>
+            <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
+            <TopAppBarTitle>Home</TopAppBarTitle>
+          </TopAppBarSection>
+        </TopAppBarRow>
+      </TopAppBar>
+      <TopAppBarFixedAdjust />
 
-    <button
-      onClick={e => history.push('/experiments/new')}
-    >New Experiment</button>
+      <button
+        onClick={e => history.push('/experiments/new')}
+      >New Experiment</button>
 
-    <FileInput
-      onFileUpload={(fileData) => {
-        // Call xlsx library
-        try {
-          const [meta, ex, rdo, cdo, dm] = binToDisplay(new Uint8Array(fileData))
-          console.log(meta, ex, rdo, cdo, dm)
-          // Ask parent to update experiment data
-          onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm)
-          setConfirmMessage("File Uploaded")
-        } catch (e) {
-          alert("The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.")
+      <FileInput
+        onFileUpload={(fileData) => {
+          // Call xlsx library
+          try {
+            const [meta, ex, rdo, cdo, dm, co] = binToDisplay(new Uint8Array(fileData))
+            console.log(meta, ex, rdo, cdo, dm)
+            // Ask parent to update experiment data
+            onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm, co)
+            setConfirmMessage("File Uploaded")
+          } catch (e) {
+            alert("The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.")
+          }
+        }}
+      />
+      <br />
+      <span>{confirmationMessage}</span>
+      <br /><br />
+      <button
+        onClick={e => {
+          if (confirmationMessage == "") {
+            alert("Please upload an experiment to begin session precheck.")
+          } else {
+            history.push('/experiments/record/view')
+          }
         }
-      }}
-    />
-    <br/>
-    <span>{confirmationMessage}</span>
-    <br/><br/>
-    <button
-      onClick={e => {
-        if(confirmationMessage == "") {
-          alert("Please upload an experiment to begin session precheck.")
-        } else {
-          history.push('/experiments/record/view')}
         }
-      }
-    >Start Session Precheck</button>
+      >Start Session Precheck</button>
     </>
   )
 }

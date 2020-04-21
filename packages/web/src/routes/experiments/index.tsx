@@ -35,12 +35,18 @@ import ScaleApiTester from '../../ScaleApiTester'
 import { Experiment } from 'api-interfaces/dist/common'
 import { CageData } from '../experiment-dashboard/CageSessions'
 
+import {
+  displayToWB, DummyMap, Comments
+} from '../../xlsx'
+
 interface Props {
   onDrawerOpen: () => void;
   experiments: Map<ExperimentId, ExperimentData>;
   rackDisplayOrder: List<RackId>;
   cageDisplayOrder: Map<RackId, List<CageId>>;
   experimentMetadata: Map<ExperimentId, ExperimentMetaData>;
+  dummyMap: DummyMap;
+  comments: Comments;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
 }
 
@@ -52,6 +58,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     cageDisplayOrder,
     onCreateExperiment,
     experimentMetadata,
+    dummyMap,
+    comments,
   } = props
 
   const { url } = useRouteMatch() || { url: '' }

@@ -33,6 +33,8 @@ import {
 
 import ExperimentsSwitch from './routes/experiments'
 
+import { Comments } from './xlsx'
+
 import {
   BottleType,
   RouteId,
@@ -71,6 +73,7 @@ const App: React.FC = () => {
   const [cageDisplayOrders, setCageDisplayOrders] = useState<CageDisplayOrder>(Map())
   const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
   const [dummyMap, setDummyMap] = useState(Map<List<number>, boolean>())
+  const [comments, setComments] = useState({})
 
   // useEffect(() => {
   //   import('./sampleData')
@@ -125,6 +128,8 @@ const App: React.FC = () => {
             experiments={experiments}
             rackDisplayOrder={rackDisplayOrder}
             cageDisplayOrder={cageDisplayOrders}
+            dummyMap={dummyMap}
+            comments={comments}
             onCreateExperiment={((experimentMetaData): void => {
               setExperimentMetadata(Map<string, ExperimentMetaData>().set(experimentId, experimentMetaData))
               history.push('/experiments/record/view')
@@ -134,12 +139,13 @@ const App: React.FC = () => {
         <Route path="/home">
           <LandingPage
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
-            onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders, newDummyMap): void => {
+            onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders, newDummyMap, comments): void => {
               setExperiments(newExperimentData)
               setExperimentMetadata(newMetaData)
               setRackDisplayOrder(newRackDisplayOrder)
               setCageDisplayOrders(newCageDisplayOrders)
               setDummyMap(newDummyMap)
+              setComments(comments)
             }}
             metaData={experimentMetadata}
           />
