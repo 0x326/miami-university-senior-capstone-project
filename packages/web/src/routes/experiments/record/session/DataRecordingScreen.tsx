@@ -12,7 +12,7 @@ import { Button } from '@rmwc/button'
 import { TextField } from '@rmwc/textfield'
 
 interface Props {
-  bottleName: string;
+  bottleName: string | null;
   isLast: boolean;
   onSubmit: (weight: number) => void;
 }
@@ -29,7 +29,7 @@ function DataRecordingScreen(props: Props): JSX.Element {
     <>
       <Typography use="body1" tag="p">
         {bottleName}
-        <br/>
+        <br />
         <TextField
           label="Enter Weight"
           type="double"

@@ -37,7 +37,7 @@ interface Props {
   rackDisplayOrder: List<RackId>;
   cageDisplayOrder: Map<RackId, List<CageId>>;
   experimentMetadata: ExperimentMetaData;
-  onEnd: () => void;
+  onEnd: (newData: Map<List<number | string>, number>) => void;
   cageIds: List<number>,
 }
 
@@ -63,7 +63,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const [bottleTypesToRecord, setBottleTypesToRecord] = useState(List(treatments))
   const [bottleType, setBottleType] = useState<BottleType>(List(treatments).first())
   const [cageIdsToRecord, setCageIdsToRecord] = useState(cageIds)
-  const [dataEntries, setDataEntries] = useState(Map<List<number | string>, number>())
+  const [newData, setNewData] = useState(Map<List<number | string>, number>())
   const [refsToRecord, setRefsToRecord] = useState((): [RackId, CageId, BottleType][] => {
     const ret: [RackId, CageId, BottleType][] = []
     for (let bott of treatments)
@@ -76,7 +76,6 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
     return ret
   })
 
-  // const cageIdToRecord: number = cageIdsToRecord.first()
   return (
     <>
       <TopAppBar>
@@ -90,19 +89,21 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
       </TopAppBar>
       <TopAppBarFixedAdjust />
 
+      <span>{JSON.stringify(newData.toJS())}</span>
+
       <DataRecordingScreen
         bottleName={refsToRecord.length > 0
           ? `Rack ${refsToRecord[0][0]}, Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]})`
-          : 'Done'}
-        isLast={refsToRecord.length <= 1}
+          : null}
+        isLast={refsToRecord.length === 0}
         onSubmit={(weight: number): void => {
           const refToRecord = refsToRecord.shift()
-          console.log(refsToRecord.length)
-          if (refsToRecord.length > 0 && refToRecord) {
+          if (refToRecord) {
             const [rid, cid, bott] = refToRecord
-            setDataEntries(dataEntries.set(List.of<any>(rid, cid, bott), weight))
-          } else {
-            onEnd()
+            setNewData(newData.set(List.of<any>(rid, cid, bott), Number(weight)))
+          }
+          else {
+            onEnd(newData)
           }
         }}
       />
