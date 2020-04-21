@@ -136,6 +136,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
               console.log("after")
               console.log(updatedExperiments.toJS())
 
+              // now that we are storing the new data, we want to send this to some sort of export page or something
+
               history.push(`${url}/record/view`)
             }}
             cageIds={cageList}
