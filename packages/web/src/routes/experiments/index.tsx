@@ -130,18 +130,26 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                       rowData: rowData,
                     })
                   })
-                  updatedExperiments.setIn([rid, cid], cageData)
+                  updatedExperiments.setIn([experimentId, rid, cid], cageData)
                 } else {
                   // otherwise, append a post to past session
-                  const past = cageData.get(-1) as any
-                  cageData = cageData.set(-1, past.cageSessionData.push({
-                    rowLabel: "post",
-                    rowData: rowData,
-                  }))
-                  updatedExperiments.setIn([rid, cid], cageData)
+                  let past = cageData.get(-1)
+                  let toUpdate = cageData.pop()
+                  if (past) {
+                    const updated = toUpdate.push({
+                      sessionNumber: past.sessionNumber,
+                      cageSessionData: past.cageSessionData.push({
+                        rowLabel: "post",
+                        rowData: rowData as any,
+                      })
+                    })
+                    cageData = updated
+                  }
+                  updatedExperiments.setIn([experimentId, rid, cid], cageData)
                 }
               })
               console.log("after")
+              updatedExperiments = updatedExperiments.asImmutable()
               console.log(updatedExperiments.toJS())
 
               // now that we are storing the new data, we want to send this to some sort of export page or something
