@@ -189,18 +189,24 @@ function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentI
               }
             }),
           }
-          const postWeights = {
-            rowLabel: 'post',
-            rowData: Map().withMutations((rowDat) => {
-              for (const cellPair of dataPairs.slice(Math.floor(dataPairs.length / 2))) {
-                const datPair = treatmentPair(cellPair)
-                rowDat.set(datPair[0], datPair[1])
-              }
-            }),
+          // it's possible we don't have post weights. There's a better way to do this, but good enough for now
+          let postWeights = null
+          try {
+            postWeights = {
+              rowLabel: 'post',
+              rowData: Map().withMutations((rowDat) => {
+                for (const cellPair of dataPairs.slice(Math.floor(dataPairs.length / 2))) {
+                  const datPair = treatmentPair(cellPair)
+                  rowDat.set(datPair[0], datPair[1])
+                }
+              }),
+            }
+          } catch {
+            // goto
           }
           const session = {
             sessionNumber: sessNumber,
-            cageSessionData: List([preWeights, postWeights]),
+            cageSessionData: postWeights ? List([preWeights, postWeights]) : List([preWeights]),
           }
           sessions.push(session)
         }
