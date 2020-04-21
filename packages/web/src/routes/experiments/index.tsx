@@ -39,6 +39,8 @@ import {
   displayToWB, DummyMap, Comments
 } from '../../xlsx'
 
+import * as XLSX from 'xlsx'
+
 interface Props {
   onDrawerOpen: () => void;
   experiments: Map<ExperimentId, ExperimentData>;
@@ -152,7 +154,14 @@ function ExperimentsSwitch(props: Props): JSX.Element {
               updatedExperiments = updatedExperiments.asImmutable()
               console.log(updatedExperiments.toJS())
 
-              // now that we are storing the new data, we want to send this to some sort of export page or something
+              // temporary. download updated experiment data for verification
+              console.log("to xlsx")
+              const wb = displayToWB(experimentMetadata.get(experimentId) as any,
+                updatedExperiments.get(experimentId) as any,
+                rackDisplayOrder, cageDisplayOrder, dummyMap, comments)
+
+              XLSX.writeFile(wb, "out.xlsx")
+
 
               history.push(`${url}/record/view`)
             }}
