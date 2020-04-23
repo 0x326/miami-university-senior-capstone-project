@@ -34,13 +34,13 @@ function DataRecordingScreen(props: Props): JSX.Element {
           label="Enter Weight"
           type="double"
           value={weight}
-          onChange={(newWeight) => setWeight(newWeight.currentTarget.value)}
+          onChange={(newWeight): void => setWeight(newWeight.currentTarget.value)}
         />
       </Typography>
 
       <Button
         raised
-        onClick={() => onSubmit(weight)}
+        onClick={(): void => onSubmit(weight)}
         label={!isLast ? 'Next' : 'Finish'}
       />
     </>

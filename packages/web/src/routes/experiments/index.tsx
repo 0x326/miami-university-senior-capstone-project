@@ -40,6 +40,7 @@ import {
 } from '../../xlsx'
 
 import * as XLSX from 'xlsx'
+import AddCages from './add-cage/AddCages'
 
 interface Props {
   onDrawerOpen: () => void;
@@ -81,9 +82,14 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         <Route exact path={`${url}/record/view`}>
           <ExperimentMetadataView
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
+            onAddCages={(): void => history.push(`${url}/add-cage`)}
             onRecord={(): void => history.push(`${url}/record/session`)}
           />
-          <br /><br /><br /><br /><br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <ScaleApiTester />
         </Route>
         <Route exact path={`${url}/record/session`}>
@@ -93,19 +99,19 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onEnd={(newData): void => {
               let updatedExperiments = experiments.asMutable()
-              console.log("before")
+              console.log('before')
               console.log(updatedExperiments.toJS())
 
               // bottles grouped by weight for simpler iteration {[rid, cid]: [bott1, bott2, ...], ...}
-              const grouped = newData.keySeq().reduce((acc, x) => {
+              const grouped = newData.keySeq().reduce((accumulator, x) => {
                 const [rid, cid, bott] = x.toArray()
                 const k = List.of<any>(rid, cid)
-                const alreadyStored = acc.get(k, null)
+                const alreadyStored = accumulator.get(k, null)
 
                 if (alreadyStored === null) {
-                  return acc.set(k, List.of(bott as string))
+                  return accumulator.set(k, List.of(bott as string))
                 }
-                return acc.set(k, alreadyStored.push(bott as string))
+                return accumulator.set(k, alreadyStored.push(bott as string))
               }, Map<List<number>, List<string>>())
 
 
@@ -115,7 +121,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
 
                 let cageData = updatedExperiments.getIn([experimentId, rid, cid]) as CageData
                 const last = cageData.last(null)
-                const isNewSession = last ? last.cageSessionData.size == 2 : true // 2 because pre and post
+                const isNewSession = last ? last.cageSessionData.size === 2 : true // 2 because pre and post
 
                 const rowData = Map<BottleType, number>().withMutations(rowData => {
                   for (let bott of botts) {
@@ -141,7 +147,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                     const updated = toUpdate.push({
                       sessionNumber: past.sessionNumber,
                       cageSessionData: past.cageSessionData.push({
-                        rowLabel: "post",
+                        rowLabel: 'post',
                         rowData: rowData as any,
                       })
                     })
@@ -150,17 +156,17 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                   updatedExperiments.setIn([experimentId, rid, cid], cageData)
                 }
               })
-              console.log("after")
+              console.log('after')
               updatedExperiments = updatedExperiments.asImmutable()
               console.log(updatedExperiments.toJS())
 
               // temporary. download updated experiment data for verification
-              console.log("to xlsx")
+              console.log('to xlsx')
               const wb = displayToWB(experimentMetadata.get(experimentId) as any,
                 updatedExperiments.get(experimentId) as any,
                 rackDisplayOrder, cageDisplayOrder, dummyMap, comments)
 
-              XLSX.writeFile(wb, "out.xlsx")
+              XLSX.writeFile(wb, 'out.xlsx')
 
 
               history.push(`${url}/record/view`)

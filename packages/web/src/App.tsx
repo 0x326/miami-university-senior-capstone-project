@@ -17,10 +17,6 @@ import {
   useHistory,
 } from 'react-router-dom'
 
-import {
-  v4 as uuid4,
-} from 'uuid'
-
 import ExperimentDashboard, {
   ExperimentData,
   CageDisplayOrder,
@@ -32,8 +28,6 @@ import {
 } from './routes/experiments/new/NewExperimentView'
 
 import ExperimentsSwitch from './routes/experiments'
-
-import { Comments } from './xlsx'
 
 import {
   BottleType,
@@ -51,6 +45,7 @@ import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
 import ScaleApiTester from './ScaleApiTester'
 import LandingPage from './routes/home'
+import AddCages from './routes/experiments/add-cage/AddCages'
 
 export type ExperimentId = RouteId
 
@@ -63,41 +58,15 @@ const App: React.FC = () => {
   const history = useHistory()
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const [snackbar, snackbarQueuePush] = useSnackbar()
+  const [snackbar] = useSnackbar()
 
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>())
   const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>())
-  const [experimentDisplayNames, setExperimentDisplayNames] = useState(Map<ExperimentId, DisplayName>())
-  const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List<ExperimentId>())
   const [cageDisplayOrders, setCageDisplayOrders] = useState<CageDisplayOrder>(Map())
   const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
   const [dummyMap, setDummyMap] = useState(Map<List<number>, boolean>())
   const [comments, setComments] = useState({})
-
-  // useEffect(() => {
-  //   import('./sampleData')
-  //     .then(({
-  //       sampleExperimentMetadata,
-  //       sampleExperiments,
-  //       sampleExperimentDisplayNames,
-  //       sampleExperimentDisplayOrder,
-  //       sampleCageDisplayOrders,
-  //       sampleRackDisplayOrder,
-  //     }) => {
-  //       setExperimentMetadata(sampleExperimentMetadata)
-  //       setExperiments(sampleExperiments)
-  //       setExperimentDisplayNames(sampleExperimentDisplayNames)
-  //       setExperimentDisplayOrder(sampleExperimentDisplayOrder)
-  //       setCageDisplayOrders(sampleCageDisplayOrders)
-  //       setRackDisplayOrder(sampleRackDisplayOrder)
-
-  //       snackbarQueuePush({
-  //         message: 'Sample data loaded',
-  //         actions: List(),
-  //       })
-  //     })
-  // }, [snackbarQueuePush])
 
   return (
     <>
@@ -148,6 +117,11 @@ const App: React.FC = () => {
               setComments(comments)
             }}
             metaData={experimentMetadata}
+          />
+        </Route>
+        <Route path="/experiments/add-cage">
+          <AddCages
+            addCages={(numberCages): void => console.log(numberCages)}
           />
         </Route>
         <Route path="/scale-api-tester">
