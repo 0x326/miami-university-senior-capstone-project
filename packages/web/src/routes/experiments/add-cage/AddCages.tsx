@@ -53,24 +53,15 @@ import { ExperimentMetaData } from '../new/NewExperimentView'
 
 
 interface Props {
-// experimentMetadata: Map<ExperimentId, ExperimentMetaData>;
-// experimentsMap: Map<ExperimentId, ExperimentData>;
-// experimentDisplayNames: Map<ExperimentId, DisplayName>;
-// experimentDisplayOrder: List<ExperimentId>;
-// cageDisplayOrders: CageDisplayOrder;
-// rackDisplayOrder: RackDisplayOrder;
+  addCages: (numberCages: string) => void;
 }
 
 function AddCages(props: Props): JSX.Element {
-  // const {
-  //   // experimentMetadata,
-  //   // experimentsMap,
-  //   // experimentDisplayNames,
-  //   // experimentDisplayOrder,
-  //   // cageDisplayOrders,
-  //   // rackDisplayOrder,
-  // } = props
+  const {
+    addCages,
+  } = props
 
+  const [numberCages, setNumberCages] = useState('0')
   const history = useHistory()
 
   return (
@@ -80,23 +71,28 @@ function AddCages(props: Props): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={(e) => history.goBack()}
+              onClick={(): void => history.goBack()}
             />
-            <TopAppBarTitle>add cages</TopAppBarTitle>
+            <TopAppBarTitle>Add Cages</TopAppBarTitle>
           </TopAppBarSection>
           <TopAppBarSection alignEnd />
         </TopAppBarRow>
       </TopAppBar>
+      <TopAppBarFixedAdjust />
       <FormField>
         <Grid>
           <GridCell span={4}>
             <TextField
               label="Cages to add"
               type="number"
-              value={0}
+              value={numberCages}
+              onChange={(event: FormEvent<HTMLInputElement>): void => {
+                setNumberCages(event.currentTarget.value)
+              }}
             />
           </GridCell>
         </Grid>
+        <Button label="Submit" raised onClick={(): void => addCages(numberCages)} />
       </FormField>
     </>
   )

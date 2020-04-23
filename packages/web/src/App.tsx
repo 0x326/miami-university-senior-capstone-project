@@ -152,7 +152,9 @@ const App: React.FC = () => {
           />
         </Route>
         <Route path="/experiments/add-cage">
-          <AddCages />
+          <AddCages
+            addCages={(numberCages): void => console.log(numberCages)}
+          />
         </Route>
         <Route path="/scale-api-tester">
           <ScaleApiTester />
