@@ -59,7 +59,6 @@ interface Props {
 
 function NewExperiment(props: Props): JSX.Element {
   const {
-    onCancelAction,
     onDoneAction,
   } = props
 
@@ -95,7 +94,7 @@ function NewExperiment(props: Props): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={e => history.goBack()}
+              onClick={() => history.goBack()}
             />
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>
@@ -191,25 +190,27 @@ function NewExperiment(props: Props): JSX.Element {
               }}
             />
           </GridCell>
-          <br/><br/>
+          <br />
+          <br />
 
-          <button
-          disabled={!areAllFieldsValid}
-          onClick={(): boolean | void => {
-            if (areAllFieldsValid) {
-              onDoneAction({
-                experimentName,
-                experimentLeadName,
-                startDate: dayjs(startDate),
-                lastUpdated: dayjs(),
-                sessionCount: Number(sessionCount),
-                bottlesPerCage: Number(bottlesPerCage),
-                treatments: treatments.trim().split(',').map((x) => x.trim()), // store as list
-              })
-            }
-          }}>
+          <Button
+            disabled={!areAllFieldsValid}
+            onClick={(): boolean | void => {
+              if (areAllFieldsValid) {
+                onDoneAction({
+                  experimentName,
+                  experimentLeadName,
+                  startDate: dayjs(startDate),
+                  lastUpdated: dayjs(),
+                  sessionCount: Number(sessionCount),
+                  bottlesPerCage: Number(bottlesPerCage),
+                  treatments: treatments.trim().split(',').map((x) => x.trim()), // store as list
+                })
+              }
+            }}
+          >
             Create new experiment and begin session
-          </button>
+          </Button>
         </Grid>
       </FormField>
     </>
