@@ -30,6 +30,7 @@ interface Props {
   experimentMetadata: ExperimentMetaData;
   onRecord: () => void;
   onAddCages: () => void;
+  onConnect: () => void;
 }
 
 function ExperimentMetadataView(props: Props): JSX.Element {
@@ -37,6 +38,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
     experimentMetadata,
     onRecord,
     onAddCages,
+    onConnect,
   } = props
 
   const {
@@ -95,6 +97,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       <br />
       <br />
       <Button label="Begin" raised onClick={onRecord} />
+      <Button label="Connect Scale" onClick={onConnect}/>
     </>
   )
 }

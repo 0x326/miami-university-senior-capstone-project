@@ -1,5 +1,6 @@
 import React, {
   useState,
+  useEffect,
 } from 'react'
 
 import {
@@ -10,6 +11,12 @@ import '@material/typography/dist/mdc.typography.css'
 import { Button } from '@rmwc/button'
 
 import { TextField } from '@rmwc/textfield'
+
+import { Measurement, MeasurementType } from 'api-interfaces/dist/scale-data'
+
+import {
+  scaleData,
+} from '../../../../apiBindings'
 
 interface Props {
   bottleName: string | null;
@@ -24,7 +31,18 @@ function DataRecordingScreen(props: Props): JSX.Element {
     onSubmit,
   } = props
 
-  const [weight, setWeight] = useState(0)
+  const [weight, setWeight] = useState<Measurement>({
+    value: 0,
+    type: MeasurementType.STABLE_WEIGHT,
+    unit: 'g',
+  })
+
+  useEffect(() => {
+    scaleData((measurement) => {
+      setWeight(measurement)
+    })
+  })
+
   return (
     <>
       <Typography use="body1" tag="p">
@@ -33,14 +51,14 @@ function DataRecordingScreen(props: Props): JSX.Element {
         <TextField
           label="Enter Weight"
           type="double"
-          value={weight}
+          value={weight.value}
           onChange={(newWeight): void => setWeight(newWeight.currentTarget.value)}
         />
       </Typography>
 
       <Button
         raised
-        onClick={(): void => onSubmit(weight)}
+        onClick={(): void => onSubmit(weight.value)}
         label={!isLast ? 'Next' : 'Finish'}
       />
     </>

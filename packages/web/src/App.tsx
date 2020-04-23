@@ -1,5 +1,6 @@
 import React, {
   useState,
+  useEffect,
 } from 'react'
 
 import {
@@ -36,6 +37,10 @@ import {
 
 import useSnackbar from './useSnackbar'
 
+import {
+  connect,
+} from './apiBindings'
+
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
@@ -64,6 +69,8 @@ const App: React.FC = () => {
   const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
   const [dummyMap, setDummyMap] = useState(Map<List<number>, boolean>())
   const [comments, setComments] = useState({})
+
+  const [connected, setConnected] = useState(false)
 
   return (
     <>
@@ -100,6 +107,11 @@ const App: React.FC = () => {
               setExperimentMetadata(Map<string, ExperimentMetaData>().set(experimentId, experimentMetaData))
               history.push('/experiments/record/view')
             })}
+            connectScale={() => {
+              connect()
+                .then(() => setConnected(true),
+                  () => {}/* Do something for the case an error occurs */)
+            }}
           />
         </Route>
         <Route path="/home">

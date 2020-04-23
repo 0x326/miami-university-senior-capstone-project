@@ -51,6 +51,7 @@ interface Props {
   dummyMap: DummyMap;
   comments: Comments;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
+  connectScale:() => void;
 }
 
 function ExperimentsSwitch(props: Props): JSX.Element {
@@ -63,6 +64,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     experimentMetadata,
     dummyMap,
     comments,
+    connectScale,
   } = props
 
   const { url } = useRouteMatch() || { url: '' }
@@ -84,6 +86,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onAddCages={(): void => history.push(`${url}/add-cage`)}
             onRecord={(): void => history.push(`${url}/record/session`)}
+            onConnect={connectScale}
           />
           <br />
           <br />
