@@ -51,6 +51,7 @@ import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
 import ScaleApiTester from './ScaleApiTester'
 import LandingPage from './routes/home'
+import AddCages from './routes/experiments/add-cage/AddCages'
 
 export type ExperimentId = RouteId
 
@@ -149,6 +150,9 @@ const App: React.FC = () => {
             }}
             metaData={experimentMetadata}
           />
+        </Route>
+        <Route path="/experiments/add-cage">
+          <AddCages />
         </Route>
         <Route path="/scale-api-tester">
           <ScaleApiTester />

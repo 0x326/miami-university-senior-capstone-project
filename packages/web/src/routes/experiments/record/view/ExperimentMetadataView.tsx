@@ -29,12 +29,14 @@ dayjs.extend(relativeTime)
 interface Props {
   experimentMetadata: ExperimentMetaData;
   onRecord: () => void;
+  onAddCages: () => void;
 }
 
 function ExperimentMetadataView(props: Props): JSX.Element {
   const {
     experimentMetadata,
     onRecord,
+    onAddCages,
   } = props
 
   const {
@@ -89,6 +91,9 @@ function ExperimentMetadataView(props: Props): JSX.Element {
         {' '}
         {treatments.join(', ')}
       </Typography>
+      <Button label="Add Cages" raised onClick={onAddCages} />
+      <br />
+      <br />
       <Button label="Begin" raised onClick={onRecord} />
     </>
   )

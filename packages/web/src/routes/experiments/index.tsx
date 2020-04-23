@@ -81,6 +81,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         <Route exact path={`${url}/record/view`}>
           <ExperimentMetadataView
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
+            onAddCages={(): void => history.push(`${url}/add-cages`)}
             onRecord={(): void => history.push(`${url}/record/session`)}
           />
           <br /><br /><br /><br /><br />
