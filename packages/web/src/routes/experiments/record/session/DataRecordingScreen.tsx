@@ -52,7 +52,12 @@ function DataRecordingScreen(props: Props): JSX.Element {
           label="Enter Weight"
           type="double"
           value={weight.value}
-          onChange={(newWeight): void => setWeight(newWeight.currentTarget.value)}
+          onChange={(newWeight): void => setWeight({
+            type: MeasurementType.STABLE_WEIGHT,
+            value: newWeight.currentTarget.value,
+            unit: 'g',
+          })
+        }
         />
       </Typography>
 

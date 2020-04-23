@@ -41,6 +41,7 @@ import {
 
 import * as XLSX from 'xlsx'
 import AddCages from './add-cage/AddCages'
+import SessionSummary from './record/summary/SessionSummary'
 
 interface Props {
   onDrawerOpen: () => void;
@@ -71,6 +72,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   const history = useHistory()
   const cages = [1, 2, 3, 4, 5]
   const cageList = List(cages)
+  const [updatedExperiments, setUpdatedExperiments] = useState(Map<string, ExperimentData>());
 
   return (
     <>
@@ -166,6 +168,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
               })
               console.log('after')
               updatedExperiments = updatedExperiments.asImmutable()
+              setUpdatedExperiments(updatedExperiments)
               console.log(updatedExperiments.toJS())
 
               // temporary. download updated experiment data for verification
@@ -177,9 +180,14 @@ function ExperimentsSwitch(props: Props): JSX.Element {
               XLSX.writeFile(wb, 'out.xlsx')
 
 
-              history.push(`${url}/record/view`)
+              history.push(`${url}/record/summary`)
             }}
             cageIds={cageList}
+          />
+        </Route>
+        <Route exact path={`${url}/record/summary`}>
+          <SessionSummary
+            updatedExperiments= {updatedExperiments.get(experimentId) as ExperimentData}
           />
         </Route>
         <Route path="*">
