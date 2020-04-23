@@ -30,8 +30,9 @@ import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
 
-import DataRecordingScreen from './DataRecordingScreen'
 import { connect, scaleData } from '../../../../apiBindings'
+
+import DataRecordingScreen from './DataRecordingScreen'
 
 
 interface Props {

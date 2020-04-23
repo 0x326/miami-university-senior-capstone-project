@@ -97,7 +97,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       <br />
       <br />
       <Button label="Begin" raised onClick={onRecord} />
-      <Button label="Connect Scale" onClick={onConnect}/>
+      <Button label="Connect Scale" onClick={onConnect} />
     </>
   )
 }

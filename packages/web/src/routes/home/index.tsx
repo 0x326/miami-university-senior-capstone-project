@@ -8,6 +8,8 @@ import {
   Map,
 } from 'immutable'
 
+import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
+
 import {
   experimentId,
 } from '../../types'
@@ -17,16 +19,16 @@ import {
 } from '../../App'
 
 
-import FileInput from './FileInput'
 import {
   ExperimentMetaData,
 } from '../experiments/new/NewExperimentView'
-import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import {
   binToDisplay, DummyMap, Comments,
 } from '../../xlsx'
 import { ExperimentData, RackDisplayOrder, CageDisplayOrder } from '../experiment-dashboard/ExperimentDashboard'
+
+import FileInput from './FileInput'
 
 interface Props {
   onDrawerOpen: () => void;
@@ -35,8 +37,8 @@ interface Props {
     newRackDisplayOrder: RackDisplayOrder,
     newCageDisplayOrder: CageDisplayOrder,
     newDummyMap: DummyMap,
-    comments: Comments) => void,
-  metaData: Map<ExperimentId, ExperimentMetaData>,
+    comments: Comments) => void;
+  metaData: Map<ExperimentId, ExperimentMetaData>;
 }
 
 function LandingPage(props: Props): JSX.Element {
@@ -47,7 +49,7 @@ function LandingPage(props: Props): JSX.Element {
   } = props
 
   const history = useHistory()
-  const [confirmationMessage, setConfirmMessage] = useState("")
+  const [confirmationMessage, setConfirmMessage] = useState('')
 
   return (
     <>
@@ -62,8 +64,10 @@ function LandingPage(props: Props): JSX.Element {
       <TopAppBarFixedAdjust />
 
       <button
-        onClick={e => history.push('/experiments/new')}
-      >New Experiment</button>
+        onClick={(e) => history.push('/experiments/new')}
+      >
+New Experiment
+      </button>
 
       <FileInput
         onFileUpload={(fileData) => {
@@ -73,25 +77,27 @@ function LandingPage(props: Props): JSX.Element {
             console.log(meta, ex, rdo, cdo, dm)
             // Ask parent to update experiment data
             onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm, co)
-            setConfirmMessage("File Uploaded")
-          } catch (e) {
-            alert("The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.")
+            setConfirmMessage('File Uploaded')
+          } catch (error) {
+            alert('The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.')
           }
         }}
       />
       <br />
       <span>{confirmationMessage}</span>
-      <br /><br />
+      <br />
+      <br />
       <button
-        onClick={e => {
-          if (confirmationMessage == "") {
-            alert("Please upload an experiment to begin session precheck.")
+        onClick={(e) => {
+          if (confirmationMessage == '') {
+            alert('Please upload an experiment to begin session precheck.')
           } else {
             history.push('/experiments/record/view')
           }
-        }
-        }
-      >Start Session Precheck</button>
+        }}
+      >
+Start Session Precheck
+      </button>
     </>
   )
 }

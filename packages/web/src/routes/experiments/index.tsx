@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   useRouteMatch,
@@ -12,11 +12,12 @@ import {
   Map,
 } from 'immutable'
 
+import * as XLSX from 'xlsx'
+
 import {
   DisplayName,
   RouteId,
   experimentId,
-  BottleState,
   BottleType,
 } from '../../types'
 
@@ -25,21 +26,21 @@ import {
   ExperimentId,
 } from '../../App'
 
-import ExperimentMetadataView from './record/view/ExperimentMetadataView'
-import ExperimentRecordDataView from './record/session/ExperimentRecordSessionView'
-import NewExperiment, {
-  ExperimentMetaData,
-} from './new/NewExperimentView'
-import { RackId, CageId, ExperimentData, } from '../experiment-dashboard/ExperimentDashboard'
+import { RackId, CageId, ExperimentData } from '../experiment-dashboard/ExperimentDashboard'
 import ScaleApiTester from '../../ScaleApiTester'
-import { Experiment } from 'api-interfaces/dist/common'
 import { CageData } from '../experiment-dashboard/CageSessions'
 
 import {
-  displayToWB, DummyMap, Comments
+  displayToWB, DummyMap, Comments,
 } from '../../xlsx'
 
-import * as XLSX from 'xlsx'
+import NewExperiment, {
+  ExperimentMetaData,
+} from './new/NewExperimentView'
+import ExperimentRecordDataView from './record/session/ExperimentRecordSessionView'
+import ExperimentMetadataView from './record/view/ExperimentMetadataView'
+
+
 import AddCages from './add-cage/AddCages'
 import SessionSummary from './record/summary/SessionSummary'
 
@@ -52,7 +53,7 @@ interface Props {
   dummyMap: DummyMap;
   comments: Comments;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
-  connectScale:() => void;
+  connectScale: () => void;
 }
 
 function ExperimentsSwitch(props: Props): JSX.Element {
@@ -125,7 +126,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
               }, Map<List<number>, List<string>>())
 
 
-              grouped.entrySeq().forEach(e => {
+              grouped.entrySeq().forEach((e) => {
                 const [rid, cid] = e[0].toArray()
                 const botts = e[1].toArray()
 
@@ -133,8 +134,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                 const last = cageData.last(null)
                 const isNewSession = last ? last.cageSessionData.size === 2 : true // 2 because pre and post
 
-                const rowData = Map<BottleType, number>().withMutations(rowData => {
-                  for (let bott of botts) {
+                // eslint-disable-next-line no-shadow
+                const rowData = Map<BottleType, number>().withMutations((rowData) => {
+                  for (const bott of botts) {
                     rowData.set(bott, newData.get(List.of<any>(rid, cid, bott)) as any)
                   }
                 })
@@ -144,22 +146,22 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                   cageData = cageData.push({
                     sessionNumber: last ? last.sessionNumber + 1 : 1,
                     cageSessionData: List.of<any>({
-                      rowLabel: "pre",
-                      rowData: rowData,
-                    })
+                      rowLabel: 'pre',
+                      rowData,
+                    }),
                   })
                   updatedExperiments.setIn([experimentId, rid, cid], cageData)
                 } else {
                   // otherwise, append a post to past session
-                  let past = cageData.get(-1)
-                  let toUpdate = cageData.pop()
+                  const past = cageData.get(-1)
+                  const toUpdate = cageData.pop()
                   if (past) {
                     const updated = toUpdate.push({
                       sessionNumber: past.sessionNumber,
                       cageSessionData: past.cageSessionData.push({
                         rowLabel: 'post',
                         rowData: rowData as any,
-                      })
+                      }),
                     })
                     cageData = updated
                   }
