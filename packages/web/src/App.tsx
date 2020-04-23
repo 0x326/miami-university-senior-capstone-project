@@ -1,6 +1,3 @@
-// TODO (0x326) [2020-05-10] Remove extraneous @material dependencies
-// TODO (0x326) [2020-05-10] Remove extraneous @rmwc dependencies
-
 import React, {
   useState,
 } from 'react'
@@ -108,7 +105,8 @@ const App: React.FC = () => {
         <Route path="/home">
           <LandingPage
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
-            onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders, newDummyMap, comments): void => {
+            onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders,
+              newDummyMap, comments): void => {
               setExperiments(newExperimentData)
               setExperimentMetadata(newMetaData)
               setRackDisplayOrder(newRackDisplayOrder)

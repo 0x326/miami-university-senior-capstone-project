@@ -94,7 +94,7 @@ function NewExperiment(props: Props): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={() => history.goBack()}
+              onClick={(): void => history.goBack()}
             />
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>

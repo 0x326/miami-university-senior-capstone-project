@@ -67,8 +67,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
 
   const { url } = useRouteMatch() || { url: '' }
   const history = useHistory()
-  const cages = [1, 2, 3, 4, 5];
-  const cageList = List(cages);
+  const cages = [1, 2, 3, 4, 5]
+  const cageList = List(cages)
 
   return (
     <>
@@ -91,6 +91,11 @@ function ExperimentsSwitch(props: Props): JSX.Element {
           <br />
           <br />
           <ScaleApiTester />
+        </Route>
+        <Route path="/experiments/add-cage">
+          <AddCages
+            addCages={(numberCages): void => console.log(numberCages)}
+          />
         </Route>
         <Route exact path={`${url}/record/session`}>
           <ExperimentRecordDataView

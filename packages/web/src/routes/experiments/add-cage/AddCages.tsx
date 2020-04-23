@@ -6,7 +6,6 @@ import React, {
 
 import {
   TopAppBar,
-  TopAppBarActionItem,
   TopAppBarFixedAdjust,
   TopAppBarNavigationIcon,
   TopAppBarRow,
@@ -32,24 +31,10 @@ import '@material/floating-label/dist/mdc.floating-label.css'
 import '@material/notched-outline/dist/mdc.notched-outline.css'
 import '@material/line-ripple/dist/mdc.line-ripple.css'
 
-import {
-  Tooltip,
-} from '@rmwc/tooltip'
 import '@rmwc/tooltip/tooltip.css'
 
-import dayjs, {
-  Dayjs,
-} from 'dayjs'
 import { useHistory } from 'react-router-dom'
 import { Button } from '@rmwc/button'
-
-import { List, Map } from 'immutable'
-
-import { ExperimentId } from '../../../App'
-import { ExperimentData, CageDisplayOrder, RackDisplayOrder } from '../../experiment-dashboard/ExperimentDashboard'
-import { DisplayName } from '../../../types'
-
-import { ExperimentMetaData } from '../new/NewExperimentView'
 
 
 interface Props {
