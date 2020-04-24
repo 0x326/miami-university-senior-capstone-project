@@ -8,6 +8,10 @@ import {
 } from 'react-router-dom'
 
 import {
+  CageSessionData
+} from '../experiment-dashboard/CageSessionTable'
+
+import {
   List,
   Map,
 } from 'immutable'
@@ -73,7 +77,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   const history = useHistory()
   const cages = [1, 2, 3, 4, 5]
   const cageList = List(cages)
-  const [updatedExperiments, setUpdatedExperiments] = useState(Map<string, ExperimentData>());
+  let updatedExperiments = experiments
+
+  // why don't state vars update immediatley
 
   return (
     <>
@@ -100,7 +106,35 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route path="/experiments/add-cage">
           <AddCages
-            addCages={(numberCages): void => console.log(numberCages)}
+            addCages={(numCages): void => {
+              console.log("before", updatedExperiments.toJS())
+              const experiment = updatedExperiments.get(experimentId)
+              let lastRid = 1
+              if (experiment) {
+                const cageIds = experiment.keySeq().flatMap(rid => {
+                  lastRid = rid
+                  return (experiment.get(rid) as Map<number, CageData>).keySeq()
+                }).toList()
+
+                const newCageIds: number[] = []
+
+                const lastElt = cageIds.get(-1, 0)
+                for (let i = lastElt + 1; i <= lastElt + Number(numCages); ++i)
+                  newCageIds.push(i)
+
+                console.log(newCageIds)
+
+                const withNewCages = updatedExperiments.asMutable()
+                for (let cid of newCageIds) {
+                  withNewCages.setIn([experimentId, lastRid, cid], List<Readonly<{
+                    sessionNumber: number;
+                    cageSessionData: CageSessionData;
+                  }>>())
+                }
+                updatedExperiments = withNewCages.asImmutable()
+                console.log("after", updatedExperiments.toJS())
+              }
+            }}
           />
         </Route>
         <Route exact path={`${url}/record/session`}>
@@ -109,9 +143,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             cageDisplayOrder={cageDisplayOrder}
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onEnd={(newData): void => {
-              let updatedExperiments = experiments.asMutable()
+              let withNewData = experiments.asMutable()
               console.log('before')
-              console.log(updatedExperiments.toJS())
+              console.log(withNewData.toJS())
 
               // bottles grouped by weight for simpler iteration {[rid, cid]: [bott1, bott2, ...], ...}
               const grouped = newData.keySeq().reduce((accumulator, x) => {
@@ -130,7 +164,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                 const [rid, cid] = e[0].toArray()
                 const botts = e[1].toArray()
 
-                let cageData = updatedExperiments.getIn([experimentId, rid, cid]) as CageData
+                let cageData = withNewData.getIn([experimentId, rid, cid]) as CageData
                 const last = cageData.last(null)
                 const isNewSession = last ? last.cageSessionData.size === 2 : true // 2 because pre and post
 
@@ -150,7 +184,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                       rowData,
                     }),
                   })
-                  updatedExperiments.setIn([experimentId, rid, cid], cageData)
+                  withNewData.setIn([experimentId, rid, cid], cageData)
                 } else {
                   // otherwise, append a post to past session
                   const past = cageData.get(-1)
@@ -165,12 +199,11 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                     })
                     cageData = updated
                   }
-                  updatedExperiments.setIn([experimentId, rid, cid], cageData)
+                  withNewData.setIn([experimentId, rid, cid], cageData)
                 }
               })
+              updatedExperiments = withNewData.asImmutable()
               console.log('after')
-              updatedExperiments = updatedExperiments.asImmutable()
-              setUpdatedExperiments(updatedExperiments)
               console.log(updatedExperiments.toJS())
 
               // temporary. download updated experiment data for verification
