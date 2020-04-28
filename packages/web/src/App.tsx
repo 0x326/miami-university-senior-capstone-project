@@ -71,6 +71,7 @@ const App: React.FC = () => {
   const [comments, setComments] = useState({})
 
   const [connected, setConnected] = useState(false)
+  const [connectionStatus, setConnectionStatus] = useState("Not connected")
 
   return (
     <>
@@ -109,9 +110,14 @@ const App: React.FC = () => {
             })}
             connectScale={() => {
               connect()
-                .then(() => setConnected(true),
-                  () => {}/* Do something for the case an error occurs */)
+                .then(() => {
+                  setConnected(true)
+                  setConnectionStatus("Connected!")
+                },
+                  () => { setConnectionStatus("Error") })
             }}
+            scaleConnectionStatus={connected}
+            connectionStatus={connectionStatus}
           />
         </Route>
         <Route path="/home">
@@ -131,7 +137,7 @@ const App: React.FC = () => {
         </Route>
         <Route path="/experiments/add-cage">
           <AddCages
-            addCages={(numberCages): void => console.log(numberCages)}
+            addCages={(numberCages): void => history.push('/experiments/record/view')}
           />
         </Route>
         <Route path="/scale-api-tester">

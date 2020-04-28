@@ -53,6 +53,8 @@ interface Props {
   comments: Comments;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
   connectScale:() => void;
+  scaleConnectionStatus: boolean;
+  connectionStatus: string;
 }
 
 function ExperimentsSwitch(props: Props): JSX.Element {
@@ -66,6 +68,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     dummyMap,
     comments,
     connectScale,
+    scaleConnectionStatus,
+    connectionStatus,
   } = props
 
   const { url } = useRouteMatch() || { url: '' }
@@ -73,6 +77,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   const cages = [1, 2, 3, 4, 5]
   const cageList = List(cages)
   const [updatedExperiments, setUpdatedExperiments] = useState(Map<string, ExperimentData>());
+  const [workbookDownload, setWorkbookDownload] = useState(Map<string, XLSX.WorkBook>())
 
   return (
     <>
@@ -87,15 +92,20 @@ function ExperimentsSwitch(props: Props): JSX.Element {
           <ExperimentMetadataView
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onAddCages={(): void => history.push(`${url}/add-cage`)}
-            onRecord={(): void => history.push(`${url}/record/session`)}
+            onRecord={(): void => {
+              if(scaleConnectionStatus) {
+                history.push(`${url}/record/session`)
+              } else {
+                const scaleCheck = window.confirm("The scale is currently not connected. Continuing will require enterting weights manually.\n\nWould you like to continue?")
+                if(scaleCheck) {
+                  history.push(`${url}/record/session`)
+                }
+              }
+            }}
             onConnect={connectScale}
+            scaleConnectionStatus={scaleConnectionStatus}
+            scaleConnectionStatusLabel={connectionStatus}
           />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <ScaleApiTester />
         </Route>
         <Route path="/experiments/add-cage">
           <AddCages
@@ -177,7 +187,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                 updatedExperiments.get(experimentId) as any,
                 rackDisplayOrder, cageDisplayOrder, dummyMap, comments)
 
-              XLSX.writeFile(wb, 'out.xlsx')
+              setWorkbookDownload(Map<string, XLSX.WorkBook>().set(experimentId, wb))
+              // XLSX.writeFile(wb, 'out.xlsx')
 
 
               history.push(`${url}/record/summary`)
@@ -188,6 +199,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         <Route exact path={`${url}/record/summary`}>
           <SessionSummary
             updatedExperiments= {updatedExperiments.get(experimentId) as ExperimentData}
+            workbook={workbookDownload.get(experimentId) as XLSX.WorkBook}
           />
         </Route>
         <Route path="*">

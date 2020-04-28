@@ -88,7 +88,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
 
       <DataRecordingScreen
         bottleName={refsToRecord.length > 0
-          ? `Rack ${refsToRecord[0][0]}, Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]})`
+          ? `Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]})`
           : null}
         isLast={refsToRecord.length === 0}
         onSubmit={(weight: number): void => {

@@ -2,6 +2,7 @@ import React, {
   useRef,
 } from 'react'
 import { FormEvent } from 'react';
+import { Button } from '@rmwc/button';
 
 // Old API (React classes)
 // class FooComponent {
@@ -71,7 +72,8 @@ function FileInput(props: Props): JSX.Element {
           <input type="file" ref={inputRef} />
         </label>
         <br />
-        <button type="submit">Submit</button>
+        <br />
+        <Button raised type="submit">Submit</Button>
       </form>
     </>
   );
