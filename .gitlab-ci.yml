@@ -96,7 +96,7 @@ cache:
 
 zip-code:
   stage: meta
-  image: alpine
+  image: ubuntu:bionic
   when: manual
   script:
     - git -z ls-files | xargs -0 zip "${CI_PROJECT_NAME}.zip"
