@@ -104,9 +104,9 @@ zip-code:
     - echo "How to use" > README.txt
     - echo "==========" >> README.txt
     - echo "" >> README.txt
-    - echo "Preferred: git clone ${CI_PROJECT_NAME}.git_bundle ${CI_PROJECT_NAME} -b ${CI_COMMIT_REF_NAME}" >> README.txt
+    - 'echo "Preferred: git clone ${CI_PROJECT_NAME}.git_bundle ${CI_PROJECT_NAME} -b ${CI_COMMIT_REF_NAME}" >> README.txt'
     - echo "" >> README.txt
-    - echo "Not recommended: unzip ${CI_PROJECT_NAME}.zip" >> README.txt
+    - 'echo "Not recommended: unzip ${CI_PROJECT_NAME}.zip" >> README.txt'
   artifacts:
     paths:
       - '*.zip'
