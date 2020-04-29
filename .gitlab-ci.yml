@@ -96,8 +96,11 @@ cache:
 
 zip-code:
   stage: meta
-  image: ubuntu:bionic
+  image: alpine
   when: manual
+  before_script:
+    - apk update
+    - apk add git zip
   script:
     - git -z ls-files | xargs -0 zip "${CI_PROJECT_NAME}.zip"
     - git bundle create "${CI_PROJECT_NAME}.git_bundle" "${CI_COMMIT_REF_NAME}" HEAD
