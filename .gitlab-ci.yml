@@ -94,6 +94,25 @@ cache:
     - node_modules/
     - .yarn
 
+zip-code:
+  stage: meta
+  image: alpine
+  when: manual
+  script:
+    - git -z ls-files | xargs -0 zip "${CI_PROJECT_NAME}.zip"
+    - git bundle create "${CI_PROJECT_NAME}.git_bundle" "${CI_COMMIT_REF_NAME}" HEAD
+    - echo "How to use" > README.txt
+    - echo "==========" >> README.txt
+    - echo "" >> README.txt
+    - echo "Preferred: git clone ${CI_PROJECT_NAME}.git_bundle ${CI_PROJECT_NAME} -b ${CI_COMMIT_REF_NAME}" >> README.txt
+    - echo "" >> README.txt
+    - echo "Not recommended: unzip ${CI_PROJECT_NAME}.zip" >> README.txt
+  artifacts:
+    paths:
+      - '*.zip'
+      - '*.git_bundle'
+      - README.txt
+
 build-web:
   stage: build
   image: node:lts
