@@ -57,6 +57,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""  # https://gitlab.com/gitlab-org/gitlab-runner/issues/4501
 
 stages:
+  - meta
   - build
   - test
   - deploy  # dummy stage to follow the template guidelines
