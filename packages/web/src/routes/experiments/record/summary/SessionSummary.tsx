@@ -146,21 +146,24 @@ function SessionSummary(props: Props): JSX.Element {
           </DataTableBody>
         </DataTableContent>
       </DataTable> */}
-      {/* <span>{data}</span>
+      <span>{data}</span>
       <Button onClick={() => {
         let temp = ""
         let counter = 1;
         updatedExperiments.forEach(rack => {
           rack.forEach(cage => {
-            temp += "\nCage: " + counter
-            cage.forEach(cageData => {
-              temp += "\nCurrent Session Summary: " + JSON.stringify(cageData.cageSessionData.last())
-            })
+            temp += "\nCage " + counter + ": "
+            const sessionData = cage.last()
+            const lastSessionData = JSON.stringify(sessionData).split(':')
+            temp += "Current Session Summary: " + JSON.stringify(sessionData) + '<br/>'
+            // cage.forEach(cageData => {
+            //   temp += "\nCurrent Session Summary: " + JSON.stringify(cageData.cageSessionData.last())
+            // })
             counter++
           })
         })
         setData(temp)
-      }}>Click</Button> */}
+      }}>Click</Button>
     </>
   )
 }
