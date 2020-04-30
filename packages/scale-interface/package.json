@@ -37,5 +37,9 @@
     "serialport": "^7.1.5",
     "ws": "^7.2.0",
     "yargs": "^14.0.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2"
   }
 }

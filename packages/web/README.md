@@ -11,6 +11,8 @@
 
 # Web UI
 
+[Live build](https://0x326.gitlab.io/miami-university-senior-capstone-project/app)
+
 ## Usage
 
 ```bash

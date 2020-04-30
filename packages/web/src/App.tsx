@@ -2,6 +2,7 @@
 // TODO (0x326) [2020-05-10] Remove extraneous @rmwc dependencies
 
 import React, {
+  useEffect,
   useState,
 } from 'react'
 
@@ -21,25 +22,17 @@ import {
   v4 as uuid4,
 } from 'uuid'
 
-import dayjs from 'dayjs'
-
 import ExperimentDashboard, {
   ExperimentData,
   CageDisplayOrder,
-  CageId,
-  RackId,
   RackDisplayOrder,
 } from './routes/experiment-dashboard/ExperimentDashboard'
-
-import ExperimentsSwitch from './routes/experiments'
-
-import {
-  CageData,
-} from './routes/experiment-dashboard/CageSessions'
 
 import {
   ExperimentMetaData,
 } from './routes/experiments/new/NewExperimentView'
+
+import ExperimentsSwitch from './routes/experiments'
 
 import {
   BottleType,
@@ -47,6 +40,8 @@ import {
   DisplayName,
   RouteMap,
 } from './types'
+
+import useSnackbar from './useSnackbar'
 
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
@@ -65,185 +60,39 @@ const App: React.FC = () => {
   const history = useHistory()
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  const [snackbar, snackbarQueuePush] = useSnackbar()
+
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
-  // TODO (wael27) [2020-05-10]: Delete this eslint-disable comment
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>()
-    .withMutations((experimentMap) => experimentMap
-      .set('experiment-1', {
-        experimentName: 'Experiment 1',
-        experimentLeadName: 'Dr. Quinn',
-        startDate: dayjs('2020-01-01'),
-        lastUpdated: dayjs('2020-02-04'),
-        sessionCount: 20,
-        bottlesPerCage: 2,
-        weighsPerBottle: 2,
+  const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>())
+  const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>())
+  const [experimentDisplayNames, setExperimentDisplayNames] = useState(Map<ExperimentId, DisplayName>())
+  const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List<ExperimentId>())
+  const [cageDisplayOrders, setCageDisplayOrders] = useState<CageDisplayOrder>(Map())
+  const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
+
+  useEffect(() => {
+    import('./sampleData')
+      .then(({
+        sampleExperimentMetadata,
+        sampleExperiments,
+        sampleExperimentDisplayNames,
+        sampleExperimentDisplayOrder,
+        sampleCageDisplayOrders,
+        sampleRackDisplayOrder,
+      }) => {
+        setExperimentMetadata(sampleExperimentMetadata)
+        setExperiments(sampleExperiments)
+        setExperimentDisplayNames(sampleExperimentDisplayNames)
+        setExperimentDisplayOrder(sampleExperimentDisplayOrder)
+        setCageDisplayOrders(sampleCageDisplayOrders)
+        setRackDisplayOrder(sampleRackDisplayOrder)
+
+        snackbarQueuePush({
+          message: 'Sample data loaded',
+          actions: List(),
+        })
       })
-      .set('experiment-2', {
-        experimentName: 'Experiment 2',
-        experimentLeadName: 'Prof. Stahr',
-        startDate: dayjs('2020-01-07'),
-        lastUpdated: dayjs('2020-01-08'),
-        sessionCount: 20,
-        bottlesPerCage: 2,
-        weighsPerBottle: 2,
-      })))
-  const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>()
-    .withMutations((experimentMap) => experimentMap
-      .set('experiment-1', Map<RackId, Map<CageId, CageData>>().withMutations((map) => map
-        .set(1, Map<CageId, CageData>().withMutations((rackData) => rackData
-          .set(1, List().withMutations((cageData) => cageData
-            .push({
-              sessionNumber: 1,
-              cageSessionData: List.of(
-                {
-                  rowLabel: 'Before',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 5)
-                    .set('EtOH', 10)),
-                },
-                {
-                  rowLabel: 'After',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 3)
-                    .set('EtOH', 9)),
-                },
-              ),
-            })
-            .push({
-              sessionNumber: 2,
-              cageSessionData: List.of(
-                {
-                  rowLabel: 'Before',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 5)
-                    .set('EtOH', 10)),
-                },
-                {
-                  rowLabel: 'After',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 2)
-                    .set('EtOH', 8)),
-                },
-              ),
-            })))
-          .set(2, List().withMutations((cageData) => cageData
-            .push({
-              sessionNumber: 1,
-              cageSessionData: List.of(
-                {
-                  rowLabel: 'Before',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 10)
-                    .set('EtOH', 10)),
-                },
-                {
-                  rowLabel: 'After',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 9)
-                    .set('EtOH', 9)),
-                },
-              ),
-            })
-            .push({
-              sessionNumber: 2,
-              cageSessionData: List.of(
-                {
-                  rowLabel: 'Before',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 10)
-                    .set('EtOH', 10)),
-                },
-                {
-                  rowLabel: 'After',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 1)
-                    .set('EtOH', 4)),
-                },
-              ),
-            })))))
-        .set(2, Map<CageId, CageData>().withMutations((rackData) => rackData
-          .set(3, List().withMutations((cageData) => cageData
-            .push({
-              sessionNumber: 1,
-              cageSessionData: List.of(
-                {
-                  rowLabel: 'Before',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 5)
-                    .set('EtOH', 10)),
-                },
-                {
-                  rowLabel: 'After',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 3)
-                    .set('EtOH', 9)),
-                },
-              ),
-            })
-            .push({
-              sessionNumber: 2,
-              cageSessionData: List.of(
-                {
-                  rowLabel: 'Before',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 5)
-                    .set('EtOH', 10)),
-                },
-                {
-                  rowLabel: 'After',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 2)
-                    .set('EtOH', 8)),
-                },
-              ),
-            })))
-          .set(4, List().withMutations((cageData) => cageData
-            .push({
-              sessionNumber: 1,
-              cageSessionData: List.of(
-                {
-                  rowLabel: 'Before',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 10)
-                    .set('EtOH', 10)),
-                },
-                {
-                  rowLabel: 'After',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 9)
-                    .set('EtOH', 9)),
-                },
-              ),
-            })
-            .push({
-              sessionNumber: 2,
-              cageSessionData: List.of(
-                {
-                  rowLabel: 'Before',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 10)
-                    .set('EtOH', 10)),
-                },
-                {
-                  rowLabel: 'After',
-                  rowData: Map().withMutations((rowData) => rowData
-                    .set('H₂0', 1)
-                    .set('EtOH', 4)),
-                },
-              ),
-            })))))))))
-  const [experimentDisplayNames, setExperimentDisplayNames] = useState(
-    Map<ExperimentId, DisplayName>()
-      .set('experiment-1', 'Experiment 1')
-      .set('experiment-2', 'Experiment 2'),
-  )
-  const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List.of('experiment-1', 'experiment-2'))
-  const [cageDisplayOrders] = useState<CageDisplayOrder>(Map<RackId, List<CageId>>()
-    .withMutations((map) => map
-      .set(1, List.of(1, 2))
-      .set(2, List.of(3, 4))))
-  const [rackDisplayOrder] = useState<RackDisplayOrder>(List.of(1, 2))
+  }, [snackbarQueuePush])
 
   return (
     <>
@@ -299,6 +148,7 @@ const App: React.FC = () => {
           />
         </Route>
       </Switch>
+      {snackbar}
     </>
   )
 }

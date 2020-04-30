@@ -2,9 +2,15 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/packages/api-interfaces/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/web/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/web/public" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/packages/scale-interface/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/api-interfaces/dist" />
       <excludeFolder url="file://$MODULE_DIR$/packages/scale-interface/.cache" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/scale-interface/build" />
       <excludeFolder url="file://$MODULE_DIR$/packages/scale-interface/dist" />
       <excludeFolder url="file://$MODULE_DIR$/packages/web/build" />
       <excludeFolder url="file://$MODULE_DIR$/site" />
