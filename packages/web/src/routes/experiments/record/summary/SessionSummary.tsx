@@ -2,38 +2,40 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import { ExperimentData } from '../../../experiment-dashboard/ExperimentDashboard'
+
 import {
-    List,
-  } from 'immutable'
+  List,
+} from 'immutable'
 
-  import {
-    DataTable,
-    DataTableContent,
-    DataTableHead,
-    DataTableRow,
-    DataTableHeadCell,
-    DataTableBody,
-    DataTableCell,
-  } from '@rmwc/data-table'
+import {
+  DataTable,
+  DataTableContent,
+  DataTableHead,
+  DataTableRow,
+  DataTableHeadCell,
+  DataTableBody,
+  DataTableCell,
+} from '@rmwc/data-table'
 
-  import '@rmwc/data-table/data-table.css'
+import '@rmwc/data-table/data-table.css'
 
-  import {
-    TextField,
-  } from '@rmwc/textfield'
+import {
+  TextField,
+} from '@rmwc/textfield'
 
-  import '@material/textfield/dist/mdc.textfield.css'
-  import '@material/floating-label/dist/mdc.floating-label.css'
-  import '@material/notched-outline/dist/mdc.notched-outline.css'
-  import '@material/line-ripple/dist/mdc.line-ripple.css'
+import '@material/textfield/dist/mdc.textfield.css'
+import '@material/floating-label/dist/mdc.floating-label.css'
+import '@material/notched-outline/dist/mdc.notched-outline.css'
+import '@material/line-ripple/dist/mdc.line-ripple.css'
 
-  import '@material/form-field/dist/mdc.form-field.css'
-import { CageData } from '../../../experiment-dashboard/CageSessions'
+import '@material/form-field/dist/mdc.form-field.css'
 import { Button } from '@rmwc/button'
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import * as XLSX from 'xlsx'
+
+import { CageData } from '../../../experiment-dashboard/CageSessions'
+import { ExperimentData } from '../../../experiment-dashboard/ExperimentDashboard'
 
 interface Props {
   updatedExperiments: ExperimentData;
@@ -46,11 +48,11 @@ function SessionSummary(props: Props): JSX.Element {
     workbook,
   } = props
 
-  const [data, setData] = useState("")
+  const [data, setData] = useState('')
 
   return (
     <>
-    <TopAppBar>
+      <TopAppBar>
         <TopAppBarRow>
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon icon="menu" />
@@ -71,15 +73,21 @@ function SessionSummary(props: Props): JSX.Element {
 
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-      }}>
-        <Button raised onClick={() => {
-          if(workbook != undefined) {
-            XLSX.writeFile(workbook, 'out.xlsx')
-          }
-        }}>Download Experiment</Button>
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Button
+          raised
+          onClick={() => {
+            if (workbook != undefined) {
+              XLSX.writeFile(workbook, 'out.xlsx')
+            }
+          }}
+        >
+Download Experiment
+        </Button>
       </div>
 
       <br />
@@ -87,15 +95,16 @@ function SessionSummary(props: Props): JSX.Element {
 
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-      }}>
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <Button raised>Restart Session</Button>
       </div>
-    {// TRIED MESSING WITH TABLES, FAILED MISERABLY :C
+      {// TRIED MESSING WITH TABLES, FAILED MISERABLY :C
     }
-        {/* <DataTable>
+      {/* <DataTable>
         <DataTableContent>
           <DataTableHead>
             <DataTableRow>
@@ -148,22 +157,25 @@ function SessionSummary(props: Props): JSX.Element {
       </DataTable> */}
       <span>{data}</span>
       <Button onClick={() => {
-        let temp = ""
-        let counter = 1;
-        updatedExperiments.forEach(rack => {
-          rack.forEach(cage => {
-            temp += "\nCage " + counter + ": "
+        let temporary = ''
+        let counter = 1
+        updatedExperiments.forEach((rack) => {
+          rack.forEach((cage) => {
+            temporary += `\nCage ${counter}: `
             const sessionData = cage.last()
             const lastSessionData = JSON.stringify(sessionData).split(':')
-            temp += "Current Session Summary: " + JSON.stringify(sessionData) + '<br/>'
+            temporary += `Current Session Summary: ${lastSessionData[0].substr(2, 13)}: ${lastSessionData[1].substr(0, lastSessionData[1].length - 18)}  ${lastSessionData[4].substr(2, lastSessionData[4].length - 3)} ${lastSessionData[3].substr(1, lastSessionData[3].length - 12)}: ${lastSessionData[5]}  ${lastSessionData[3].substr(1, lastSessionData[3].length - 12)}: ${lastSessionData[6].substr(0, lastSessionData[6].length - 4)} <br/>`
             // cage.forEach(cageData => {
             //   temp += "\nCurrent Session Summary: " + JSON.stringify(cageData.cageSessionData.last())
             // })
             counter++
           })
         })
-        setData(temp)
-      }}>Click</Button>
+        setData(temporary)
+      }}
+      >
+Click
+      </Button>
     </>
   )
 }

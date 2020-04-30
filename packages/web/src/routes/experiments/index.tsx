@@ -198,7 +198,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route exact path={`${url}/record/summary`}>
           <SessionSummary
-            updatedExperiments= {updatedExperiments.get(experimentId) as ExperimentData}
+            updatedExperiments={updatedExperiments.get(experimentId) as ExperimentData}
             workbook={workbookDownload.get(experimentId) as XLSX.WorkBook}
           />
         </Route>
