@@ -1,26 +1,33 @@
-# Welcome to MkDocs
+[Mkdocs]: https://www.mkdocs.org/
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+# Scale Interface Project: Installation Guide
+
+> By: John Meyer, Nick DiGennaro, David Wimmel, Wael Elsharkawy
+
+## Preface
+
+### Introduction
+
+### Purpose
+
+### Audience
+
+## System Requirements
+
+## Installation Instructions
+
+## Troubleshooting
+
+## Verification
 
 ## Building these docs
+
+This document is written in Markdown and rendered as a web page using [Mkdocs]:
 
 ```bash
 pip3 install mkdocs mkdocs-material
 
+git clone https://gitlab.com/0x326/miami-university-senior-capstone-project.git
 cd miami-university-senior-capstone-project/
 mkdocs build
 ```
-
-## Commands
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
