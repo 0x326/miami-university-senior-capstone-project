@@ -23,7 +23,7 @@ import {
 } from '../../../../types'
 
 import {
-  CageId, RackId,
+  CageId, RackId, ExperimentData,
 } from '../../../experiment-dashboard/ExperimentDashboard'
 
 import {
@@ -36,6 +36,7 @@ import DataRecordingScreen from './DataRecordingScreen'
 
 
 interface Props {
+  experiment: ExperimentData;
   rackDisplayOrder: List<RackId>;
   cageDisplayOrder: Map<RackId, List<CageId>>;
   experimentMetadata: ExperimentMetaData;
@@ -45,6 +46,7 @@ interface Props {
 
 function ExperimentRecordSessionView(props: Props): JSX.Element {
   const {
+    experiment,
     rackDisplayOrder,
     cageDisplayOrder,
     experimentMetadata,
