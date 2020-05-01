@@ -77,7 +77,11 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   const history = useHistory()
   const cages = [1, 2, 3, 4, 5]
   const cageList = List(cages)
+  // todo refactor this
   let updatedExperiments = experiments
+  let updatedCdo = cageDisplayOrder
+  const [x, setx] = useState(updatedExperiments)
+  const [y, sety] = useState(updatedCdo)
 
   // why don't state vars update immediatley
 
@@ -107,7 +111,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         <Route path="/experiments/add-cage">
           <AddCages
             addCages={(numCages): void => {
-              console.log("before", updatedExperiments.toJS())
+              console.log("before", updatedExperiments.getIn([experimentId]).toJS())
               const experiment = updatedExperiments.get(experimentId)
               let lastRid = 1
               if (experiment) {
@@ -122,30 +126,32 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                 for (let i = lastElt + 1; i <= lastElt + Number(numCages); ++i)
                   newCageIds.push(i)
 
-                console.log(newCageIds)
-
                 const withNewCages = updatedExperiments.asMutable()
+                const withNewCdo = updatedCdo.asMutable()
                 for (let cid of newCageIds) {
                   withNewCages.setIn([experimentId, lastRid, cid], List<Readonly<{
                     sessionNumber: number;
                     cageSessionData: CageSessionData;
                   }>>())
+                  withNewCdo.setIn([lastRid], withNewCdo.getIn([lastRid]).push(cid)) // godless
                 }
                 updatedExperiments = withNewCages.asImmutable()
-                console.log("after", updatedExperiments.toJS())
+                updatedCdo = withNewCdo.asMutable()
+                setx(updatedExperiments)
+                sety(updatedCdo)
+                console.log("after", updatedExperiments.getIn([experimentId]).toJS())
               }
             }}
           />
         </Route>
         <Route exact path={`${url}/record/session`}>
-          <ExperimentRecordDataView
           <ExperimentRecordSessionView
-            experiment={experiments.get(experimentId) as ExperimentData}
+            experiment={x.get(experimentId) as ExperimentData}
             rackDisplayOrder={rackDisplayOrder}
-            cageDisplayOrder={cageDisplayOrder}
+            cageDisplayOrder={y}
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onEnd={(newData): void => {
-              let withNewData = experiments.asMutable()
+              let withNewData = x.asMutable()
               console.log('before')
               console.log(withNewData.toJS())
 
@@ -162,9 +168,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
               }, Map<List<number>, List<string>>())
 
 
-              grouped.entrySeq().forEach((e) => {
-                const [rid, cid] = e[0].toArray()
-                const botts = e[1].toArray()
+              grouped.entrySeq().forEach((elt) => {
+                const [rid, cid] = elt[0].toArray()
+                const botts = elt[1].toArray()
 
                 let cageData = withNewData.getIn([experimentId, rid, cid]) as CageData
                 const last = cageData.last(null)
@@ -205,14 +211,18 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                 }
               })
               updatedExperiments = withNewData.asImmutable()
+              setx(updatedExperiments)
               console.log('after')
               console.log(updatedExperiments.toJS())
+
+              console.log("==cdo", updatedCdo.toJS())
+              console.log("==cdo2", y.toJS())
 
               // temporary. download updated experiment data for verification
               console.log('to xlsx')
               const wb = displayToWB(experimentMetadata.get(experimentId) as any,
                 updatedExperiments.get(experimentId) as any,
-                rackDisplayOrder, cageDisplayOrder, dummyMap, comments)
+                rackDisplayOrder, y, dummyMap, comments)
 
               XLSX.writeFile(wb, 'out.xlsx')
 
