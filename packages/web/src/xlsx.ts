@@ -297,15 +297,15 @@ function experimentToWS(
   // data rows
   let i = rows.dataBegin
   for (const [rid, cages] of rdo.map((x) => {
-    const cages = cdo.get(x)
-    if (cages) { return [x, cages.toArray()] }
+    const cages = cdo.get(x, null)
+    if (cages !== null) { return [x, cages.toArray()] }
     return null
   }).toArray() as [number, number[]][]) {
     for (const cid of cages) {
       aoa[i] = []
       aoa[i][cols.rackid] = rid
       aoa[i][cols.cageid] = cid
-      aoa[i][cols.isDummy] = dm.get(List.of(rid, cid))
+      aoa[i][cols.isDummy] = dm.get(List.of(rid, cid), false)
 
       const sessionData = (ex.getIn([rid, cid]) as CageData)
         .sort((a, b) => (a.sessionNumber >= b.sessionNumber ? 1 : -1))
