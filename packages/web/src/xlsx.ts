@@ -25,6 +25,10 @@ import {
 
 import { ExperimentId } from './App'
 
+import {
+  experimentId,
+} from './types'
+
 import { ExperimentMetaData } from './routes/experiments/new/NewExperimentView'
 
 // for simpler parsing
@@ -149,9 +153,10 @@ function treatmentPair(datPair: [XLSX.CellObject, XLSX.CellObject]): [string, nu
 function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentId, ExperimentData>, DummyMap] {
   const colsPerSess = md.bottlesPerCage * 2 // pre and post weights for each treatment
 
-  const eid = `${md.experimentName}_${
-    md.experimentLeadName}_${
-    String(md.startDate)}`
+  // const eid = `${md.experimentName}_${
+  //   md.experimentLeadName}_${
+  //   String(md.startDate)}`
+  const eid = experimentId
 
   const dummyMap = Map<List<number>, boolean>().asMutable()
 

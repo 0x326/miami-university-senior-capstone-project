@@ -14,22 +14,27 @@ import {
 } from '@rmwc/typography'
 import '@material/typography/dist/mdc.typography.css'
 
+import { Button } from '@rmwc/button'
+
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import {
   ExperimentMetaData,
-} from '../new/NewExperimentView'
+} from '../../new/NewExperimentView'
+
 
 dayjs.extend(relativeTime)
 
 interface Props {
   experimentMetadata: ExperimentMetaData;
+  onRecord: () => void;
 }
 
 function ExperimentMetadataView(props: Props): JSX.Element {
   const {
     experimentMetadata,
+    onRecord,
   } = props
 
   const {
@@ -84,6 +89,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
         {' '}
         {treatments.join(', ')}
       </Typography>
+      <Button label="Begin" raised onClick={onRecord} />
     </>
   )
 }

@@ -48,6 +48,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
 import ScaleApiTester from './ScaleApiTester'
+import LandingPage from './routes/home'
 
 export type ExperimentId = RouteId
 
@@ -69,30 +70,31 @@ const App: React.FC = () => {
   const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List<ExperimentId>())
   const [cageDisplayOrders, setCageDisplayOrders] = useState<CageDisplayOrder>(Map())
   const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
+  const [dummyMap, setDummyMap] = useState(Map<List<number>, boolean>())
 
-  useEffect(() => {
-    import('./sampleData')
-      .then(({
-        sampleExperimentMetadata,
-        sampleExperiments,
-        sampleExperimentDisplayNames,
-        sampleExperimentDisplayOrder,
-        sampleCageDisplayOrders,
-        sampleRackDisplayOrder,
-      }) => {
-        setExperimentMetadata(sampleExperimentMetadata)
-        setExperiments(sampleExperiments)
-        setExperimentDisplayNames(sampleExperimentDisplayNames)
-        setExperimentDisplayOrder(sampleExperimentDisplayOrder)
-        setCageDisplayOrders(sampleCageDisplayOrders)
-        setRackDisplayOrder(sampleRackDisplayOrder)
+  // useEffect(() => {
+  //   import('./sampleData')
+  //     .then(({
+  //       sampleExperimentMetadata,
+  //       sampleExperiments,
+  //       sampleExperimentDisplayNames,
+  //       sampleExperimentDisplayOrder,
+  //       sampleCageDisplayOrders,
+  //       sampleRackDisplayOrder,
+  //     }) => {
+  //       setExperimentMetadata(sampleExperimentMetadata)
+  //       setExperiments(sampleExperiments)
+  //       setExperimentDisplayNames(sampleExperimentDisplayNames)
+  //       setExperimentDisplayOrder(sampleExperimentDisplayOrder)
+  //       setCageDisplayOrders(sampleCageDisplayOrders)
+  //       setRackDisplayOrder(sampleRackDisplayOrder)
 
-        snackbarQueuePush({
-          message: 'Sample data loaded',
-          actions: List(),
-        })
-      })
-  }, [snackbarQueuePush])
+  //       snackbarQueuePush({
+  //         message: 'Sample data loaded',
+  //         actions: List(),
+  //       })
+  //     })
+  // }, [snackbarQueuePush])
 
   return (
     <>
@@ -105,7 +107,7 @@ const App: React.FC = () => {
       />
       <Switch>
         <Route exact path="/">
-          <Redirect to="/experiments" />
+          <Redirect to="/home" />
         </Route>
         <Route path="/experiment-dashboard">
           <ExperimentDashboard
@@ -136,6 +138,19 @@ const App: React.FC = () => {
 
               history.push('/experiments')
             })}
+          />
+        </Route>
+        <Route path="/home">
+          <LandingPage
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders, newDummyMap): void => {
+              setExperiments(newExperimentData)
+              setExperimentMetadata(newMetaData)
+              setRackDisplayOrder(newRackDisplayOrder)
+              setCageDisplayOrders(newCageDisplayOrders)
+              setDummyMap(newDummyMap)
+            }}
+            metaData={experimentMetadata}
           />
         </Route>
         <Route path="/scale-api-tester">
