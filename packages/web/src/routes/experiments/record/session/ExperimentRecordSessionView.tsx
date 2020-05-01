@@ -57,7 +57,7 @@ function ExperimentRecodSessionView(props: Props): JSX.Element {
     lastUpdated,
     sessionCount,
     bottlesPerCage,
-    weighsPerBottle,
+    // weighsPerBottle,
   } = experimentMetadata
 
   const [bottleTypesToRecord, setBottleTypesToRecord] = useState(List<BottleType>())
