@@ -7,9 +7,6 @@ import {
   useHistory,
 } from 'react-router-dom'
 
-import {
-  CageSessionData
-} from '../experiment-dashboard/CageSessionTable'
 
 import {
   List,
@@ -17,6 +14,10 @@ import {
 } from 'immutable'
 
 import * as XLSX from 'xlsx'
+
+import {
+  CageSessionData,
+} from '../experiment-dashboard/CageSessionTable'
 
 import {
   DisplayName,
@@ -58,6 +59,8 @@ interface Props {
   comments: Comments;
   onCreateExperiment: (experimentMetaData: ExperimentMetaData) => void;
   connectScale: () => void;
+  onAddCages: (numCages: number) => void;
+  onNewWeights: (newData: Map<List<React.ReactText>, number>) => void;
 }
 
 function ExperimentsSwitch(props: Props): JSX.Element {
@@ -67,6 +70,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     rackDisplayOrder,
     cageDisplayOrder,
     onCreateExperiment,
+    onAddCages,
+    onNewWeights,
     experimentMetadata,
     dummyMap,
     comments,
@@ -77,13 +82,6 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   const history = useHistory()
   const cages = [1, 2, 3, 4, 5]
   const cageList = List(cages)
-  // todo refactor this
-  let updatedExperiments = experiments
-  let updatedCdo = cageDisplayOrder
-  const [x, setx] = useState(updatedExperiments)
-  const [y, sety] = useState(updatedCdo)
-
-  // why don't state vars update immediatley
 
   return (
     <>
@@ -91,7 +89,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         <Route exact path={`${url}/new`}>
           <NewExperiment
             onCancelAction={(): void => history.push(`${url}/`)}
-            onDoneAction={onCreateExperiment}
+            onDoneAction={(experimentMetaData): void => {
+              onCreateExperiment(experimentMetaData)
+            }}
           />
         </Route>
         <Route exact path={`${url}/record/view`}>
@@ -110,131 +110,22 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route path="/experiments/add-cage">
           <AddCages
-            addCages={(numCages): void => {
-              console.log("before", updatedExperiments.getIn([experimentId]).toJS())
-              const experiment = updatedExperiments.get(experimentId)
-              let lastRid = 1
-              if (experiment) {
-                const cageIds = experiment.keySeq().flatMap(rid => {
-                  lastRid = rid
-                  return (experiment.get(rid) as Map<number, CageData>).keySeq()
-                }).toList()
-
-                const newCageIds: number[] = []
-
-                const lastElt = cageIds.get(-1, 0)
-                for (let i = lastElt + 1; i <= lastElt + Number(numCages); ++i)
-                  newCageIds.push(i)
-
-                const withNewCages = updatedExperiments.asMutable()
-                const withNewCdo = updatedCdo.asMutable()
-                for (let cid of newCageIds) {
-                  withNewCages.setIn([experimentId, lastRid, cid], List<Readonly<{
-                    sessionNumber: number;
-                    cageSessionData: CageSessionData;
-                  }>>())
-                  withNewCdo.setIn([lastRid], withNewCdo.getIn([lastRid]).push(cid)) // godless
-                }
-                updatedExperiments = withNewCages.asImmutable()
-                updatedCdo = withNewCdo.asMutable()
-                setx(updatedExperiments)
-                sety(updatedCdo)
-                console.log("after", updatedExperiments.getIn([experimentId]).toJS())
-              }
-            }}
+            addCages={(numberCages): void => onAddCages(Number(numberCages))}
           />
         </Route>
         <Route exact path={`${url}/record/session`}>
           <ExperimentRecordSessionView
-            experiment={x.get(experimentId) as ExperimentData}
+            experiment={experiments.get(experimentId) as ExperimentData}
             rackDisplayOrder={rackDisplayOrder}
-            cageDisplayOrder={y}
+            cageDisplayOrder={cageDisplayOrder}
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
-            onEnd={(newData): void => {
-              let withNewData = x.asMutable()
-              console.log('before')
-              console.log(withNewData.toJS())
-
-              // bottles grouped by weight for simpler iteration {[rid, cid]: [bott1, bott2, ...], ...}
-              const grouped = newData.keySeq().reduce((accumulator, x) => {
-                const [rid, cid, bott] = x.toArray()
-                const k = List.of<any>(rid, cid)
-                const alreadyStored = accumulator.get(k, null)
-
-                if (alreadyStored === null) {
-                  return accumulator.set(k, List.of(bott as string))
-                }
-                return accumulator.set(k, alreadyStored.push(bott as string))
-              }, Map<List<number>, List<string>>())
-
-
-              grouped.entrySeq().forEach((elt) => {
-                const [rid, cid] = elt[0].toArray()
-                const botts = elt[1].toArray()
-
-                let cageData = withNewData.getIn([experimentId, rid, cid]) as CageData
-                const last = cageData.last(null)
-                const isNewSession = last ? last.cageSessionData.size === 2 : true // 2 because pre and post
-
-                // eslint-disable-next-line no-shadow
-                const rowData = Map<BottleType, number>().withMutations((rowData) => {
-                  for (const bott of botts) {
-                    rowData.set(bott, newData.get(List.of<any>(rid, cid, bott)) as any)
-                  }
-                })
-
-                if (isNewSession) {
-                  // when new session, append pre to new session
-                  cageData = cageData.push({
-                    sessionNumber: last ? last.sessionNumber + 1 : 1,
-                    cageSessionData: List.of<any>({
-                      rowLabel: 'pre',
-                      rowData,
-                    }),
-                  })
-                  withNewData.setIn([experimentId, rid, cid], cageData)
-                } else {
-                  // otherwise, append a post to past session
-                  const past = cageData.get(-1)
-                  const toUpdate = cageData.pop()
-                  if (past) {
-                    const updated = toUpdate.push({
-                      sessionNumber: past.sessionNumber,
-                      cageSessionData: past.cageSessionData.push({
-                        rowLabel: 'post',
-                        rowData: rowData as any,
-                      }),
-                    })
-                    cageData = updated
-                  }
-                  withNewData.setIn([experimentId, rid, cid], cageData)
-                }
-              })
-              updatedExperiments = withNewData.asImmutable()
-              setx(updatedExperiments)
-              console.log('after')
-              console.log(updatedExperiments.toJS())
-
-              console.log("==cdo", updatedCdo.toJS())
-              console.log("==cdo2", y.toJS())
-
-              // temporary. download updated experiment data for verification
-              console.log('to xlsx')
-              const wb = displayToWB(experimentMetadata.get(experimentId) as any,
-                updatedExperiments.get(experimentId) as any,
-                rackDisplayOrder, y, dummyMap, comments)
-
-              XLSX.writeFile(wb, 'out.xlsx')
-
-
-              history.push(`${url}/record/summary`)
-            }}
+            onEnd={(newData): void => onNewWeights(newData)}
             cageIds={cageList}
           />
         </Route>
         <Route exact path={`${url}/record/summary`}>
           <SessionSummary
-            updatedExperiments={updatedExperiments.get(experimentId) as ExperimentData}
+            updatedExperiments={experiments.get(experimentId) as ExperimentData}
           />
         </Route>
         <Route path="*">

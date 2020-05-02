@@ -63,10 +63,6 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const [refsToRecord] = useState((): [RackId, CageId, BottleType, boolean][] => {
     const ret: [RackId, CageId, BottleType, boolean][] = []
     // first collect rid cids that need a post session
-    console.log("experiment in ExperimentRecordSessionView")
-    console.log(experiment.toJS())
-    console.log("cdo")
-    console.log(cageDisplayOrder.toJS())
     for (const bott of treatments) {
       for (const rid of rackDisplayOrder.toArray()) {
         const cids = cageDisplayOrder.get(rid, null)
@@ -78,7 +74,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
             const lastSess = cage.get(-1, null)
             if (lastSess === null)
               continue
-            if (lastSess.cageSessionData.size == 1) // then it must need a post session
+            if (lastSess.cageSessionData.size === 1) // then it must need a post session
               ret.push([rid, cid, bott, true])
           }
         }
@@ -103,7 +99,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
         }
       }
     }
-    console.log(ret)
+    console.log("rec order", ret)
     return ret
   })
 
