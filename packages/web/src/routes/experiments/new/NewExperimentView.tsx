@@ -40,6 +40,7 @@ import dayjs, {
   Dayjs,
 } from 'dayjs'
 import { useHistory } from 'react-router-dom'
+import { Button } from '@rmwc/button'
 
 export interface ExperimentMetaData extends Readonly<{
   experimentName: string;
@@ -58,7 +59,6 @@ interface Props {
 
 function NewExperiment(props: Props): JSX.Element {
   const {
-    onCancelAction,
     onDoneAction,
   } = props
 
@@ -94,7 +94,7 @@ function NewExperiment(props: Props): JSX.Element {
           <TopAppBarSection alignStart>
             <TopAppBarNavigationIcon
               icon="chevron_left"
-              onClick={e => history.goBack()}
+              onClick={(): void => history.goBack()}
             />
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>
@@ -190,6 +190,27 @@ function NewExperiment(props: Props): JSX.Element {
               }}
             />
           </GridCell>
+          <br />
+          <br />
+
+          <Button
+            disabled={!areAllFieldsValid}
+            onClick={(): boolean | void => {
+              if (areAllFieldsValid) {
+                onDoneAction({
+                  experimentName,
+                  experimentLeadName,
+                  startDate: dayjs(startDate),
+                  lastUpdated: dayjs(),
+                  sessionCount: Number(sessionCount),
+                  bottlesPerCage: Number(bottlesPerCage),
+                  treatments: treatments.trim().split(',').map((x) => x.trim()), // store as list
+                })
+              }
+            }}
+          >
+            Create new experiment and begin session
+          </Button>
         </Grid>
       </FormField>
     </>

@@ -189,18 +189,24 @@ function parseData(ds: XLSX.WorkSheet, md: ExperimentMetaData): [Map<ExperimentI
               }
             }),
           }
-          const postWeights = {
-            rowLabel: 'post',
-            rowData: Map().withMutations((rowDat) => {
-              for (const cellPair of dataPairs.slice(Math.floor(dataPairs.length / 2))) {
-                const datPair = treatmentPair(cellPair)
-                rowDat.set(datPair[0], datPair[1])
-              }
-            }),
+          // it's possible we don't have post weights. There's a better way to do this, but good enough for now
+          let postWeights = null
+          try {
+            postWeights = {
+              rowLabel: 'post',
+              rowData: Map().withMutations((rowDat) => {
+                for (const cellPair of dataPairs.slice(Math.floor(dataPairs.length / 2))) {
+                  const datPair = treatmentPair(cellPair)
+                  rowDat.set(datPair[0], datPair[1])
+                }
+              }),
+            }
+          } catch {
+            // goto
           }
           const session = {
             sessionNumber: sessNumber,
-            cageSessionData: List([preWeights, postWeights]),
+            cageSessionData: postWeights ? List([preWeights, postWeights]) : List([preWeights]),
           }
           sessions.push(session)
         }
@@ -242,8 +248,8 @@ function binToDisplay(dat: Uint8Array):
   const onlyKey = experimentData.keySeq().toArray()[0]
   const rackOrder = List(experimentData.getIn([onlyKey]).keySeq().toArray().sort() as [RackId])
 
-  const cageOrder = Map().asMutable() as CageDisplayOrder
-  rackOrder.map((rackid) => cageOrder.set(rackid, experimentData.getIn([onlyKey, rackid]).keySeq().toArray().sort()))
+  const cageOrder = Map<RackId, List<CageId>>().asMutable()
+  rackOrder.map((rackid) => cageOrder.set(rackid, experimentData.getIn([onlyKey, rackid]).keySeq().sort().toList()))
 
   return [metadat, experimentData, rackOrder, cageOrder.asImmutable(), dummies, comments]
 }
@@ -290,14 +296,16 @@ function experimentToWS(
 
   // data rows
   let i = rows.dataBegin
-  for (const [rid, cages] of rdo.map((x) => [x, cdo.get(x)]).toArray() as [number, number[]][]) {
+  for (const [rid, cages] of rdo.map((x) => {
+    const cages = cdo.get(x, null)
+    if (cages !== null) { return [x, cages.toArray()] }
+    return null
+  }).toArray() as [number, number[]][]) {
     for (const cid of cages) {
-      // const cage = ex.getIn([rid, cid]) as Cage
-
       aoa[i] = []
       aoa[i][cols.rackid] = rid
       aoa[i][cols.cageid] = cid
-      aoa[i][cols.isDummy] = dm.get(List.of(rid, cid))
+      aoa[i][cols.isDummy] = dm.get(List.of(rid, cid), false)
 
       const sessionData = (ex.getIn([rid, cid]) as CageData)
         .sort((a, b) => (a.sessionNumber >= b.sessionNumber ? 1 : -1))
@@ -348,7 +356,7 @@ export {
   displayToWB,
 }
 
-// // test functionality
+// test functionality
 
 // import * as fs from 'fs'
 // let dat = new Uint8Array(fs.readFileSync('./test.xlsx'))
@@ -369,8 +377,11 @@ export {
 // console.log('====\ncomments: \n====')
 // console.log(co)
 // console.log('====\ndisplayToWb:\n====')
+// console.log(experiment.toJS())
+
+
 // let wb = displayToWB(metadat,
-//   (experiment as any).get('Addiction Study 12_Quinn_Mon, 19 Jan 1970 04:32:24 GMT'),
+//   (experiment as any).get(experimentId),
 //   rdo, cdo, dm, co)
 // XLSX.writeFile(wb, 'from-test.xlsx')
 
@@ -378,7 +389,7 @@ export {
 // dat = new Uint8Array(fs.readFileSync('./from-test.xlsx'))
 // const again = binToDisplay(dat)
 // wb = displayToWB(again[0],
-//   (again[1] as any).get('Addiction Study 12_Quinn_Mon, 19 Jan 1970 04:32:24 GMT'),
+//   (again[1] as any).get(experimentId),
 //   again[2], again[3], again[4], again[5])
 // XLSX.writeFile(wb, 'from-from-test.xlsx')
 
@@ -391,7 +402,6 @@ THIS!
         1: {
             // cageids
             1: {
-                isDummy: true,
                 cageData: [{
                     sessionNumber: 1,
                     cageSessionData: [
