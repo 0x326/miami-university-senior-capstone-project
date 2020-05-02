@@ -13,17 +13,10 @@ import {
   Map,
 } from 'immutable'
 
-import * as XLSX from 'xlsx'
-
-import {
-  CageSessionData,
-} from '../experiment-dashboard/CageSessionTable'
-
 import {
   DisplayName,
   RouteId,
   experimentId,
-  BottleType,
 } from '../../types'
 
 import NoMatch from '../NoMatch'
@@ -33,10 +26,9 @@ import {
 
 import { RackId, CageId, ExperimentData } from '../experiment-dashboard/ExperimentDashboard'
 import ScaleApiTester from '../../ScaleApiTester'
-import { CageData } from '../experiment-dashboard/CageSessions'
 
 import {
-  displayToWB, DummyMap, Comments,
+  DummyMap, Comments,
 } from '../../xlsx'
 
 import NewExperiment, {
