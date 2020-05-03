@@ -27,6 +27,7 @@ import {
   binToDisplay, DummyMap, Comments,
 } from '../../xlsx'
 import { ExperimentData, RackDisplayOrder, CageDisplayOrder } from '../experiment-dashboard/ExperimentDashboard'
+import { Button } from '@rmwc/button'
 
 import FileInput from './FileInput'
 
@@ -49,7 +50,7 @@ function LandingPage(props: Props): JSX.Element {
   } = props
 
   const history = useHistory()
-  const [confirmationMessage, setConfirmMessage] = useState('')
+  const [confirmationMessage, setConfirmMessage] = useState("Not File Submission")
 
   return (
     <>
@@ -63,41 +64,84 @@ function LandingPage(props: Props): JSX.Element {
       </TopAppBar>
       <TopAppBarFixedAdjust />
 
-      <button
-        onClick={(e) => history.push('/experiments/new')}
-      >
-New Experiment
-      </button>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
 
-      <FileInput
-        onFileUpload={(fileData) => {
-          // Call xlsx library
-          try {
-            const [meta, ex, rdo, cdo, dm, co] = binToDisplay(new Uint8Array(fileData))
-            console.log(meta, ex, rdo, cdo, dm)
-            // Ask parent to update experiment data
-            onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm, co)
-            setConfirmMessage('File Uploaded')
-          } catch (error) {
-            alert('The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.')
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+      }}>
+        <Button raised
+          onClick={() => history.push('/experiments/new')}
+        >New Experiment</Button>
+      </div>
+
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+      }}>
+        <FileInput
+          onFileUpload={(fileData) => {
+            // Call xlsx library
+            try {
+              const [meta, ex, rdo, cdo, dm, co] = binToDisplay(new Uint8Array(fileData))
+              console.log(meta, ex, rdo, cdo, dm)
+              // Ask parent to update experiment data
+              onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm, co)
+              setConfirmMessage("File Uploaded")
+            } catch (e) {
+              alert("The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.")
+            }
+          }}
+        />
+      </div>
+
+      <br />
+      <br />
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+      }}>
+        <span>{confirmationMessage}</span>
+      </div>
+
+      <br />
+      <br />
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+      }}>
+        <Button raised
+          onClick={() => {
+            if (confirmationMessage == "") {
+              alert("Please upload an experiment to begin session precheck.")
+            } else {
+              history.push('/experiments/record/view')
+            }
           }
-        }}
-      />
-      <br />
-      <span>{confirmationMessage}</span>
-      <br />
-      <br />
-      <button
-        onClick={(e) => {
-          if (confirmationMessage == '') {
-            alert('Please upload an experiment to begin session precheck.')
-          } else {
-            history.push('/experiments/record/view')
           }
-        }}
-      >
-Start Session Precheck
-      </button>
+        >Start Session Precheck</Button>
+      </div>
     </>
   )
 }

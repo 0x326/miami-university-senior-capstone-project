@@ -56,6 +56,12 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const {
     experimentName,
     treatments,
+    experimentLeadName,
+    startDate,
+    lastUpdated,
+    sessionCount,
+    bottlesPerCage,
+    // weighsPerBottle,
   } = experimentMetadata
 
   const sessLim = experimentMetadata.sessionCount
@@ -122,7 +128,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
       // todo: refactor this
       <DataRecordingScreen
         bottleName={refsToRecord.length > 0
-          ? `Rack ${refsToRecord[0][0]}, Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]}), ${refsToRecord[0][3] ? "Post" : "Pre"}`
+          ? `Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]})`
           : null}
         isLast={refsToRecord.length === 0}
         onSubmit={(weight: number): void => {

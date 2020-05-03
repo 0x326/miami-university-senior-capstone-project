@@ -194,6 +194,7 @@ function NewExperiment(props: Props): JSX.Element {
           <br />
 
           <Button
+            raised
             disabled={!areAllFieldsValid}
             onClick={(): boolean | void => {
               if (areAllFieldsValid) {

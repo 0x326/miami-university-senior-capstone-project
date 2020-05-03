@@ -38,9 +38,11 @@ function DataRecordingScreen(props: Props): JSX.Element {
   })
 
   useEffect(() => {
-    scaleData((measurement) => {
-      setWeight(measurement)
-    })
+    try {
+      scaleData((measurement) => {
+        setWeight(measurement)
+      })
+    } catch(error) { }
   })
 
   return (
