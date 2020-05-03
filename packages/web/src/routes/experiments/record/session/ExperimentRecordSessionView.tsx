@@ -53,6 +53,12 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const {
     experimentName,
     treatments,
+    experimentLeadName,
+    startDate,
+    lastUpdated,
+    sessionCount,
+    bottlesPerCage,
+    // weighsPerBottle,
   } = experimentMetadata
 
   const [newData, setNewData] = useState(Map<List<number | string>, number>())
