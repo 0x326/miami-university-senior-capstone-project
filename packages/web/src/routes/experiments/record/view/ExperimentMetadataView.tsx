@@ -106,17 +106,13 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       <Button label="Add Cages" raised onClick={onAddCages} />
       <br />
       <br />
-      <Button label="Connect Scale" raised onClick={onConnect}/>
+      <Button label="Connect Scale" raised onClick={onConnect} />
       <br />
       <br />
       <label>Scale Connection Status: {scaleConnectionStatusLabel}</label>
       <br />
       <br />
       <Button label="Begin" raised onClick={onRecord} />
-<<<<<<< HEAD
-      <Button label="Connect Scale" onClick={onConnect} />
-=======
->>>>>>> 79-overview-recorded-session-data
     </>
   )
 }
