@@ -77,7 +77,13 @@ function AddCages(props: Props): JSX.Element {
             />
           </GridCell>
         </Grid>
-        <Button label="Submit" raised onClick={(): void => addCages(numberCages)} />
+        <Button
+          label="Submit"
+          raised
+          onClick={(): void => {
+            addCages(numberCages)
+          }}
+        />
       </FormField>
     </>
   )
