@@ -13,8 +13,12 @@ nav:
   - Contributing: CONTRIBUTING.md
   - Hardware: HARDWARE.md
   - SRC:
-    - web: web/globals.md
-    - scale-interface: scale-interface/globals.md
+    - web:
+      - overview: web/README.md
+      - detailed: web/globals.md
+    - scale-interface:
+      - overview: scale-interface/README.md
+      - detailed: scale-interface/globals.md
     - api-interfaces:
       - overview: api-interfaces/README.md
       - detailed: api-interfaces/globals.md
