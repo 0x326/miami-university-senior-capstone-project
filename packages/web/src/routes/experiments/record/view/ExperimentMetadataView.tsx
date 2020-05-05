@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   TopAppBar,
@@ -14,23 +14,37 @@ import {
 } from '@rmwc/typography'
 import '@material/typography/dist/mdc.typography.css'
 
+import { Button } from '@rmwc/button'
+
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import {
   ExperimentMetaData,
-} from '../new/NewExperimentView'
+} from '../../new/NewExperimentView'
+
 
 dayjs.extend(relativeTime)
 
 interface Props {
   experimentMetadata: ExperimentMetaData;
+  onRecord: () => void;
+  onAddCages: () => void;
+  onConnect: () => void;
+  scaleConnectionStatus: boolean
+  scaleConnectionStatusLabel: string
 }
 
 function ExperimentMetadataView(props: Props): JSX.Element {
   const {
     experimentMetadata,
+    onRecord,
+    onAddCages,
+    onConnect,
+    scaleConnectionStatus,
+    scaleConnectionStatusLabel,
   } = props
+
 
   const {
     experimentName,
@@ -39,7 +53,7 @@ function ExperimentMetadataView(props: Props): JSX.Element {
     lastUpdated,
     sessionCount,
     bottlesPerCage,
-    weighsPerBottle,
+    treatments,
   } = experimentMetadata
 
   return (
@@ -80,10 +94,25 @@ function ExperimentMetadataView(props: Props): JSX.Element {
         {bottlesPerCage}
       </Typography>
       <Typography use="body1" tag="p">
-        Weights per Bottle:
+        Treatments:
         {' '}
-        {weighsPerBottle}
+        {treatments.join(', ')}
       </Typography>
+
+      <br />
+      <br />
+      <br />
+
+      <Button label="Add Cages" raised onClick={onAddCages} />
+      <br />
+      <br />
+      <Button label="Connect Scale" raised onClick={onConnect} />
+      <br />
+      <br />
+      <label>Scale Connection Status: {scaleConnectionStatusLabel}</label>
+      <br />
+      <br />
+      <Button label="Begin" raised onClick={onRecord} />
     </>
   )
 }

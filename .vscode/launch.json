@@ -50,7 +50,7 @@
       "smartStep": true,
       "internalConsoleOptions": "openOnSessionStart",
       "outFiles": [
-        "${workspaceRoot}/packages/scale-interface/dist/**/*.js"
+        "${workspaceRoot}/packages/scale-interface/build/**/*.js"
       ]
     },
     // See https://jestjs.io/docs/en/troubleshooting#debugging-in-vs-code

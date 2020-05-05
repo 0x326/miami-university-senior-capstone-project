@@ -1,9 +1,6 @@
-// TODO (0x326) [2020-05-10] Remove extraneous @material dependencies
-// TODO (0x326) [2020-05-10] Remove extraneous @rmwc dependencies
-
 import React, {
-  useEffect,
   useState,
+  useEffect,
 } from 'react'
 
 import {
@@ -18,14 +15,14 @@ import {
   useHistory,
 } from 'react-router-dom'
 
-import {
-  v4 as uuid4,
-} from 'uuid'
+import * as XLSX from 'xlsx'
 
 import ExperimentDashboard, {
   ExperimentData,
   CageDisplayOrder,
   RackDisplayOrder,
+  RackId,
+  CageId,
 } from './routes/experiment-dashboard/ExperimentDashboard'
 
 import {
@@ -39,15 +36,25 @@ import {
   RouteId,
   DisplayName,
   RouteMap,
+  experimentId,
 } from './types'
 
 import useSnackbar from './useSnackbar'
+
+import {
+  connect,
+} from './apiBindings'
 
 import './App.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
 import ScaleApiTester from './ScaleApiTester'
+import LandingPage from './routes/home'
+import AddCages from './routes/experiments/add-cage/AddCages'
+import { CageData } from './routes/experiment-dashboard/CageSessions'
+import { CageSessionData } from './routes/experiment-dashboard/CageSessionTable'
+import { displayToWB } from './xlsx'
 
 export type ExperimentId = RouteId
 
@@ -60,39 +67,18 @@ const App: React.FC = () => {
   const history = useHistory()
 
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const [snackbar, snackbarQueuePush] = useSnackbar()
+  const [snackbar] = useSnackbar()
 
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>())
   const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>())
-  const [experimentDisplayNames, setExperimentDisplayNames] = useState(Map<ExperimentId, DisplayName>())
-  const [experimentDisplayOrder, setExperimentDisplayOrder] = useState(List<ExperimentId>())
-  const [cageDisplayOrders, setCageDisplayOrders] = useState<CageDisplayOrder>(Map())
-  const [rackDisplayOrder, setRackDisplayOrder] = useState<RackDisplayOrder>(List())
+  const [cageDisplayOrders, setCageDisplayOrders] = useState(Map<RackId, List<CageId>>())
+  const [rackDisplayOrder, setRackDisplayOrder] = useState(List<RackId>())
+  const [dummyMap, setDummyMap] = useState(Map<List<number>, boolean>())
+  const [comments, setComments] = useState({})
 
-  useEffect(() => {
-    import('./sampleData')
-      .then(({
-        sampleExperimentMetadata,
-        sampleExperiments,
-        sampleExperimentDisplayNames,
-        sampleExperimentDisplayOrder,
-        sampleCageDisplayOrders,
-        sampleRackDisplayOrder,
-      }) => {
-        setExperimentMetadata(sampleExperimentMetadata)
-        setExperiments(sampleExperiments)
-        setExperimentDisplayNames(sampleExperimentDisplayNames)
-        setExperimentDisplayOrder(sampleExperimentDisplayOrder)
-        setCageDisplayOrders(sampleCageDisplayOrders)
-        setRackDisplayOrder(sampleRackDisplayOrder)
-
-        snackbarQueuePush({
-          message: 'Sample data loaded',
-          actions: List(),
-        })
-      })
-  }, [snackbarQueuePush])
+  const [connected, setConnected] = useState(false)
+  const [connectionStatus, setConnectionStatus] = useState("Not connected")
 
   return (
     <>
@@ -105,7 +91,7 @@ const App: React.FC = () => {
       />
       <Switch>
         <Route exact path="/">
-          <Redirect to="/experiments" />
+          <Redirect to="/home" />
         </Route>
         <Route path="/experiment-dashboard">
           <ExperimentDashboard
@@ -119,23 +105,162 @@ const App: React.FC = () => {
         <Route path="/experiments">
           <ExperimentsSwitch
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
-            experimentIds={experimentDisplayOrder}
-            experiments={experimentDisplayNames}
             experimentMetadata={experimentMetadata}
+            experiments={experiments}
+            rackDisplayOrder={rackDisplayOrder}
+            cageDisplayOrder={cageDisplayOrders}
+            dummyMap={dummyMap}
+            comments={comments}
             onCreateExperiment={((experimentMetaData): void => {
-              const {
-                experimentName,
-              } = experimentMetaData
-
-              const experimentId = uuid4()
-              setExperiments((prevExperiments) => prevExperiments.set(experimentId, Map()))
-              setExperimentDisplayNames((prevExperimentDisplayNames) => prevExperimentDisplayNames
-                .set(experimentId, experimentName))
-              setExperimentDisplayOrder((prevExperimentDisplayOrder) => prevExperimentDisplayOrder
-                .push(experimentId))
-
-              history.push('/experiments')
+              // assuming just 1 rack for now
+              setExperimentMetadata(Map<string, ExperimentMetaData>().set(experimentId, experimentMetaData))
+              let blankExp = Map<ExperimentId, ExperimentData>()
+              blankExp.set(experimentId, Map<RackId, Map<CageId, CageData>>())
+              blankExp = blankExp.setIn([experimentId, 1], Map<CageId, CageData>())
+              setExperiments(blankExp)
+              setCageDisplayOrders(Map<RackId, List<CageId>>().withMutations(x => x.set(1, List<CageId>())))
+              setRackDisplayOrder(List.of<RackId>(1))
+              history.push('/experiments/record/view')
             })}
+            connectScale={() => {
+              connect()
+                .then(() => {
+                  setConnected(true)
+                  setConnectionStatus("Connected!")
+                },
+                  () => { setConnectionStatus("Error") })
+            }}
+            onAddCages={((numCages): void => {
+              console.log("before", experiments.getIn([experimentId]).toJS())
+              const experiment = experiments.get(experimentId)
+              let lastRid = 1
+              if (experiment) {
+                const cageIds = experiment.keySeq().flatMap(rid => {
+                  lastRid = rid
+                  return (experiment.get(rid) as Map<number, CageData>).keySeq()
+                }).toList()
+
+                const newCageIds: number[] = []
+
+                const lastElt = cageIds.get(-1, 0)
+                for (let i = lastElt + 1; i <= lastElt + numCages; ++i)
+                  newCageIds.push(i)
+
+                const withNewCages = experiments.asMutable()
+                const withNewCdo = cageDisplayOrders.asMutable()
+                for (let cid of newCageIds) {
+                  if (cid) {
+                    withNewCages.setIn([experimentId, lastRid, cid], List<Readonly<{
+                      sessionNumber: number;
+                      cageSessionData: CageSessionData;
+                    }>>())
+                    withNewCdo.setIn([lastRid], withNewCdo.getIn([lastRid]).push(cid))
+                  }
+                }
+                console.log("withNewCages", withNewCages.toJS())
+                console.log("withNewCdo", withNewCdo.toJS())
+                setExperiments(withNewCages.asImmutable())
+                setCageDisplayOrders(withNewCdo.asImmutable())
+              }
+            })}
+            onNewWeights={((newData): void => {
+              let withNewData = experiments.asMutable()
+              console.log('before')
+              console.log(withNewData.toJS())
+
+              // bottles grouped by weight for simpler iteration {[rid, cid]: [bott1, bott2, ...], ...}
+              const grouped = newData.keySeq().reduce((accumulator, x) => {
+                const [rid, cid, bott] = x.toArray()
+                const k = List.of<any>(rid, cid)
+                const alreadyStored = accumulator.get(k, null)
+
+                if (alreadyStored === null) {
+                  return accumulator.set(k, List.of(bott as string))
+                }
+                return accumulator.set(k, alreadyStored.push(bott as string))
+              }, Map<List<number>, List<string>>())
+
+
+              grouped.entrySeq().forEach((elt) => {
+                const [rid, cid] = elt[0].toArray()
+                const botts = elt[1].toArray()
+
+                let cageData = withNewData.getIn([experimentId, rid, cid]) as CageData
+                const last = cageData.last(null)
+                const isNewSession = last ? last.cageSessionData.size === 2 : true // 2 because pre and post
+
+                // eslint-disable-next-line no-shadow
+                const rowData = Map<BottleType, number>().withMutations((rowData) => {
+                  for (const bott of botts) {
+                    rowData.set(bott, newData.get(List.of<any>(rid, cid, bott)) as any)
+                  }
+                })
+
+                if (isNewSession) {
+                  // when new session, append pre to new session
+                  cageData = cageData.push({
+                    sessionNumber: last ? last.sessionNumber + 1 : 1,
+                    cageSessionData: List.of<any>({
+                      rowLabel: 'pre',
+                      rowData,
+                    }),
+                  })
+                  withNewData.setIn([experimentId, rid, cid], cageData)
+                } else {
+                  // otherwise, append a post to past session
+                  const past = cageData.get(-1)
+                  const toUpdate = cageData.pop()
+                  if (past) {
+                    const updated = toUpdate.push({
+                      sessionNumber: past.sessionNumber,
+                      cageSessionData: past.cageSessionData.push({
+                        rowLabel: 'post',
+                        rowData: rowData as any,
+                      }),
+                    })
+                    cageData = updated
+                  }
+                  withNewData.setIn([experimentId, rid, cid], cageData)
+                }
+              })
+              setExperiments(withNewData.asImmutable())
+              // updatedExperiments = withNewData.asImmutable()
+              // setx(updatedExperiments)
+              console.log('after')
+              console.log(withNewData.toJS())
+
+              // temporary. download updated experiment data for verification
+              console.log('to xlsx')
+              const wb = displayToWB(experimentMetadata.get(experimentId) as any,
+                withNewData.asImmutable().get(experimentId) as any,
+                rackDisplayOrder, cageDisplayOrders, dummyMap, comments)
+
+              XLSX.writeFile(wb, 'out.xlsx')
+
+              // history.push(`${url}/record/summary`)
+            })}
+            scaleConnectionStatus={connected}
+            connectionStatus={connectionStatus}
+          />
+        </Route>
+        <Route path="/home">
+          <LandingPage
+            onDrawerOpen={(): void => setIsDrawerOpen(true)}
+            onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders,
+              newDummyMap, comments): void => {
+              setExperiments(newExperimentData)
+              setExperimentMetadata(newMetaData)
+              setRackDisplayOrder(newRackDisplayOrder)
+              setCageDisplayOrders(newCageDisplayOrders)
+              setDummyMap(newDummyMap)
+              setComments(comments)
+            }}
+            metaData={experimentMetadata}
+          />
+        </Route>
+        <Route path="/experiments/add-cage">
+          <AddCages
+            addCages={(numberCages): void => history.push('/experiments/record/view')}
           />
         </Route>
         <Route path="/scale-api-tester">
