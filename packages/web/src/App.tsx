@@ -1,6 +1,5 @@
 import React, {
   useState,
-  useEffect,
 } from 'react'
 
 import {
@@ -19,8 +18,6 @@ import * as XLSX from 'xlsx'
 
 import ExperimentDashboard, {
   ExperimentData,
-  CageDisplayOrder,
-  RackDisplayOrder,
   RackId,
   CageId,
 } from './routes/experiment-dashboard/ExperimentDashboard'
@@ -51,7 +48,6 @@ import AppModalDrawer from './AppModalDrawer'
 import NoMatch from './routes/NoMatch'
 import ScaleApiTester from './ScaleApiTester'
 import LandingPage from './routes/home'
-import AddCages from './routes/experiments/add-cage/AddCages'
 import { CageData } from './routes/experiment-dashboard/CageSessions'
 import { CageSessionData } from './routes/experiment-dashboard/CageSessionTable'
 import { displayToWB } from './xlsx'
@@ -78,7 +74,7 @@ const App: React.FC = () => {
   const [comments, setComments] = useState({})
 
   const [connected, setConnected] = useState(false)
-  const [connectionStatus, setConnectionStatus] = useState("Not connected")
+  const [connectionStatus, setConnectionStatus] = useState('Not connected')
 
   return (
     <>
@@ -118,7 +114,7 @@ const App: React.FC = () => {
               blankExp.set(experimentId, Map<RackId, Map<CageId, CageData>>())
               blankExp = blankExp.setIn([experimentId, 1], Map<CageId, CageData>())
               setExperiments(blankExp)
-              setCageDisplayOrders(Map<RackId, List<CageId>>().withMutations(x => x.set(1, List<CageId>())))
+              setCageDisplayOrders(Map<RackId, List<CageId>>().withMutations((x) => x.set(1, List<CageId>())))
               setRackDisplayOrder(List.of<RackId>(1))
               history.push('/experiments/record/view')
             })}
@@ -126,16 +122,16 @@ const App: React.FC = () => {
               connect()
                 .then(() => {
                   setConnected(true)
-                  setConnectionStatus("Connected!")
+                  setConnectionStatus('Connected!')
                 },
-                  () => { setConnectionStatus("Error") })
+                () => { setConnectionStatus('Error') })
             }}
-            onAddCages={((numCages): void => {
-              console.log("before", experiments.getIn([experimentId]).toJS())
+            onAddCages={((numberCages): void => {
+              console.log('before', experiments.getIn([experimentId]).toJS())
               const experiment = experiments.get(experimentId)
               let lastRid = 1
               if (experiment) {
-                const cageIds = experiment.keySeq().flatMap(rid => {
+                const cageIds = experiment.keySeq().flatMap((rid) => {
                   lastRid = rid
                   return (experiment.get(rid) as Map<number, CageData>).keySeq()
                 }).toList()
@@ -143,12 +139,11 @@ const App: React.FC = () => {
                 const newCageIds: number[] = []
 
                 const lastElt = cageIds.get(-1, 0)
-                for (let i = lastElt + 1; i <= lastElt + numCages; ++i)
-                  newCageIds.push(i)
+                for (let i = lastElt + 1; i <= lastElt + numberCages; ++i) { newCageIds.push(i) }
 
                 const withNewCages = experiments.asMutable()
                 const withNewCdo = cageDisplayOrders.asMutable()
-                for (let cid of newCageIds) {
+                for (const cid of newCageIds) {
                   if (cid) {
                     withNewCages.setIn([experimentId, lastRid, cid], List<Readonly<{
                       sessionNumber: number;
@@ -157,14 +152,14 @@ const App: React.FC = () => {
                     withNewCdo.setIn([lastRid], withNewCdo.getIn([lastRid]).push(cid))
                   }
                 }
-                console.log("withNewCages", withNewCages.toJS())
-                console.log("withNewCdo", withNewCdo.toJS())
+                console.log('withNewCages', withNewCages.toJS())
+                console.log('withNewCdo', withNewCdo.toJS())
                 setExperiments(withNewCages.asImmutable())
                 setCageDisplayOrders(withNewCdo.asImmutable())
               }
             })}
             onNewWeights={((newData): void => {
-              let withNewData = experiments.asMutable()
+              const withNewData = experiments.asMutable()
               console.log('before')
               console.log(withNewData.toJS())
 
@@ -247,20 +242,15 @@ const App: React.FC = () => {
           <LandingPage
             onDrawerOpen={(): void => setIsDrawerOpen(true)}
             onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders,
-              newDummyMap, comments): void => {
+              newDummyMap, newComments): void => {
               setExperiments(newExperimentData)
               setExperimentMetadata(newMetaData)
               setRackDisplayOrder(newRackDisplayOrder)
               setCageDisplayOrders(newCageDisplayOrders)
               setDummyMap(newDummyMap)
-              setComments(comments)
+              setComments(newComments)
             }}
             metaData={experimentMetadata}
-          />
-        </Route>
-        <Route path="/experiments/add-cage">
-          <AddCages
-            addCages={(numberCages): void => history.push('/experiments/record/view')}
           />
         </Route>
         <Route path="/scale-api-tester">

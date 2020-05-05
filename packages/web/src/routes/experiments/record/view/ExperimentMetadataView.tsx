@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   TopAppBar,
@@ -31,8 +31,8 @@ interface Props {
   onRecord: () => void;
   onAddCages: () => void;
   onConnect: () => void;
-  scaleConnectionStatus: boolean
-  scaleConnectionStatusLabel: string
+  scaleConnectionStatus: boolean;
+  scaleConnectionStatusLabel: string;
 }
 
 function ExperimentMetadataView(props: Props): JSX.Element {
@@ -41,7 +41,6 @@ function ExperimentMetadataView(props: Props): JSX.Element {
     onRecord,
     onAddCages,
     onConnect,
-    scaleConnectionStatus,
     scaleConnectionStatusLabel,
   } = props
 
@@ -109,7 +108,10 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       <Button label="Connect Scale" raised onClick={onConnect} />
       <br />
       <br />
-      <label>Scale Connection Status: {scaleConnectionStatusLabel}</label>
+      <label>
+        Scale Connection Status:
+        {scaleConnectionStatusLabel}
+      </label>
       <br />
       <br />
       <Button label="Begin" raised onClick={onRecord} />

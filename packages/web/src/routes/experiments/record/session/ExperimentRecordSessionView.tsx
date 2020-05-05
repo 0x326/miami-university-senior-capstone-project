@@ -30,8 +30,6 @@ import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
 
-import { connect, scaleData } from '../../../../apiBindings'
-
 import DataRecordingScreen from './DataRecordingScreen'
 
 
@@ -56,12 +54,6 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const {
     experimentName,
     treatments,
-    experimentLeadName,
-    startDate,
-    lastUpdated,
-    sessionCount,
-    bottlesPerCage,
-    // weighsPerBottle,
   } = experimentMetadata
 
   const sessLim = experimentMetadata.sessionCount
@@ -75,13 +67,10 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
         if (cids !== null) {
           for (const cid of cids.toArray()) {
             const cage = experiment.getIn([rid, cid], null)
-            if (cage === null)
-              continue
+            if (cage === null) { continue }
             const lastSess = cage.get(-1, null)
-            if (lastSess === null)
-              continue
-            if (lastSess.cageSessionData.size === 1) // then it must need a post session
-              ret.push([rid, cid, bott, true])
+            if (lastSess === null) { continue }
+            if (lastSess.cageSessionData.size === 1) { ret.push([rid, cid, bott, true]) }
           }
         }
       }
@@ -97,15 +86,17 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
               continue
             }
             const lastSess = cage.get(-1, null)
-            if (lastSess === null) // then it's a brand new cage (needs a pre session)
+            if (lastSess === null) {
+              // then it's a brand new cage (needs a pre session)
               ret.push([rid, cid, bott, false])
-            else if (lastSess.sessionNumber < sessLim && lastSess.cageSessionData.size == 2)
+            } else if (lastSess.sessionNumber < sessLim && lastSess.cageSessionData.size === 2) {
               ret.push([rid, cid, bott, false])
+            }
           }
         }
       }
     }
-    console.log("rec order", ret)
+    console.log('rec order', ret)
     return ret
   })
 
@@ -128,13 +119,13 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
       // todo: refactor this
       <DataRecordingScreen
         bottleName={refsToRecord.length > 0
-          ? `Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]}), ${refsToRecord[0][3] ? "Post" : "Pre"}`
+          ? `Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]}), ${refsToRecord[0][3] ? 'Post' : 'Pre'}`
           : null}
         isLast={refsToRecord.length === 0}
         onSubmit={(weight: number): void => {
           const refToRecord = refsToRecord.shift()
           if (refToRecord) {
-            const [rid, cid, bott, isPre] = refToRecord
+            const [rid, cid, bott] = refToRecord
             console.log(experiment.getIn([rid, cid]).toJS())
             setNewData(newData.set(List.of<any>(rid, cid, bott), Number(weight)))
           } else {

@@ -42,7 +42,8 @@ function DataRecordingScreen(props: Props): JSX.Element {
       scaleData((measurement) => {
         setWeight(measurement)
       })
-    } catch(error) { }
+      // eslint-disable-next-line no-empty
+    } catch (error) { }
   })
 
   return (
@@ -58,8 +59,7 @@ function DataRecordingScreen(props: Props): JSX.Element {
             type: MeasurementType.STABLE_WEIGHT,
             value: newWeight.currentTarget.value,
             unit: 'g',
-          })
-        }
+          })}
         />
       </Typography>
 
