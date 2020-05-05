@@ -27,12 +27,12 @@ import {
 dayjs.extend(relativeTime)
 
 interface Props {
-  experimentMetadata: ExperimentMetaData;
-  onRecord: () => void;
-  onAddCages: () => void;
-  onConnect: () => void;
-  scaleConnectionStatus: boolean;
-  scaleConnectionStatusLabel: string;
+    experimentMetadata: ExperimentMetaData;
+    onRecord: () => void;
+    onAddCages: () => void;
+    onConnect: () => void;
+    scaleConnectionStatus: boolean;
+    scaleConnectionStatusLabel: string;
 }
 
 function ExperimentMetadataView(props: Props): JSX.Element {
@@ -68,32 +68,32 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       </TopAppBar>
       <TopAppBarFixedAdjust />
       <Typography use="body1" tag="p">
-        Primary Experimentor:
+                Primary Experimentor:
         {' '}
         {experimentLeadName}
       </Typography>
       <Typography use="body1" tag="p">
-        Start Date:
+                Start Date:
         {' '}
         {startDate.format('YYYY-MM-DD')}
       </Typography>
       <Typography use="body1" tag="p">
-        Last Updated:
+                Last Updated:
         {' '}
         {lastUpdated.fromNow()}
       </Typography>
       <Typography use="body1" tag="p">
-        Sessions per Cage:
+                Sessions per Cage:
         {' '}
         {sessionCount}
       </Typography>
       <Typography use="body1" tag="p">
-        Bottles per Cage:
+                Bottles per Cage:
         {' '}
         {bottlesPerCage}
       </Typography>
       <Typography use="body1" tag="p">
-        Treatments:
+                Treatments:
         {' '}
         {treatments.join(', ')}
       </Typography>
@@ -108,10 +108,13 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       <Button label="Connect Scale" raised onClick={onConnect} />
       <br />
       <br />
-      <label>
-        Scale Connection Status:
+      <span>
+        {' '}
+Scale Connection Status:
         {scaleConnectionStatusLabel}
-      </label>
+        {' '}
+
+      </span>
       <br />
       <br />
       <Button label="Begin" raised onClick={onRecord} />

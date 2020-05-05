@@ -12,6 +12,7 @@ import { Button } from '@rmwc/button'
 
 import { TextField } from '@rmwc/textfield'
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Measurement, MeasurementType } from 'api-interfaces/dist/scale-data'
 
 import {

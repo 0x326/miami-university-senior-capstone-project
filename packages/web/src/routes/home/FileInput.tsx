@@ -1,5 +1,7 @@
-import React, { useRef,
-  FormEvent } from 'react'
+import React, {
+  useRef,
+  FormEvent,
+} from 'react'
 
 import { Button } from '@rmwc/button'
 
@@ -66,9 +68,7 @@ function FileInput(props: Props): JSX.Element {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <label>
-          <input type="file" ref={inputRef} />
-        </label>
+        <input type="file" ref={inputRef} />
         <br />
         <br />
         <Button raised type="submit">Submit</Button>
