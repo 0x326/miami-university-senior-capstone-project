@@ -7,10 +7,7 @@ export type BottleType = string
 
 export type RouteId = string
 export type DisplayName = string
-export interface RouteMap extends Map<RouteId, DisplayName> {}
+export interface RouteMap extends Map<RouteId, DisplayName> { }
 
-const experimentId = 'experiment'
-
-export {
-  experimentId,
-}
+// eslint-disable-next-line import/prefer-default-export
+export const experimentId = 'experiment'

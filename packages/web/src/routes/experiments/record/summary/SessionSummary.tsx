@@ -1,11 +1,4 @@
-import React, {
-  useState,
-} from 'react'
-
-import {
-  List,
-  Map,
-} from 'immutable'
+import React from 'react'
 
 import '@rmwc/data-table/data-table.css'
 
@@ -21,7 +14,6 @@ import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, Top
 import * as XLSX from 'xlsx'
 
 import { ExperimentData } from '../../../experiment-dashboard/ExperimentDashboard'
-import { useHistory } from 'react-router-dom'
 
 interface Props {
   onStartNewSession(): void;
@@ -32,13 +24,7 @@ interface Props {
 function SessionSummary(props: Props): JSX.Element {
   const {
     onStartNewSession,
-    updatedExperiments,
-    workbook,
   } = props
-
-
-  const history = useHistory()
-  const [data, setData] = useState('')
 
   return (
     <>
@@ -67,7 +53,7 @@ function SessionSummary(props: Props): JSX.Element {
           fontSize: '24px',
         }}
       >
-      <span><b>Open the downloaded experiment to ensure all values are correct.</b></span>
+        <span><b>Open the downloaded experiment to ensure all values are correct.</b></span>
       </div>
 
       <br />
@@ -83,9 +69,9 @@ function SessionSummary(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
-      <Button raised>Restart Session</Button>
+        <Button raised>Restart Session</Button>
       </div>
-        <br/>
+      <br />
       <div
         style={{
           display: 'flex',
@@ -93,7 +79,7 @@ function SessionSummary(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <span>Choose "Restart Session" to erase current session data and start over.</span>
+        <span>Choose &quot;Restart Session&quot; to erase current session data and start over.</span>
       </div>
 
       <br />
@@ -112,7 +98,7 @@ function SessionSummary(props: Props): JSX.Element {
       >
         <Button raised onClick={() => { onStartNewSession() }}>Start New Session</Button>
       </div>
-        <br/>
+      <br />
       <div
         style={{
           display: 'flex',
@@ -120,7 +106,7 @@ function SessionSummary(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <label>Choose "Start New Session" to record another session.</label>
+        <span>Choose &quot;Start New Session&quot; to record another session.</span>
       </div>
     </>
   )

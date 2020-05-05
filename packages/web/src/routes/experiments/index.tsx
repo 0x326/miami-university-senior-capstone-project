@@ -1,4 +1,4 @@
-import React, { useState, ReactText } from 'react'
+import React, { useState } from 'react'
 
 import {
   useRouteMatch,
@@ -13,6 +13,8 @@ import {
   Map,
 } from 'immutable'
 
+import * as XLSX from 'xlsx'
+
 import {
   DisplayName,
   RouteId,
@@ -26,14 +28,13 @@ import {
 } from '../../App'
 
 import { RackId, CageId, ExperimentData } from '../experiment-dashboard/ExperimentDashboard'
-import ScaleApiTester from '../../ScaleApiTester'
 
 import {
   DummyMap, Comments, displayToWB,
 } from '../../xlsx'
 
 
-import * as XLSX from 'xlsx'
+import { CageData } from '../experiment-dashboard/CageSessions'
 
 import NewExperiment, {
   ExperimentMetaData,
@@ -44,7 +45,6 @@ import ExperimentMetadataView from './record/view/ExperimentMetadataView'
 
 import AddCages from './add-cage/AddCages'
 import SessionSummary from './record/summary/SessionSummary'
-import { CageData } from '../experiment-dashboard/CageSessions'
 
 interface Props {
   onDrawerOpen: () => void;
@@ -71,7 +71,6 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     cageDisplayOrder,
     onCreateExperiment,
     onAddCages,
-    onNewWeights,
     onStartNewSession,
     experimentMetadata,
     dummyMap,
@@ -104,11 +103,11 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onAddCages={(): void => history.push(`${url}/add-cage`)}
             onRecord={(): void => {
-              if(scaleConnectionStatus) {
+              if (scaleConnectionStatus) {
                 history.push(`${url}/record/session`)
               } else {
-                const scaleCheck = window.confirm("The scale is currently not connected. Continuing will require enterting weights manually.\n\nWould you like to continue?")
-                if(scaleCheck) {
+                const scaleCheck = window.confirm('The scale is currently not connected. Continuing will require enterting weights manually.\n\nWould you like to continue?')
+                if (scaleCheck) {
                   history.push(`${url}/record/session`)
                 }
               }
@@ -120,7 +119,10 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route path="/experiments/add-cage">
           <AddCages
-            addCages={(numberCages): void => onAddCages(Number(numberCages))}
+            addCages={(numberCages): void => {
+              onAddCages(Number(numberCages))
+              history.push('/experiments/record/view')
+            }}
           />
         </Route>
         <Route exact path={`${url}/record/session`}>
@@ -130,9 +132,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             cageDisplayOrder={cageDisplayOrder}
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onEnd={(newData): void => {
-              let updatedExperiments = experiments.asMutable()
+              const expWithNewData = experiments.asMutable()
               console.log('before')
-              console.log(updatedExperiments.toJS())
+              console.log(expWithNewData.toJS())
 
               // bottles grouped by weight for simpler iteration {[rid, cid]: [bott1, bott2, ...], ...}
               const grouped = newData.keySeq().reduce((accumulator, x) => {
@@ -147,17 +149,17 @@ function ExperimentsSwitch(props: Props): JSX.Element {
               }, Map<List<number>, List<string>>())
 
 
-              grouped.entrySeq().forEach(e => {
-                const [rid, cid] = e[0].toArray()
-                const botts = e[1].toArray()
+              grouped.entrySeq().forEach((elt) => {
+                const [rid, cid] = elt[0].toArray()
+                const botts = elt[1].toArray()
 
-                let cageData = updatedExperiments.getIn([experimentId, rid, cid]) as CageData
+                let cageData = expWithNewData.getIn([experimentId, rid, cid]) as CageData
                 const last = cageData.last(null)
                 const isNewSession = last ? last.cageSessionData.size === 2 : true // 2 because pre and post
 
-                const rowData = Map<BottleType, number>().withMutations(rowData => {
-                  for (let bott of botts) {
-                    rowData.set(bott, newData.get(List.of<any>(rid, cid, bott)) as any)
+                const rowData = Map<BottleType, number>().withMutations((rd) => {
+                  for (const bott of botts) {
+                    rd.set(bott, newData.get(List.of<any>(rid, cid, bott)) as any)
                   }
                 })
 
@@ -166,37 +168,36 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                   cageData = cageData.push({
                     sessionNumber: last ? last.sessionNumber + 1 : 1,
                     cageSessionData: List.of<any>({
-                      rowLabel: "pre",
-                      rowData: rowData,
-                    })
+                      rowLabel: 'pre',
+                      rowData,
+                    }),
                   })
-                  updatedExperiments.setIn([experimentId, rid, cid], cageData)
+                  expWithNewData.setIn([experimentId, rid, cid], cageData)
                 } else {
                   // otherwise, append a post to past session
-                  let past = cageData.get(-1)
-                  let toUpdate = cageData.pop()
+                  const past = cageData.get(-1)
+                  const toUpdate = cageData.pop()
                   if (past) {
                     const updated = toUpdate.push({
                       sessionNumber: past.sessionNumber,
                       cageSessionData: past.cageSessionData.push({
                         rowLabel: 'post',
                         rowData: rowData as any,
-                      })
+                      }),
                     })
                     cageData = updated
                   }
-                  updatedExperiments.setIn([experimentId, rid, cid], cageData)
+                  expWithNewData.setIn([experimentId, rid, cid], cageData)
                 }
               })
               console.log('after')
-              updatedExperiments = updatedExperiments.asImmutable()
-              setUpdatedExperiments(updatedExperiments)
-              console.log(updatedExperiments.toJS())
+              setUpdatedExperiments(expWithNewData.asImmutable())
+              console.log(expWithNewData.toJS())
 
               // temporary. download updated experiment data for verification
               console.log('to xlsx')
               const wb = displayToWB(experimentMetadata.get(experimentId) as any,
-                updatedExperiments.get(experimentId) as any,
+                expWithNewData.get(experimentId) as any,
                 rackDisplayOrder, cageDisplayOrder, dummyMap, comments)
 
               setWorkbookDownload(Map<string, XLSX.WorkBook>().set(experimentId, wb))

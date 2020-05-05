@@ -1,4 +1,4 @@
-// TODO (wimmeldj) [2020-05-01] don't use unix timestamps. Use human readable and in locale
+// TODO (wimmeldj) [2020-05-15] don't use unix timestamps. Use human readable and in locale
 
 import assert from 'assert'
 
