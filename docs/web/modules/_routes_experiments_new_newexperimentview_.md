@@ -19,7 +19,7 @@
 
 ▸ **NewExperiment**(`props`: [Props](../interfaces/_routes_experiment_dashboard_cagesessiontable_.props.md)): *Element*
 
-Defined in packages/web/src/routes/experiments/new/NewExperimentView.tsx:58
+Defined in packages/web/src/routes/experiments/new/NewExperimentView.tsx:60
 
 **Parameters:**
 

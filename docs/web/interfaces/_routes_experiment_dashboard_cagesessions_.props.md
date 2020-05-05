@@ -22,7 +22,7 @@
 
 • **bottleTypes**: *[List](_routes_experiment_dashboard_cagesessiontable_.cagesessiondata.md#list)‹[BottleType](../modules/_types_.md#bottletype)›*
 
-Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:31
+Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:32
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **cageData**: *[CageData](_routes_experiment_dashboard_cagesessions_.cagedata.md)*
 
-Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:30
+Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:31
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **cageNumber**: *number*
 
-Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:29
+Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:30
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **isEditable**: *boolean*
 
-Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:32
+Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:33
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 • **onCageDataChange**: *function*
 
-Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:33
+Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:34
 
 #### Type declaration:
 

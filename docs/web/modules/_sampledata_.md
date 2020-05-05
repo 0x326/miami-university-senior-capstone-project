@@ -55,7 +55,7 @@ ___
       lastUpdated: dayjs('2020-02-04'),
       sessionCount: 20,
       bottlesPerCage: 2,
-      weighsPerBottle: 2,
+      treatments: ['h2o', 'EtOH'],
     })
     .set('experiment-2', {
       experimentName: 'Experiment 2',
@@ -64,7 +64,7 @@ ___
       lastUpdated: dayjs('2020-01-08'),
       sessionCount: 20,
       bottlesPerCage: 2,
-      weighsPerBottle: 2,
+      treatments: ['h2o', 'EtOH'],
     }))
 
 Defined in packages/web/src/sampleData.ts:26

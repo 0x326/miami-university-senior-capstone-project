@@ -15,6 +15,10 @@
 * [DisplayName](_types_.md#displayname)
 * [RouteId](_types_.md#routeid)
 
+### Variables
+
+* [experimentId](_types_.md#const-experimentid)
+
 ## Type aliases
 
 ###  BottleState
@@ -46,3 +50,11 @@ ___
 Ƭ **RouteId**: *string*
 
 Defined in packages/web/src/types.ts:8
+
+## Variables
+
+### `Const` experimentId
+
+• **experimentId**: *"experiment"* = "experiment"
+
+Defined in packages/web/src/types.ts:12

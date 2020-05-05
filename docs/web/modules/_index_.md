@@ -14,4 +14,4 @@
 
 • **REACT_APP_SENTRY_DSN**: *undefined | string*
 
-Defined in packages/web/src/index.tsx:14
+Defined in packages/web/src/index.tsx:19

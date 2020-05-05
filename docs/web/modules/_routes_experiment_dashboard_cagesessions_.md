@@ -19,7 +19,7 @@
 
 ▸ **CageSessions**(`props`: [Props](../interfaces/_routes_experiment_dashboard_cagesessiontable_.props.md)): *Element*
 
-Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:36
+Defined in packages/web/src/routes/experiment-dashboard/CageSessions.tsx:37
 
 **Parameters:**
 

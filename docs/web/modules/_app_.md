@@ -22,7 +22,7 @@
 
 Ƭ **ExperimentId**: *[RouteId](_types_.md#routeid)*
 
-Defined in packages/web/src/App.tsx:52
+Defined in packages/web/src/App.tsx:59
 
 ## Variables
 
@@ -33,7 +33,7 @@ Defined in packages/web/src/App.tsx:52
   .set('experiments', 'Experiments')
   .set('scale-api-tester', 'Scale API tester'))
 
-Defined in packages/web/src/App.tsx:54
+Defined in packages/web/src/App.tsx:61
 
 ## Functions
 
@@ -41,6 +41,6 @@ Defined in packages/web/src/App.tsx:54
 
 ▸ **App**(): *Element‹›*
 
-Defined in packages/web/src/App.tsx:59
+Defined in packages/web/src/App.tsx:66
 
 **Returns:** *Element‹›*

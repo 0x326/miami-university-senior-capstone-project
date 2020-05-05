@@ -19,7 +19,7 @@
 
 • **onCancelAction**: *function*
 
-Defined in packages/web/src/routes/experiments/new/NewExperimentView.tsx:54
+Defined in packages/web/src/routes/experiments/new/NewExperimentView.tsx:56
 
 #### Type declaration:
 
@@ -31,7 +31,7 @@ ___
 
 • **onDoneAction**: *function*
 
-Defined in packages/web/src/routes/experiments/new/NewExperimentView.tsx:55
+Defined in packages/web/src/routes/experiments/new/NewExperimentView.tsx:57
 
 #### Type declaration:
 
