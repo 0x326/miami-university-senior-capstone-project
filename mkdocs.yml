@@ -15,4 +15,7 @@ nav:
   - SRC:
     - web: web/globals.md
     - scale-interface: scale-interface/globals.md
+    - api-interfaces:
+      - overview: api-interfaces/README.md
+      - detailed: api-interfaces/globals.md
   - License: license.md
