@@ -41,6 +41,8 @@ interface Props {
     newDummyMap: DummyMap,
     comments: Comments) => void;
   metaData: Map<ExperimentId, ExperimentMetaData>;
+  confirmationMessage: string;
+  setConfirmMessage: () => void;
 }
 
 function LandingPage(props: Props): JSX.Element {
