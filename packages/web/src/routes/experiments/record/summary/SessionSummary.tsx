@@ -33,12 +33,14 @@ import { Button } from '@rmwc/button'
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import * as XLSX from 'xlsx'
+
 // import { CageData } from '../../../experiment-dashboard/CageSessions'
+
 import { ExperimentData } from '../../../experiment-dashboard/ExperimentDashboard'
 
 interface Props {
-  updatedExperiments: ExperimentData;
-  workbook: XLSX.WorkBook | undefined;
+    updatedExperiments: ExperimentData;
+    workbook: XLSX.WorkBook | undefined;
 }
 
 function SessionSummary(props: Props): JSX.Element {
@@ -85,7 +87,7 @@ function SessionSummary(props: Props): JSX.Element {
             }
           }}
         >
-          Download Experiment
+                    Download Experiment
         </Button>
       </div>
 
@@ -102,7 +104,7 @@ function SessionSummary(props: Props): JSX.Element {
         <Button raised>Restart Session</Button>
       </div>
       {// TRIED MESSING WITH TABLES, FAILED MISERABLY :C
-      }
+            }
       {/* <DataTable>
         <DataTableContent>
           <DataTableHead>
@@ -173,7 +175,7 @@ function SessionSummary(props: Props): JSX.Element {
         setData(temporary)
       }}
       >
-        Click
+                Click
       </Button>
     </>
   )
