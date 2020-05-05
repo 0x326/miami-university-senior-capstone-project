@@ -1,27 +1,27 @@
 import React, {
   useState,
-  useEffect,
+  // useEffect,
 } from 'react'
 
-import {
-  List,
-} from 'immutable'
+// import {
+//   List,
+// } from 'immutable'
 
-import {
-  DataTable,
-  DataTableContent,
-  DataTableHead,
-  DataTableRow,
-  DataTableHeadCell,
-  DataTableBody,
-  DataTableCell,
-} from '@rmwc/data-table'
+// import {
+//   DataTable,
+//   DataTableContent,
+//   DataTableHead,
+//   DataTableRow,
+//   DataTableHeadCell,
+//   DataTableBody,
+//   DataTableCell,
+// } from '@rmwc/data-table'
 
 import '@rmwc/data-table/data-table.css'
 
-import {
-  TextField,
-} from '@rmwc/textfield'
+// import {
+//   TextField,
+// } from '@rmwc/textfield'
 
 import '@material/textfield/dist/mdc.textfield.css'
 import '@material/floating-label/dist/mdc.floating-label.css'
@@ -33,8 +33,7 @@ import { Button } from '@rmwc/button'
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import * as XLSX from 'xlsx'
-
-import { CageData } from '../../../experiment-dashboard/CageSessions'
+// import { CageData } from '../../../experiment-dashboard/CageSessions'
 import { ExperimentData } from '../../../experiment-dashboard/ExperimentDashboard'
 
 interface Props {
@@ -81,12 +80,12 @@ function SessionSummary(props: Props): JSX.Element {
         <Button
           raised
           onClick={() => {
-            if (workbook != undefined) {
+            if (workbook !== undefined) {
               XLSX.writeFile(workbook, 'out.xlsx')
             }
           }}
         >
-Download Experiment
+          Download Experiment
         </Button>
       </div>
 
@@ -103,7 +102,7 @@ Download Experiment
         <Button raised>Restart Session</Button>
       </div>
       {// TRIED MESSING WITH TABLES, FAILED MISERABLY :C
-    }
+      }
       {/* <DataTable>
         <DataTableContent>
           <DataTableHead>
@@ -174,7 +173,7 @@ Download Experiment
         setData(temporary)
       }}
       >
-Click
+        Click
       </Button>
     </>
   )
