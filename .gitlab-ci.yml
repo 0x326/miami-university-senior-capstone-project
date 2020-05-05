@@ -140,6 +140,18 @@ build-scale-interface:
     paths:
       - packages/scale-interface/build
 
+build-docs:
+  stage: build
+  image:
+    name: squidfunk/mkdocs-material
+    entrypoint:
+      - ''
+  script:
+    - mkdocs build
+  artifacts:
+    paths:
+      - site
+
 lint:
   stage: test
   image: node:lts
@@ -160,11 +172,13 @@ pages:
 
   dependencies:
     - build-web
+    - build-docs
 
   script:
     - sed -i "s#{{CI_PROJECT_NAME}}#${CI_PROJECT_NAME}#g" public/index.html
     - sed -i "s#{{CI_PAGES_URL}}#${CI_PAGES_URL}#g" public/index.html
     - mv packages/web/build/ public/app
+    - mv site/ public/docs
 
   artifacts:
     paths:
