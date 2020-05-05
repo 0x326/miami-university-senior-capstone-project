@@ -1,8 +1,7 @@
-import React, {
-  useRef,
-} from 'react'
-import { FormEvent } from 'react';
-import { Button } from '@rmwc/button';
+import React, { useRef,
+  FormEvent } from 'react'
+
+import { Button } from '@rmwc/button'
 
 // Old API (React classes)
 // class FooComponent {
