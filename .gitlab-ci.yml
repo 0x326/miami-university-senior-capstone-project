@@ -57,6 +57,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""  # https://gitlab.com/gitlab-org/gitlab-runner/issues/4501
 
 stages:
+  - meta
   - build
   - test
   - deploy  # dummy stage to follow the template guidelines
@@ -92,6 +93,28 @@ cache:
   paths:
     - node_modules/
     - .yarn
+
+zip-code:
+  stage: meta
+  image: alpine
+  when: manual
+  before_script:
+    - apk update
+    - apk add git zip
+  script:
+    - git ls-files -z | xargs -0 zip "${CI_PROJECT_NAME}.zip"
+    - git bundle create "${CI_PROJECT_NAME}.git_bundle" HEAD
+    - echo "How to use" > README.txt
+    - echo "==========" >> README.txt
+    - echo "" >> README.txt
+    - 'echo "Preferred: git clone ${CI_PROJECT_NAME}.git_bundle ${CI_PROJECT_NAME}" >> README.txt'
+    - echo "" >> README.txt
+    - 'echo "Not recommended: unzip ${CI_PROJECT_NAME}.zip" >> README.txt'
+  artifacts:
+    paths:
+      - '*.zip'
+      - '*.git_bundle'
+      - README.txt
 
 build-web:
   stage: build
