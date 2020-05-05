@@ -15,11 +15,53 @@ nav:
   - SRC:
     - web:
       - overview: web/README.md
-      - detailed: web/globals.md
+      - detailed:
+        - App: web/modules/_app_.md
+        - App.test: web/modules/_app_test_.md
+        - AppModalDrawer: web/modules/_appmodaldrawer_.md
+        - ScaleApiTester: web/modules/_scaleapitester_.md
+        - apiBindings: web/modules/_apibindings_.md
+        - index: web/modules/_index_.md
+        - routes/NoMatch: web/modules/_routes_nomatch_.md
+        - routes/experiment-dashboard/CageSessionTable: web/modules/_routes_experiment_dashboard_cagesessiontable_.md
+        - routes/experiment-dashboard/CageSessions: web/modules/_routes_experiment_dashboard_cagesessions_.md
+        - routes/experiment-dashboard/ExperimentDashboard: web/modules/_routes_experiment_dashboard_experimentdashboard_.md
+        - routes/experiments/ExperimentList: web/modules/_routes_experiments_experimentlist_.md
+        - routes/experiments/add-cage/AddCages: web/modules/_routes_experiments_add_cage_addcages_.md
+        - routes/experiments/index: web/modules/_routes_experiments_index_.md
+        - routes/experiments/new/NewExperimentView: web/modules/_routes_experiments_new_newexperimentview_.md
+        - routes/experiments/record/session/DataRecordingScreen: web/modules/_routes_experiments_record_session_datarecordingscreen_.md
+        - routes/experiments/record/session/ExperimentRecordSessionView: web/modules/_routes_experiments_record_session_experimentrecordsessionview_.md
+        - routes/experiments/record/summary/SessionSummary: web/modules/_routes_experiments_record_summary_sessionsummary_.md
+        - routes/experiments/record/view/ExperimentMetadataView: web/modules/_routes_experiments_record_view_experimentmetadataview_.md
+        - routes/home/FileInput: web/modules/_routes_home_fileinput_.md
+        - routes/home/index: web/modules/_routes_home_index_.md
+        - sampleData: web/modules/_sampledata_.md
+        - serviceWorker: web/modules/_serviceworker_.md
+        - types: web/modules/_types_.md
+        - useSnackbar: web/modules/_usesnackbar_.md
+        - xlsx: web/modules/_xlsx_.md
+
     - scale-interface:
       - overview: scale-interface/README.md
-      - detailed: scale-interface/globals.md
+      - detailed:
+        - fs: scale-interface/modules/_fs_.md
+        - fsOperations: scale-interface/modules/_fsoperations_.md
+        - fsOperations.test: scale-interface/modules/_fsoperations_test_.md
+        - index: scale-interface/modules/_index_.md
+        - serial: scale-interface/modules/_serial_.md
+        - webSocketServer: scale-interface/modules/_websocketserver_.md
+
     - api-interfaces:
       - overview: api-interfaces/README.md
-      - detailed: api-interfaces/globals.md
+      - detailed:
+        - common: api-interfaces/modules/_common_.md)
+        - get-experiment: api-interfaces/modules/_get_experiment_.md
+        - get-root-dir: api-interfaces/modules/_get_root_dir_.md
+        - index: api-interfaces/modules/_index_.md
+        - list-experiment-paths: api-interfaces/modules/_list_experiment_paths_.md
+        - list-experiments: api-interfaces/modules/_list_experiments_.md
+        - scale-data: api-interfaces/modules/_scale_data_.md
+        - write-experiment: api-interfaces/modules/_write_experiment_.md
+
   - License: license.md
