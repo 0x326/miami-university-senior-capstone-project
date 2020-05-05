@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ReactText } from 'react'
 
 import {
   useRouteMatch,
@@ -58,6 +58,7 @@ interface Props {
   connectScale: () => void;
   onAddCages: (numCages: number) => void;
   onNewWeights: (newData: Map<List<React.ReactText>, number>) => void;
+  onStartNewSession: () => void;
   scaleConnectionStatus: boolean;
   connectionStatus: string;
 }
@@ -71,6 +72,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     onCreateExperiment,
     onAddCages,
     onNewWeights,
+    onStartNewSession,
     experimentMetadata,
     dummyMap,
     comments,
@@ -83,7 +85,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
   const history = useHistory()
   const cages = [1, 2, 3, 4, 5]
   const cageList = List(cages)
-  const [updatedExperiments, setUpdatedExperiments] = useState(Map<string, ExperimentData>());
+  const [updatedExperiments, setUpdatedExperiments] = useState(Map<string, ExperimentData>())
   const [workbookDownload, setWorkbookDownload] = useState(Map<string, XLSX.WorkBook>())
 
   return (
@@ -198,8 +200,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
                 rackDisplayOrder, cageDisplayOrder, dummyMap, comments)
 
               setWorkbookDownload(Map<string, XLSX.WorkBook>().set(experimentId, wb))
-              // XLSX.writeFile(wb, 'out.xlsx')
-
+              XLSX.writeFile(wb, 'out.xlsx')
 
               history.push(`${url}/record/summary`)
             }}
@@ -208,6 +209,9 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route exact path={`${url}/record/summary`}>
           <SessionSummary
+            onStartNewSession={() => {
+              onStartNewSession()
+            }}
             updatedExperiments={updatedExperiments.get(experimentId) as ExperimentData}
             workbook={workbookDownload.get(experimentId) as XLSX.WorkBook}
           />

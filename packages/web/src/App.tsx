@@ -76,6 +76,7 @@ const App: React.FC = () => {
   const [rackDisplayOrder, setRackDisplayOrder] = useState(List<RackId>())
   const [dummyMap, setDummyMap] = useState(Map<List<number>, boolean>())
   const [comments, setComments] = useState({})
+  const [confirmationMessage, setConfirmMessage] = useState("No File Submission")
 
   const [connected, setConnected] = useState(false)
   const [connectionStatus, setConnectionStatus] = useState("Not connected")
@@ -241,6 +242,12 @@ const App: React.FC = () => {
             })}
             scaleConnectionStatus={connected}
             connectionStatus={connectionStatus}
+            onStartNewSession={() => {
+              setExperiments(experiments.remove(experimentId))
+              setExperimentMetadata(experimentMetadata.remove(experimentId))
+              setConfirmMessage("No File Submission")
+              history.push('/home')
+            }}
           />
         </Route>
         <Route path="/home">
@@ -256,6 +263,8 @@ const App: React.FC = () => {
               setComments(comments)
             }}
             metaData={experimentMetadata}
+            confirmationMessage={confirmationMessage}
+            setConfirmMessage={(): void => setConfirmMessage("File Uploaded")}
           />
         </Route>
         <Route path="/experiments/add-cage">
