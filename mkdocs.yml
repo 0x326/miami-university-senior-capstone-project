@@ -12,4 +12,6 @@ nav:
   - Installation: index.md
   - Contributing: CONTRIBUTING.md
   - Hardware: HARDWARE.md
+  - SRC:
+    - web: web/globals.md
   - License: license.md
