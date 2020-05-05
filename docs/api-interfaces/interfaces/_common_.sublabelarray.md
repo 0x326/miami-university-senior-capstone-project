@@ -31,8 +31,6 @@
 * [filter](_common_.sublabelarray.md#filter)
 * [find](_common_.sublabelarray.md#find)
 * [findIndex](_common_.sublabelarray.md#findindex)
-* [flat](_common_.sublabelarray.md#flat)
-* [flatMap](_common_.sublabelarray.md#flatmap)
 * [forEach](_common_.sublabelarray.md#foreach)
 * [includes](_common_.sublabelarray.md#includes)
 * [indexOf](_common_.sublabelarray.md#indexof)
@@ -63,8 +61,6 @@
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1385
 
-Defined in packages/api-interfaces/node_modules/typescript/lib/lib.es5.d.ts:1385
-
 ___
 
 ###  length
@@ -72,8 +68,6 @@ ___
 • **length**: *number*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[length](_common_.sublabelarray.md#length)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[length](_common_.sublabelarray.md#length)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1215
 
@@ -86,8 +80,6 @@ Gets or sets the length of the array. This is a number one higher than the highe
 ▸ **[Symbol.iterator]**(): *IterableIterator‹[SubLabel](../modules/_common_.md#sublabel)›*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[[Symbol.iterator]](_common_.sublabelarray.md#[symbol.iterator])*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[[Symbol.iterator]](_common_.sublabelarray.md#[symbol.iterator])*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:60
 
@@ -102,8 +94,6 @@ ___
 ▸ **[Symbol.unscopables]**(): *object*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[[Symbol.unscopables]](_common_.sublabelarray.md#[symbol.unscopables])*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[[Symbol.unscopables]](_common_.sublabelarray.md#[symbol.unscopables])*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:94
 
@@ -134,8 +124,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[concat](_common_.sublabelarray.md#concat)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[concat](_common_.sublabelarray.md#concat)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1237
 
 Combines two or more arrays.
@@ -151,8 +139,6 @@ Name | Type | Description |
 ▸ **concat**(...`items`: T | ConcatArray‹T›[]): *[SubLabel](../modules/_common_.md#sublabel)[]*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[concat](_common_.sublabelarray.md#concat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[concat](_common_.sublabelarray.md#concat)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1242
 
@@ -173,8 +159,6 @@ ___
 ▸ **copyWithin**(`target`: number, `start`: number, `end?`: undefined | number): *this*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[copyWithin](_common_.sublabelarray.md#copywithin)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[copyWithin](_common_.sublabelarray.md#copywithin)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts:64
 
@@ -199,8 +183,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[entries](_common_.sublabelarray.md#entries)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[entries](_common_.sublabelarray.md#entries)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:65
 
 Returns an iterable of key, value pairs for every entry in the array
@@ -214,8 +196,6 @@ ___
 ▸ **every**(`callbackfn`: function, `thisArg?`: any): *boolean*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[every](_common_.sublabelarray.md#every)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[every](_common_.sublabelarray.md#every)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1310
 
@@ -254,8 +234,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[fill](_common_.sublabelarray.md#fill)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[fill](_common_.sublabelarray.md#fill)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts:53
 
 Returns the this object after filling the section identified by start and end with value
@@ -277,8 +255,6 @@ ___
 ▸ **filter**<**S**>(`callbackfn`: function, `thisArg?`: any): *S[]*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[filter](_common_.sublabelarray.md#filter)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[filter](_common_.sublabelarray.md#filter)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1337
 
@@ -314,8 +290,6 @@ An object to which the this keyword can refer in the callbackfn function. If thi
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[filter](_common_.sublabelarray.md#filter)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[filter](_common_.sublabelarray.md#filter)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1343
 
 Returns the elements of an array that meet the condition specified in a callback function.
@@ -349,8 +323,6 @@ ___
 ▸ **find**<**S**>(`predicate`: function, `thisArg?`: any): *S | undefined*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[find](_common_.sublabelarray.md#find)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[find](_common_.sublabelarray.md#find)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts:31
 
@@ -391,8 +363,6 @@ predicate. If it is not provided, undefined is used instead.
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[find](_common_.sublabelarray.md#find)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[find](_common_.sublabelarray.md#find)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts:32
 
 **Parameters:**
@@ -420,8 +390,6 @@ ___
 ▸ **findIndex**(`predicate`: function, `thisArg?`: any): *number*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[findIndex](_common_.sublabelarray.md#findindex)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[findIndex](_common_.sublabelarray.md#findindex)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts:43
 
@@ -455,279 +423,11 @@ predicate. If it is not provided, undefined is used instead.
 
 ___
 
-###  flat
-
-▸ **flat**<**U**>(`this`: U[][][][][][][][], `depth`: 7): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:158
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`this` | U[][][][][][][][] | - |
-`depth` | 7 | The maximum recursion depth  |
-
-**Returns:** *U[]*
-
-▸ **flat**<**U**>(`this`: U[][][][][][][], `depth`: 6): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:166
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`this` | U[][][][][][][] | - |
-`depth` | 6 | The maximum recursion depth  |
-
-**Returns:** *U[]*
-
-▸ **flat**<**U**>(`this`: U[][][][][][], `depth`: 5): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:174
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`this` | U[][][][][][] | - |
-`depth` | 5 | The maximum recursion depth  |
-
-**Returns:** *U[]*
-
-▸ **flat**<**U**>(`this`: U[][][][][], `depth`: 4): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:182
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`this` | U[][][][][] | - |
-`depth` | 4 | The maximum recursion depth  |
-
-**Returns:** *U[]*
-
-▸ **flat**<**U**>(`this`: U[][][][], `depth`: 3): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:190
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`this` | U[][][][] | - |
-`depth` | 3 | The maximum recursion depth  |
-
-**Returns:** *U[]*
-
-▸ **flat**<**U**>(`this`: U[][][], `depth`: 2): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:198
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`this` | U[][][] | - |
-`depth` | 2 | The maximum recursion depth  |
-
-**Returns:** *U[]*
-
-▸ **flat**<**U**>(`this`: U[][], `depth?`: undefined | 1): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:206
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`this` | U[][] | - |
-`depth?` | undefined &#124; 1 | The maximum recursion depth  |
-
-**Returns:** *U[]*
-
-▸ **flat**<**U**>(`this`: U[], `depth`: 0): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:214
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`this` | U[] | - |
-`depth` | 0 | The maximum recursion depth  |
-
-**Returns:** *U[]*
-
-▸ **flat**<**U**>(`depth?`: undefined | number): *any[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flat](_common_.sublabelarray.md#flat)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:222
-
-Returns a new array with all sub-array elements concatenated into it recursively up to the
-specified depth. If no depth is provided, flat method defaults to the depth of 1.
-
-**Type parameters:**
-
-▪ **U**
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`depth?` | undefined &#124; number | The maximum recursion depth  |
-
-**Returns:** *any[]*
-
-___
-
-###  flatMap
-
-▸ **flatMap**<**U**, **This**>(`callback`: function, `thisArg?`: This): *U[]*
-
-*Inherited from [SubLabelArray](_common_.sublabelarray.md).[flatMap](_common_.sublabelarray.md#flatmap)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[flatMap](_common_.sublabelarray.md#flatmap)*
-
-Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2019.array.d.ts:147
-
-Calls a defined callback function on each element of an array. Then, flattens the result into
-a new array.
-This is identical to a map followed by flat with depth 1.
-
-**Type parameters:**
-
-▪ **U**
-
-▪ **This**
-
-**Parameters:**
-
-▪ **callback**: *function*
-
-A function that accepts up to three arguments. The flatMap method calls the
-callback function one time for each element in the array.
-
-▸ (`this`: This, `value`: [SubLabel](../modules/_common_.md#sublabel), `index`: number, `array`: [SubLabel](../modules/_common_.md#sublabel)[]): *U | ReadonlyArray‹U›*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`this` | This |
-`value` | [SubLabel](../modules/_common_.md#sublabel) |
-`index` | number |
-`array` | [SubLabel](../modules/_common_.md#sublabel)[] |
-
-▪`Optional`  **thisArg**: *This*
-
-An object to which the this keyword can refer in the callback function. If
-thisArg is omitted, undefined is used as the this value.
-
-**Returns:** *U[]*
-
-___
-
 ###  forEach
 
 ▸ **forEach**(`callbackfn`: function, `thisArg?`: any): *void*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[forEach](_common_.sublabelarray.md#foreach)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[forEach](_common_.sublabelarray.md#foreach)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1325
 
@@ -763,8 +463,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[includes](_common_.sublabelarray.md#includes)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[includes](_common_.sublabelarray.md#includes)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2016.array.include.d.ts:27
 
 Determines whether an array includes a certain element, returning true or false as appropriate.
@@ -785,8 +483,6 @@ ___
 ▸ **indexOf**(`searchElement`: [SubLabel](../modules/_common_.md#sublabel), `fromIndex?`: undefined | number): *number*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[indexOf](_common_.sublabelarray.md#indexof)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[indexOf](_common_.sublabelarray.md#indexof)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1295
 
@@ -809,8 +505,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[join](_common_.sublabelarray.md#join)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[join](_common_.sublabelarray.md#join)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1247
 
 Adds all the elements of an array separated by the specified separator string.
@@ -831,8 +525,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[keys](_common_.sublabelarray.md#keys)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[keys](_common_.sublabelarray.md#keys)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:70
 
 Returns an iterable of keys in the array
@@ -846,8 +538,6 @@ ___
 ▸ **lastIndexOf**(`searchElement`: [SubLabel](../modules/_common_.md#sublabel), `fromIndex?`: undefined | number): *number*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[lastIndexOf](_common_.sublabelarray.md#lastindexof)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[lastIndexOf](_common_.sublabelarray.md#lastindexof)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1301
 
@@ -869,8 +559,6 @@ ___
 ▸ **map**<**U**>(`callbackfn`: function, `thisArg?`: any): *U[]*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[map](_common_.sublabelarray.md#map)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[map](_common_.sublabelarray.md#map)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1331
 
@@ -910,8 +598,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[pop](_common_.sublabelarray.md#pop)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[pop](_common_.sublabelarray.md#pop)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1227
 
 Removes the last element from an array and returns it.
@@ -925,8 +611,6 @@ ___
 ▸ **push**(...`items`: [SubLabel](../modules/_common_.md#sublabel)[]): *number*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[push](_common_.sublabelarray.md#push)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[push](_common_.sublabelarray.md#push)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1232
 
@@ -947,8 +631,6 @@ ___
 ▸ **reduce**(`callbackfn`: function): *[SubLabel](../modules/_common_.md#sublabel)*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[reduce](_common_.sublabelarray.md#reduce)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[reduce](_common_.sublabelarray.md#reduce)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1349
 
@@ -977,8 +659,6 @@ Name | Type |
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[reduce](_common_.sublabelarray.md#reduce)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[reduce](_common_.sublabelarray.md#reduce)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1350
 
 **Parameters:**
@@ -1003,8 +683,6 @@ Name | Type |
 ▸ **reduce**<**U**>(`callbackfn`: function, `initialValue`: U): *U*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[reduce](_common_.sublabelarray.md#reduce)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[reduce](_common_.sublabelarray.md#reduce)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1356
 
@@ -1045,8 +723,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[reduceRight](_common_.sublabelarray.md#reduceright)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[reduceRight](_common_.sublabelarray.md#reduceright)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1362
 
 Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -1074,8 +750,6 @@ Name | Type |
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[reduceRight](_common_.sublabelarray.md#reduceright)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[reduceRight](_common_.sublabelarray.md#reduceright)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1363
 
 **Parameters:**
@@ -1100,8 +774,6 @@ Name | Type |
 ▸ **reduceRight**<**U**>(`callbackfn`: function, `initialValue`: U): *U*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[reduceRight](_common_.sublabelarray.md#reduceright)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[reduceRight](_common_.sublabelarray.md#reduceright)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1369
 
@@ -1142,8 +814,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[reverse](_common_.sublabelarray.md#reverse)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[reverse](_common_.sublabelarray.md#reverse)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1251
 
 Reverses the elements in an Array.
@@ -1158,8 +828,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[shift](_common_.sublabelarray.md#shift)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[shift](_common_.sublabelarray.md#shift)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1255
 
 Removes the first element from an array and returns it.
@@ -1173,8 +841,6 @@ ___
 ▸ **slice**(`start?`: undefined | number, `end?`: undefined | number): *[SubLabel](../modules/_common_.md#sublabel)[]*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[slice](_common_.sublabelarray.md#slice)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[slice](_common_.sublabelarray.md#slice)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1261
 
@@ -1196,8 +862,6 @@ ___
 ▸ **some**(`callbackfn`: function, `thisArg?`: any): *boolean*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[some](_common_.sublabelarray.md#some)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[some](_common_.sublabelarray.md#some)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1319
 
@@ -1236,8 +900,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[sort](_common_.sublabelarray.md#sort)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[sort](_common_.sublabelarray.md#sort)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1271
 
 Sorts an array.
@@ -1258,8 +920,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[splice](_common_.sublabelarray.md#splice)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[splice](_common_.sublabelarray.md#splice)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1277
 
 Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
@@ -1276,8 +936,6 @@ Name | Type | Description |
 ▸ **splice**(`start`: number, `deleteCount`: number, ...`items`: [SubLabel](../modules/_common_.md#sublabel)[]): *[SubLabel](../modules/_common_.md#sublabel)[]*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[splice](_common_.sublabelarray.md#splice)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[splice](_common_.sublabelarray.md#splice)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1284
 
@@ -1301,8 +959,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[toLocaleString](_common_.sublabelarray.md#tolocalestring)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[toLocaleString](_common_.sublabelarray.md#tolocalestring)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1223
 
 Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
@@ -1317,8 +973,6 @@ ___
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[toString](_common_.sublabelarray.md#tostring)*
 
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[toString](_common_.sublabelarray.md#tostring)*
-
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1219
 
 Returns a string representation of an array.
@@ -1332,8 +986,6 @@ ___
 ▸ **unshift**(...`items`: [SubLabel](../modules/_common_.md#sublabel)[]): *number*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[unshift](_common_.sublabelarray.md#unshift)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[unshift](_common_.sublabelarray.md#unshift)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1289
 
@@ -1354,8 +1006,6 @@ ___
 ▸ **values**(): *IterableIterator‹[SubLabel](../modules/_common_.md#sublabel)›*
 
 *Inherited from [SubLabelArray](_common_.sublabelarray.md).[values](_common_.sublabelarray.md#values)*
-
-*Overrides [SubLabelArray](_common_.sublabelarray.md).[values](_common_.sublabelarray.md#values)*
 
 Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:75
 
