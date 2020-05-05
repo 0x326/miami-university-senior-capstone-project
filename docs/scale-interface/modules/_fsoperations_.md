@@ -29,7 +29,7 @@ ___
 
 ### `Const` schema
 
-• **schema**: *ObjectSchema‹›* = Joi.object({
+• **schema**: *ObjectSchema‹any›* = Joi.object({
   name: Joi.string()
     .min(1)
     .pattern(/^[^_]*$/) // anything but an underscore

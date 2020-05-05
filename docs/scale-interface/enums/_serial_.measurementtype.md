@@ -17,7 +17,7 @@
 
 • **OUT_OF_RANGE**: = "OL"
 
-Defined in serial.ts:146
+Defined in serial.ts:147
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **STABLE_COUNTING**: = "QT"
 
-Defined in serial.ts:144
+Defined in serial.ts:145
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **STABLE_WEIGHT**: = "ST"
 
-Defined in serial.ts:143
+Defined in serial.ts:144
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **UNSTABLE_WEIGHT**: = "US"
 
-Defined in serial.ts:145
+Defined in serial.ts:146

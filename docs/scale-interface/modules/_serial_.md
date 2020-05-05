@@ -93,7 +93,7 @@ ___
 
 Ƭ **Unit**: *"g" | "pc" | "%" | "oz" | "lb" | "ozt" | "ct" | "momme" | "dwt" | "grain" | "tael"*
 
-Defined in serial.ts:155
+Defined in serial.ts:156
 
 ## Variables
 
@@ -125,7 +125,7 @@ Defined in serial.ts:22
 
 ▸ **changeUnits**(): *Promise‹void›*
 
-Defined in serial.ts:328
+Defined in serial.ts:329
 
 **Returns:** *Promise‹void›*
 
@@ -135,7 +135,7 @@ ___
 
 ▸ **close**(): *Promise‹void›*
 
-Defined in serial.ts:126
+Defined in serial.ts:127
 
 **Returns:** *Promise‹void›*
 
@@ -145,7 +145,7 @@ ___
 
 ▸ **listenForReply**(`type`: [ActionReply](../enums/_serial_.actionreply.md)): *Promise‹void›*
 
-Defined in serial.ts:288
+Defined in serial.ts:289
 
 **Parameters:**
 
@@ -161,7 +161,7 @@ ___
 
 ▸ **noop**(): *void*
 
-Defined in serial.ts:37
+Defined in serial.ts:38
 
 **Returns:** *void*
 
@@ -171,7 +171,7 @@ ___
 
 ▸ **open**(`path`: string, `options`: OpenOptions): *Promise‹void›*
 
-Defined in serial.ts:39
+Defined in serial.ts:40
 
 **Parameters:**
 
@@ -188,7 +188,7 @@ ___
 
 ▸ **parse**(`data`: string): *[Measurement](../interfaces/_serial_.measurement.md) | [ActionReply](../enums/_serial_.actionreply.md)*
 
-Defined in serial.ts:157
+Defined in serial.ts:158
 
 **Parameters:**
 
@@ -204,7 +204,7 @@ ___
 
 ▸ **requestBalance**(): *Promise‹[Measurement](../interfaces/_serial_.measurement.md)›*
 
-Defined in serial.ts:298
+Defined in serial.ts:299
 
 **Returns:** *Promise‹[Measurement](../interfaces/_serial_.measurement.md)›*
 
@@ -214,7 +214,7 @@ ___
 
 ▸ **subscribe**(`includeActionReplies`: true): *AsyncGenerator‹[Measurement](../interfaces/_serial_.measurement.md) | [ActionReply](../enums/_serial_.actionreply.md)›*
 
-Defined in serial.ts:220
+Defined in serial.ts:221
 
 **Parameters:**
 
@@ -226,7 +226,7 @@ Name | Type |
 
 ▸ **subscribe**(`includeActionReplies?`: undefined | false): *AsyncGenerator‹[Measurement](../interfaces/_serial_.measurement.md)›*
 
-Defined in serial.ts:221
+Defined in serial.ts:222
 
 **Parameters:**
 
@@ -242,7 +242,7 @@ ___
 
 ▸ **subscribeOnce**(`includeActionReplies`: true): *Promise‹[Measurement](../interfaces/_serial_.measurement.md) | [ActionReply](../enums/_serial_.actionreply.md)›*
 
-Defined in serial.ts:254
+Defined in serial.ts:255
 
 **Parameters:**
 
@@ -254,7 +254,7 @@ Name | Type |
 
 ▸ **subscribeOnce**(`includeActionReplies?`: undefined | false): *Promise‹[Measurement](../interfaces/_serial_.measurement.md)›*
 
-Defined in serial.ts:255
+Defined in serial.ts:256
 
 **Parameters:**
 
@@ -270,7 +270,7 @@ ___
 
 ▸ **tareBalance**(): *Promise‹void›*
 
-Defined in serial.ts:313
+Defined in serial.ts:314
 
 **Returns:** *Promise‹void›*
 
@@ -290,7 +290,7 @@ ___
 
 ▸ **write**(`data`: string): *Promise‹number›*
 
-Defined in serial.ts:111
+Defined in serial.ts:112
 
 **Parameters:**
 

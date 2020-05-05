@@ -20,7 +20,7 @@
 
 • **type**: *[MeasurementType](../enums/_serial_.measurementtype.md)*
 
-Defined in serial.ts:150
+Defined in serial.ts:151
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **unit**: *[Unit](../modules/_serial_.md#unit)*
 
-Defined in serial.ts:152
+Defined in serial.ts:153
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **value**: *number*
 
-Defined in serial.ts:151
+Defined in serial.ts:152
