@@ -14,4 +14,5 @@ nav:
   - Hardware: HARDWARE.md
   - SRC:
     - web: web/globals.md
+    - scale-interface: scale-interface/globals.md
   - License: license.md
