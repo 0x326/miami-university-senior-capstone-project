@@ -2,7 +2,7 @@
 
 # Scale Interface Project: Installation Guide
 
-> By: John Meyer, Nick DiGennaro, David Wimmel, Wael Elsharkawy
+> By: Nick DiGennaro, David Wimmel, Wael Elsharkawy, John Meyer
 
 ## Preface
 
@@ -26,11 +26,16 @@ documentation, etc) is for developers.
       results of experiments in progress and making modifications to experiment
       data on the fly.
 
-## Installation Instructions
+## Starting Application
+* Turn on scale
+* Plug scale into tablet
+* Launch StartScaleApp.sh
+    * Scale is connected properly if resulting console displays, "Created Server" "Created Web Sockets"
 
 ## Troubleshooting
-
-## Verification
+* If console does not display "Created Server" "Created Web Sockets", ensure:
+    * Scale is connected to tablet
+    * Scale is powered on
 
 ## Building these docs
 
