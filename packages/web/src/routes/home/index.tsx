@@ -89,8 +89,23 @@ function LandingPage(props: Props): JSX.Element {
       </div>
 
       <br />
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <span>Choose &quot;New Experiment&quot; to create a new experiment and start a weighing session.</span>
+      </div>
+
       <br />
       <br />
+      <br />
+
+        <hr style={{width: '75%',}}></hr>
+
       <br />
       <br />
 
@@ -118,7 +133,6 @@ function LandingPage(props: Props): JSX.Element {
       </div>
 
       <br />
-      <br />
 
       <div
         style={{
@@ -130,7 +144,6 @@ function LandingPage(props: Props): JSX.Element {
         <span>{confirmationMessage}</span>
       </div>
 
-      <br />
       <br />
 
       <div
@@ -152,6 +165,18 @@ function LandingPage(props: Props): JSX.Element {
         >
           Start Session Precheck
         </Button>
+      </div>
+
+      <br />
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <span>Choose &quot;Start Session Precheck&quot; after you have uploaded a valid experiment file.</span>
       </div>
     </>
   )
