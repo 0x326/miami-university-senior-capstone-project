@@ -10,8 +10,8 @@ edit_uri: /-/edit/master/docs/
 
 nav:
   - Project Overview: index.md
-  - Contributing: CONTRIBUTING.md
-  - Hardware: HARDWARE.md
+  - Install/Use: install.md
+  - Contribute: CONTRIBUTING.md
   - SRC:
     - web:
       - overview: web/README.md
@@ -64,4 +64,5 @@ nav:
         - scale-data: api-interfaces/modules/_scale_data_.md
         - write-experiment: api-interfaces/modules/_write_experiment_.md
 
+  - Hardware: HARDWARE.md
   - License: license.md
