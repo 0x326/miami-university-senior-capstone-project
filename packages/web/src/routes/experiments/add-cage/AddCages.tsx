@@ -64,19 +64,57 @@ function AddCages(props: Props): JSX.Element {
         </TopAppBarRow>
       </TopAppBar>
       <TopAppBarFixedAdjust />
-      <FormField>
-        <Grid>
-          <GridCell span={4}>
-            <TextField
-              label="Cages to add"
-              type="number"
-              value={numberCages}
-              onChange={(event: FormEvent<HTMLInputElement>): void => {
-                setNumberCages(event.currentTarget.value)
-              }}
-            />
-          </GridCell>
-        </Grid>
+
+      <br />
+      <br />
+      <br />
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <h1>Add Cages</h1>
+      </div>
+
+      <br />
+      <br />
+      <br />
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <FormField>
+          <Grid>
+            <GridCell span={4}>
+              <TextField
+                label="Cages to add"
+                type="number"
+                value={numberCages}
+                onChange={(event: FormEvent<HTMLInputElement>): void => {
+                  setNumberCages(event.currentTarget.value)
+                }}
+              />
+            </GridCell>
+          </Grid>
+        </FormField>
+      </div>
+
+      <br />
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <Button
           label="Submit"
           raised
@@ -84,7 +122,7 @@ function AddCages(props: Props): JSX.Element {
             addCages(numberCages)
           }}
         />
-      </FormField>
+      </div>
     </>
   )
 }
