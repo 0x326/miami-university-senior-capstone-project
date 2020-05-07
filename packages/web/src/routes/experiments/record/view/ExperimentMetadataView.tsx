@@ -22,6 +22,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
+import { useHistory } from 'react-router-dom'
 
 
 dayjs.extend(relativeTime)
@@ -55,12 +56,17 @@ function ExperimentMetadataView(props: Props): JSX.Element {
     treatments,
   } = experimentMetadata
 
+  const history = useHistory()
+
   return (
     <>
       <TopAppBar>
         <TopAppBarRow>
           <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu" />
+            <TopAppBarNavigationIcon
+              icon="chevron_left"
+              onClick={(): void => history.goBack()}
+            />
             <TopAppBarTitle>{experimentName}</TopAppBarTitle>
           </TopAppBarSection>
           <TopAppBarSection alignEnd />

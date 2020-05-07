@@ -59,7 +59,6 @@ function LandingPage(props: Props): JSX.Element {
       <TopAppBar>
         <TopAppBarRow>
           <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
             <TopAppBarTitle>Home</TopAppBarTitle>
           </TopAppBarSection>
         </TopAppBarRow>

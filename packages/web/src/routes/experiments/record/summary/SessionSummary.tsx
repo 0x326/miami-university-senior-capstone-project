@@ -31,7 +31,6 @@ function SessionSummary(props: Props): JSX.Element {
       <TopAppBar>
         <TopAppBarRow>
           <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu" />
             <TopAppBarTitle>End of Session</TopAppBarTitle>
           </TopAppBarSection>
           <TopAppBarSection alignEnd />
