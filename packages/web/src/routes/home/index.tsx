@@ -104,7 +104,7 @@ function LandingPage(props: Props): JSX.Element {
       <br />
       <br />
 
-        <hr style={{width: '75%',}}></hr>
+      <hr style={{ width: '75%' }} />
 
       <br />
       <br />
@@ -116,6 +116,8 @@ function LandingPage(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
+
+        <span> &emsp; &emsp;&emsp;&emsp;&emsp;</span>
         <FileInput
           onFileUpload={(fileData) => {
             // Call xlsx library
