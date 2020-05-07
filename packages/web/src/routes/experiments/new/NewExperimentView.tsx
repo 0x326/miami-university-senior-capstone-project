@@ -74,7 +74,7 @@ function NewExperiment(props: Props): JSX.Element {
   const isStartDateValid = dayjs(startDate).isValid()
   const isSessionCountValid = Number(sessionCount) > 0
   const isBottlesPerCageValid = Number(bottlesPerCage) > 0
-  const isTreatmentsValid = treatments.trim().split(',').length > 0
+  const isTreatmentsValid = treatments.trim().split(',').length > 0 && treatments.trim().split(',')[0] && treatments.trim().split(',').length == Number(bottlesPerCage)
 
   const areAllFieldsValid = [
     isExperimentNameValid,
@@ -99,29 +99,32 @@ function NewExperiment(props: Props): JSX.Element {
             <TopAppBarTitle>New Experiment</TopAppBarTitle>
           </TopAppBarSection>
           <TopAppBarSection alignEnd>
-            <Tooltip content="Save experiment">
-              <TopAppBarActionItem
-                icon="done"
-                disabled={!areAllFieldsValid}
-                onClick={(): boolean | void => {
-                  if (areAllFieldsValid) {
-                    onDoneAction({
-                      experimentName,
-                      experimentLeadName,
-                      startDate: dayjs(startDate),
-                      lastUpdated: dayjs(),
-                      sessionCount: Number(sessionCount),
-                      bottlesPerCage: Number(bottlesPerCage),
-                      treatments: treatments.trim().split(',').map((x) => x.trim()), // store as list
-                    })
-                  }
-                }}
-              />
-            </Tooltip>
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>
       <TopAppBarFixedAdjust />
+      <br/>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+       <h1>New Experiment Form</h1>
+      </div>
+
+      <br/>
+      <br/>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
       <FormField>
         <Grid>
           <GridCell span={4}>
@@ -181,7 +184,7 @@ function NewExperiment(props: Props): JSX.Element {
           </GridCell>
           <GridCell span={4}>
             <TextField
-              label="Treatments"
+              label="Treatment Names"
               type="text"
               value={treatments}
               invalid={!isTreatmentsValid}
@@ -190,10 +193,35 @@ function NewExperiment(props: Props): JSX.Element {
               }}
             />
           </GridCell>
+        </Grid>
+      </FormField>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <label><b>Separate treatments by commas (Ex: h20, Eth0)</b></label>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+          <b>Bottles per cage must equal the number of treatment names</b>
+        </div>
+
           <br />
           <br />
 
-          <Button
+        <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Button
             raised
             disabled={!areAllFieldsValid}
             onClick={(): boolean | void => {
@@ -212,8 +240,7 @@ function NewExperiment(props: Props): JSX.Element {
           >
             Create new experiment and begin session
           </Button>
-        </Grid>
-      </FormField>
+          </div>
     </>
   )
 }

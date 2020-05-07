@@ -103,6 +103,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onAddCages={(): void => history.push(`${url}/add-cage`)}
             onRecord={(): void => {
+              // TODO: Add check for 1 or more cages in an experiment.
               if (scaleConnectionStatus) {
                 history.push(`${url}/record/session`)
               } else {
