@@ -47,6 +47,13 @@
 
 # Contributing Guide
 
+This section documents the workflow we've used throughout the course of the project. Future
+contributors obviously don't have to follow our [Git development
+practices](#software-development-workflow), but this information might be useful to better
+understand the work history. The rest of the sections ([setting up dev
+env](#setting-up-development-environment), [using dev env](#using-development-environment), etc.)
+are very important for running our code.
+
 ## Software Development Workflow
 
 > [GitLab as an Agile tool](https://about.gitlab.com/solutions/agile-delivery/)
