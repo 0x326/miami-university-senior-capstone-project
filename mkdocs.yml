@@ -1,4 +1,4 @@
-site_name: My Docs
+site_name: Scale Interface
 
 theme:
   name: material
@@ -9,9 +9,9 @@ repo_url: https://gitlab.com/0x326/miami-university-senior-capstone-project
 edit_uri: /-/edit/master/docs/
 
 nav:
-  - Installation: index.md
-  - Contributing: CONTRIBUTING.md
-  - Hardware: HARDWARE.md
+  - Project Overview: index.md
+  - Install/Use: install-and-use.md
+  - Contribute: contributing.md
   - SRC:
     - web:
       - overview: web/README.md
@@ -64,4 +64,5 @@ nav:
         - scale-data: api-interfaces/modules/_scale_data_.md
         - write-experiment: api-interfaces/modules/_write_experiment_.md
 
+  - Hardware: hardware.md
   - License: license.md
