@@ -67,11 +67,6 @@ function LandingPage(props: Props): JSX.Element {
       <TopAppBarFixedAdjust />
 
       <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
 
       <div
         style={{
@@ -80,6 +75,21 @@ function LandingPage(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
+
+        <h1>New Experiment</h1>
+
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <br />
+        <br />
+
         <Button
           raised
           onClick={() => history.push('/experiments/new')}
@@ -107,6 +117,18 @@ function LandingPage(props: Props): JSX.Element {
       <hr style={{ width: '75%' }} />
 
       <br />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+
+        <h1>Import Experiment</h1>
+
+      </div>
+
       <br />
 
       <div
