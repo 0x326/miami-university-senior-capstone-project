@@ -277,6 +277,10 @@ function ExperimentMetadataView(props: Props): JSX.Element {
       </div>
 
       <br />
+      <br />
+      <br />
+      <br />
+      <br />
 
     </>
   )
