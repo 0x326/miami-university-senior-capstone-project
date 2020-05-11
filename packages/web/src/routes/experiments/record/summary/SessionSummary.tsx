@@ -12,11 +12,13 @@ import { Button } from '@rmwc/button'
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 interface Props {
+  onRestartSession(): void;
   onStartNewSession(): void;
 }
 
 function SessionSummary(props: Props): JSX.Element {
   const {
+    onRestartSession,
     onStartNewSession,
   } = props
 
@@ -62,7 +64,7 @@ function SessionSummary(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <Button raised>Restart Session</Button>
+        <Button raised onClick={() => onRestartSession()}>Restart Session</Button>
       </div>
       <br />
       <div
@@ -72,7 +74,10 @@ function SessionSummary(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <span>Choose &quot;Restart Session&quot; to erase current session data and start over.</span>
+        <span>
+          Choose &quot;Restart Session&quot; to erase current session data and start over.
+            This will keep any cages you may have added.
+        </span>
       </div>
 
       <br />

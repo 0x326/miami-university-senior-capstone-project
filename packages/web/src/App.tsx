@@ -67,6 +67,7 @@ const App: React.FC = () => {
 
   const [bottleTypes] = useState<List<BottleType>>(List.of('H₂0', 'EtOH'))
   const [experimentMetadata, setExperimentMetadata] = useState(Map<ExperimentId, ExperimentMetaData>())
+  const [originalExperiments, setOriginalExperiments] = useState(Map<ExperimentId, ExperimentData>())
   const [experiments, setExperiments] = useState(Map<ExperimentId, ExperimentData>())
   const [cageDisplayOrders, setCageDisplayOrders] = useState(Map<RackId, List<CageId>>())
   const [rackDisplayOrder, setRackDisplayOrder] = useState(List<RackId>())
@@ -156,6 +157,7 @@ const App: React.FC = () => {
                 console.log('withNewCages', withNewCages.toJS())
                 console.log('withNewCdo', withNewCdo.toJS())
                 setExperiments(withNewCages.asImmutable())
+                setOriginalExperiments(withNewCages.asImmutable())
                 setCageDisplayOrders(withNewCdo.asImmutable())
               }
             })}
@@ -220,8 +222,6 @@ const App: React.FC = () => {
                 }
               })
               setExperiments(withNewData.asImmutable())
-              // updatedExperiments = withNewData.asImmutable()
-              // setx(updatedExperiments)
               console.log('after')
               console.log(withNewData.toJS())
 
@@ -232,11 +232,14 @@ const App: React.FC = () => {
                 rackDisplayOrder, cageDisplayOrders, dummyMap, comments)
 
               XLSX.writeFile(wb, 'out.xlsx')
-
-              // history.push(`${url}/record/summary`)
             })}
             scaleConnectionStatus={connected}
             connectionStatus={connectionStatus}
+            onRestartSession={() => {
+              console.log('session restarted')
+              setExperiments(originalExperiments)
+              history.push('/experiments/record/view')
+            }}
             onStartNewSession={() => {
               setExperiments(experiments.remove(experimentId))
               setExperimentMetadata(experimentMetadata.remove(experimentId))
@@ -251,6 +254,7 @@ const App: React.FC = () => {
             onExperimentDataChange={(newExperimentData, newMetaData, newRackDisplayOrder, newCageDisplayOrders,
               newDummyMap, newComments): void => {
               setExperiments(newExperimentData)
+              setOriginalExperiments(newExperimentData)
               setExperimentMetadata(newMetaData)
               setRackDisplayOrder(newRackDisplayOrder)
               setCageDisplayOrders(newCageDisplayOrders)

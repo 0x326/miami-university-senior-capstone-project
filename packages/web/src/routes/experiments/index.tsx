@@ -62,6 +62,7 @@ interface Props {
   connectScale: () => void;
   onAddCages: (numCages: number) => void;
   onNewWeights: (newData: Map<List<React.ReactText>, number>) => void;
+  onRestartSession: () => void;
   onStartNewSession: () => void;
   scaleConnectionStatus: boolean;
   connectionStatus: string;
@@ -75,6 +76,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
     cageDisplayOrder,
     onCreateExperiment,
     onAddCages,
+    onRestartSession,
     onStartNewSession,
     experimentMetadata,
     dummyMap,
@@ -226,9 +228,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
         </Route>
         <Route exact path={`${url}/record/summary`}>
           <SessionSummary
-            onStartNewSession={() => {
-              onStartNewSession()
-            }}
+            onStartNewSession={() => onStartNewSession()}
+            onRestartSession={() => onRestartSession()}
           />
         </Route>
         <Route path="*">
