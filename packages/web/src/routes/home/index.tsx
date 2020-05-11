@@ -51,7 +51,8 @@ function LandingPage(props: Props): JSX.Element {
   } = props
 
   const history = useHistory()
-  const [confirmationMessage, setConfirmMessage] = useState('Not File Submission')
+  const [confirmationMessage, setConfirmMessage] = useState('No File Submission')
+  const [fileIsUpload, setFileIsUpload] = useState(false)
 
   return (
     <>
@@ -147,6 +148,7 @@ function LandingPage(props: Props): JSX.Element {
               // Ask parent to update experiment data
               onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm, co)
               setConfirmMessage('File Uploaded')
+              setFileIsUpload(true)
             } catch (error) {
               alert('The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.')
             }
@@ -178,10 +180,11 @@ function LandingPage(props: Props): JSX.Element {
         <Button
           raised
           onClick={() => {
-            if (confirmationMessage === '') {
-              alert('Please upload an experiment to begin session precheck.')
-            } else {
+            console.log('conf', confirmationMessage)
+            if (fileIsUpload) {
               history.push('/experiments/record/view')
+            } else {
+              alert('Please upload and submit an experiment to begin session precheck.')
             }
           }}
         >
