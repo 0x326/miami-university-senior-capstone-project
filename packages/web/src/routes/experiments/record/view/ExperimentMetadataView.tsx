@@ -19,10 +19,11 @@ import { Button } from '@rmwc/button'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
+import { useHistory } from 'react-router-dom'
+
 import {
   ExperimentMetaData,
 } from '../../new/NewExperimentView'
-import { useHistory } from 'react-router-dom'
 
 
 dayjs.extend(relativeTime)

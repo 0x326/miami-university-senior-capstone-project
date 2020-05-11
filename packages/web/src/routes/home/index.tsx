@@ -8,7 +8,7 @@ import {
   Map,
 } from 'immutable'
 
-import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
+import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import { Button } from '@rmwc/button'
 
@@ -47,7 +47,6 @@ interface Props {
 
 function LandingPage(props: Props): JSX.Element {
   const {
-    onDrawerOpen,
     onExperimentDataChange,
   } = props
 

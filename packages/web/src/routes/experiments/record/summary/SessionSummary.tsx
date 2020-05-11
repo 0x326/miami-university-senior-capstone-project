@@ -9,7 +9,7 @@ import '@material/line-ripple/dist/mdc.line-ripple.css'
 
 import '@material/form-field/dist/mdc.form-field.css'
 import { Button } from '@rmwc/button'
-import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
+import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import * as XLSX from 'xlsx'
 

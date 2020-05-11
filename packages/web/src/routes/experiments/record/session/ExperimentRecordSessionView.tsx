@@ -33,7 +33,6 @@ import {
 import DataRecordingScreen from './DataRecordingScreen'
 
 
-
 interface Props {
   experiment: ExperimentData;
   rackDisplayOrder: List<RackId>;
@@ -44,7 +43,6 @@ interface Props {
 }
 
 function ExperimentRecordSessionView(props: Props): JSX.Element {
-
   const [lastWeight, setLastWeight] = useState('No Previous')
 
   const {
@@ -63,7 +61,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const sessLim = experimentMetadata.sessionCount
   const [newData, setNewData] = useState(Map<List<number | string>, number>())
   const [refsToRecord] = useState((): [RackId, CageId, BottleType, boolean][] => {
-  const ret: [RackId, CageId, BottleType, boolean][] = []
+    const ret: [RackId, CageId, BottleType, boolean][] = []
 
     // first collect rid cids that need a post session
     for (const bott of treatments) {
@@ -135,7 +133,10 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <span>Last Weight Recorded: {lastWeight}</span>
+        <span>
+Last Weight Recorded:
+          {lastWeight}
+        </span>
       </div>
 
       <div
