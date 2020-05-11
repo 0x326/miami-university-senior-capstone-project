@@ -15,6 +15,8 @@ import {
 
 import * as XLSX from 'xlsx'
 
+import dayjs from 'dayjs'
+
 import {
   DisplayName,
   RouteId,
@@ -45,6 +47,8 @@ import ExperimentMetadataView from './record/view/ExperimentMetadataView'
 
 import AddCages from './add-cage/AddCages'
 import SessionSummary from './record/summary/SessionSummary'
+// import dayjs from 'dayjs'
+
 
 interface Props {
   onDrawerOpen: () => void;
@@ -82,8 +86,8 @@ function ExperimentsSwitch(props: Props): JSX.Element {
 
   const { url } = useRouteMatch() || { url: '' }
   const history = useHistory()
-  const [updatedExperiments, setUpdatedExperiments] = useState(Map<string, ExperimentData>())
-  const [workbookDownload, setWorkbookDownload] = useState(Map<string, XLSX.WorkBook>())
+  const [updatedExperiments, setUpdatedExperiments] = useState(experiments)
+  const [updatedMetaData, setUpdatedMetaData] = useState(experimentMetadata)
 
   return (
     <>
@@ -92,6 +96,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
           <NewExperiment
             onCancelAction={(): void => history.push(`${url}/`)}
             onDoneAction={(experimentMetaData): void => {
+              setUpdatedMetaData(Map<ExperimentId, ExperimentMetaData>().set(experimentId, experimentMetaData))
               onCreateExperiment(experimentMetaData)
             }}
           />
@@ -199,14 +204,21 @@ function ExperimentsSwitch(props: Props): JSX.Element {
               setUpdatedExperiments(expWithNewData.asImmutable())
               console.log(expWithNewData.toJS())
 
-              // temporary. download updated experiment data for verification
-              console.log('to xlsx')
-              const wb = displayToWB(experimentMetadata.get(experimentId) as any,
+              const mdWithCurrentDate = updatedMetaData.withMutations((mdMap) => {
+                const md = mdMap.get(experimentId) as ExperimentMetaData
+                md.lastUpdated = dayjs()
+                mdMap.set(experimentId, md)
+              })
+              setUpdatedMetaData(mdWithCurrentDate)
+              const md = mdWithCurrentDate.get(experimentId) as ExperimentMetaData
+
+              console.log('md', md)
+
+              const wb = displayToWB(md,
                 expWithNewData.get(experimentId) as any,
                 rackDisplayOrder, cageDisplayOrder, dummyMap, comments)
 
-              setWorkbookDownload(Map<string, XLSX.WorkBook>().set(experimentId, wb))
-              XLSX.writeFile(wb, 'out.xlsx')
+              XLSX.writeFile(wb, `${md.experimentLeadName}_${md.experimentName}_${md.lastUpdated}.xlsx`)
 
               history.push(`${url}/record/summary`)
             }}
@@ -217,8 +229,6 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             onStartNewSession={() => {
               onStartNewSession()
             }}
-            updatedExperiments={updatedExperiments.get(experimentId) as ExperimentData}
-            workbook={workbookDownload.get(experimentId) as XLSX.WorkBook}
           />
         </Route>
         <Route path="*">

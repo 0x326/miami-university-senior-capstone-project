@@ -38,7 +38,7 @@ import dayjs, {
 import { useHistory } from 'react-router-dom'
 import { Button } from '@rmwc/button'
 
-export interface ExperimentMetaData extends Readonly<{
+export interface ExperimentMetaData {
   experimentName: string;
   experimentLeadName: string;
   startDate: Dayjs;
@@ -46,7 +46,7 @@ export interface ExperimentMetaData extends Readonly<{
   sessionCount: number;
   bottlesPerCage: number;
   treatments: string[];
-}> { }
+}
 
 interface Props {
   onCancelAction: () => void;

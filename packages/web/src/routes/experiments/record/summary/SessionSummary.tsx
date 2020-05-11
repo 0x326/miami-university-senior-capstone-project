@@ -11,14 +11,8 @@ import '@material/form-field/dist/mdc.form-field.css'
 import { Button } from '@rmwc/button'
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
-import * as XLSX from 'xlsx'
-
-import { ExperimentData } from '../../../experiment-dashboard/ExperimentDashboard'
-
 interface Props {
   onStartNewSession(): void;
-  updatedExperiments: ExperimentData;
-  workbook: XLSX.WorkBook | undefined;
 }
 
 function SessionSummary(props: Props): JSX.Element {
