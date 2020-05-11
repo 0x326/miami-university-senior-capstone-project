@@ -9,20 +9,16 @@ import '@material/line-ripple/dist/mdc.line-ripple.css'
 
 import '@material/form-field/dist/mdc.form-field.css'
 import { Button } from '@rmwc/button'
-import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
-
-import * as XLSX from 'xlsx'
-
-import { ExperimentData } from '../../../experiment-dashboard/ExperimentDashboard'
+import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 interface Props {
+  onRestartSession(): void;
   onStartNewSession(): void;
-  updatedExperiments: ExperimentData;
-  workbook: XLSX.WorkBook | undefined;
 }
 
 function SessionSummary(props: Props): JSX.Element {
   const {
+    onRestartSession,
     onStartNewSession,
   } = props
 
@@ -31,7 +27,6 @@ function SessionSummary(props: Props): JSX.Element {
       <TopAppBar>
         <TopAppBarRow>
           <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu" />
             <TopAppBarTitle>End of Session</TopAppBarTitle>
           </TopAppBarSection>
           <TopAppBarSection alignEnd />
@@ -69,7 +64,7 @@ function SessionSummary(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <Button raised>Restart Session</Button>
+        <Button raised onClick={() => onRestartSession()}>Restart Session</Button>
       </div>
       <br />
       <div
@@ -79,7 +74,10 @@ function SessionSummary(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <span>Choose &quot;Restart Session&quot; to erase current session data and start over.</span>
+        <span>
+          Choose &quot;Restart Session&quot; to erase current session data and start over.
+            This will keep any cages you may have added.
+        </span>
       </div>
 
       <br />

@@ -71,6 +71,7 @@ function FileInput(props: Props): JSX.Element {
         <input type="file" ref={inputRef} />
         <br />
         <br />
+        <span>&emsp;&emsp;</span>
         <Button raised type="submit">Submit</Button>
       </form>
     </>

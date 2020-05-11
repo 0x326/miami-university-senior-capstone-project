@@ -8,7 +8,7 @@ import {
   Map,
 } from 'immutable'
 
-import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarNavigationIcon, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
+import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar'
 
 import { Button } from '@rmwc/button'
 
@@ -47,30 +47,24 @@ interface Props {
 
 function LandingPage(props: Props): JSX.Element {
   const {
-    onDrawerOpen,
     onExperimentDataChange,
   } = props
 
   const history = useHistory()
-  const [confirmationMessage, setConfirmMessage] = useState('Not File Submission')
+  const [confirmationMessage, setConfirmMessage] = useState('No File Submission')
+  const [fileIsUpload, setFileIsUpload] = useState(false)
 
   return (
     <>
       <TopAppBar>
         <TopAppBarRow>
           <TopAppBarSection alignStart>
-            <TopAppBarNavigationIcon icon="menu" onClick={onDrawerOpen} />
             <TopAppBarTitle>Home</TopAppBarTitle>
           </TopAppBarSection>
         </TopAppBarRow>
       </TopAppBar>
       <TopAppBarFixedAdjust />
 
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
       <br />
 
       <div
@@ -80,6 +74,21 @@ function LandingPage(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
+
+        <h1>New Experiment</h1>
+
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <br />
+        <br />
+
         <Button
           raised
           onClick={() => history.push('/experiments/new')}
@@ -89,9 +98,36 @@ function LandingPage(props: Props): JSX.Element {
       </div>
 
       <br />
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <span>Choose &quot;New Experiment&quot; to create a new experiment and start a weighing session.</span>
+      </div>
+
       <br />
       <br />
       <br />
+
+      <hr style={{ width: '75%' }} />
+
+      <br />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+
+        <h1>Import Experiment</h1>
+
+      </div>
+
       <br />
 
       <div
@@ -101,6 +137,8 @@ function LandingPage(props: Props): JSX.Element {
           alignItems: 'center',
         }}
       >
+
+        <span> &emsp; &emsp;&emsp;&emsp;&emsp;</span>
         <FileInput
           onFileUpload={(fileData) => {
             // Call xlsx library
@@ -110,6 +148,7 @@ function LandingPage(props: Props): JSX.Element {
               // Ask parent to update experiment data
               onExperimentDataChange(ex, Map<string, ExperimentMetaData>().set(experimentId, meta), rdo, cdo, dm, co)
               setConfirmMessage('File Uploaded')
+              setFileIsUpload(true)
             } catch (error) {
               alert('The uploaded file is not a proper experiment file.\n\nProper Experiment files can only be created within this application.')
             }
@@ -117,7 +156,6 @@ function LandingPage(props: Props): JSX.Element {
         />
       </div>
 
-      <br />
       <br />
 
       <div
@@ -131,7 +169,6 @@ function LandingPage(props: Props): JSX.Element {
       </div>
 
       <br />
-      <br />
 
       <div
         style={{
@@ -143,15 +180,28 @@ function LandingPage(props: Props): JSX.Element {
         <Button
           raised
           onClick={() => {
-            if (confirmationMessage === '') {
-              alert('Please upload an experiment to begin session precheck.')
-            } else {
+            console.log('conf', confirmationMessage)
+            if (fileIsUpload) {
               history.push('/experiments/record/view')
+            } else {
+              alert('Please upload and submit an experiment to begin session precheck.')
             }
           }}
         >
           Start Session Precheck
         </Button>
+      </div>
+
+      <br />
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <span>Choose &quot;Start Session Precheck&quot; after you have uploaded a valid experiment file.</span>
       </div>
     </>
   )

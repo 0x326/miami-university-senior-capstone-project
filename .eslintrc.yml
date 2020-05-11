@@ -198,6 +198,8 @@ rules:
 
         refs: false
 
+        acc: false
+
   unicorn/filename-case:
     - error
     - cases:

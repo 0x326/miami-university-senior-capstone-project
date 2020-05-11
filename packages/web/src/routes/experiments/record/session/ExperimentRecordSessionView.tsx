@@ -39,10 +39,11 @@ interface Props {
   cageDisplayOrder: Map<RackId, List<CageId>>;
   experimentMetadata: ExperimentMetaData;
   onEnd: (newData: Map<List<number | string>, number>) => void;
-  cageIds: List<number>;
 }
 
 function ExperimentRecordSessionView(props: Props): JSX.Element {
+  const [lastWeight, setLastWeight] = useState('No Previous')
+
   const {
     experiment,
     rackDisplayOrder,
@@ -60,6 +61,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
   const [newData, setNewData] = useState(Map<List<number | string>, number>())
   const [refsToRecord] = useState((): [RackId, CageId, BottleType, boolean][] => {
     const ret: [RackId, CageId, BottleType, boolean][] = []
+
     // first collect rid cids that need a post session
     for (const bott of treatments) {
       for (const rid of rackDisplayOrder.toArray()) {
@@ -113,26 +115,54 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
       </TopAppBar>
       <TopAppBarFixedAdjust />
 
-      <h1>Recording POST sessions THEN PRE </h1>
-      <span>{JSON.stringify(newData.toJS())}</span>
-
-      // todo: refactor this
-      <DataRecordingScreen
-        bottleName={refsToRecord.length > 0
-          ? `Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]}), ${refsToRecord[0][3] ? 'Post' : 'Pre'}`
-          : null}
-        isLast={refsToRecord.length === 0}
-        onSubmit={(weight: number): void => {
-          const refToRecord = refsToRecord.shift()
-          if (refToRecord) {
-            const [rid, cid, bott] = refToRecord
-            console.log(experiment.getIn([rid, cid]).toJS())
-            setNewData(newData.set(List.of<any>(rid, cid, bott), Number(weight)))
-          } else {
-            onEnd(newData)
-          }
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
-      />
+      >
+        <h1>Recording POST sessions THEN PRE </h1>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <span>
+          Last Weight Recorded:
+          {lastWeight}
+        </span>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <DataRecordingScreen
+          bottleName={refsToRecord.length > 0
+            ? `Cage ${refsToRecord[0][1]}, Bottle (${refsToRecord[0][2]}), ${refsToRecord[0][3] ? 'Post' : 'Pre'}`
+            : null}
+          isLast={refsToRecord.length === 0}
+          onSubmit={(weight: number): void => {
+            const refToRecord = refsToRecord.shift()
+            if (refToRecord) {
+              const [rid, cid, bott] = refToRecord
+              console.log(experiment.getIn([rid, cid]).toJS())
+              setNewData(newData.set(List.of<any>(rid, cid, bott), Number(weight)))
+              setLastWeight(weight.toString())
+            } else {
+              onEnd(newData)
+            }
+          }}
+        />
+      </div>
     </>
   )
 }
