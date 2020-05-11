@@ -39,7 +39,6 @@ interface Props {
   cageDisplayOrder: Map<RackId, List<CageId>>;
   experimentMetadata: ExperimentMetaData;
   onEnd: (newData: Map<List<number | string>, number>) => void;
-  cageIds: List<number>;
 }
 
 function ExperimentRecordSessionView(props: Props): JSX.Element {
@@ -134,7 +133,7 @@ function ExperimentRecordSessionView(props: Props): JSX.Element {
         }}
       >
         <span>
-Last Weight Recorded:
+          Last Weight Recorded:
           {lastWeight}
         </span>
       </div>

@@ -82,8 +82,6 @@ function ExperimentsSwitch(props: Props): JSX.Element {
 
   const { url } = useRouteMatch() || { url: '' }
   const history = useHistory()
-  const cages = [1, 2, 3, 4, 5]
-  const cageList = List(cages)
   const [updatedExperiments, setUpdatedExperiments] = useState(Map<string, ExperimentData>())
   const [workbookDownload, setWorkbookDownload] = useState(Map<string, XLSX.WorkBook>())
 
@@ -206,7 +204,6 @@ function ExperimentsSwitch(props: Props): JSX.Element {
 
               history.push(`${url}/record/summary`)
             }}
-            cageIds={cageList}
           />
         </Route>
         <Route exact path={`${url}/record/summary`}>
