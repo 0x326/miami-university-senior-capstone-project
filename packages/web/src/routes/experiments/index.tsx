@@ -101,7 +101,12 @@ function ExperimentsSwitch(props: Props): JSX.Element {
             experimentMetadata={experimentMetadata.get(experimentId) as ExperimentMetaData}
             onAddCages={(): void => history.push(`${url}/add-cage`)}
             onRecord={(): void => {
-              // TODO: Add check for 1 or more cages in an experiment.
+              const areCages = cageDisplayOrder.keySeq()
+                .reduce((acc, k) => acc || (cageDisplayOrder.get(k) as any).size > 0, false)
+              if (!areCages) {
+                alert('Your experiment is empty! Please add cages to record weights to.')
+                return
+              }
               if (scaleConnectionStatus) {
                 history.push(`${url}/record/session`)
               } else {
@@ -120,6 +125,7 @@ function ExperimentsSwitch(props: Props): JSX.Element {
           <AddCages
             addCages={(numberCages): void => {
               onAddCages(Number(numberCages))
+              console.log(updatedExperiments.toJS())
               history.push('/experiments/record/view')
             }}
           />
