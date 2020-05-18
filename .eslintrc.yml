@@ -44,7 +44,6 @@ rules:
     - error
     - newlines-between: always-and-inside-groups
 
-
   import/no-cycle: error
 
   object-curly-newline:
@@ -52,7 +51,6 @@ rules:
     - consistent: true
       # ImportDeclaration: always
       # ExportDeclaration: always
-
 
   react/prefer-read-only-props: error
   react/jsx-key: error
@@ -161,9 +159,11 @@ rules:
 
         dir: false  # "directory"
 
-        ret: false
+        ret: false  # "returnValue"
 
-        res: false
+        res: false  # "result"
+
+        acc: false  # "accumulator"
 
         prom:
           promise: true
@@ -197,8 +197,6 @@ rules:
         ref: false
 
         refs: false
-
-        acc: false
 
   unicorn/filename-case:
     - error
