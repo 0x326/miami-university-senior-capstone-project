@@ -102,7 +102,7 @@ zip-code:
     - apk update
     - apk add git zip
   script:
-    - git ls-files -z | xargs -0 zip "${CI_PROJECT_NAME}.zip"
+    - git archive HEAD --format=zip > "${CI_PROJECT_NAME}.zip"
     - git bundle create "${CI_PROJECT_NAME}.git_bundle" HEAD
     - echo "How to use" > README.txt
     - echo "==========" >> README.txt
